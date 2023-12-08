@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 15a4adcdbd17311459ca9f4ee12be4a9
+labels:
+- chainreactions
+- spritesheet
+- flare
+- smoke
+- fx
+- effects
+- shuriken
+- beam
+- lightning
+- fire
+- explosion
+- particles
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Scripts/PPFXLightFlare.cs
+  uploadId: 158327

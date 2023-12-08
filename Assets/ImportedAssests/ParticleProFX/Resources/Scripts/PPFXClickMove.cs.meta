@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: dea79c3a936d3684983f3452d6ca716b
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Scripts/PPFXClickMove.cs
+  uploadId: 158327

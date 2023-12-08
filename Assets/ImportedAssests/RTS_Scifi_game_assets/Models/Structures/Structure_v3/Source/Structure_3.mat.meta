@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4d33ef34442e0bc4cae14b58c310bde2
+timeCreated: 1518285279
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Structures/Structure_v3/Source/Structure_3.mat
+  uploadId: 231629

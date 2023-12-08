@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 5cac951d96382cf4c85b2b5627343e76
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Materials/matppfx_whiteSelfIllum.mat
+  uploadId: 158327

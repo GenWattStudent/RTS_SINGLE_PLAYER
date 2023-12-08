@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5ae37b5c6421a9348b5bb44a7d422962
+timeCreated: 1517809248
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Turrets/Turret_v1.prefab
+  uploadId: 231629

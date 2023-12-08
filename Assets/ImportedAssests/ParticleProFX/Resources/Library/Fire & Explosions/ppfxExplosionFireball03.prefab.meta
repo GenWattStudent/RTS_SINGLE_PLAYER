@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d16a9cc0aecee7248ac31a6ded035ecc
+timeCreated: 1485351447
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Library/Fire & Explosions/ppfxExplosionFireball03.prefab
+  uploadId: 158327

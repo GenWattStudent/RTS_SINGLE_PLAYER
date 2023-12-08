@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 84279b72f5195ec408d394ee46eba2e9
+labels:
+- chainreactions
+- spritesheet
+- flare
+- smoke
+- fx
+- effects
+- shuriken
+- beam
+- lightning
+- fire
+- explosion
+- particles
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Scripts/PPFXChainReactionInspector.cs
+  uploadId: 158327

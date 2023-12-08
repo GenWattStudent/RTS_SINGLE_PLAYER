@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: d75c42ec022fb426598a772326c57538
+labels:
+- Fire
+- Flare
+- Fx
+- Particles
+- Shuriken
+- Smoke
+- Effects
+- Explosion
+- Beam
+- Spritesheet
+- Lightning
+- Chainreactions
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/PPFXWindow/PPFXWindow.cs
+  uploadId: 158327

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 63f7a599ac3d08641bf519fa841d623a
+timeCreated: 1518287944
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Vehicle/Vehicle_v3/Source/Vehicle_3.mat
+  uploadId: 231629

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 63bdf12f11b58e8488c1e93b6f2c33c7
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Materials/matppfx_explosionAlphaBlended.mat
+  uploadId: 158327

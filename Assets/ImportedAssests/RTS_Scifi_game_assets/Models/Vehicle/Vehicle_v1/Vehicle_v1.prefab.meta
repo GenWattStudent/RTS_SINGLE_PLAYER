@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 528af406eaf082244ae68b755f89d3d3
+timeCreated: 1518463134
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Vehicle/Vehicle_v1/Vehicle_v1.prefab
+  uploadId: 231629

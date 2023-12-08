@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 686bba6db330117419815aaa388a16a3
+timeCreated: 1517679766
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Turrets/Source/Turret_v1.mat
+  uploadId: 231629

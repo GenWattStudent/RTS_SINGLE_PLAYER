@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 1e939d7e719d57f4da17a41ea377df1e
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Materials/matppfx_fadedLineDouble.mat
+  uploadId: 158327

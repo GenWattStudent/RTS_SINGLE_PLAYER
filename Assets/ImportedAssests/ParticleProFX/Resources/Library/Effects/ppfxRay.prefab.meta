@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 4b3e2799610ded5468bd161b5a26975b
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Library/Effects/ppfxRay.prefab
+  uploadId: 158327

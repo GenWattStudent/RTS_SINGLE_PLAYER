@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: dd24ecb011a2dc74d8ecdb7d79a828ee
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Library/Effects/ppfxRayHorizontal.prefab
+  uploadId: 158327

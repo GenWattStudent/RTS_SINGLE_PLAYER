@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5dcb928077a95e2448177ed3f09f32f6
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/Resources/Scripts/PPFXRandomPosition.cs
+  uploadId: 158327

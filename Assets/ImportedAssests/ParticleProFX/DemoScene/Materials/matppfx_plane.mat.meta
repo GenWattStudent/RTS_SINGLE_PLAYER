@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: ccc3ed74f7cebae499de6ddaa1c3ba7d
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20251
+  packageName: Particle ProFX One
+  packageVersion: 1.2.3
+  assetPath: Assets/ParticleProFX/DemoScene/Materials/matppfx_plane.mat
+  uploadId: 158327

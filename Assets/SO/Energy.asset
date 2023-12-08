@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
+  m_Name: Energy
+  m_EditorClassIdentifier: 
+  health: 100
+  type: 0
+  buildingName: Energy
+  description: lalala
+  sprite: {fileID: 21300000, guid: d56b5386733fd314891209268b641430, type: 3}
+  prefab: {fileID: 8989622198761688359, guid: ab070f6ef0626334d8856e5d4c530f2e, type: 3}
+  validPrefab: {fileID: 8989622198761688359, guid: b31c6d3572a07044ca387fd1fdbcdb6b,
+    type: 3}
+  invalidPrefab: {fileID: 8989622198761688359, guid: 4bf57783983b2f64184b3d4225f467a3,
+    type: 3}
+  income: 20
+  incomeInterval: 2
+  unitsToSpawn: []
+  maxBuildingCount: 2
+  cost: 100

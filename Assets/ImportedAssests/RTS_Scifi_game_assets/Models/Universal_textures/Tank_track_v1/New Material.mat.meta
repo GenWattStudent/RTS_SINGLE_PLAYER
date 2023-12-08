@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 14612bc18140fed438df3640441e88b9
+timeCreated: 1518460191
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112251
+  packageName: RTS Sci-Fi Game Assets v1
+  packageVersion: 1.0
+  assetPath: Assets/RTS_Scifi_game_assets/Models/Universal_textures/Tank_track_v1/New
+    Material.mat
+  uploadId: 231629
