@@ -13,9 +13,15 @@ public class Unit : MonoBehaviour
     public void ChangeMaterial(Material material) {
         if (!shouldChangeMaterial) return;
         unitMaterial = material;
+        
         if (unitMaterial != null) {
             foreach (var unitPrefab in unitPrefabs) {
-                unitPrefab.GetComponent<MeshRenderer>().material = unitMaterial;
+                var meshRenderer = unitPrefab.GetComponent<MeshRenderer>();
+                if (meshRenderer == null) {
+                    unitPrefab.GetComponent<SkinnedMeshRenderer>().material = unitMaterial;
+                    continue;
+                }
+                meshRenderer.material = unitMaterial;
             }
         }
     }

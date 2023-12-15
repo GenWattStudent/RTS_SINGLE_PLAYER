@@ -4,8 +4,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class UnitMovement : MonoBehaviour
 {
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     private Unit unit;
+    private Animator animator;
 
     private void SetNavMeshValues()
     {
@@ -24,7 +25,14 @@ public class UnitMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         unit = GetComponent<Unit>();
+        animator = GetComponent<Animator>();
         SetNavMeshValues();
+    }
+
+    private void SetIsWalking(bool isWalking)
+    {
+        if (animator == null) return;
+        animator.SetBool("isWalking", isWalking);
     }
 
     public void MoveTo(Vector3 destination)
@@ -36,5 +44,15 @@ public class UnitMovement : MonoBehaviour
     public void Stop()
     {
         agent.isStopped = true;
+    }
+
+    private void Update()
+    {
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+           SetIsWalking(false);
+        } else {
+            SetIsWalking(true);
+        }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,18 +16,19 @@ public class UIUnitManager : MonoBehaviour
     public bool IsUnitUIOpen { get; set; } = false;
     public bool IsUnitSelectionTabOpen { get; set; } = false;
     private Dictionary<string, List<UnitSo>> unitQueue = new ();
+    private int unitCountPrev = 0;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    private void OnEnable() {
-        // SelectionManager.Instance.OnSelect += CreateSelectionUnitTab;
+    private void Start() {
+        SelectionManager.Instance.OnSelect += CreateSelectionUnitTab;
     }
     
     private void OnDisable() {
-        // SelectionManager.Instance.OnSelect -= CreateSelectionUnitTab;
+        SelectionManager.Instance.OnSelect -= CreateSelectionUnitTab;
     }
 
     // private void HandleUpgrade() {
@@ -71,10 +71,16 @@ public class UIUnitManager : MonoBehaviour
     }
 
     public void CreateSelectionUnitTab() {
+        if (unitCountPrev == 0 && SelectionManager.Instance.selectedObjects.Count == 0) {
+            return;
+        }
+        unitCountPrev = SelectionManager.Instance.selectedObjects.Count;
         ClearTabs();
         unitSlotTabs.Clear();
         unitsAttachedToTab.Clear();
+        unitQueue.Clear();
 
+        Debug.Log("CreateSelectionUnitTab");
         foreach(var selectable in SelectionManager.Instance.selectedObjects) {
             if (selectable.selectableType == Selectable.SelectableType.Unit) {
                 var unit = selectable.GetComponent<Unit>();
@@ -91,9 +97,9 @@ public class UIUnitManager : MonoBehaviour
         foreach(var unit in unitQueue) {
             GameObject unitTab = Instantiate(unitSlotTabPrefab, transform);
             unitTab.name = unit.Key;
-            var unitQueueCount = unit.Value;
+            var unitQueueCount = unit.Value.Count;
 
-            SetUnitData(unitTab, unit.Value[0], false);
+            SetUnitData(unitTab, unit.Value[0], unitQueueCount);
             unitSlotTabs.Add(unitTab);
             unitsAttachedToTab.Add(unit.Value[0]);
         }
@@ -102,15 +108,18 @@ public class UIUnitManager : MonoBehaviour
         IsUnitSelectionTabOpen = true;
     }
 
-    private void SetUnitData(GameObject unitTab, UnitSo soUnit, bool cost = true) {
+    private void SetUnitData(GameObject unitTab, UnitSo soUnit, int cost = -1) {
         var unitNameText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[0];
         var button = unitTab.GetComponentInChildren<Image>();
 
         unitNameText.text = soUnit.unitName;
 
-        if (cost) {
+        if (cost < 0 && soUnit.cost > 0) {
             var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
             costText.text = soUnit.cost.ToString();
+        } else {
+            var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
+            costText.text = cost.ToString();
         }
 
         button.GetComponent<Button>().onClick.AddListener(() => {

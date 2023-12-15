@@ -1,34 +1,45 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RTSManager : MonoBehaviour
 {
     [SerializeField] private GameObject unitPrefab;
+    public float unitSpacing = 1;
 
     private void CancelBuildingCommand(Selectable selectable) {
         var workerScript = selectable.GetComponent<Worker>();
-
+        Debug.Log("Cancel building command");
         if (workerScript != null) {
             workerScript.StopConstruction();
         }
     }
 
     private void MoveCommand(Vector3 position) {
-        int index = 0;
+        int unitsCount = SelectionManager.Instance.selectedObjects.Count;
+        int rows = Mathf.CeilToInt(Mathf.Sqrt(unitsCount));
+        int cols = Mathf.CeilToInt((float)unitsCount / rows);
 
-        foreach (Selectable selectable in SelectionManager.Instance.selectedObjects)
+        for (int row = 0; row < rows; row++)
         {
-            if (selectable.selectableType == Selectable.SelectableType.Unit)
+            for (int col = 0; col < cols; col++)
             {
-                var moveScript = selectable.GetComponent<UnitMovement>();
-                var agent = selectable.GetComponent<UnityEngine.AI.NavMeshAgent>();
-                // calculate position for each unit take navmesh radius into accoun
-                var unitPosition = new Vector3(position.x + index * (agent.radius + 0.5f), position.y, position.z + index * (agent.radius + 0.55f));
+                var index = row * cols + col;
+                var unit = SelectionManager.Instance.selectedObjects[index];
 
-                if (moveScript != null) {
-                    moveScript.MoveTo(unitPosition);
-                    CancelBuildingCommand(selectable);
+                if (unit.selectableType == Selectable.SelectableType.Unit) {
+                    Debug.Log("Move command " + index);
+                    if (index < unitsCount)
+                    {
+                        Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
+                        Vector3 finalPosition = position + offset;
+                        var unitMovement = SelectionManager.Instance.selectedObjects[index].GetComponent<UnitMovement>();
+                        
+                        finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
+                        finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
+                        Debug.Log("Move command " + finalPosition);
+                        unitMovement.MoveTo(finalPosition);
+                    }
                 }
-                index++;
             }
         }
     }
@@ -46,7 +57,7 @@ public class RTSManager : MonoBehaviour
 
     private void BuildCommand(Construction construction) {
         var workers = SelectionManager.Instance.GetWorkers();
-
+        Debug.Log(construction + "Count " + workers.Count);
         foreach (var worker in workers) {
             var workerScript = worker.GetComponent<Worker>();
 
@@ -62,7 +73,7 @@ public class RTSManager : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.point != null)
             {
                 var damagableScript = hit.transform.gameObject.GetComponent<Damagable>();
                 var unitScript = hit.transform.gameObject.GetComponent<Unit>();
@@ -80,10 +91,10 @@ public class RTSManager : MonoBehaviour
                         }
                     }
                     // ------------------------------------------------
-                    Debug.Log(selectableScript.selectableType);
                     if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.playerId == PlayerController.Instance.playerId && constructionScript != null) {
                         // Build
                         BuildCommand(constructionScript);
+                        return;
                     }
                 }
 

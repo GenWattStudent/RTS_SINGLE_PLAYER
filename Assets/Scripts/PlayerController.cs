@@ -10,11 +10,23 @@ public class PlayerController : MonoBehaviour
     public Material playerMaterial;
     public static PlayerController Instance;
     public List<Unit> units = new ();
+    [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
 
-    private void SpawnUnits() {
+    private void SpawnHero() {
+        var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
+        var damagableScript = heroInstance.GetComponent<Damagable>();
+        var unitScript = heroInstance.GetComponent<Unit>();
 
+        damagableScript.playerId = playerId;
+        unitScript.playerId = playerId;
+        unitScript.ChangeMaterial(playerMaterial);
+        units.Add(unitScript);
+    }
+
+    private void SpawnUnits() {
+        SpawnHero();
         foreach (var unitPrefab in unitPrefabs) {
             for (int i = 0; i < 2; i++) {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);

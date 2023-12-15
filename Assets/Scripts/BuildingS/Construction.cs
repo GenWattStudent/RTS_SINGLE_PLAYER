@@ -7,25 +7,25 @@ public class Construction : MonoBehaviour
     private float constructionTimer = 0f;
     private bool isCurrentlyConstructing = false;
     private float buildingSpeed  = 0f;
-    public List<UnitSo> buildingUnits = new List<UnitSo>();
+    public List<Unit> buildingUnits = new List<Unit>();
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
     private ProgresBar progresBar;
 
-    public void AddWorker(UnitSo unitSo)
+    public void AddWorker(Unit unit)
     {
-        if (unitSo.type != UnitSo.UnitType.Worker) return;
-        buildingUnits.Add(unitSo);
-        buildingSpeed += unitSo.attackDamage;
+        if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
+        buildingUnits.Add(unit);
+        buildingSpeed += unit.unitSo.attackDamage;
         StartConstruction();
     }
 
-    public void RemoveWorker(UnitSo unitSo)
+    public void RemoveWorker(Unit unit)
     {
-        if (unitSo.type != UnitSo.UnitType.Worker) return;
-        buildingUnits.Remove(unitSo);
-        buildingSpeed -= unitSo.attackDamage;
+        if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
+        buildingUnits.Remove(unit);
+        buildingSpeed -= unit.unitSo.attackDamage;
         if (buildingUnits.Count == 0)
         {
             StopConstruction();
@@ -35,6 +35,7 @@ public class Construction : MonoBehaviour
     public void StartConstruction()
     {
         isCurrentlyConstructing = true;
+        Debug.Log("Start construction - building");
         ActivateBuildInProgress();
     }
 
@@ -42,6 +43,14 @@ public class Construction : MonoBehaviour
     {
         isCurrentlyConstructing = false;
         ActivateConstructionBuilding();
+        foreach (var unit in buildingUnits)
+        {
+            var worker = unit.GetComponent<Worker>();
+            if (worker != null)
+            {
+                worker.StopConstruction();
+            }
+        }
     }
 
     private void InstantiateBuilding()
@@ -49,6 +58,7 @@ public class Construction : MonoBehaviour
         // Finished building
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
         building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
+        building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
         Destroy(gameObject);
     }
 

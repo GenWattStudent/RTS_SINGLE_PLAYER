@@ -7,6 +7,7 @@ public class Attack : MonoBehaviour
     public Damagable target;
     [SerializeField] private float checkTargetTimer;
     private Unit currentUnit;
+    private Animator animator;
     [SerializeField] private GameObject bulletSpawnPoint;
     private float attackSpeedTimer;
     private float attackCooldownTimer;
@@ -21,6 +22,7 @@ public class Attack : MonoBehaviour
         currentUnit = GetComponent<Unit>();
         currentAmmo = currentUnit.unitSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
+        animator = GetComponent<Animator>();
 
         if (currentUnit.unitSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
@@ -80,8 +82,10 @@ public class Attack : MonoBehaviour
 
     private void PerformAttack() {
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
+            if (animator != null) animator.SetBool("isShooting", true);
             ShootBullet();
-
+            if (animator) animator.SetBool("isShooting", false);
+            
             if (currentAmmo <= 0) {
                 attackCooldownTimer = currentUnit.unitSo.attackCooldown;
                 currentAmmo = currentUnit.unitSo.ammo;

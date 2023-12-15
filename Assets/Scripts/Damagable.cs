@@ -9,12 +9,14 @@ public class Damagable : MonoBehaviour
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private GameObject destroyedObjectPrefab;
     private ProgresBar progressBarScript;
+    private Animator animator;
     public Guid playerId;
 
     void Awake()
     {
         health = damagableSo.health;
         progressBarScript = healthBar.GetComponent<ProgresBar>();
+        animator = GetComponent<Animator>();
     }
 
     private void InstantiateExplosion() {
@@ -40,6 +42,9 @@ public class Damagable : MonoBehaviour
             Destroy(gameObject);
             InstantiateExplosion(); 
             InstantiateDestroyedObject();
+            if (animator != null) {
+                animator.SetBool("isDead", true);
+            }
         }
     }
 }

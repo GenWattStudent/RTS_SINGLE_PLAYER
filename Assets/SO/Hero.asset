@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
-  m_Name: Worker
+  m_Name: Hero
   m_EditorClassIdentifier: 
-  health: 150
-  type: 0
-  unitName: Worker
-  speed: 10
-  buildingDistance: 10
-  attackDamage: 10
-  attackRange: 2
-  attackSpeed: 4
-  attackCooldown: 1
-  acceleration: 5
+  health: 1000
+  type: 3
+  unitName: Argus
+  speed: 6
+  buildingDistance: 0
+  attackDamage: 60
+  attackRange: 6
+  attackSpeed: 0.4
+  attackCooldown: 1.4
+  acceleration: 4
   canAttack: 1
   bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
     type: 3}
-  ammo: 1
-  attackAngle: 10
-  cost: 10
+  ammo: 30
+  attackAngle: 8
+  cost: 0
   hasTurret: 0
   rotateSpeed: 10
   turretRotateSpeed: 0
-  spawnTime: 3
-  sprite: {fileID: 21300000, guid: 4eb58c998bbca104fb7d3b6ccac4c68f, type: 3}
-  prefab: {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
+  spawnTime: 0
+  sprite: {fileID: 0}
+  prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}

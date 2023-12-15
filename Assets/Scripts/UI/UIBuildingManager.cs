@@ -33,6 +33,8 @@ public class UIBuildingManager : MonoBehaviour
     public void CreateBuildingTabs(BuildingSo.BuildingType buildingType) {
         ClearTabs();
         UIUnitManager.Instance.IsUnitUIOpen = false;
+        UIUnitManager.Instance.IsUnitSelectionTabOpen = false;
+        Debug.Log("LOLEK");
         // upgradeButton.gameObject.SetActive(false);
 
         foreach (var bulding in buildings)

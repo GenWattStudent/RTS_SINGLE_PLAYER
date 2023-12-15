@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class SelectionManager : MonoBehaviour
 
         foreach (Selectable selectable in selectedObjects) {
             var unitScript = selectable.GetComponent<Unit>();
-            if (unitScript.unitSo.type == UnitSo.UnitType.Worker) {
+            if (unitScript != null && unitScript.unitSo != null && unitScript.unitSo.type == UnitSo.UnitType.Worker) {
                 workers.Add(selectable);
             }
         }

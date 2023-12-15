@@ -25,7 +25,6 @@ public class Selectable : MonoBehaviour
 
     public void Select()
     {
-        Debug.Log("Select");
         isSelected = true;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(true);
