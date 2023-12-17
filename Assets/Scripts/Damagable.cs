@@ -11,6 +11,7 @@ public class Damagable : MonoBehaviour
     private ProgresBar progressBarScript;
     private Animator animator;
     public Guid playerId;
+    public int expirence = 0;
 
     void Awake()
     {
@@ -34,7 +35,11 @@ public class Damagable : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage) {
+    public void AddExpiernce(int exp) {
+        expirence += exp;
+    }
+
+    public bool TakeDamage(float damage) {
         health -= damage;
         progressBarScript.UpdateProgresBar(health, damagableSo.health);
 
@@ -45,6 +50,10 @@ public class Damagable : MonoBehaviour
             if (animator != null) {
                 animator.SetBool("isDead", true);
             }
+
+            return true;
         }
+
+        return false;
     }
 }

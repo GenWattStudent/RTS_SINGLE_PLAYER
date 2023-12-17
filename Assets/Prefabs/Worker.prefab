@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 2368580329236892303}
   - component: {fileID: 6084159726790955623}
   - component: {fileID: -5754590039528732433}
+  - component: {fileID: -8539418394513040316}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -166,12 +167,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 2321514005527918770}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -191,6 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c9b6e971558742a0312f45bc3e92d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
 --- !u!114 &1419450092642985885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   construction: {fileID: 0}
-  unitSo: {fileID: 0}
+  unit: {fileID: 0}
 --- !u!114 &-5754590039528732433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +255,28 @@ MonoBehaviour:
   checkTargetTimer: 0
   bulletSpawnPoint: {fileID: 6003862070716649827}
   autoAttack: 0
+--- !u!95 &-8539418394513040316
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0

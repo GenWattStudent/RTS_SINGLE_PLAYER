@@ -25,9 +25,8 @@ public class RTSManager : MonoBehaviour
             {
                 var index = row * cols + col;
                 var unit = SelectionManager.Instance.selectedObjects[index];
-
+                Debug.Log("Move command " + index);
                 if (unit.selectableType == Selectable.SelectableType.Unit) {
-                    Debug.Log("Move command " + index);
                     if (index < unitsCount)
                     {
                         Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);

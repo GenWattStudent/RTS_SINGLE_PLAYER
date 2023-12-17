@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Hero
   m_EditorClassIdentifier: 
   health: 1000
+  deathExpirence: 10
   type: 3
   unitName: Argus
   speed: 6
@@ -34,3 +35,4 @@ MonoBehaviour:
   spawnTime: 0
   sprite: {fileID: 0}
   prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
+  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}

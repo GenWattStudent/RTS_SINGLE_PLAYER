@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c62211f0159e3e4408e83bfe5367cdd0
+timeCreated: 1511652539
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 106304
+  packageName: Canopus-III Low Poly Sci-fi Desert Units Set
+  packageVersion: 2.0
+  assetPath: Assets/Canopus-III_Low-Poly_Sci-Fi_Desert_Units_Set_1/documentation
+    - Low-Poly_Sci-Fi_Desert_Units_Set.txt
+  uploadId: 555159

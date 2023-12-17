@@ -50,7 +50,7 @@ public class UnitMovement : MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-           SetIsWalking(false);
+            SetIsWalking(false);
         } else {
             SetIsWalking(true);
         }

@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public float speed = 2f;
     public Guid playerId;
     public BulletSo bulletSo;
+    public Damagable unitsBullet;
 
     private void Awake() {
         damage = bulletSo.damage;
@@ -34,14 +35,15 @@ public class Bullet : MonoBehaviour
         var damegableScript = collider.gameObject.GetComponent<Damagable>();
 
         if (damegableScript != null && damegableScript.playerId != playerId) {
-            damegableScript.TakeDamage(damage);
+            if (damegableScript.TakeDamage(damage)) {
+                unitsBullet.AddExpiernce(damegableScript.damagableSo.deathExpirence);
+            }
         }
     }
 
     private bool IsOwnUnit(RaycastHit hit) {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
         return damagable != null && damagable.playerId == playerId;
-
     }
 
     private void CheckHit() {

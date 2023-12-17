@@ -30,4 +30,5 @@ public class UnitSo : DamagableSo
     public float spawnTime;
     public Sprite sprite;
     public GameObject prefab;
+    public BulletSo bulletSo;
 }
