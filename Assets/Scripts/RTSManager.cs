@@ -1,14 +1,13 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class RTSManager : MonoBehaviour
 {
     [SerializeField] private GameObject unitPrefab;
-    public float unitSpacing = 1;
+    public float unitSpacing = 0.3f;
 
     private void CancelBuildingCommand(Selectable selectable) {
         var workerScript = selectable.GetComponent<Worker>();
-        Debug.Log("Cancel building command");
+
         if (workerScript != null) {
             workerScript.StopConstruction();
         }
@@ -25,7 +24,6 @@ public class RTSManager : MonoBehaviour
             {
                 var index = row * cols + col;
                 var unit = SelectionManager.Instance.selectedObjects[index];
-                Debug.Log("Move command " + index);
                 if (unit.selectableType == Selectable.SelectableType.Unit) {
                     if (index < unitsCount)
                     {
@@ -35,7 +33,11 @@ public class RTSManager : MonoBehaviour
                         
                         finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
                         finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
-                        Debug.Log("Move command " + finalPosition);
+                        // draw point on the ground
+                        GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        point.transform.position = finalPosition;
+                        point.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                        point.GetComponent<MeshRenderer>().material.color = Color.red;
                         unitMovement.MoveTo(finalPosition);
                     }
                 }
@@ -48,7 +50,7 @@ public class RTSManager : MonoBehaviour
             var attackScript = selectable.GetComponent<Attack>();
 
             if (attackScript != null) {
-                attackScript.target = target;
+                attackScript.SetTarget(target);
                 CancelBuildingCommand(selectable);
             }
         }

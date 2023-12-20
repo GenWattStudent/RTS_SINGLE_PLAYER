@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2231143994585503189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2936924105273951565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5289973568738679937}
+  m_Layer: 0
+  m_Name: TargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5289973568738679937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2936924105273951565}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.28, z: 0}
+  m_LocalScale: {x: 1.4999999, y: 1.4999999, z: 1.4999999}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5638679581261296277}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3393997211609255391
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,6 +98,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5289973568738679937}
   - {fileID: 2231143994585503189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -186,8 +218,11 @@ MonoBehaviour:
   damagableSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   health: 0
   healthBar: {fileID: 7893409644182956996}
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
+    type: 3}
   destroyedObjectPrefab: {fileID: 0}
+  expirence: 0
+  targetPoint: {fileID: 2936924105273951565}
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0

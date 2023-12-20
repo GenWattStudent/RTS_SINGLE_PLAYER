@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     public List<Unit> units = new ();
     public Guid enemyId;
     public List<GameObject> unitPrefabs = new ();
-    public Vector3 spawnPosition = new Vector3(1.5f, 0, 4f);
+    public Vector3 spawnPosition = new Vector3(6, 0, 10f);
 
     private void SpawnUnits() {
         foreach (var unitPrefab in unitPrefabs) {
@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
     {
         enemyId = Guid.NewGuid();
         Instance = this;
-        // SpawnUnits();
+        SpawnUnits();
     }
 
     // Update is called once per frame

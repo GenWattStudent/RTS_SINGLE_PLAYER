@@ -43,13 +43,14 @@ public class Construction : MonoBehaviour
     {
         isCurrentlyConstructing = false;
         ActivateConstructionBuilding();
-        foreach (var unit in buildingUnits)
+        StopWorkersConstruction();
+    }
+
+    private void StopWorkersConstruction()
+    {
+        for(int i = 0; i < buildingUnits.Count; i++)
         {
-            var worker = unit.GetComponent<Worker>();
-            if (worker != null)
-            {
-                worker.StopConstruction();
-            }
+            buildingUnits[i].GetComponent<Worker>().StopConstruction();
         }
     }
 
@@ -59,6 +60,8 @@ public class Construction : MonoBehaviour
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
         building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
         building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
+        StopWorkersConstruction();
+        Debug.Log("Instantiate building");
         Destroy(gameObject);
     }
 

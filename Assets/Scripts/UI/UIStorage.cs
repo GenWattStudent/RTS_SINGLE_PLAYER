@@ -2,8 +2,8 @@ using TMPro;
 using UnityEngine;
 
 public class Storage {
-    public int energy = 0;
-    public int maxEnergy = 500;
+    public int energy = 200;
+    public int maxEnergy = 700;
 }
 
 public class UIStorage : MonoBehaviour

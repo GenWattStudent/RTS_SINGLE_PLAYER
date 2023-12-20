@@ -13,7 +13,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] private float minZoom = 10f;
     [SerializeField] private float cameraRotationSpeed = 40f;
     [SerializeField] private float cameraZoomSpeed = 5f;
-    [SerializeField] private float cameraMovementSpeed = 50f;
+    [SerializeField] private float cameraMovementSpeed = 40f;
 
     private void Update() {
         HandleCameraMovement();

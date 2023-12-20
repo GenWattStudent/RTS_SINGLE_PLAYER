@@ -16,7 +16,7 @@ MonoBehaviour:
   deathExpirence: 10
   type: 1
   unitName: Tank
-  speed: 8
+  speed: 4
   buildingDistance: 0
   attackDamage: 20
   attackRange: 20

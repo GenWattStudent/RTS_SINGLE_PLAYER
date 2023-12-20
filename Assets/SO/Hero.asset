@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
   m_Name: Hero
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 1000000
   deathExpirence: 10
   type: 3
   unitName: Argus
-  speed: 6
+  speed: 5
   buildingDistance: 0
   attackDamage: 60
-  attackRange: 6
+  attackRange: 12
   attackSpeed: 0.4
   attackCooldown: 1.4
   acceleration: 4
@@ -33,6 +33,6 @@ MonoBehaviour:
   rotateSpeed: 10
   turretRotateSpeed: 0
   spawnTime: 0
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 5a09bd23f7473d94586daf5b381cb9db, type: 3}
   prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}

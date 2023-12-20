@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Energy
   m_EditorClassIdentifier: 
   health: 100
+  deathExpirence: 10
   type: 0
   buildingName: Energy
   description: lalala
@@ -21,6 +22,8 @@ MonoBehaviour:
   validPrefab: {fileID: 8989622198761688359, guid: b31c6d3572a07044ca387fd1fdbcdb6b,
     type: 3}
   invalidPrefab: {fileID: 8989622198761688359, guid: 4bf57783983b2f64184b3d4225f467a3,
+    type: 3}
+  constructionManagerPrefab: {fileID: 3286866004926964515, guid: fcb368d001f9ded49af221a21ffb0846,
     type: 3}
   income: 20
   incomeInterval: 2

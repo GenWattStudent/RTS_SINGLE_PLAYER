@@ -10,66 +10,36 @@ public class BuildingSystem : MonoBehaviour
     private static BuildingSystem instance;
     public static BuildingSystem Instance { get { return instance; } }
     private bool wasValid = false;
-    [SerializeField] private int numberOfRays = 25;
+    private GameObject[] heightsPoint;
+    public float diffranceBetweenMaxAndMinHeight = 1f;
 
     private void Awake() {
         instance = this;
         camera = Camera.main;
     }
-        bool IsBuildingPlacementValid(Vector3 center)
-    {
-        // Calculate the positions for rays around the building's base
-        for (int i = 0; i < numberOfRays; i++)
-        {
-            float angle = i * 360f / numberOfRays;
-            Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * Vector3.forward;
 
-            Ray ray = new Ray(center, rayDirection);
-            RaycastHit hit;
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 2f);
+    private bool IsFlatTerrain() {
+        if (heightsPoint == null) return false;
 
-            if (Physics.Raycast(ray, out hit, float.MaxValue, terrainLayer))
-            {
-                Debug.Log("Hit point");
-                // Check if the terrain slope is within an acceptable range
-                if (!IsTerrainFlat(hit.point))
-                {
-                    return false; // Terrain is too steep at this point
-                }
-            }
-            else
-            {
-                Debug.Log("No hit point");
-                return false; // Ray didn't hit terrain, consider it invalid
+        // make raycast fromm the height points to the ground then chek diff between  min and max height
+        float maxHeight = 0;
+        float minHeight = 0;
+
+        foreach (var point in heightsPoint) {
+            var rayPosition = new Vector3(point.transform.position.x, 100f, point.transform.position.z);
+            Ray ray = new Ray(rayPosition, Vector3.down);
+            // if ray hit notthing then return false
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, terrainLayer)) {
+                if (hit.point.y > maxHeight) maxHeight = hit.point.y;
+                if (hit.point.y < minHeight) minHeight = hit.point.y;
+            } else {
+                return false;
             }
         }
-
-        return true; // All rays found flat terrain
+        
+        return Mathf.Abs(maxHeight - minHeight) <= diffranceBetweenMaxAndMinHeight;
     }
-
-    bool IsTerrainFlat(Vector3 point)
-    {
-        // Sample the terrain normal at the specified point
-        Terrain terrain = Terrain.activeTerrain;
-        Debug.Log(terrain);
-        if (terrain != null)
-        {
-            Vector3 terrainNormal = terrain.terrainData.GetInterpolatedNormal(
-                point.x / terrain.terrainData.size.x,
-                point.z / terrain.terrainData.size.z
-            );
-
-            // You can adjust the slope threshold based on your requirements
-            float slopeThreshold = 0.3f; // Example threshold
-
-            // Check if the terrain slope is within an acceptable range
-            Debug.Log(Vector3.Dot(terrainNormal, Vector3.up));
-            return Vector3.Dot(terrainNormal, Vector3.up) > 1 - slopeThreshold;
-        }
-
-        return false;
-    }
-
+ 
     public void SetSelectedBuilding(BuildingSo building) {
         SelectedBuilding = building;
         if (previewPrefab) Destroy(previewPrefab);
@@ -85,6 +55,19 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    private void GetHeightPoints() {
+        if (previewPrefab == null) return;
+        var heightPoints = previewPrefab.transform.Find("HeightPoints");
+
+        if (heightPoints != null) {
+            heightsPoint = new GameObject[heightPoints.childCount];
+
+            for (int i = 0; i < heightPoints.childCount; i++) {
+                heightsPoint[i] = heightPoints.GetChild(i).gameObject;
+            }
+        }
+    }
+
     private void BuildingPreview() {
         if (SelectedBuilding is null) return;
 
@@ -95,8 +78,10 @@ public class BuildingSystem : MonoBehaviour
             if (previewPrefab != null) Destroy(previewPrefab);
             if (isValid) {
                 previewPrefab = Instantiate(SelectedBuilding.validPrefab);
+                GetHeightPoints();
             } else {
                 previewPrefab = Instantiate(SelectedBuilding.invalidPrefab);
+                GetHeightPoints();
             }
 
             placeableBuilding = previewPrefab.GetComponent<PlaceableBuilding>();
@@ -123,7 +108,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private bool IsValidPosition() {
-        return placeableBuilding != null && placeableBuilding.colliders.Count == 0;
+        return placeableBuilding != null && placeableBuilding.colliders.Count == 0 && IsFlatTerrain();
     }
 
     public void CancelBuilding() {
@@ -146,6 +131,7 @@ public class BuildingSystem : MonoBehaviour
                 previewPrefab = Instantiate(SelectedBuilding.validPrefab);
                 previewPrefab.transform.position = (Vector3)mousePosition;
                 placeableBuilding = previewPrefab.GetComponent<PlaceableBuilding>();
+                GetHeightPoints();
             }
         }
     }

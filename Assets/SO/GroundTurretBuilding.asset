@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
+  m_Name: GroundTurretBuilding
+  m_EditorClassIdentifier: 
+  attackDamage: 20
+  attackRange: 0
+  attackSpeed: 0.8
+  attackCooldown: 5
+  acceleration: 0
+  canAttack: 1
+  bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
+    type: 3}
+  ammo: 10
+  attackAngle: 0
+  hasTurret: 1
+  rotateSpeed: 0
+  turretRotateSpeed: 20
+  health: 400
+  deathExpirence: 50
+  type: 2
+  buildingName: Ground Turret
+  description: lalaa
+  sprite: {fileID: 21300000, guid: 83180f082d4a54f4289be6f03ce8cbe1, type: 3}
+  prefab: {fileID: 0}
+  validPrefab: {fileID: 0}
+  invalidPrefab: {fileID: 0}
+  constructionManagerPrefab: {fileID: 0}
+  income: 0
+  incomeInterval: 0
+  unitsToSpawn: []
+  maxBuildingCount: 4
+  cost: 100

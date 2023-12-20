@@ -13,6 +13,11 @@ public class Damagable : MonoBehaviour
     public Guid playerId;
     public int expirence = 0;
 
+    // On dead event handler
+    public event Action OnDead;
+    public GameObject targetPoint;
+
+
     void Awake()
     {
         health = damagableSo.health;
@@ -47,6 +52,7 @@ public class Damagable : MonoBehaviour
             Destroy(gameObject);
             InstantiateExplosion(); 
             InstantiateDestroyedObject();
+            OnDead?.Invoke();
             if (animator != null) {
                 animator.SetBool("isDead", true);
             }

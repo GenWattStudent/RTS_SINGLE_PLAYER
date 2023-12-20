@@ -27,6 +27,7 @@ public class Bullet : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, bulletSo.radius);
         foreach (var collider in colliders) {
+            if (IsOwnUnit(collider)) continue;
             DealDamage(collider);
         }
     }
@@ -46,9 +47,15 @@ public class Bullet : MonoBehaviour
         return damagable != null && damagable.playerId == playerId;
     }
 
+    private bool IsOwnUnit(Collider collider) {
+        var damagable = collider.gameObject.GetComponent<Damagable>();
+        return damagable != null && damagable.playerId == playerId;
+    }
+
     private void CheckHit() {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction, out hit, bulletSo.speed * Time.deltaTime)) {
+        if (Physics.Raycast(transform.position, direction, out hit, speed * Time.deltaTime)) {
+            Debug.Log(hit.collider.gameObject.name);
             if (IsOwnUnit(hit)) return;
 
             if (bulletSo.radius > 0f) {

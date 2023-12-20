@@ -8,12 +8,10 @@ public class Worker : MonoBehaviour
     private UnitMovement unitMovement;
 
     private float DistanceToConstruction() {
-        Debug.Log("Distance to construction " + Vector3.Distance(transform.position, construction.transform.position));
         return Vector3.Distance(transform.position, construction.transform.position);
     }
 
     private void StartConstruction() {
-        Debug.Log("Start construction - unit");
         construction.AddWorker(unit);
         isBuilding = true;
     }
@@ -27,7 +25,6 @@ public class Worker : MonoBehaviour
 
     public void MoveToConstruction(Construction construction) {
         this.construction = construction;
-        Debug.Log("Move to construction");
         if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance) {
             unitMovement.MoveTo(construction.transform.position);
         }
@@ -43,7 +40,7 @@ public class Worker : MonoBehaviour
     {
         if (construction == null) return;
         var distance = DistanceToConstruction();
-        Debug.Log(distance + " " + unit.unitSo.buildingDistance + " " + isBuilding);
+
         if (distance <= unit.unitSo.buildingDistance && !isBuilding) {
             if (unitMovement != null) {
                 unitMovement.Stop();

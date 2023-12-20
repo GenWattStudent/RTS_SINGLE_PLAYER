@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &33262721970858854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7183266777542325119}
+  m_Layer: 0
+  m_Name: TargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7183266777542325119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33262721970858854}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.643, z: 0}
+  m_LocalScale: {x: 0.74999994, y: 0.74999994, z: 0.74999994}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7563983821104451940}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8989622198761688359
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +66,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7183266777542325119}
   - {fileID: 4301394834325064359}
   - {fileID: 6259324541909070047}
   m_Father: {fileID: 0}
@@ -94,8 +126,11 @@ MonoBehaviour:
   damagableSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
   health: 0
   healthBar: {fileID: 2161865639616813149}
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
+    type: 3}
   destroyedObjectPrefab: {fileID: 0}
+  expirence: 0
+  targetPoint: {fileID: 33262721970858854}
 --- !u!54 &-6088940530253509853
 Rigidbody:
   m_ObjectHideFlags: 0

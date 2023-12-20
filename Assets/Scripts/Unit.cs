@@ -5,6 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     public UnitSo unitSo;
+    public AttackableSo attackableSo;
     public Guid playerId;
     public Material unitMaterial;
     public bool shouldChangeMaterial = true;

@@ -20,52 +20,65 @@ public class Attack : MonoBehaviour
     void Start()
     {
         currentUnit = GetComponent<Unit>();
-        currentAmmo = currentUnit.unitSo.ammo;
+        currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
         animator = GetComponent<Animator>();
 
-        if (currentUnit.unitSo.hasTurret) {
+        if (currentUnit.attackableSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
         }
     }
 
     private void CheckForTargets() {
-        var colliders = Physics.OverlapSphere(transform.position, currentUnit.unitSo.attackRange);
+        var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
 
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
 
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
-                target = damagableScript;
+                SetTarget(damagableScript);
                 break;
             }
         }
     }
 
+    public void SetTarget(Damagable target) {
+        this.target = target;
+        target.OnDead += OnTargetDead;
+    }
+
+    private void OnTargetDead() {
+        target = null;
+    }
+
     private bool IsInRange() {
-        return Vector3.Distance(transform.position, target.transform.position) <= currentUnit.unitSo.attackRange;
+        return Vector3.Distance(transform.position, target.transform.position) <= currentUnit.attackableSo.attackRange;
     }
 
     private void ShootBullet() {
-        GameObject bullet = Instantiate(currentUnit.unitSo.bulletPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().damage = currentUnit.unitSo.attackDamage;
-        bullet.GetComponent<Bullet>().direction = (target.transform.position - transform.position).normalized;
-        bullet.GetComponent<Bullet>().playerId = currentUnit.playerId;
+        GameObject bullet = Instantiate(currentUnit.attackableSo.bulletPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
+        var bulletScript = bullet.GetComponent<Bullet>();
+        var targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
-        attackSpeedTimer = currentUnit.unitSo.attackSpeed;
+        bulletScript.damage = currentUnit.attackableSo.attackDamage;
+        bulletScript.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
+        bulletScript.playerId = currentUnit.playerId;
+        bulletScript.unitsBullet = GetComponent<Damagable>();
+
+        attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
     }
 
     private bool IsInAngle() {
-        if (currentUnit.unitSo.hasTurret) {
-            return turret.IsInFieldOfView(target.transform.position, currentUnit.unitSo.attackAngle);
+        if (currentUnit.attackableSo.hasTurret) {
+            return turret.IsInFieldOfView(target.transform.position, currentUnit.attackableSo.attackAngle);
         } else {
             // calculate angle between unit and target
             Vector3 targetDir = target.transform.position - transform.position;
             float angle = Vector3.Angle(targetDir, transform.forward);
 
             // if angle is less than attack angle, return true
-            if (angle < currentUnit.unitSo.attackAngle) {
+            if (angle < currentUnit.attackableSo.attackAngle) {
                 return true;
             }
 
@@ -82,13 +95,11 @@ public class Attack : MonoBehaviour
 
     private void PerformAttack() {
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
-            if (animator != null) animator.SetBool("isShooting", true);
             ShootBullet();
-            if (animator) animator.SetBool("isShooting", false);
             
             if (currentAmmo <= 0) {
-                attackCooldownTimer = currentUnit.unitSo.attackCooldown;
-                currentAmmo = currentUnit.unitSo.ammo;
+                attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
+                currentAmmo = currentUnit.attackableSo.ammo;
             }
         }
     }
@@ -98,20 +109,21 @@ public class Attack : MonoBehaviour
         attackSpeedTimer -= Time.deltaTime;
         attackCooldownTimer -= Time.deltaTime;
 
-        if (target == null && autoAttack) {
+        if (target == null && autoAttack && currentUnit.attackableSo.canAttack && checkForTargetsCoroutine == null) {
            checkForTargetsCoroutine =  StartCoroutine(CheckForTargetsCoroutine());
         }
 
         if (target != null) {
             if (checkForTargetsCoroutine != null) StopCoroutine(checkForTargetsCoroutine);
-            if (IsInRange() && currentUnit.unitSo.canAttack) {
+            if (IsInRange() && currentUnit.attackableSo.canAttack) {
               PerformAttack();             
             } else {
                 target = null;
+                return;
             }
 
-            if (currentUnit.unitSo.hasTurret) {
-                turret.RotateToTarget(target.transform.position, currentUnit.unitSo.turretRotateSpeed);
+            if (currentUnit.attackableSo.hasTurret) {
+                turret.RotateToTarget(target.transform.position, currentUnit.attackableSo.turretRotateSpeed);
             } else {
                 unitMovement.RotateToTarget(target.transform.position);
             }

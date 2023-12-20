@@ -16,8 +16,8 @@ MonoBehaviour:
   deathExpirence: 10
   type: 0
   unitName: Worker
-  speed: 10
-  buildingDistance: 10
+  speed: 7
+  buildingDistance: 3
   attackDamage: 10
   attackRange: 2
   attackSpeed: 4
