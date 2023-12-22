@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
         unitScript.playerId = playerId;
         unitScript.ChangeMaterial(playerMaterial);
         units.Add(unitScript);
+
+        spawnPosition += new Vector3(2, 0 ,0);
     }
 
     private void SpawnUnits() {

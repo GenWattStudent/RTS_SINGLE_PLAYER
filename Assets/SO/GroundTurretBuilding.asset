@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GroundTurretBuilding
   m_EditorClassIdentifier: 
   attackDamage: 20
-  attackRange: 0
+  attackRange: 20
   attackSpeed: 0.8
   attackCooldown: 5
   acceleration: 0
@@ -21,9 +21,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
     type: 3}
   ammo: 10
-  attackAngle: 0
+  attackAngle: 7
   hasTurret: 1
-  rotateSpeed: 0
+  rotateSpeed: 20
   turretRotateSpeed: 20
   health: 400
   deathExpirence: 50
@@ -31,10 +31,13 @@ MonoBehaviour:
   buildingName: Ground Turret
   description: lalaa
   sprite: {fileID: 21300000, guid: 83180f082d4a54f4289be6f03ce8cbe1, type: 3}
-  prefab: {fileID: 0}
-  validPrefab: {fileID: 0}
-  invalidPrefab: {fileID: 0}
-  constructionManagerPrefab: {fileID: 0}
+  prefab: {fileID: 5393129853425955648, guid: 825765985e9e9074491829f7a4327bd5, type: 3}
+  validPrefab: {fileID: 3393997211609255391, guid: 66026f8c49ae57244a3184e4b68c04b6,
+    type: 3}
+  invalidPrefab: {fileID: 3393997211609255391, guid: 74e702fa1f9cb9644a003753a01f0df1,
+    type: 3}
+  constructionManagerPrefab: {fileID: 3286866004926964515, guid: 801935982bfa58240af8575938c394c1,
+    type: 3}
   income: 0
   incomeInterval: 0
   unitsToSpawn: []

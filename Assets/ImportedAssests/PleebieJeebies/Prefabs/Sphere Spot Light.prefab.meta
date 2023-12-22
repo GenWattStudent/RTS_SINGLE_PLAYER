@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8a2b2af7628caac46b02bf4523fc472f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 201611
+  packageName: Day, Night, and Light Controller (3D)
+  packageVersion: 1.0.0
+  assetPath: Assets/PleebieJeebies/Prefabs/Sphere Spot Light.prefab
+  uploadId: 449747

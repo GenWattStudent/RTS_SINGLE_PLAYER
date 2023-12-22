@@ -37,8 +37,9 @@ public class UnitMovement : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
-        agent.isStopped = false;
         agent.SetDestination(destination);
+        agent.isStopped = false;
+        agent.avoidancePriority = Random.Range(1, 100);
     }
 
     public void Stop()

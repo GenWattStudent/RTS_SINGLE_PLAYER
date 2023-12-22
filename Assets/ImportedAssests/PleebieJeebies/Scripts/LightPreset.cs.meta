@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c0e3cc097d8e3f14fb8629e0a4740189
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 201611
+  packageName: Day, Night, and Light Controller (3D)
+  packageVersion: 1.0.0
+  assetPath: Assets/PleebieJeebies/Scripts/LightPreset.cs
+  uploadId: 449747

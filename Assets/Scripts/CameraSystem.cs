@@ -14,6 +14,12 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] private float cameraRotationSpeed = 40f;
     [SerializeField] private float cameraZoomSpeed = 5f;
     [SerializeField] private float cameraMovementSpeed = 40f;
+    [SerializeField] private Vector3 boundsMargin = new Vector3(5f, 5f, 5f);
+    private Terrain terrain;
+
+    private void Start() {
+        terrain = Terrain.activeTerrain;
+    }
 
     private void Update() {
         HandleCameraMovement();
@@ -55,8 +61,9 @@ public class CameraSystem : MonoBehaviour
 
     private void UpdateCameraPosition(Vector3 inputDirection) {
         Vector3 moveDirection = transform.forward * inputDirection.z + transform.right * inputDirection.x;
+        Vector3 newPosition = transform.position + moveDirection * cameraMovementSpeed * Time.deltaTime;
 
-        transform.position += moveDirection * cameraMovementSpeed * Time.deltaTime;
+        transform.position = newPosition;
     }
 
     private void HandleCameraMovement() {

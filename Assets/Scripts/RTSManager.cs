@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class RTSManager : MonoBehaviour
 {
@@ -45,20 +46,39 @@ public class RTSManager : MonoBehaviour
         }
     }
 
+    private void SetTarget(Damagable target, Selectable selectable) {
+        var attackScript = selectable.GetComponent<Attack>();
+
+        if (attackScript != null) {
+            attackScript.SetTarget(target);
+            CancelBuildingCommand(selectable);
+        }
+    }
+
     private void AttackCommand(Damagable target) {
         foreach (Selectable selectable in SelectionManager.Instance.selectedObjects) {
-            var attackScript = selectable.GetComponent<Attack>();
-
-            if (attackScript != null) {
-                attackScript.SetTarget(target);
-                CancelBuildingCommand(selectable);
+            var unitScript = selectable.GetComponent<Unit>();
+            var distance = Vector3.Distance(target.transform.position, selectable.transform.position);
+            
+            if (unitScript != null && unitScript.attackableSo.attackRange < distance) {
+                // Move to target
+                var unitMovement = selectable.GetComponent<UnitMovement>();
+                var offsetPoint = 2f;
+                // calculete the closest point to be in range offset indicates that unit should be closer to target by offset
+                var closestPointToBeInRange = target.transform.position + (selectable.transform.position - target.transform.position).normalized * (distance - unitScript.attackableSo.attackRange + offsetPoint);
+                
+                unitMovement.MoveTo(closestPointToBeInRange);
+                SetTarget(target, selectable);
+                continue;
             }
+
+            SetTarget(target, selectable);
         }
     }
 
     private void BuildCommand(Construction construction) {
         var workers = SelectionManager.Instance.GetWorkers();
-        Debug.Log(construction + "Count " + workers.Count);
+
         foreach (var worker in workers) {
             var workerScript = worker.GetComponent<Worker>();
 
@@ -70,26 +90,21 @@ public class RTSManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0)
+        if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && (!EventSystem.current.IsPointerOverGameObject() || !EventSystem.current.IsPointerOverGameObject(0)))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit) && hit.point != null)
             {
                 var damagableScript = hit.transform.gameObject.GetComponent<Damagable>();
-                var unitScript = hit.transform.gameObject.GetComponent<Unit>();
                 var selectableScript = hit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = hit.transform.gameObject.GetComponent<Construction>();
 
-                if (damagableScript != null && unitScript != null && selectableScript != null) {
+                if (damagableScript != null && selectableScript != null) {
                     // Attack
                     if (damagableScript.playerId != PlayerController.Instance.playerId) {
-                        var distance = Vector3.Distance(hit.point, transform.position);
-
-                       if (distance <= unitScript.unitSo.attackRange) {
-                            AttackCommand(damagableScript);
-                            return;
-                        }
+                        AttackCommand(damagableScript);
+                        return;
                     }
                     // ------------------------------------------------
                     if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.playerId == PlayerController.Instance.playerId && constructionScript != null) {

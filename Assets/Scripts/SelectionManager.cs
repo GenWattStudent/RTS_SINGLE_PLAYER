@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -135,6 +135,7 @@ public class SelectionManager : MonoBehaviour
     // Select unit if clicked on it, deselect when nothing is clicked on
     private void Update()
     {
+        if (!EventSystem.current.IsPointerOverGameObject()) return;
         if (Input.GetMouseButtonDown(0))
         {
             mouseStartPosition = Input.mousePosition;

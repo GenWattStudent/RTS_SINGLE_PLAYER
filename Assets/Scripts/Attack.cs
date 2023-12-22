@@ -5,7 +5,7 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     public Damagable target;
-    [SerializeField] private float checkTargetTimer;
+    [SerializeField] private float checkTargetTimer = 0.2f;
     private Unit currentUnit;
     private Animator animator;
     [SerializeField] private GameObject bulletSpawnPoint;
@@ -27,6 +27,8 @@ public class Attack : MonoBehaviour
         if (currentUnit.attackableSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
         }
+
+        if (autoAttack) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
     }
 
     private void CheckForTargets() {
@@ -34,8 +36,10 @@ public class Attack : MonoBehaviour
 
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
-
+            Debug.Log($"TROLE {damagableScript} {currentUnit.playerId} {currentUnit.attackableSo.attackRange}");
+            if (damagableScript != null) Debug.Log($"LOKE {damagableScript.playerId} {currentUnit.playerId}");
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
+                Debug.Log("Set target");
                 SetTarget(damagableScript);
                 break;
             }
@@ -44,11 +48,18 @@ public class Attack : MonoBehaviour
 
     public void SetTarget(Damagable target) {
         this.target = target;
-        target.OnDead += OnTargetDead;
-    }
+
+        if (this.target != null) {
+            StopCoroutine(checkForTargetsCoroutine);
+            target.OnDead += OnTargetDead;
+            return;
+        } 
+
+        if (autoAttack) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
+    }   
 
     private void OnTargetDead() {
-        target = null;
+        SetTarget(null);
     }
 
     private bool IsInRange() {
@@ -109,16 +120,12 @@ public class Attack : MonoBehaviour
         attackSpeedTimer -= Time.deltaTime;
         attackCooldownTimer -= Time.deltaTime;
 
-        if (target == null && autoAttack && currentUnit.attackableSo.canAttack && checkForTargetsCoroutine == null) {
-           checkForTargetsCoroutine =  StartCoroutine(CheckForTargetsCoroutine());
-        }
-
         if (target != null) {
-            if (checkForTargetsCoroutine != null) StopCoroutine(checkForTargetsCoroutine);
+            Debug.Log("Target not null");
             if (IsInRange() && currentUnit.attackableSo.canAttack) {
               PerformAttack();             
             } else {
-                target = null;
+                SetTarget(null);
                 return;
             }
 
