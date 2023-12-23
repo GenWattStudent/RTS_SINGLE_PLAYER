@@ -10,6 +10,5 @@ public class BulletSo : ScriptableObject
     public float lifeTime;
     public float radius;
     public GameObject explosionPrefab;
-    // sound effect
-    public AudioClip shootSound;
+    public GameObject initialExplosionPrefab;
 }

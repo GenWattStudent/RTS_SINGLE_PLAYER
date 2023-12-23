@@ -4,7 +4,7 @@ using UnityEngine;
 public class Stats : MonoBehaviour
 {
     [SerializeField] private RectTransform statGameObject;
-    private List<GameObject> statObjects = new List<GameObject>();
+    private List<RectTransform> statObjects = new ();
 
     public void CreateStat(string name, string value) {
         var stat = Instantiate(statGameObject, transform);
@@ -14,18 +14,18 @@ public class Stats : MonoBehaviour
 
         textMeshes[0].text = name;
         textMeshes[1].text = value;
-        statObjects.Add(stat.gameObject);
+        statObjects.Add(stat);
     }
 
     public void ClearStats() {
         foreach (var statObject in statObjects) {
-            Destroy(statObject);
+            Destroy(statObject.gameObject);
         }
 
         statObjects.Clear();
     }
 
-    public void clearStatByName(string name) {
+    public void ClearStatByName(string name) {
         foreach (var statObject in statObjects) {
             if (statObject.name == name) {
                 Destroy(statObject);

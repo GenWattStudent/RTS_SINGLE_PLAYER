@@ -36,7 +36,7 @@ public class BuildingSystem : MonoBehaviour
                 return false;
             }
         }
-        
+        Debug.Log(maxHeight + " " + minHeight + " " + diffranceBetweenMaxAndMinHeight);
         return Mathf.Abs(maxHeight - minHeight) <= diffranceBetweenMaxAndMinHeight;
     }
  

@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -619140009929304772, guid: f8f1c037243de2446a3f8c1256a72502,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1062200220178984634, guid: f8f1c037243de2446a3f8c1256a72502,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -128,6 +133,11 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 32a76832b79e84347ad9df08b12709c3, type: 2}
+    - target: {fileID: 8816775167768068385, guid: f8f1c037243de2446a3f8c1256a72502,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9184962378081221949, guid: f8f1c037243de2446a3f8c1256a72502,
         type: 3}
       propertyPath: shouldChangeMaterial

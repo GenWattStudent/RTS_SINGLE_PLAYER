@@ -212,7 +212,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4647910288746205808}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -421,7 +421,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5638854283228320419}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: -8074666234003767969}
   - component: {fileID: 1506612390311189066}
   - component: {fileID: 1503889969436305116}
+  - component: {fileID: 170826199209899036}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -660,6 +661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   checkTargetTimer: 0.2
+  currentUnit: {fileID: 0}
   bulletSpawnPoint: {fileID: 4344669776812657341}
   autoAttack: 1
 --- !u!114 &1506612390311189066
@@ -680,7 +682,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
   targetPoint: {fileID: 5020726765372733000}
 --- !u!54 &1503889969436305116
 Rigidbody:
@@ -709,6 +711,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &170826199209899036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994407462191697491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d853e38ae7aa42b4abc7158c0e0a2c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelableSo: {fileID: 11400000, guid: 2a9cc1241d219e44882aa2c3bd7d21cb, type: 2}
+  level: 1
+  expirence: 0
+  expirenceToNextLevel: 0
 --- !u!1 &6040101447951884499
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,6 +1220,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 145
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835873228113364017, guid: 3b61c5c2bac64e4458b87b415e735b4c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6463491866520170059, guid: 3b61c5c2bac64e4458b87b415e735b4c,
         type: 3}

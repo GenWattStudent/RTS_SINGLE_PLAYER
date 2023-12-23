@@ -78,6 +78,8 @@ GameObject:
   - component: {fileID: 9184962378081221949}
   - component: {fileID: 5025436868650576337}
   - component: {fileID: -6002317933877532533}
+  - component: {fileID: -619140009929304772}
+  - component: {fileID: 8816775167768068385}
   m_Layer: 0
   m_Name: TankBuilding
   m_TagString: Building
@@ -223,7 +225,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
   targetPoint: {fileID: 2936924105273951565}
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
@@ -240,6 +242,39 @@ MonoBehaviour:
   selectionCircle: {fileID: 0}
   selectableType: 0
   isSelected: 0
+--- !u!114 &-619140009929304772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc43562d0d0107742a0ae19144d0a7bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingLevelableSo: {fileID: 11400000, guid: ebe94d0a624769f4da31f068d545c492,
+    type: 2}
+  level: 1
+  building: {fileID: 0}
+  damagable: {fileID: 0}
+  reduceSpawnTime: 0
+--- !u!114 &8816775167768068385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
+  attackableSo: {fileID: 0}
+  buildingLevelable: {fileID: 0}
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +367,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4240831702524726709}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 

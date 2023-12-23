@@ -46,6 +46,8 @@ GameObject:
   - component: {fileID: -6088940530253509853}
   - component: {fileID: -5337248106169933741}
   - component: {fileID: -3889227336996827685}
+  - component: {fileID: 3186745836414866504}
+  - component: {fileID: 5668391838505882548}
   m_Layer: 0
   m_Name: EnergyBuilding
   m_TagString: Untagged
@@ -105,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   shouldChangeMaterial: 1
   unitPrefabs:
@@ -129,7 +132,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
   targetPoint: {fileID: 33262721970858854}
 --- !u!54 &-6088940530253509853
 Rigidbody:
@@ -191,6 +194,39 @@ MonoBehaviour:
   selectionCircle: {fileID: 0}
   selectableType: 0
   isSelected: 0
+--- !u!114 &3186745836414866504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989622198761688359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc43562d0d0107742a0ae19144d0a7bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingLevelableSo: {fileID: 11400000, guid: d0e7c50c127efda4f8e340f7774ae844,
+    type: 2}
+  level: 1
+  building: {fileID: 0}
+  damagable: {fileID: 0}
+  reduceSpawnTime: 0
+--- !u!114 &5668391838505882548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989622198761688359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  attackableSo: {fileID: 0}
+  buildingLevelable: {fileID: 0}
 --- !u!1001 &4305346903095443135
 PrefabInstance:
   m_ObjectHideFlags: 0

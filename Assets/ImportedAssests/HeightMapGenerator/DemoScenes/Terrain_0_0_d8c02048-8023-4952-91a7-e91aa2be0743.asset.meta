@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 205ca897b021082438abe616c497475a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 15600000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 260294
+  packageName: HeightMap Generator
+  packageVersion: 1.0.0
+  assetPath: Assets/HeightMapGenerator/DemoScenes/Terrain_0_0_d8c02048-8023-4952-91a7-e91aa2be0743.asset
+  uploadId: 610044

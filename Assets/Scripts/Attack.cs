@@ -6,7 +6,7 @@ public class Attack : MonoBehaviour
 {
     public Damagable target;
     [SerializeField] private float checkTargetTimer = 0.2f;
-    private Unit currentUnit;
+    public Unit currentUnit;
     private Animator animator;
     [SerializeField] private GameObject bulletSpawnPoint;
     private float attackSpeedTimer;
@@ -36,10 +36,8 @@ public class Attack : MonoBehaviour
 
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
-            Debug.Log($"TROLE {damagableScript} {currentUnit.playerId} {currentUnit.attackableSo.attackRange}");
-            if (damagableScript != null) Debug.Log($"LOKE {damagableScript.playerId} {currentUnit.playerId}");
+
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
-                Debug.Log("Set target");
                 SetTarget(damagableScript);
                 break;
             }
@@ -50,7 +48,7 @@ public class Attack : MonoBehaviour
         this.target = target;
 
         if (this.target != null) {
-            StopCoroutine(checkForTargetsCoroutine);
+            if (checkForTargetsCoroutine != null) StopCoroutine(checkForTargetsCoroutine);
             target.OnDead += OnTargetDead;
             return;
         } 
@@ -71,7 +69,7 @@ public class Attack : MonoBehaviour
         var bulletScript = bullet.GetComponent<Bullet>();
         var targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
-        bulletScript.damage = currentUnit.attackableSo.attackDamage;
+        bulletScript.bulletSo = currentUnit.attackableSo.bulletSo;
         bulletScript.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
         bulletScript.playerId = currentUnit.playerId;
         bulletScript.unitsBullet = GetComponent<Damagable>();
@@ -121,7 +119,6 @@ public class Attack : MonoBehaviour
         attackCooldownTimer -= Time.deltaTime;
 
         if (target != null) {
-            Debug.Log("Target not null");
             if (IsInRange() && currentUnit.attackableSo.canAttack) {
               PerformAttack();             
             } else {

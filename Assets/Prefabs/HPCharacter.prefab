@@ -857,6 +857,8 @@ GameObject:
   - component: {fileID: 6451795301113717441}
   - component: {fileID: 2993480397647512918}
   - component: {fileID: 182582431717544544}
+  - component: {fileID: 3743362079215078247}
+  - component: {fileID: 3372196632889626661}
   m_Layer: 0
   m_Name: HPCharacter
   m_TagString: Untagged
@@ -970,7 +972,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 3372196632889626661}
   targetPoint: {fileID: 6409524915884832550}
 --- !u!114 &7673169960702776933
 MonoBehaviour:
@@ -986,6 +988,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   checkTargetTimer: 0
+  currentUnit: {fileID: 0}
   bulletSpawnPoint: {fileID: 8963895157291006664}
   autoAttack: 1
 --- !u!195 &6451795301113717441
@@ -1044,6 +1047,49 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &3743362079215078247
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3912865232768828701}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &3372196632889626661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3912865232768828701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d853e38ae7aa42b4abc7158c0e0a2c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelableSo: {fileID: 11400000, guid: e8ebdc3953b31384d888bcdf51573de3, type: 2}
+  level: 1
+  expirence: 0
+  expirenceToNextLevel: 0
 --- !u!1 &4078261128673861799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2704,7 +2750,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7571700067864268399}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -3095,7 +3141,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8199242462070866894}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 

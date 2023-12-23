@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
 
     private void SpawnUnits() {
         foreach (var unitPrefab in unitPrefabs) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 9; i++) {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();

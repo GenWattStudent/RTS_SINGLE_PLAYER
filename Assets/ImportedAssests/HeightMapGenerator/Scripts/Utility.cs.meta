@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d3ad2b29aa0a2c349bbe237cf9de1c82
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 260294
+  packageName: HeightMap Generator
+  packageVersion: 1.0.0
+  assetPath: Assets/HeightMapGenerator/Scripts/Utility.cs
+  uploadId: 610044

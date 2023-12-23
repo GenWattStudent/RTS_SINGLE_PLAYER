@@ -11,18 +11,18 @@ public class Damagable : MonoBehaviour
     private ProgresBar progressBarScript;
     private Animator animator;
     public Guid playerId;
-    public int expirence = 0;
+    public Levelable levelable;
 
     // On dead event handler
     public event Action OnDead;
     public GameObject targetPoint;
-
 
     void Awake()
     {
         health = damagableSo.health;
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         animator = GetComponent<Animator>();
+        levelable = GetComponent<Levelable>();
     }
 
     private void InstantiateExplosion() {
@@ -41,7 +41,8 @@ public class Damagable : MonoBehaviour
     }
 
     public void AddExpiernce(int exp) {
-        expirence += exp;
+        if (levelable == null) return;
+        levelable.AddExpirence(exp);
     }
 
     public bool TakeDamage(float damage) {

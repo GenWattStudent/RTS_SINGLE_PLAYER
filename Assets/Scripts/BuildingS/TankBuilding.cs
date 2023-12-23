@@ -13,10 +13,12 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
     private bool isUnitSpawning = false;
     private UnitSo currentSpawningUnit;
     private List<Animator> doorAnimators = new ();
+    private Building buildingScript;
 
     private void Awake()
     {
         var animators = GetComponentsInChildren<Animator>();
+        buildingScript = GetComponent<Building>();
 
         foreach (var animator in animators)
         {
@@ -82,7 +84,7 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
-            spawnTimer = unitsQueue[0].spawnTime;
+            spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }

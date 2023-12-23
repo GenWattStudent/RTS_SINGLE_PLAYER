@@ -28,13 +28,17 @@ public class UIStorage : MonoBehaviour
         UpdateEnergyData();
     }
 
-    public void decreaseEnergy(int amount) {
+    public void DecreaseEnergy(int amount) {
         if (storage.energy < amount) {
             return;
         }
 
         storage.energy -= amount;
         UpdateEnergyData();
+    }
+
+    public bool HasEnoughEnergy(int amount) {
+        return storage.energy >= amount;
     }
 
     private void Start() {

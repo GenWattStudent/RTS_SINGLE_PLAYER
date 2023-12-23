@@ -135,7 +135,8 @@ public class SelectionManager : MonoBehaviour
     // Select unit if clicked on it, deselect when nothing is clicked on
     private void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject()) return;
+        if (UIHelper.Instance.IsPointerOverUIElement()) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             mouseStartPosition = Input.mousePosition;

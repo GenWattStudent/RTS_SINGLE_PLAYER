@@ -90,7 +90,7 @@ public class RTSManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && (!EventSystem.current.IsPointerOverGameObject() || !EventSystem.current.IsPointerOverGameObject(0)))
+        if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

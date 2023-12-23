@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: -5754590039528732433}
   - component: {fileID: -8539418394513040316}
   - component: {fileID: 5744144253892617160}
+  - component: {fileID: 325383662786411873}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -170,7 +171,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 2321514005527918770}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.8
+  m_Radius: 0.7
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -229,7 +230,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
   targetPoint: {fileID: 5575477033357697071}
 --- !u!114 &6084159726790955623
 MonoBehaviour:
@@ -259,6 +260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   checkTargetTimer: 0
+  currentUnit: {fileID: 0}
   bulletSpawnPoint: {fileID: 6003862070716649827}
   autoAttack: 0
 --- !u!95 &-8539418394513040316
@@ -310,6 +312,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &325383662786411873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d853e38ae7aa42b4abc7158c0e0a2c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelableSo: {fileID: 11400000, guid: 17fa135bbdb3e7a40bdd56f57d66173e, type: 2}
+  level: 1
+  expirence: 0
+  expirenceToNextLevel: 0
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +566,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6977154542806008979}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
