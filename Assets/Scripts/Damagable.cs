@@ -28,7 +28,6 @@ public class Damagable : MonoBehaviour
     private void InstantiateExplosion() {
         if (explosionPrefab != null) {
             var explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            explosion.transform.localScale = Vector3.one * 2f;
             Destroy(explosion, 2.4f);
         }
     }

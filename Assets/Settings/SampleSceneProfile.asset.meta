@@ -6,3 +6,10 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 260306
+  packageName: Low-poly nature
+  packageVersion: 1.0.0
+  assetPath: Assets/Settings/SampleSceneProfile.asset
+  uploadId: 600143

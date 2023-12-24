@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   shouldChangeMaterial: 0
   unitPrefabs: []
@@ -92,7 +93,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
   targetPoint: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
@@ -128,8 +129,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.99002993, y: 0.44942325, z: 1.0374616}
-  m_Center: {x: 0.32183045, y: 0.22090015, z: 0.44293958}
+  m_Size: {x: 1.0343945, y: 0.44942325, z: 1.048759}
+  m_Center: {x: -0.008897066, y: 0.22090015, z: -0.008595616}
 --- !u!54 &6051365526223578087
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -236,12 +237,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundTurretBuildingConstruction
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1475964704601497210, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
-    - {fileID: 4386753864046641479, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
-    - {fileID: 7163232982638283826, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
-    - {fileID: 5776599522645334268, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
-    - {fileID: -2914960921143579207, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

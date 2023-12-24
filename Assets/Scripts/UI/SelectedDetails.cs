@@ -71,21 +71,24 @@ public class SelectedDetails : MonoBehaviour
         var damagable = selectable.GetComponent<Damagable>();
         var building = selectable.GetComponent<Building>();
         CreateHealthStat(damagable);
-        imageGameObject.GetComponent<Image>().sprite = building.buildingSo.sprite;
 
-        if (building.attackableSo != null) {
-            CreateDamageStat(building.attackableSo);
+        if (building != null) {
+            imageGameObject.GetComponent<Image>().sprite = building.buildingSo.sprite;
+
+            if (building.attackableSo != null) {
+                CreateDamageStat(building.attackableSo);
+            }
+
+            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
+                this.building = building;
+                upgrdeButton.gameObject.SetActive(true);
+            } else {
+                upgrdeButton.gameObject.SetActive(false);
+            }
+
+            levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
+            healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
         }
-
-        if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
-            this.building = building;
-            upgrdeButton.gameObject.SetActive(true);
-        } else {
-            upgrdeButton.gameObject.SetActive(false);
-        }
-
-        levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
-        healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
     }
 
     private void UpdateMultipleDetails()

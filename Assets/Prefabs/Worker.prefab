@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: -8539418394513040316}
   - component: {fileID: 5744144253892617160}
   - component: {fileID: 325383662786411873}
+  - component: {fileID: 7144610241314663701}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -328,6 +329,24 @@ MonoBehaviour:
   level: 1
   expirence: 0
   expirenceToNextLevel: 0
+--- !u!114 &7144610241314663701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef613c8f5aa287b4f85829cb22fea1ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserBeamPrefab: {fileID: 8543049332639901786, guid: c150b30f0b1578e4ea44bb1ff0fbb569,
+    type: 3}
+  spawnPoint: {fileID: 6003862070716649827}
+  laserSo: {fileID: 11400000, guid: c2e2afdbb44a6b941adab0a98d54f9db, type: 2}
+  currentDamageInterval: 0
+  isAttacking: 0
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,7 +487,7 @@ Transform:
   m_GameObject: {fileID: 6003862070716649827}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.398, z: 0.371}
+  m_LocalPosition: {x: 0, y: 0.398, z: 0.367}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

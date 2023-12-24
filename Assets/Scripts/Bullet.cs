@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     public Guid playerId;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
+    private Vector3 previousPosition;
 
     private void Awake() {
         damage = bulletSo.damage;
@@ -16,6 +17,8 @@ public class Bullet : MonoBehaviour
     }
 
     private void Move() {
+        previousPosition = transform.position;
+        transform.rotation = Quaternion.LookRotation(direction);
         transform.position += direction * speed * Time.deltaTime;
     }
 
@@ -54,8 +57,9 @@ public class Bullet : MonoBehaviour
 
     private void CheckHit() {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction, out hit, speed * Time.deltaTime)) {
-            Debug.Log(hit.collider.gameObject.name);
+        var direction = transform.position - previousPosition;
+        
+        if (Physics.Raycast(previousPosition, direction.normalized, out hit, direction.magnitude)) {
             if (IsOwnUnit(hit)) return;
 
             if (bulletSo.radius > 0f) {
@@ -76,7 +80,7 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        CheckHit();
         Move();
+        CheckHit();
     }
 }

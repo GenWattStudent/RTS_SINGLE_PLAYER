@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Make this change in editor
-// [ExecuteAlways]
+// [ExecuteInEditMode]
 public class LightManager : MonoBehaviour
 {
     [SerializeField, Header("Managed Objects")] private Light DirectionalLight = null;

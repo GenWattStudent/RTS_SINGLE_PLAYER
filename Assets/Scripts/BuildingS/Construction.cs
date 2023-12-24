@@ -7,7 +7,7 @@ public class Construction : MonoBehaviour
     private float constructionTimer = 0f;
     private bool isCurrentlyConstructing = false;
     private float buildingSpeed  = 0f;
-    public List<Unit> buildingUnits = new List<Unit>();
+    public List<Unit> buildingUnits = new ();
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
@@ -18,6 +18,7 @@ public class Construction : MonoBehaviour
         if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
         buildingUnits.Add(unit);
         buildingSpeed += unit.unitSo.attackDamage;
+        Debug.Log("Add worker - building " + buildingUnits.Count + " - " + buildingSpeed);
         StartConstruction();
     }
 
@@ -25,7 +26,7 @@ public class Construction : MonoBehaviour
     {
         if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
         buildingUnits.Remove(unit);
-        buildingSpeed -= unit.unitSo.attackDamage;
+        if (buildingSpeed > 0) buildingSpeed -= unit.unitSo.attackDamage;
         if (buildingUnits.Count == 0)
         {
             StopConstruction();
@@ -48,20 +49,20 @@ public class Construction : MonoBehaviour
 
     private void StopWorkersConstruction()
     {
-        for(int i = 0; i < buildingUnits.Count; i++)
+        foreach (var unit in buildingUnits)
         {
-            buildingUnits[i].GetComponent<Worker>().StopConstruction();
+            var worker = unit.GetComponent<Worker>();
+            worker.StopConstruction(false);
         }
     }
 
     private void InstantiateBuilding()
     {
         // Finished building
+        StopWorkersConstruction();
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
         building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
         building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
-        StopWorkersConstruction();
-        Debug.Log("Instantiate building");
         Destroy(gameObject);
     }
 
@@ -91,6 +92,7 @@ public class Construction : MonoBehaviour
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
             progresBar.UpdateProgresBar(constructionTimer, buildingSo.health);
+
             if (constructionTimer >= buildingSo.health)
             {
                 isCurrentlyConstructing = false;

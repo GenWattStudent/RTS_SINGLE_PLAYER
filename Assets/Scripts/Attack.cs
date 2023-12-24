@@ -33,11 +33,12 @@ public class Attack : MonoBehaviour
 
     private void CheckForTargets() {
         var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
-
+        
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
 
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
+                Debug.Log("Found target");
                 SetTarget(damagableScript);
                 break;
             }
@@ -61,7 +62,16 @@ public class Attack : MonoBehaviour
     }
 
     private bool IsInRange() {
-        return Vector3.Distance(transform.position, target.transform.position) <= currentUnit.attackableSo.attackRange;
+        // we need to use target collider
+        Collider[] colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
+
+        foreach (var collider in colliders) {
+            if (collider.gameObject == target.gameObject) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void ShootBullet() {
@@ -120,6 +130,9 @@ public class Attack : MonoBehaviour
 
         if (target != null) {
             if (IsInRange() && currentUnit.attackableSo.canAttack) {
+                if (PlayerController.Instance.playerId == currentUnit.playerId && gameObject.name == "HPCharacter(Clone)") {
+                    Debug.Log("Attack");
+                }
               PerformAttack();             
             } else {
                 SetTarget(null);

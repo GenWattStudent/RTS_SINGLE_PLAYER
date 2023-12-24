@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8ecdf265c25fb2e4a936cca00602f579
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 241895
+  packageName: 25+ Free Stylized Textures - Grass, Ground, Floors, Walls & More
+  packageVersion: 1.2.0
+  assetPath: Assets/Game Buffs/Free Stylized Textures/Scripts/GameBuffsInitializer.cs
+  uploadId: 586439

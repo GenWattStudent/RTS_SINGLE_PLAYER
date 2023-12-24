@@ -36,7 +36,7 @@ public class BuildingSystem : MonoBehaviour
                 return false;
             }
         }
-        Debug.Log(maxHeight + " " + minHeight + " " + diffranceBetweenMaxAndMinHeight);
+
         return Mathf.Abs(maxHeight - minHeight) <= diffranceBetweenMaxAndMinHeight;
     }
  
@@ -95,6 +95,7 @@ public class BuildingSystem : MonoBehaviour
         if (SelectedBuilding == null) return;
         var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, Quaternion.identity);
         var damagableScript = newBuilding.GetComponent<Damagable>();
+        damagableScript.health = 1;
         damagableScript.playerId = PlayerController.Instance.playerId;
         var unitScript = newBuilding.GetComponent<Unit>();
         unitScript.playerId = PlayerController.Instance.playerId;
@@ -119,7 +120,7 @@ public class BuildingSystem : MonoBehaviour
 
     private void CheckSelectedBuilding() {
         var selectedBuilding = UIBuildingManager.Instance.GetSelectedBuilding();
-
+        
         if (selectedBuilding != null && selectedBuilding != SelectedBuilding) {
             SetSelectedBuilding(selectedBuilding);
         }

@@ -35,11 +35,12 @@ public class RTSManager : MonoBehaviour
                         finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
                         finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
                         // draw point on the ground
-                        GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        point.transform.position = finalPosition;
-                        point.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                        point.GetComponent<MeshRenderer>().material.color = Color.red;
+                        // GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        // point.transform.position = finalPosition;
+                        // point.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                        // point.GetComponent<MeshRenderer>().material.color = Color.red;
                         unitMovement.MoveTo(finalPosition);
+                        CancelBuildingCommand(unit);
                     }
                 }
             }
@@ -83,6 +84,15 @@ public class RTSManager : MonoBehaviour
             var workerScript = worker.GetComponent<Worker>();
 
             if (workerScript != null) {
+                // if is clicked on building that worker currently building
+                if (workerScript.construction == construction) {
+                    return;
+                }
+                // if worker is building something else
+                if (workerScript.construction != null) {
+                    workerScript.StopConstruction();
+                }
+                // move to construction
                 workerScript.MoveToConstruction(construction);
             }
         }

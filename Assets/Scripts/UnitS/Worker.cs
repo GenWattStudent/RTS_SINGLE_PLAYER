@@ -6,6 +6,16 @@ public class Worker : MonoBehaviour
     public Unit unit;
     private bool isBuilding = false;
     private UnitMovement unitMovement;
+    private Laser laser;
+
+    private void ActivateLaser() {
+        laser.isAttacking = false;
+        laser.SetTarget(construction.GetComponent<Damagable>());
+    }
+
+    private void DeactivateLaser() {
+        laser.SetTarget(null);
+    }
 
     private float DistanceToConstruction() {
         return Vector3.Distance(transform.position, construction.transform.position);
@@ -14,17 +24,20 @@ public class Worker : MonoBehaviour
     private void StartConstruction() {
         construction.AddWorker(unit);
         isBuilding = true;
+        ActivateLaser();
     }
 
-    public void StopConstruction() {
+    public void StopConstruction(bool removeFromList = true) {
         if (construction == null) return;
-        construction.RemoveWorker(unit);
+        if (removeFromList) construction.RemoveWorker(unit);
         isBuilding = false;
         construction = null;
+        DeactivateLaser();
     }
 
     public void MoveToConstruction(Construction construction) {
         this.construction = construction;
+        unitMovement.RotateToTarget(construction.transform.position);
         if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance) {
             unitMovement.MoveTo(construction.transform.position);
         }
@@ -34,6 +47,7 @@ public class Worker : MonoBehaviour
     {
         unit = GetComponent<Unit>();
         unitMovement = GetComponent<UnitMovement>();
+        laser = GetComponent<Laser>();
     }
 
     void Update()
@@ -45,6 +59,7 @@ public class Worker : MonoBehaviour
             if (unitMovement != null) {
                 unitMovement.Stop();
             }
+
             StartConstruction();
         }   
 
