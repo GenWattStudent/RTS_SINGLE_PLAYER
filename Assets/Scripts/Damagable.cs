@@ -5,6 +5,7 @@ public class Damagable : MonoBehaviour
 {
     public DamagableSo damagableSo;
     public float health;
+    public float maxHealth;
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private GameObject destroyedObjectPrefab;
@@ -20,6 +21,7 @@ public class Damagable : MonoBehaviour
     void Awake()
     {
         health = damagableSo.health;
+        maxHealth = damagableSo.health;
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         animator = GetComponent<Animator>();
         levelable = GetComponent<Levelable>();

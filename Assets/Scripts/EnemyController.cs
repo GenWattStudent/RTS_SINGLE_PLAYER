@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();
+                var unitMovement = unit.GetComponent<UnitMovement>();
+
+                if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 damagableScript.playerId = enemyId;
                 unitScript.playerId = enemyId;

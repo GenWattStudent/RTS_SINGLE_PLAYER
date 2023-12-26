@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpawnPanel : MonoBehaviour
 {
-    public void SetSpawnData(UnitSo soUnit, int unitQueueCount, float currentTime) {
+    public void SetSpawnData(int unitQueueCount, float currentTime, float totalSpawnTime) {
         gameObject.SetActive(true);
 
         var spawnUnitCountText = GetComponentsInChildren<TextMeshProUGUI>(true)[0];
@@ -13,6 +13,6 @@ public class SpawnPanel : MonoBehaviour
 
         timeText.text = timeRounded.ToString() + "s";
         spawnUnitCountText.text = unitQueueCount.ToString() + "x";
-        progressBar.UpdateProgresBar(currentTime, soUnit.spawnTime);
+        progressBar.UpdateProgresBar(currentTime, totalSpawnTime);
     }
 }

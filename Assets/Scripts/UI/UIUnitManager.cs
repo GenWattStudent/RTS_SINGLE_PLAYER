@@ -58,7 +58,7 @@ public class UIUnitManager : MonoBehaviour
     
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name) {
                     var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                    spawnPanel.SetSpawnData(soUnit, unitQueueCount, currentTime);
+                    spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
                 }
 
                 if (unitQueueCount <= 0) {
@@ -71,9 +71,9 @@ public class UIUnitManager : MonoBehaviour
     }
 
     public void CreateSelectionUnitTab() {
-        if (unitCountPrev == 0 && SelectionManager.Instance.selectedObjects.Count == 0) {
-            return;
-        }
+        if (unitCountPrev == 0 && SelectionManager.Instance.selectedObjects.Count == 0) return;
+        if (SelectionManager.Instance.selectedObjects.Count == 1 && SelectionManager.Instance.IsBuilding(SelectionManager.Instance.selectedObjects[0])) return;
+
         unitCountPrev = SelectionManager.Instance.selectedObjects.Count;
         ClearTabs();
         unitSlotTabs.Clear();
@@ -117,14 +117,14 @@ public class UIUnitManager : MonoBehaviour
         if (cost < 0 && soUnit.cost > 0) {
             var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
             costText.text = soUnit.cost.ToString();
+                
+            button.GetComponent<Button>().onClick.AddListener(() => {
+                spawnerBuilding.AddUnitToQueue(soUnit);
+            });
         } else {
             var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
             costText.text = cost.ToString();
         }
-
-        button.GetComponent<Button>().onClick.AddListener(() => {
-            spawnerBuilding.AddUnitToQueue(soUnit);
-        });
 
         Image[] images = unitTab.GetComponentsInChildren<Image>();
         var image = images[1];
@@ -160,10 +160,10 @@ public class UIUnitManager : MonoBehaviour
 
             if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName) {
                 var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                spawnPanel.SetSpawnData(soUnit, unitQueueCount, currentTime);
+                spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
             } else if (unitQueueCount > 0) {
                 var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                spawnPanel.SetSpawnData(soUnit, unitQueueCount, currentTime);
+                spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
             }
 
             SetUnitData(unitTab, soUnit);
@@ -172,5 +172,6 @@ public class UIUnitManager : MonoBehaviour
         }
 
         IsUnitUIOpen = true;
+        IsUnitSelectionTabOpen = false;
     }
 }

@@ -37,7 +37,7 @@ public class Worker : MonoBehaviour
 
     public void MoveToConstruction(Construction construction) {
         this.construction = construction;
-        unitMovement.RotateToTarget(construction.transform.position);
+
         if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance) {
             unitMovement.MoveTo(construction.transform.position);
         }
@@ -54,7 +54,7 @@ public class Worker : MonoBehaviour
     {
         if (construction == null) return;
         var distance = DistanceToConstruction();
-
+        unitMovement.RotateToTarget(construction.transform.position);
         if (distance <= unit.unitSo.buildingDistance && !isBuilding) {
             if (unitMovement != null) {
                 unitMovement.Stop();

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
-public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
+public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 {
     [SerializeField] private UnitSo unitToSpawn;
     [SerializeField] private Transform unitSpawnPoint;
@@ -14,6 +14,7 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
     private UnitSo currentSpawningUnit;
     private List<Animator> doorAnimators = new ();
     private Building buildingScript;
+    public float totalSpawnTime {get; set;} = 0;
 
     private void Awake()
     {
@@ -50,6 +51,9 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
 
     private void InstantiateUnit()
     {
+        var d = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
+        d.enabled = false;
+
         GameObject unitInstance = Instantiate(unitToSpawn.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
         var DamagableScript = unitInstance.GetComponent<Damagable>();
@@ -61,7 +65,7 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
         var unitMovement = unitInstance.GetComponent<UnitMovement>();
         if (unitMovement == null) return;
 
-        unitMovement.MoveTo(unitMovePoint.position);
+        unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
 
         OpenDoor();
         // calculate time when unit will be in unit move point
@@ -74,17 +78,14 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
         unitsQueue.Add(unit);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button != PointerEventData.InputButton.Left) return;
-        UIUnitManager.Instance.CreateUnitTabs(building, this, gameObject);
-    }
-
     private void StartQueue()
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
+            Debug.Log("StartQueue " + unitsQueue[0].spawnTime + " " + buildingScript.buildingLevelable.reduceSpawnTime);
+            Debug.Log("StartQueue " + (unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime));
             spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
+            totalSpawnTime = spawnTimer;
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }
@@ -106,15 +107,15 @@ public class TankSpawner : MonoBehaviour, IPointerClickHandler, ISpawnerBuilding
     }
 
     private void UpdateScreen() {
-        // var screenController = GetComponent<ScreenController>();
+        var screenController = GetComponentInChildren<ScreenController>();
 
-        // if (screenController == null) return;
+        if (screenController == null) return;
 
-        // if (currentSpawningUnit != null) {
-        //     screenController.SetProgresBar(spawnTimer, currentSpawningUnit.spawnTime);
-        // } else {
-        //     screenController.SetProgresBar(0, 0);
-        // }
+        if (currentSpawningUnit != null) {
+            screenController.SetProgresBar(spawnTimer, totalSpawnTime);
+        } else {
+            screenController.SetProgresBar(0, 0);
+        }
     }
 
     private void Update() {

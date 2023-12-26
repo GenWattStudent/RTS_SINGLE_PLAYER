@@ -54,6 +54,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
+        type: 3}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -70,7 +80,7 @@ PrefabInstance:
     - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
         type: 3}
       propertyPath: m_Positions.Array.data[1].z
-      value: 1.1099207
+      value: 1.8491358
       objectReference: {fileID: 0}
     - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
         type: 3}
@@ -159,7 +169,7 @@ PrefabInstance:
     - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
         type: 3}
       propertyPath: m_Range
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
         type: 3}
@@ -179,12 +189,17 @@ PrefabInstance:
     - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
         type: 3}
       propertyPath: m_Intensity
-      value: 5
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
         type: 3}
       propertyPath: m_SpotAngle
       value: 8.197922
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2976405774885964752, guid: 5419c6d4879c4e34b83942099205518b,
         type: 3}

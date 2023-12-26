@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   shouldChangeMaterial: 0
   unitPrefabs: []
@@ -222,7 +223,8 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
-  expirence: 0
+  levelable: {fileID: 0}
+  targetPoint: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,9 +298,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.00001, y: 0.5, z: 0.75}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

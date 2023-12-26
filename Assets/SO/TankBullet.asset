@@ -19,4 +19,4 @@ MonoBehaviour:
   lifeTime: 3
   radius: 4
   explosionPrefab: {fileID: 100010, guid: 14d59fd63a842674992eb9579f7b50c7, type: 3}
-  shootSound: {fileID: 0}
+  initialExplosionPrefab: {fileID: 0}

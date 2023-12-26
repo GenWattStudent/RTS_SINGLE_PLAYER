@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
         var damagableScript = heroInstance.GetComponent<Damagable>();
         var unitScript = heroInstance.GetComponent<Unit>();
+        var unitMovement = heroInstance.GetComponent<UnitMovement>();
+
+        if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
         damagableScript.playerId = playerId;
         unitScript.playerId = playerId;
@@ -33,6 +36,9 @@ public class PlayerController : MonoBehaviour
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();
+                var unitMovement = unit.GetComponent<UnitMovement>();
+
+                if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 damagableScript.playerId = playerId;
                 unitScript.playerId = playerId;

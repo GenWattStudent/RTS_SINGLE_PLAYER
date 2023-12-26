@@ -3,9 +3,8 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     // laser beam have light, paricle system and line renderer
-    [SerializeField] private GameObject laserBeamPrefab;
     [SerializeField] private GameObject spawnPoint;
-    private GameObject goLaserBeam;
+    [SerializeField] private GameObject goLaserBeam;
     private LineRenderer lineRenderer;
     private ParticleSystem laserHitEffect;
     private Light laserLight;
@@ -41,13 +40,12 @@ public class Laser : MonoBehaviour
     }
 
     private void PlayLaserLight() {
-        laserLight.transform.position = target.transform.position;
+        var newPosition = new Vector3(target.transform.position.x, target.transform.position.y + .5f, target.transform.position.z);
+        laserLight.transform.position = newPosition;
     }
     
     private void InstantiateAllEffects() {
-        Debug.Log("InstantiateAllEffects " + spawnPoint.transform.position);
-        goLaserBeam = Instantiate(laserBeamPrefab, spawnPoint.transform.position, Quaternion.identity);
-        goLaserBeam.transform.SetParent(spawnPoint.transform);
+        goLaserBeam.gameObject.SetActive(true);
 
         lineRenderer = goLaserBeam.GetComponentInChildren<LineRenderer>();
         laserHitEffect = goLaserBeam.GetComponentInChildren<ParticleSystem>();
@@ -57,7 +55,7 @@ public class Laser : MonoBehaviour
     }
 
     private void DestroyAllEffects() {
-        Destroy(goLaserBeam);
+        goLaserBeam.gameObject.SetActive(false);
 
         lineRenderer = null;
         laserHitEffect = null;

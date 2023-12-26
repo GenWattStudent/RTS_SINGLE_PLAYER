@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class RTSManager : MonoBehaviour
 {
     [SerializeField] private GameObject unitPrefab;
-    public float unitSpacing = 0.3f;
+    public float unitSpacing = 0.2f;
 
     private void CancelBuildingCommand(Selectable selectable) {
         var workerScript = selectable.GetComponent<Worker>();
