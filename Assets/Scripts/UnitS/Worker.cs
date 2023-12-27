@@ -64,7 +64,7 @@ public class Worker : MonoBehaviour
         }   
 
         if (isBuilding && distance > unit.unitSo.buildingDistance) {
-            StopConstruction();
+            MoveToConstruction(construction);
         }
     }
 }

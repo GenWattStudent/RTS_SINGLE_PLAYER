@@ -51,8 +51,9 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void InstantiateUnit()
     {
-        var d = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
-        d.enabled = false;
+        if (!UnitCountManager.Instance.CanSpawnUnit()) return;
+        var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
+        agent.enabled = false;
 
         GameObject unitInstance = Instantiate(unitToSpawn.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
@@ -66,6 +67,8 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         if (unitMovement == null) return;
 
         unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
+
+        PlayerController.Instance.AddUnit(unitScript);
 
         OpenDoor();
         // calculate time when unit will be in unit move point
@@ -82,8 +85,6 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
-            Debug.Log("StartQueue " + unitsQueue[0].spawnTime + " " + buildingScript.buildingLevelable.reduceSpawnTime);
-            Debug.Log("StartQueue " + (unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime));
             spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
             totalSpawnTime = spawnTimer;
             currentSpawningUnit = unitsQueue[0];

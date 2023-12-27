@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 455375288305264767}
   - component: {fileID: 9114777838778127375}
   - component: {fileID: 8196612811450285908}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 6483828332065883950}
   - component: {fileID: 7966958438621580114}
   - component: {fileID: 3835873228113364017}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3835873228113364017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 6206178562372166787}
   - component: {fileID: 5631371813282414011}
   - component: {fileID: 3420456459730539577}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: text
   m_TagString: Untagged
   m_Icon: {fileID: 0}

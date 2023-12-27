@@ -27,6 +27,7 @@ MonoBehaviour:
   bulletSo: {fileID: 0}
   health: 150
   deathExpirence: 10
+  deathMaterial: {fileID: 2100000, guid: dbb389c368294a84982285c41311178a, type: 2}
   type: 1
   buildingName: Tank building
   description: hahaha
@@ -42,5 +43,6 @@ MonoBehaviour:
   incomeInterval: 0
   unitsToSpawn:
   - {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
+  - {fileID: 11400000, guid: e9f8266ad6710924d8828e433b2c62ed, type: 2}
   maxBuildingCount: 2
   cost: 200

@@ -10,8 +10,8 @@ public class Attack : MonoBehaviour
     private Animator animator;
     [SerializeField] private GameObject bulletSpawnPoint;
     private float attackSpeedTimer;
-    private float attackCooldownTimer;
-    private int currentAmmo;
+    public float attackCooldownTimer;
+    public int currentAmmo;
     private Turret turret;
     private UnitMovement unitMovement;
     [SerializeField] private bool autoAttack = true;
@@ -38,7 +38,6 @@ public class Attack : MonoBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
 
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
-                Debug.Log("Found target");
                 SetTarget(damagableScript);
                 break;
             }
@@ -86,6 +85,10 @@ public class Attack : MonoBehaviour
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
+
+        if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null) {
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
+        }
     }
 
     private bool IsInAngle() {
@@ -130,9 +133,6 @@ public class Attack : MonoBehaviour
 
         if (target != null) {
             if (IsInRange() && currentUnit.attackableSo.canAttack) {
-                if (PlayerController.Instance.playerId == currentUnit.playerId && gameObject.name == "HPCharacter(Clone)") {
-                    Debug.Log("Attack");
-                }
               PerformAttack();             
             } else {
                 SetTarget(null);

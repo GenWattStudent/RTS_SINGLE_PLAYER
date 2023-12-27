@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
+  m_Name: HeavyTank
+  m_EditorClassIdentifier: 
+  attackDamage: 60
+  attackRange: 10
+  attackSpeed: 4
+  attackCooldown: 4
+  acceleration: 4
+  canAttack: 1
+  bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
+    type: 3}
+  ammo: 4
+  attackAngle: 15
+  hasTurret: 1
+  rotateSpeed: 20
+  turretRotateSpeed: 20
+  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
+  health: 500
+  deathExpirence: 40
+  type: 1
+  unitName: Heavy Tank
+  speed: 4
+  buildingDistance: 0
+  cost: 250
+  spawnTime: 8
+  sprite: {fileID: 0}
+  prefab: {fileID: 5994407462191697491, guid: f67102e40d770a347b04eb45950653ee, type: 3}

@@ -25,8 +25,10 @@ MonoBehaviour:
   hasTurret: 1
   rotateSpeed: 2
   turretRotateSpeed: 2
+  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   health: 200
   deathExpirence: 10
+  deathMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
   type: 1
   unitName: Tank
   speed: 4
@@ -35,4 +37,3 @@ MonoBehaviour:
   spawnTime: 2
   sprite: {fileID: 21300000, guid: 847675753ed3bee479569c08afe093f8, type: 3}
   prefab: {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
-  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}

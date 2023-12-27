@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
 
+    // add unit event
+    public event Action<Unit, List<Unit>> OnUnitChange;
+
     private void SpawnHero() {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
         var damagableScript = heroInstance.GetComponent<Damagable>();
@@ -29,6 +32,17 @@ public class PlayerController : MonoBehaviour
         spawnPosition += new Vector3(2, 0 ,0);
     }
 
+    public void AddUnit(Unit unit) {
+        var damagableScript = unit.GetComponent<Damagable>();
+        units.Add(unit);
+        damagableScript.OnDead += () => {
+            units.Remove(unit);
+            OnUnitChange?.Invoke(unit, units);
+        };
+
+        OnUnitChange?.Invoke(unit, units);
+    }
+
     private void SpawnUnits() {
         SpawnHero();
         foreach (var unitPrefab in unitPrefabs) {
@@ -43,17 +57,21 @@ public class PlayerController : MonoBehaviour
                 damagableScript.playerId = playerId;
                 unitScript.playerId = playerId;
                 unitScript.ChangeMaterial(playerMaterial);
-                units.Add(unitScript);
+                AddUnit(unitScript);
 
                 spawnPosition += new Vector3(2, 0 ,0);
             }
         }
     }
 
-    void Start()
+    void Awake()
     {
         playerId = Guid.NewGuid();
         Instance = this;
+    }
+
+    void Start()
+    {
         SpawnUnits();
     }
 

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Damagable : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class Damagable : MonoBehaviour
     // On dead event handler
     public event Action OnDead;
     public GameObject targetPoint;
+    private Attack attackScript;
+    private Collider collider;
+    private UnitMovement unitMovement;
+    private NavMeshAgent agent;
+    private Selectable selectable;
 
     void Awake()
     {
@@ -25,6 +31,10 @@ public class Damagable : MonoBehaviour
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         animator = GetComponent<Animator>();
         levelable = GetComponent<Levelable>();
+        attackScript = GetComponent<Attack>();
+        collider = GetComponent<Collider>();
+        unitMovement = GetComponent<UnitMovement>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     private void InstantiateExplosion() {
@@ -46,19 +56,52 @@ public class Damagable : MonoBehaviour
         levelable.AddExpirence(exp);
     }
 
+    private void PlayDisapperShader() {
+        var unitScript = GetComponent<Unit>();
+
+        if (unitScript != null) {
+            unitScript.ChangeMaterial(damagableSo.deathMaterial);
+            unitScript.StartShaderValues("_DissolveOffest", 1f);
+        }
+    }
+
+    private void DisableAfterDeath() {
+        Destroy(collider);
+        if (unitMovement != null) {
+            Destroy(unitMovement);
+        }
+
+        if (attackScript != null) {
+            Destroy(attackScript);
+        }
+
+        if (targetPoint != null) {
+            Destroy(targetPoint);
+        }
+
+        if (agent != null) {
+            Destroy(agent);
+        }
+
+        if (selectable != null) {
+            Destroy(selectable);
+        }
+    }
+
     public bool TakeDamage(float damage) {
         health -= damage;
         progressBarScript.UpdateProgresBar(health, damagableSo.health);
 
         if (health <= 0f) {
-            Destroy(gameObject);
+            PlayDisapperShader();
             InstantiateExplosion(); 
             InstantiateDestroyedObject();
             OnDead?.Invoke();
             if (animator != null) {
                 animator.SetBool("isDead", true);
             }
-
+            Destroy(gameObject, 20f);
+            DisableAfterDeath();
             return true;
         }
 

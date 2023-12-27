@@ -11,10 +11,7 @@ public class MiniMapRectangle : MonoBehaviour
     public CameraSystem cameraSystem;
     public Collider terrainCollider;
     public float lineWidth = 0.001f;
-    public float minX;
-    public float minY;
-    public float maxX;
-    public float maxY;
+    public Vector3 topLeftPosition, topRightPosition, bottomLeftPosition, bottomRightPosition;
 
     void OnEnable()
     {
@@ -23,15 +20,14 @@ public class MiniMapRectangle : MonoBehaviour
         // add post render listener to the minimap camera 
 
         // add post render listener to the minimap camera
-        RenderPipelineManager.endCameraRendering += OnPostRenderr;
-
+        // RenderPipelineManager.endCameraRendering += OnPostRenderr;
     }
 
     void OnDisable()
     {
         // remove click listener from the minimap
         minimapImage.GetComponent<Button>().onClick.RemoveListener(MoveCameraToMousePosition);
-        RenderPipelineManager.endCameraRendering -= OnPostRenderr;
+        // RenderPipelineManager.endCameraRendering -= OnPostRenderr;
     }
 
     void MoveCameraToMousePosition()
@@ -64,28 +60,8 @@ public class MiniMapRectangle : MonoBehaviour
     {
         if (camera.name == "MinimapCamera") 
         {
-            GL.PushMatrix();
-            {
-                cameraBoxMaterial.SetPass(0);
-                GL.LoadOrtho();
+            // draw trapezoid on minimap
 
-                GL.Begin(GL.QUADS);
-                GL.Color(Color.red);
-                
-                // Define the vertices of your trapezoid in world coordinates
-                Vector3 vertex1 = new Vector3(minX, minY, 0);
-                Vector3 vertex2 = new Vector3(maxX, minY, 0);
-                Vector3 vertex3 = new Vector3(maxX * 0.8f, maxY, 0);  // Adjust the position as needed
-                Vector3 vertex4 = new Vector3(minX * 1.2f, maxY, 0);  // Adjust the position as needed
-                
-                GL.Vertex(mainCamera.WorldToViewportPoint(vertex1));
-                GL.Vertex(mainCamera.WorldToViewportPoint(vertex2));
-                GL.Vertex(mainCamera.WorldToViewportPoint(vertex3));
-                GL.Vertex(mainCamera.WorldToViewportPoint(vertex4));
-
-                GL.End();
-            }
-            GL.PopMatrix();
         }
     }
 }
