@@ -23,7 +23,7 @@ MonoBehaviour:
   ammo: 5
   attackAngle: 5
   hasTurret: 1
-  rotateSpeed: 2
+  rotateSpeed: 60.69
   turretRotateSpeed: 2
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   health: 200

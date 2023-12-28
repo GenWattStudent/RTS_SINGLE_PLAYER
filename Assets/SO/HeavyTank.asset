@@ -24,15 +24,16 @@ MonoBehaviour:
   attackAngle: 15
   hasTurret: 1
   rotateSpeed: 20
-  turretRotateSpeed: 20
+  turretRotateSpeed: 50.1
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   health: 500
   deathExpirence: 40
+  deathMaterial: {fileID: 0}
   type: 1
   unitName: Heavy Tank
   speed: 4
   buildingDistance: 0
   cost: 250
   spawnTime: 8
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 8426e27361e479a43bf8528363a5bcb3, type: 3}
   prefab: {fileID: 5994407462191697491, guid: f67102e40d770a347b04eb45950653ee, type: 3}

@@ -23,6 +23,7 @@ public class Damagable : MonoBehaviour
     private UnitMovement unitMovement;
     private NavMeshAgent agent;
     private Selectable selectable;
+    public bool isDead = false;
 
     void Awake()
     {
@@ -72,7 +73,8 @@ public class Damagable : MonoBehaviour
         }
 
         if (attackScript != null) {
-            Destroy(attackScript);
+            attackScript.SetTarget(null, true);
+            attackScript.enabled = false;
         }
 
         if (targetPoint != null) {
@@ -97,10 +99,11 @@ public class Damagable : MonoBehaviour
             InstantiateExplosion(); 
             InstantiateDestroyedObject();
             OnDead?.Invoke();
+            isDead = true;
             if (animator != null) {
-                animator.SetBool("isDead", true);
+                animator.SetBool("isDead", isDead);
             }
-            Destroy(gameObject, 20f);
+            Destroy(gameObject, 1f);
             DisableAfterDeath();
             return true;
         }

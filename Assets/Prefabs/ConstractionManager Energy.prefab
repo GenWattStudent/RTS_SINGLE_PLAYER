@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7780410018301658671}
   - component: {fileID: 6051365526223578087}
   - component: {fileID: 4633497842560847797}
+  - component: {fileID: -1069333922228279049}
   m_Layer: 0
   m_Name: ConstractionManager Energy
   m_TagString: Untagged
@@ -75,6 +76,9 @@ MonoBehaviour:
   unitMaterial: {fileID: 0}
   shouldChangeMaterial: 0
   unitPrefabs: []
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &2943060365431914200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,12 +93,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 5749275408073883805}
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
+  isDead: 0
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +180,21 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &-1069333922228279049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  attackableSo: {fileID: 0}
+  buildingLevelable: {fileID: 0}
 --- !u!1001 &815442246044689766
 PrefabInstance:
   m_ObjectHideFlags: 0

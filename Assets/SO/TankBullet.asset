@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletName: TankBullet
   damage: 40
-  speed: 30
+  speed: 10
   prefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac, type: 3}
   lifeTime: 3
   radius: 4

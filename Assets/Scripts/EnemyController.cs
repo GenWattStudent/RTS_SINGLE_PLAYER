@@ -20,7 +20,11 @@ public class EnemyController : MonoBehaviour
                 var unitScript = unit.GetComponent<Unit>();
                 var unitMovement = unit.GetComponent<UnitMovement>();
 
-                if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
+
+                if (unitMovement != null) {
+                    unitMovement.isReachedDestinationAfterSpawn = true;
+                    unitMovement.agent.enabled = true;
+                }
 
                 damagableScript.playerId = enemyId;
                 unitScript.playerId = enemyId;

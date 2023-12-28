@@ -139,7 +139,7 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     public int GetUnitQueueCountByName(string unitName)
     {
-        return unitsQueue.FindAll(unit => unit.name == unitName).Count;
+        return unitsQueue.FindAll(unit => unit.unitName == unitName).Count;
     }
 
     private void OnDestroy()

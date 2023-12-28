@@ -55,6 +55,7 @@ public class SelectedDetails : MonoBehaviour
         stats.ClearStats();
         // healthBar.UpdateProgresBar(0, 0);
         imageGameObject.GetComponent<Image>().sprite = null;
+        upgrdeButton.gameObject.SetActive(false);
     }
 
     private void UpdateUnitDetails(Unit unit, Damagable damagable)

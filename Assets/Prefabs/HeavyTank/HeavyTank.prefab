@@ -618,6 +618,9 @@ MonoBehaviour:
   - {fileID: 7303497412511367978}
   - {fileID: 6037326562452537172}
   - {fileID: 1585627072477679339}
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &-8074666234003767969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,6 +661,7 @@ MonoBehaviour:
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 5020726765372733000}
+  isDead: 0
 --- !u!114 &170826199209899036
 MonoBehaviour:
   m_ObjectHideFlags: 0

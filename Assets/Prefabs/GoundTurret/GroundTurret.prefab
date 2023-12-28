@@ -289,6 +289,9 @@ MonoBehaviour:
   - {fileID: 5956001520663812265}
   - {fileID: 2227511722294446386}
   - {fileID: 332635648250210324}
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &1117546208343776308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,11 +306,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 8132519675546357993}
   explosionPrefab: {fileID: 0}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 1947396230601766344}
+  isDead: 0
 --- !u!114 &7951579903449969910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +329,8 @@ MonoBehaviour:
   checkTargetTimer: 0
   currentUnit: {fileID: 0}
   bulletSpawnPoint: {fileID: 8785809381074074484}
+  attackCooldownTimer: 0
+  currentAmmo: 0
   autoAttack: 1
 --- !u!114 &6064307292801402592
 MonoBehaviour:
@@ -396,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
-  attackableSo: {fileID: 0}
+  attackableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
   buildingLevelable: {fileID: 0}
 --- !u!114 &-2468502465295515026
 MonoBehaviour:

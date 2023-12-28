@@ -2,18 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIBuildingManager : MonoBehaviour
+public class UIBuildingManager : Singleton<UIBuildingManager>
 {
     [SerializeField] private BuildingSo[] buildings;
     [SerializeField] private GameObject buildingTabPrefab;
     // [SerializeField] private Button upgradeButton;
     private BuildingSo selectedBuilding;
-    public static UIBuildingManager Instance { get; private set; }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     public void ClearTabs() {
         foreach (Transform child in transform)
@@ -36,11 +30,11 @@ public class UIBuildingManager : MonoBehaviour
         UIUnitManager.Instance.IsUnitSelectionTabOpen = false;
         // upgradeButton.gameObject.SetActive(false);
 
-        foreach (var bulding in buildings)
+        foreach (var building in buildings)
         {
-            if (bulding.type == buildingType)
+            if (building.type == buildingType)
             {
-                CreateBuildingTab(bulding);
+                CreateBuildingTab(building);
             }
         }
     }

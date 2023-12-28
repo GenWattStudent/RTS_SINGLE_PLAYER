@@ -1,22 +1,15 @@
 using UnityEngine;
 
-public class BuildingSystem : MonoBehaviour
+public class BuildingSystem : Singleton<BuildingSystem>
 {
-    [SerializeField] private Camera camera;
     [SerializeField] private LayerMask terrainLayer;
     public BuildingSo SelectedBuilding { get; private set; }
     private PlaceableBuilding placeableBuilding;
     private GameObject previewPrefab;
-    private static BuildingSystem instance;
-    public static BuildingSystem Instance { get { return instance; } }
     private bool wasValid = false;
     private GameObject[] heightsPoint;
     public float diffranceBetweenMaxAndMinHeight = 1f;
-
-    private void Awake() {
-        instance = this;
-        camera = Camera.main;
-    }
+    private Popup popup;
 
     private bool IsFlatTerrain() {
         if (heightsPoint == null) return false;
@@ -46,7 +39,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private Vector3? GetMouseWorldPosition() {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, terrainLayer)) {
             return hit.point;
@@ -68,12 +61,20 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    private void SetPopup() {
+        if (popup == null) {
+            var message = $"{SelectedBuilding.name} ({PlayerController.Instance.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+            popup = PopupManager.Instance.ShowPopup(message, -1, true, new Vector2(25, 0));
+        }
+    }
+
     private void BuildingPreview() {
         if (SelectedBuilding is null) return;
 
         var mousePosition = GetMouseWorldPosition();
         bool isValid = IsValidPosition();
 
+        SetPopup();
         if (isValid != wasValid && mousePosition != null) {
             if (previewPrefab != null) Destroy(previewPrefab);
             if (isValid) {
@@ -95,10 +96,13 @@ public class BuildingSystem : MonoBehaviour
         if (SelectedBuilding == null) return;
         var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, Quaternion.identity);
         var damagableScript = newBuilding.GetComponent<Damagable>();
+
         damagableScript.health = 1;
         damagableScript.playerId = PlayerController.Instance.playerId;
+
         var unitScript = newBuilding.GetComponent<Unit>();
         unitScript.playerId = PlayerController.Instance.playerId;
+        PlayerController.Instance.AddBuilding(newBuilding.GetComponent<Building>());
     }
 
     private void PlaceBuilding() {
@@ -109,13 +113,18 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private bool IsValidPosition() {
-        return placeableBuilding != null && placeableBuilding.colliders.Count == 0 && IsFlatTerrain();
+        return placeableBuilding != null && 
+        placeableBuilding.colliders.Count == 0 && 
+        !PlayerController.Instance.IsMaxBuildingOfType(SelectedBuilding) && 
+        IsFlatTerrain();
     }
 
     public void CancelBuilding() {
         if (previewPrefab != null) Destroy(previewPrefab);
         SelectedBuilding = null;
         UIBuildingManager.Instance.SetSelectedBuilding(null);
+        PopupManager.Instance.DestroyPopup(popup);
+        popup = null;
     }
 
     private void CheckSelectedBuilding() {

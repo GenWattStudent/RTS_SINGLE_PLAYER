@@ -64,8 +64,10 @@ public class RTSManager : MonoBehaviour
                 // Move to target
                 var unitMovement = selectable.GetComponent<UnitMovement>();
                 var offsetPoint = 2f;
-                // calculete the closest point to be in range offset indicates that unit should be closer to target by offset
-                var closestPointToBeInRange = target.transform.position + (selectable.transform.position - target.transform.position).normalized * (distance - unitScript.attackableSo.attackRange + offsetPoint);
+                var directionToTarget = (target.transform.position - selectable.transform.position).normalized;
+
+                // Calculate the closest point to be in range with the specified offset
+                var closestPointToBeInRange = target.transform.position - directionToTarget * (unitScript.attackableSo.attackRange - offsetPoint);
                 
                 unitMovement.MoveTo(closestPointToBeInRange);
                 SetTarget(target, selectable);

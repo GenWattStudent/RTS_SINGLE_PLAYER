@@ -47,12 +47,12 @@ public class Bullet : MonoBehaviour
 
     private bool IsOwnUnit(RaycastHit hit) {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && damagable.playerId == playerId;
+        return damagable != null && !damagable.isDead && damagable.playerId == playerId;
     }
 
     private bool IsOwnUnit(Collider collider) {
         var damagable = collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && damagable.playerId == playerId;
+        return damagable != null && !damagable.isDead && damagable.playerId == playerId;
     }
 
     private void CheckHit() {
@@ -62,7 +62,7 @@ public class Bullet : MonoBehaviour
         if (Physics.Raycast(previousPosition, direction.normalized, out hit, direction.magnitude)) {
             if (IsOwnUnit(hit)) return;
 
-            if (bulletSo.radius > 0f) {
+            if (bulletSo.radius > 0) {
                 Explode();
             }
             else {

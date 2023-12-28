@@ -16,6 +16,7 @@ public class Attack : MonoBehaviour
     private UnitMovement unitMovement;
     [SerializeField] private bool autoAttack = true;
     private Coroutine checkForTargetsCoroutine;
+    private bool isRealoading = false;
 
     void Start()
     {
@@ -37,14 +38,14 @@ public class Attack : MonoBehaviour
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
 
-            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId) {
+            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead) {
                 SetTarget(damagableScript);
                 break;
             }
         }
     }
 
-    public void SetTarget(Damagable target) {
+    public void SetTarget(Damagable target, bool isDead = false) {
         this.target = target;
 
         if (this.target != null) {
@@ -53,7 +54,7 @@ public class Attack : MonoBehaviour
             return;
         } 
 
-        if (autoAttack) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
+        if (autoAttack && !isDead) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
     }   
 
     private void OnTargetDead() {
@@ -115,13 +116,22 @@ public class Attack : MonoBehaviour
         }
     }
 
+    private void Realod() {
+        if (!isRealoading) attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
+        isRealoading = true;
+        
+        if (isRealoading && attackCooldownTimer <= 0) {
+            currentAmmo = currentUnit.attackableSo.ammo;
+            isRealoading = false;
+        }
+    }
+
     private void PerformAttack() {
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
             ShootBullet();
             
             if (currentAmmo <= 0) {
-                attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
-                currentAmmo = currentUnit.attackableSo.ammo;
+                Realod();
             }
         }
     }

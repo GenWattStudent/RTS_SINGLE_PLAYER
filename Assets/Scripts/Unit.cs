@@ -46,10 +46,9 @@ public class Unit : MonoBehaviour
             effectTimer += Time.deltaTime;
             float lerpValue = Mathf.Lerp(0, value, effectTimer / duration);
 
-            int index = 0;
             foreach (var unitPrefab in unitPrefabs) {
-                if (index != 0) return;
                 var renderer = unitPrefab.GetComponent<Renderer>();
+                if (renderer == null) continue;
                 renderer.material.SetVector(key, new Vector4(0, lerpValue, 0, 0));
             }
         }

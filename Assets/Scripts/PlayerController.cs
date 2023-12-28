@@ -2,19 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     public Guid playerId;
     public Color playerColor;
     public Material playerMaterial;
-    public static PlayerController Instance;
     public List<Unit> units = new ();
+    public List<Building> buildings = new ();
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
 
     // add unit event
     public event Action<Unit, List<Unit>> OnUnitChange;
+    public event Action<Building, List<Building>> OnBuildingChange;
 
     private void SpawnHero() {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
@@ -36,11 +37,46 @@ public class PlayerController : MonoBehaviour
         var damagableScript = unit.GetComponent<Damagable>();
         units.Add(unit);
         damagableScript.OnDead += () => {
-            units.Remove(unit);
-            OnUnitChange?.Invoke(unit, units);
+            RemoveUnit(unit);
         };
 
         OnUnitChange?.Invoke(unit, units);
+    }
+
+    public void RemoveUnit(Unit unit) {
+        units.Remove(unit);
+        OnUnitChange?.Invoke(unit, units);
+    }
+
+    public void AddBuilding(Building building) {
+        var damagableScript = building.GetComponent<Damagable>();
+        buildings.Add(building);
+
+        damagableScript.OnDead += () => {
+            RemoveBuilding(building);
+        };
+
+        OnBuildingChange?.Invoke(building, buildings);
+    }
+
+    public void RemoveBuilding(Building building) {
+        buildings.Remove(building);
+        OnBuildingChange?.Invoke(building, buildings);
+    }
+
+    public bool IsMaxBuildingOfType(BuildingSo buildingSo) {
+        int count = GetBuildingCountOfType(buildingSo);
+        return count >= buildingSo.maxBuildingCount;
+    }
+
+    public int GetBuildingCountOfType(BuildingSo buildingSo) {
+        int count = 0;
+
+        foreach (var building in buildings) {
+            if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
+        }
+
+        return count;
     }
 
     private void SpawnUnits() {
@@ -51,6 +87,7 @@ public class PlayerController : MonoBehaviour
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();
                 var unitMovement = unit.GetComponent<UnitMovement>();
+                unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
@@ -64,14 +101,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Awake()
-    {
-        playerId = Guid.NewGuid();
-        Instance = this;
-    }
-
     void Start()
     {
+        playerId = Guid.NewGuid();;
         SpawnUnits();
     }
 

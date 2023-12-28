@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectionManager : MonoBehaviour
+public class SelectionManager : Singleton<SelectionManager>
 {
     [HideInInspector] public List<Selectable> selectedObjects;
-    public static SelectionManager Instance;
-    [SerializeField] private float dragSelectionDelay = 0.3f;
-    private float dragSelectionTimer = 0f;
     private bool isDragging = false;
     private Vector3 mouseStartPosition;
+    private Vector3 mouseThreshold = new Vector3(0.1f, 0.1f, 0.1f);
     [SerializeField] private RectTransform selectionBox;
     // select event
     public delegate void SelectAction();
@@ -25,9 +23,8 @@ public class SelectionManager : MonoBehaviour
         selectedObjects.Clear();
     }
 
-    private void Awake()
+    private void Start()
     {
-        Instance = this;
         selectedObjects = new ();
     }
 
@@ -36,6 +33,19 @@ public class SelectionManager : MonoBehaviour
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
         return unitScript.playerId != PlayerController.Instance.playerId;
+    }
+
+    public bool IsCanAttack() {
+        if (selectedObjects.Count == 0) return false;
+        foreach (Selectable selectable in selectedObjects) {
+            var unitScript = selectable.GetComponent<Unit>();
+            if (unitScript == null) continue;
+            if (unitScript.unitSo == null) continue;
+            if (unitScript.unitSo.type == UnitSo.UnitType.Worker) continue;
+            return true;
+        }
+
+        return false;
     }
 
     public List<Selectable> GetWorkers() {
@@ -58,6 +68,30 @@ public class SelectionManager : MonoBehaviour
         return true;
     }
 
+    private void Select(Selectable selectable) {
+        selectable.Select();
+        selectedObjects.Add(selectable);
+        OnSelect?.Invoke(); 
+    }
+
+    private void Deselect(Selectable selectable) {
+        selectable.Deselect();
+        selectedObjects.Remove(selectable);
+        OnSelect?.Invoke();
+    }
+
+    private void SelectBuilding(Selectable selectable) {
+        DeselectAll();
+        var buildingScript = selectable.GetComponent<Building>();
+        var tankBuildingScript = selectable.GetComponent<TankBuilding>();
+        var constructionScript = selectable.GetComponent<Construction>();
+
+        if (constructionScript != null) return;
+
+        UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        selectedObjects.Add(selectable);
+    }
+
     private void OnClickHandler() {
         // Get all the objects that are under the mouse position its 3D project!!
         RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100f);
@@ -69,12 +103,7 @@ public class SelectionManager : MonoBehaviour
             Selectable selectable = hit.collider.GetComponent<Selectable>();
 
             if (IsBuilding(selectable) && !IsEnemy(selectable)) {
-                DeselectAll();
-                var buildingScript = selectable.GetComponent<Building>();
-                var tankBuildingScript = selectable.GetComponent<TankBuilding>();
-
-                UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
-                selectedObjects.Add(selectable);
+                SelectBuilding(selectable);
                 isSelectableClicked = true;
                 break;
             }
@@ -85,15 +114,11 @@ public class SelectionManager : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift)) {
                     if (selectable.isSelected)
                     {
-                        selectable.Deselect();
-                        selectedObjects.Remove(selectable);
-                        OnSelect?.Invoke();
+                        Deselect(selectable);
                     }
                     else
                     {
-                        selectable.Select();
-                        selectedObjects.Add(selectable);
-                        OnSelect?.Invoke();
+                        Select(selectable);
                     }
 
                     isSelectableClicked = true;
@@ -101,9 +126,7 @@ public class SelectionManager : MonoBehaviour
                 }
 
                 DeselectAll();
-                selectable.Select();
-                selectedObjects.Add(selectable);
-                OnSelect?.Invoke();
+                Select(selectable);
                 isSelectableClicked = true;
                 break;
             }
@@ -117,7 +140,6 @@ public class SelectionManager : MonoBehaviour
 
     private void SelectObjectsInRectangle()
     {
-        Debug.Log("SelectObjectsInRectangle");
         DeselectAll();
         selectionBox.gameObject.SetActive(false);
         
@@ -160,27 +182,23 @@ public class SelectionManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             mouseStartPosition = Input.mousePosition;
-            if (!isDragging) OnClickHandler();
         }
 
         // drag selection
         if (Input.GetMouseButton(0))
         {
-            dragSelectionTimer += Time.deltaTime;
+            // if compare to mouseStartPosition is less than mouseThreshold, return
+            if (Vector3.Distance(mouseStartPosition, Input.mousePosition) < mouseThreshold.magnitude) return;
 
-            if (dragSelectionTimer >= dragSelectionDelay)
-            {
-                isDragging = true;
-                UpdateSelectionBox(Input.mousePosition);
-            }
+            isDragging = true;
+            UpdateSelectionBox(Input.mousePosition);
         }
 
-        if (Input.GetMouseButtonUp(0) && isDragging)
+        if (Input.GetMouseButtonUp(0))
         {
-            dragSelectionTimer = 0f;
+            if (isDragging) SelectObjectsInRectangle();
+            else OnClickHandler();
             isDragging = false;
-
-            SelectObjectsInRectangle();
         }
     }
 }
