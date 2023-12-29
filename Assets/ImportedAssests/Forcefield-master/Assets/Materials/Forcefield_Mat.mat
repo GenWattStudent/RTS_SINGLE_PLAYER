@@ -138,14 +138,14 @@ Material:
     - _ZWrite: 1
     - _enableFillTexture: 1
     - _enableIntersection: 1
-    - _enableRimGlow: 0
-    - _enableRipple: 0
-    - _enableScanLine: 1
+    - _enableRimGlow: 1
+    - _enableRipple: 1
+    - _enableScanLine: 0
     - _fill: 0.05
-    - _impactRippleAmplitude: 0.001
-    - _impactRippleMaxRadius: 0.2
-    - _impactRippleSpeed: 20
-    - _intersectionMultiplier: 19.7
+    - _impactRippleAmplitude: 0.1
+    - _impactRippleMaxRadius: 2
+    - _impactRippleSpeed: 10
+    - _intersectionMultiplier: 100
     - _intersectionOffset: 0.912
     - _rimGlowNoiseDensity: 1
     - _rimGlowNoiseSpeed: 1
@@ -168,11 +168,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _baseColor: {r: 0.9882353, g: 0.09122467, b: 0, a: 1}
+    - _baseColor: {r: 0, g: 0.7026666, b: 0.9882353, a: 1}
     - _fillOffset: {r: 0.04, g: -0.03, b: 0, a: 0}
     - _fillTiling: {r: 30, g: 20, b: 0, a: 0}
-    - _impactPoint: {r: 0.06, g: 0.1483, b: 0, a: 0}
-    - _impactRippleDirection: {r: 1, g: 0, b: 0, a: 0}
-    - _rimColor: {r: 0.104712, g: 3.9999995, b: 3.8952487, a: 1}
+    - _impactPoint: {r: 0.16, g: 0.67, b: 3.9, a: 0}
+    - _impactRippleDirection: {r: 3.31, g: -10.2, b: 5.87, a: 0}
+    - _rimColor: {r: 4.181566, g: 1.9504374, b: 0, a: 1}
     - _rimPower: {r: 3, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []

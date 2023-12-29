@@ -9,7 +9,7 @@ public class AmmoScreenController : MonoBehaviour
     {
         screenController = GetComponentInChildren<ScreenController>();
         attack = GetComponent<Attack>();
-        screenController.SetProgresBar(0, attack.currentUnit.attackableSo.attackCooldown);
+        if (screenController != null && attack != null) UpdateScreen();
     }
 
     private void UpdateScreen() {

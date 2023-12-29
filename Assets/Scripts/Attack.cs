@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ public class Attack : MonoBehaviour
     [SerializeField] private bool autoAttack = true;
     private Coroutine checkForTargetsCoroutine;
     private bool isRealoading = false;
+
+    public event Action OnAttack;
+    public event Action<Damagable, Unit> OnTarget;
 
     void Start()
     {
@@ -51,10 +55,14 @@ public class Attack : MonoBehaviour
         if (this.target != null) {
             if (checkForTargetsCoroutine != null) StopCoroutine(checkForTargetsCoroutine);
             target.OnDead += OnTargetDead;
+            OnTarget?.Invoke(target, currentUnit);
             return;
         } 
 
-        if (autoAttack && !isDead) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
+        if (autoAttack && !isDead) {
+            checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
+            OnTarget?.Invoke(target, currentUnit);
+        }
     }   
 
     private void OnTargetDead() {
@@ -128,6 +136,7 @@ public class Attack : MonoBehaviour
 
     private void PerformAttack() {
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
+            OnAttack?.Invoke();
             ShootBullet();
             
             if (currentAmmo <= 0) {

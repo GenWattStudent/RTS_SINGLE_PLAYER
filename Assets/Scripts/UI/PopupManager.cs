@@ -49,6 +49,7 @@ public class PopupManager : Singleton<PopupManager>
     }
 
     public void DestroyPopup(Popup popup) {
+        if (popup == null) return;
         popups.Remove(popups.Find(p => p.popup == popup));
         Debug.Log("Destroy popup " + popup);
         // destroy ui element
