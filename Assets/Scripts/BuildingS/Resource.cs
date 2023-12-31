@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class MAss : MonoBehaviour
+public class Resource : MonoBehaviour
 {
     public BuildingSo buildingSo;
+    public ResourceSO resourceSo;
     public int income;
     public float incomeInterval;
     public float incomeTimer;
@@ -13,7 +14,7 @@ public class MAss : MonoBehaviour
         currentIncome += income;
         incomeTimer = incomeInterval;
         totalIncome += income;
-        UIStorage.Instance.IncreaseMass(income);
+        UIStorage.Instance.IncreaseResource(resourceSo, income);
     }
 
     // Start is called before the first frame update

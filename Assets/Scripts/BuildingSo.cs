@@ -23,4 +23,5 @@ public class BuildingSo : DamagableSo
     public UnitSo[] unitsToSpawn;
     public int maxBuildingCount;
     public int cost;
+    public ResourceSO costResource;
 }

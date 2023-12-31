@@ -49,6 +49,7 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
 
         button.GetComponent<Button>().onClick.AddListener(() => {
             Debug.Log("Clicked on " + BuildingSo.buildingName);
+            if (!UIStorage.Instance.HasEnoughResource(BuildingSo.costResource, BuildingSo.cost)) return;
             selectedBuilding = BuildingSo;
         });
 

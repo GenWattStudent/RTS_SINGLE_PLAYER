@@ -48,7 +48,7 @@ PrefabInstance:
     - target: {fileID: 3393997211609255391, guid: f8f1c037243de2446a3f8c1256a72502,
         type: 3}
       propertyPath: m_Name
-      value: GroundTurretBuildingBuild
+      value: MassBuildingInProgress
       objectReference: {fileID: 0}
     - target: {fileID: 3451991725603180730, guid: f8f1c037243de2446a3f8c1256a72502,
         type: 3}
@@ -193,6 +193,8 @@ PrefabInstance:
     - {fileID: 4962824280736601957, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
     - {fileID: -6002317933877532533, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
     - {fileID: 9184962378081221949, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
+    - {fileID: -619140009929304772, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
+    - {fileID: 8816775167768068385, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7570018552739707671, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
     - {fileID: 2548751832132793852, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}

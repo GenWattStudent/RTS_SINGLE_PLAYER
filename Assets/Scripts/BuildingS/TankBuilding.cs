@@ -52,6 +52,8 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
     private void InstantiateUnit()
     {
         if (!UnitCountManager.Instance.CanSpawnUnit()) return;
+        UIStorage.Instance.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
+
         var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
         agent.enabled = false;
 
@@ -83,10 +85,11 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void StartQueue()
     {
-        if (unitsQueue.Count > 0 && !isUnitSpawning)
+        if (unitsQueue.Count > 0 && !isUnitSpawning && UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost))
         {
             spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
             totalSpawnTime = spawnTimer;
+            Debug.Log($"StartQueue {spawnTimer}");
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }

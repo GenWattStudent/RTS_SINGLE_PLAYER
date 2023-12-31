@@ -80,6 +80,11 @@ public class Construction : MonoBehaviour
         constructionPrefab.SetActive(true);
     }
 
+    private void OnDestroy()
+    {
+        StopWorkersConstruction();
+    }
+
     void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();

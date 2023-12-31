@@ -9,4 +9,10 @@ public class Building : MonoBehaviour
     private void Start() {
         buildingLevelable = GetComponent<BuildingLevelable>();
     }
+
+    public void Sell() {
+        UIStorage.Instance.IncreaseResource(buildingSo.costResource, buildingSo.cost / 2);
+        var damagableScript = GetComponent<Damagable>();
+        damagableScript.TakeDamage(damagableScript.health);
+    }
 }

@@ -25,8 +25,10 @@ MonoBehaviour:
   hasTurret: 1
   rotateSpeed: 20
   turretRotateSpeed: 20
+  bulletSo: {fileID: 0}
   health: 400
   deathExpirence: 50
+  deathMaterial: {fileID: 0}
   type: 2
   buildingName: Ground Turret
   description: lalaa
@@ -43,3 +45,4 @@ MonoBehaviour:
   unitsToSpawn: []
   maxBuildingCount: 4
   cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}

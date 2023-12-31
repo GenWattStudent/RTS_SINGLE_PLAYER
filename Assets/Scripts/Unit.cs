@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public Material unitMaterial;
     public bool shouldChangeMaterial = true;
     public List<GameObject> unitPrefabs = new ();
+    public List<GameObject> unitUiPrefabs = new ();
 
     private float effectDuration;
     public float effectTimer = 0;
@@ -29,6 +30,18 @@ public class Unit : MonoBehaviour
                 }
                 meshRenderer.material = unitMaterial;
             }
+        }
+    }
+
+    public void HideUiPrefabs() {
+        foreach (var unitUiPrefab in unitUiPrefabs) {
+            unitUiPrefab.SetActive(false);
+        }
+    }
+
+    public void ShowUiPrefabs() {
+        foreach (var unitUiPrefab in unitUiPrefabs) {
+            unitUiPrefab.SetActive(true);
         }
     }
 
@@ -55,7 +68,7 @@ public class Unit : MonoBehaviour
     }
 
     private void Update() {
-        if (effectKey != null) {
+        if (!string.IsNullOrEmpty(effectKey)) {
             UpdateShaderValues(effectKey, effectValue, effectDuration);
         }
 

@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 3186745836414866504}
   - component: {fileID: 5668391838505882548}
   - component: {fileID: -162578482409940836}
-  - component: {fileID: 6521419998113623749}
+  - component: {fileID: 2059918259488018310}
   m_Layer: 0
   m_Name: MassBuilding
   m_TagString: Untagged
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  damagableSo: {fileID: 11400000, guid: cdacdcd8334f71e4faf58e784f8a9e90, type: 2}
   health: 0
   maxHealth: 0
   healthBar: {fileID: 2161865639616813149}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc43562d0d0107742a0ae19144d0a7bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingLevelableSo: {fileID: 11400000, guid: d0e7c50c127efda4f8e340f7774ae844,
+  buildingLevelableSo: {fileID: 11400000, guid: 179735a6902ba1c44a1912e2db66c604,
     type: 2}
   level: 1
   building: {fileID: 0}
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  buildingSo: {fileID: 11400000, guid: cdacdcd8334f71e4faf58e784f8a9e90, type: 2}
   attackableSo: {fileID: 0}
   buildingLevelable: {fileID: 0}
 --- !u!208 &-162578482409940836
@@ -261,7 +261,7 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &6521419998113623749
+--- !u!114 &2059918259488018310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -270,10 +270,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8989622198761688359}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4efb26ce1d0f8c443bd518850ae5c1ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 623f55ed118737b489988471bf86891d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: cdacdcd8334f71e4faf58e784f8a9e90, type: 2}
+  resourceSo: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   income: 0
   incomeInterval: 0
   incomeTimer: 0
@@ -486,6 +487,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.23896107
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -476
       objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}

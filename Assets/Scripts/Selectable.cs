@@ -12,20 +12,23 @@ public class Selectable : MonoBehaviour
     [SerializeField] private RectTransform selectionCircle;
     public SelectableType selectableType;
     [HideInInspector] public bool isSelected = false;
+    private Damagable damagable;
 
     // when unit killed should be diselected
-    private void OnDestroy()
-    {
-        if (isSelected)
-        {
-            SelectionManager.Instance.selectedObjects.Remove(this);
-            Deselect();
-        }
+    private void Start() {
+        damagable = GetComponent<Damagable>();
+    }
+
+    private void OnDead() {
+        Debug.Log("OnDead");
+        SelectionManager.Instance.Deselect(this);
+        Deselect();
     }
 
     public void Select()
     {
         isSelected = true;
+        damagable.OnDead += OnDead;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(true);
     }
@@ -33,6 +36,7 @@ public class Selectable : MonoBehaviour
     public void Deselect()
     {
         isSelected = false;
+        damagable.OnDead -= OnDead;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(false);
     } 

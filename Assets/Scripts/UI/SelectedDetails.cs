@@ -9,7 +9,8 @@ public class SelectedDetails : MonoBehaviour
     [SerializeField] private RectTransform healthBarGameObject;
     [SerializeField] private TextMeshProUGUI levelTextGameObject;
     [SerializeField] private RectTransform expirenceGameObject;
-    [SerializeField] private Button upgrdeButton;
+    [SerializeField] private Button upgradeButton;
+    [SerializeField] private Button sellButton;
     private ProgresBar healthBar;
     private ProgresBar expirenceBar;
     private Stats stats;
@@ -22,19 +23,30 @@ public class SelectedDetails : MonoBehaviour
         expirenceBar = expirenceGameObject.GetComponent<ProgresBar>();
         healthBar.UpdateProgresBar(0, 0);
         expirenceBar.UpdateProgresBar(0, 0);
-        upgrdeButton.gameObject.SetActive(false);
+        ActivateButtons(false);
     }
 
     private void OnEnable() {
-        upgrdeButton.onClick.AddListener(OnUpgradeButtonClick);
+        upgradeButton.onClick.AddListener(OnUpgradeButtonClick);
+        sellButton.onClick.AddListener(OnSellButtonClick);
     }
 
     private void OnDisable() {
-        upgrdeButton.onClick.RemoveListener(OnUpgradeButtonClick);
+        upgradeButton.onClick.RemoveListener(OnUpgradeButtonClick);
+        sellButton.onClick.RemoveListener(OnSellButtonClick);
+    }
+
+    private void ActivateButtons(bool isActive) {
+        upgradeButton.gameObject.SetActive(isActive);
+        sellButton.gameObject.SetActive(isActive);
     }
 
     private void OnUpgradeButtonClick() {
         building.buildingLevelable.LevelUp();
+    }
+
+    private void OnSellButtonClick() {
+        building.Sell();
     }
 
     private void CreateHealthStat(Damagable damagable) {
@@ -55,7 +67,7 @@ public class SelectedDetails : MonoBehaviour
         stats.ClearStats();
         // healthBar.UpdateProgresBar(0, 0);
         imageGameObject.GetComponent<Image>().sprite = null;
-        upgrdeButton.gameObject.SetActive(false);
+        ActivateButtons(false);
     }
 
     private void UpdateUnitDetails(Unit unit, Damagable damagable)
@@ -64,6 +76,7 @@ public class SelectedDetails : MonoBehaviour
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
         imageGameObject.GetComponent<Image>().sprite = unit.unitSo.sprite;
+        Debug.Log("Update unit details " + damagable.health + " " + damagable.damagableSo.health + " ");
         healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
     }
 
@@ -80,15 +93,25 @@ public class SelectedDetails : MonoBehaviour
                 CreateDamageStat(building.attackableSo);
             }
 
-            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
-                this.building = building;
-                upgrdeButton.gameObject.SetActive(true);
-            } else {
-                upgrdeButton.gameObject.SetActive(false);
-            }
-
             levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
             healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
+
+            var construction = selectable.GetComponent<Construction>();
+
+            if (construction != null) {
+                this.building = building;
+                upgradeButton.gameObject.SetActive(false);
+                sellButton.gameObject.SetActive(true);
+                return;
+            }
+
+            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
+                this.building = building;
+                ActivateButtons(true);
+            } else {
+                upgradeButton.gameObject.SetActive(false);
+                sellButton.gameObject.SetActive(true);
+            }
         }
     }
 

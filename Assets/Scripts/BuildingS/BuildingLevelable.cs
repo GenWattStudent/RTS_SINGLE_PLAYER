@@ -23,12 +23,13 @@ public class BuildingLevelable : MonoBehaviour
     }
 
     public void LevelUp() {
-        if (level >= maxLevel || UIStorage.Instance.HasEnoughEnergy(buildingLevelableSo.levels[level].cost)) return;
+        Debug.Log($"Level up to {level} level {building.buildingSo.costResource}  {buildingLevelableSo.levels[level].cost}");
+        if (level >= maxLevel || !UIStorage.Instance.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
         Debug.Log($"Level up to {buildingLevelableSo.levels[level].cost} level");
         level++;
         var levelData = buildingLevelableSo.levels[level - 1];
         Debug.Log($"Level up to {levelData.cost} level");
-        UIStorage.Instance.DecreaseEnergy(levelData.cost);
+        UIStorage.Instance.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
         damagable.health += levelData.health;
         damagable.maxHealth += levelData.health;

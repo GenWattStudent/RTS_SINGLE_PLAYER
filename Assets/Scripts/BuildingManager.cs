@@ -93,7 +93,9 @@ public class BuildingSystem : Singleton<BuildingSystem>
     }
 
     private void PlaceBuilding(Vector3 position) {
-        if (SelectedBuilding == null) return;
+        if (SelectedBuilding == null || !UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
+        UIStorage.Instance.DecreaseResource(SelectedBuilding.costResource, SelectedBuilding.cost);
+
         var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, Quaternion.identity);
         var damagableScript = newBuilding.GetComponent<Damagable>();
 

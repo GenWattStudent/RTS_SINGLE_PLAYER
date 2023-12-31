@@ -92,11 +92,11 @@ GameObject:
   - component: {fileID: 1419450092642985885}
   - component: {fileID: 2368580329236892303}
   - component: {fileID: 6084159726790955623}
-  - component: {fileID: -5754590039528732433}
   - component: {fileID: -8539418394513040316}
   - component: {fileID: 5744144253892617160}
   - component: {fileID: 325383662786411873}
   - component: {fileID: 7144610241314663701}
+  - component: {fileID: -8534491582296696178}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -163,6 +163,12 @@ MonoBehaviour:
   - {fileID: 1259631158737612746}
   - {fileID: 1259631158737612738}
   - {fileID: 1259631158737612736}
+  unitUiPrefabs:
+  - {fileID: 363848697267320202}
+  - {fileID: 6977154542806008979}
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!195 &6739326068420461195
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -198,6 +204,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
+  isReachedDestinationAfterSpawn: 0
+  destinationAfterSpawn: {x: 0, y: 0, z: 0}
 --- !u!114 &1419450092642985885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,12 +235,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 3706828982024979038}
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 5575477033357697071}
+  isDead: 0
 --- !u!114 &6084159726790955623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,23 +257,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   construction: {fileID: 0}
   unit: {fileID: 0}
---- !u!114 &-5754590039528732433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2321514005527918770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df302aa9d6cae574fbe2d4efc121e1ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  checkTargetTimer: 0
-  currentUnit: {fileID: 0}
-  bulletSpawnPoint: {fileID: 6003862070716649827}
-  autoAttack: 0
 --- !u!95 &-8539418394513040316
 Animator:
   serializedVersion: 7
@@ -346,6 +339,20 @@ MonoBehaviour:
   laserSo: {fileID: 11400000, guid: c2e2afdbb44a6b941adab0a98d54f9db, type: 2}
   currentDamageInterval: 0
   isAttacking: 0
+--- !u!114 &-8534491582296696178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f654b7223202974a834eb28106c1a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  damagableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +924,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da90186066a1ad2428c4903673e6bba1, type: 3}
+--- !u!1 &363848697267320202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8640651434155435941}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3706828982024979038 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,

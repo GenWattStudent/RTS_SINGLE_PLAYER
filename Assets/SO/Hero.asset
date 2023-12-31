@@ -28,11 +28,13 @@ MonoBehaviour:
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   health: 1000000
   deathExpirence: 10
+  deathMaterial: {fileID: 0}
   type: 3
   unitName: Argus
   speed: 5
   buildingDistance: 0
   cost: 0
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   spawnTime: 0
   sprite: {fileID: 21300000, guid: 5a09bd23f7473d94586daf5b381cb9db, type: 3}
   prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}

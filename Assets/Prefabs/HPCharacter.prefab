@@ -954,6 +954,13 @@ MonoBehaviour:
   - {fileID: 7855397118573359606}
   - {fileID: 5453629992473313119}
   - {fileID: 4543481343174982981}
+  unitUiPrefabs:
+  - {fileID: 7571700067864268399}
+  - {fileID: 8673674343154182211}
+  - {fileID: 8199242462070866894}
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &1361897205793647017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -968,12 +975,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: 7e78a67b93d453b478591502bb70d19c, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 5630343939903741847}
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 3372196632889626661}
   targetPoint: {fileID: 6409524915884832550}
+  isDead: 0
 --- !u!114 &7673169960702776933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +999,8 @@ MonoBehaviour:
   checkTargetTimer: 0
   currentUnit: {fileID: 0}
   bulletSpawnPoint: {fileID: 8963895157291006664}
+  attackCooldownTimer: 0
+  currentAmmo: 0
   autoAttack: 1
 --- !u!195 &6451795301113717441
 NavMeshAgent:
@@ -1026,6 +1037,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 6451795301113717441}
+  isReachedDestinationAfterSpawn: 0
+  destinationAfterSpawn: {x: 0, y: 0, z: 0}
 --- !u!135 &182582431717544544
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3721,6 +3734,12 @@ RectTransform:
 --- !u!224 &5630343939903741847 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+    type: 3}
+  m_PrefabInstance: {fileID: 773053539953506924}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8673674343154182211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
     type: 3}
   m_PrefabInstance: {fileID: 773053539953506924}
   m_PrefabAsset: {fileID: 0}

@@ -618,6 +618,11 @@ MonoBehaviour:
   - {fileID: 7303497412511367978}
   - {fileID: 6037326562452537172}
   - {fileID: 1585627072477679339}
+  unitUiPrefabs:
+  - {fileID: 2628264077652502333}
+  - {fileID: 5638854283228320419}
+  - {fileID: 7799355497773167089}
+  - {fileID: 4647910288746205808}
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -1497,6 +1502,12 @@ PrefabInstance:
 --- !u!224 &1434063631896191623 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7939079358659996657, guid: 3b61c5c2bac64e4458b87b415e735b4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 9064505643694164342}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2628264077652502333 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6463491866520170059, guid: 3b61c5c2bac64e4458b87b415e735b4c,
     type: 3}
   m_PrefabInstance: {fileID: 9064505643694164342}
   m_PrefabAsset: {fileID: 0}

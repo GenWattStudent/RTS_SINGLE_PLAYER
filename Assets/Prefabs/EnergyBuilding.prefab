@@ -44,11 +44,11 @@ GameObject:
   - component: {fileID: 7168066823511844232}
   - component: {fileID: 689717222582152868}
   - component: {fileID: -6088940530253509853}
-  - component: {fileID: -5337248106169933741}
   - component: {fileID: -3889227336996827685}
   - component: {fileID: 3186745836414866504}
   - component: {fileID: 5668391838505882548}
   - component: {fileID: -162578482409940836}
+  - component: {fileID: 166817307447583794}
   m_Layer: 0
   m_Name: EnergyBuilding
   m_TagString: Untagged
@@ -115,6 +115,9 @@ MonoBehaviour:
   - {fileID: 4304358997482882887}
   - {fileID: 4304358997841353857}
   - {fileID: 4304358993666588431}
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &689717222582152868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,12 +132,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 2161865639616813149}
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 33262721970858854}
+  isDead: 0
 --- !u!54 &-6088940530253509853
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,24 +167,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-5337248106169933741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8989622198761688359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985b5ba9bf5203645abf4dac97f5c83a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
-  income: 0
-  incomeInterval: 0
-  incomeTimer: 0
-  currentIncome: 0
-  totalIncome: 0
 --- !u!114 &-3889227336996827685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +231,25 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &166817307447583794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989622198761688359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623f55ed118737b489988471bf86891d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSo: {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  resourceSo: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+  income: 0
+  incomeInterval: 0
+  incomeTimer: 0
+  currentIncome: 0
+  totalIncome: 0
 --- !u!1001 &4305346903095443135
 PrefabInstance:
   m_ObjectHideFlags: 0

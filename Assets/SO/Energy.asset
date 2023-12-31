@@ -12,8 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
   m_Name: Energy
   m_EditorClassIdentifier: 
+  attackDamage: 0
+  attackRange: 0
+  attackSpeed: 0
+  attackCooldown: 0
+  acceleration: 0
+  canAttack: 0
+  bulletPrefab: {fileID: 0}
+  ammo: 0
+  attackAngle: 0
+  hasTurret: 0
+  rotateSpeed: 0
+  turretRotateSpeed: 0
+  bulletSo: {fileID: 0}
   health: 100
   deathExpirence: 10
+  deathMaterial: {fileID: 0}
   type: 0
   buildingName: Energy
   description: lalala
@@ -30,3 +44,4 @@ MonoBehaviour:
   unitsToSpawn: []
   maxBuildingCount: 2
   cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}

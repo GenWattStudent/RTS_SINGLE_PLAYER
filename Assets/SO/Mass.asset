@@ -45,3 +45,4 @@ MonoBehaviour:
   unitsToSpawn: []
   maxBuildingCount: 4
   cost: 50
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}

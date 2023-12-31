@@ -1,87 +1,106 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class Storage {
-    public int energy = 200;
-    public int maxEnergy = 700;
-    public int mass = 800;
-    public int maxMass = 5000;
+    public ResourceSO recourceSO;
+    public int currentValue = 0;
+    public StorageData storageData;
+}
+
+[System.Serializable]
+public class StorageData {
+    public ResourceSO resourceSO;
+    public TextMeshProUGUI text;
+    public RectTransform bar;
 }
 
 public class UIStorage : Singleton<UIStorage>
 {
-    [SerializeField] private RectTransform energyBar;
-    [SerializeField] private TextMeshProUGUI energyBarText;
+    [SerializeField] private List<StorageData> resources = new ();
 
-    [SerializeField] private RectTransform massBar;
-    [SerializeField] private TextMeshProUGUI massBarText;
+    private List<Storage> storages = new ();
 
-    private Storage storage = new Storage();
-
-    #region Energy
-
-    private void UpdateEnergyData() {
-        energyBarText.text = $"{storage.energy}/{storage.maxEnergy}";
-        var progressBarScript = energyBar.GetComponent<ProgresBar>();
-        progressBarScript.UpdateProgresBar(storage.energy, storage.maxEnergy);
+    public Storage GetStorageByResource(ResourceSO resource) {
+        return storages.Find(x => x.recourceSO == resource);
     }
 
-    public void IncreaseEnergy(int amount) {
-        if (storage.energy + amount > storage.maxEnergy) {
-            return;
-        }
-        storage.energy += amount;
-        UpdateEnergyData();
+    private bool IsStorageFull(Storage storage) {
+        return storage.currentValue >= storage.recourceSO.maxValue;
     }
 
-    public void DecreaseEnergy(int amount) {
-        if (storage.energy < amount) {
-            return;
+    private int AmountCanFit(Storage storage, int amount) {
+        if (storage.currentValue + amount > storage.recourceSO.maxValue) {
+            return storage.recourceSO.maxValue - storage.currentValue;
         }
 
-        storage.energy -= amount;
-        UpdateEnergyData();
-    }
-
-    public bool HasEnoughEnergy(int amount) {
-        return storage.energy >= amount;
-    }
-
-    #endregion
-
-    #region Mass
-
-    private void UpdateMassData() {
-        massBarText.text = $"{storage.mass}/{storage.maxMass}";
-        var progressBarScript = massBar.GetComponent<ProgresBar>();
-        progressBarScript.UpdateProgresBar(storage.mass, storage.maxMass);
-    }
-
-    public void IncreaseMass(int amount) {
-        if (storage.mass + amount > storage.maxMass) {
-            return;
+        if (storage.currentValue + amount < 0) {
+            return 0;
         }
-        storage.mass += amount;
-        UpdateMassData();
+
+        return amount;
     }
 
-    public void DecreaseMass(int amount) {
-        if (storage.mass < amount) {
+    private void UpdatResourceData(Storage storage) {
+        storage.storageData.text.text = $"{storage.currentValue}/{storage.recourceSO.maxValue}";
+        var progressBarScript = storage.storageData.bar.GetComponent<ProgresBar>();
+        progressBarScript.UpdateProgresBar(storage.currentValue, storage.recourceSO.maxValue);
+    }
+
+    public void IncreaseResource(ResourceSO resourceSO, int amount) {
+        var storage = GetStorageByResource(resourceSO);
+
+        if (storage is null) {
             return;
         }
 
-        storage.mass -= amount;
-        UpdateMassData();
+        var amountCanFit = AmountCanFit(storage, amount);
+
+        storage.currentValue += amountCanFit;
+        UpdatResourceData(storage);
     }
 
-    public bool HasEnoughMass(int amount) {
-        return storage.mass >= amount;
+    public void DecreaseResource(ResourceSO resourceSO, int amount) {
+        var storage = GetStorageByResource(resourceSO);
+
+        if (storage is null) {
+            return;
+        }
+
+        var amountCanFit = AmountCanFit(storage, -amount);
+
+        storage.currentValue += amountCanFit;
+        UpdatResourceData(storage); 
     }
 
-    #endregion
+    public bool HasEnoughResource(ResourceSO resourceSO, int amount) {
+        var storage = GetStorageByResource(resourceSO);
+
+        if (storage is null) {
+            return false;
+        }
+
+        return storage.currentValue >= amount;
+    }
+
+    private void CreateStorageForResources() {
+        foreach (var resource in resources) {
+            var storage = new Storage
+            {
+                recourceSO = resource.resourceSO,
+                currentValue = resource.resourceSO.startValue,
+                storageData = resource
+            };
+
+            storages.Add(storage);
+        }
+    }
 
     private void Start() {
-        UpdateEnergyData();
-        UpdateMassData();
+        CreateStorageForResources();
+
+        foreach (var storage in storages) {
+            UpdatResourceData(storage);
+        }
     }
 }

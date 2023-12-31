@@ -53,6 +53,7 @@ public class PlayerController : Singleton<PlayerController>
         buildings.Add(building);
 
         damagableScript.OnDead += () => {
+            Debug.Log("Building is dead");
             RemoveBuilding(building);
         };
 

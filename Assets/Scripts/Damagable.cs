@@ -36,6 +36,7 @@ public class Damagable : MonoBehaviour
         collider = GetComponent<Collider>();
         unitMovement = GetComponent<UnitMovement>();
         agent = GetComponent<NavMeshAgent>();
+        TakeDamage(40);
     }
 
     private void InstantiateExplosion() {
@@ -109,5 +110,13 @@ public class Damagable : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void Heal(float amount) {
+        health += amount;
+        if (health > damagableSo.health) {
+            health = damagableSo.health;
+        }
+        progressBarScript.UpdateProgresBar(health, damagableSo.health);
     }
 }

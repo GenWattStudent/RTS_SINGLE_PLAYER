@@ -61,6 +61,21 @@ public class SelectionManager : Singleton<SelectionManager>
         return workers;
     }
 
+    public List<Selectable> GetHealers() {
+        var healers = new List<Selectable>();
+
+        foreach (Selectable selectable in selectedObjects) {
+            var unitScript = selectable.GetComponent<Unit>();
+            var healerScript = selectable.GetComponent<Healer>();
+
+            if (unitScript != null && unitScript.unitSo != null && healerScript != null) {
+                healers.Add(selectable);
+            }
+        }
+
+        return healers;
+    }
+
     public bool IsBuilding(Selectable selectable) {
         if (selectable == null) return false;
         var buildingScript = selectable.GetComponent<Building>();
@@ -74,7 +89,7 @@ public class SelectionManager : Singleton<SelectionManager>
         OnSelect?.Invoke(); 
     }
 
-    private void Deselect(Selectable selectable) {
+    public void Deselect(Selectable selectable) {
         selectable.Deselect();
         selectedObjects.Remove(selectable);
         OnSelect?.Invoke();
@@ -86,9 +101,14 @@ public class SelectionManager : Singleton<SelectionManager>
         var tankBuildingScript = selectable.GetComponent<TankBuilding>();
         var constructionScript = selectable.GetComponent<Construction>();
 
-        if (constructionScript != null) return;
+        if (constructionScript != null) {
+            selectable.Select();
+            selectedObjects.Add(selectable);
+            return;
+        }
 
-        UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        selectable.Select();
         selectedObjects.Add(selectable);
     }
 

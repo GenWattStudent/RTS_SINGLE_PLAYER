@@ -55,7 +55,7 @@ public class UIUnitManager : MonoBehaviour
                 var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
                 var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(unitTab.name);
                 var soUnit = unitsAttachedToTab.Find(x => x.unitName == unitTab.name);
-                Debug.Log($"Unit name: {unitTab.name}, queue count: {unitQueueCount} current time: {currentTime} currentSpawningUnit: {currentSpawningUnit}");
+               
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name) {
                     var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
                     spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);

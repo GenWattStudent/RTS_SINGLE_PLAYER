@@ -16,6 +16,7 @@ public class UnitSo : DamagableSo
     public float speed;
     public float buildingDistance;
     public int cost;
+    public ResourceSO costResource;
     public float spawnTime;
     public Sprite sprite;
     public GameObject prefab;

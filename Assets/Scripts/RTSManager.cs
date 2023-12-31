@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RTSManager : MonoBehaviour
 {
     [SerializeField] private GameObject unitPrefab;
+    [SerializeField] private GameObject moveIdicatorPrefab;
     public float unitSpacing = 0.2f;
 
     private void CancelBuildingCommand(Selectable selectable) {
@@ -10,6 +12,14 @@ public class RTSManager : MonoBehaviour
 
         if (workerScript != null) {
             workerScript.StopConstruction();
+        }
+    }
+
+    private void CancelHealingCommand(Selectable selectable) {
+        var healerScript = selectable.GetComponent<Healer>();
+
+        if (healerScript != null) {
+            healerScript.SetTarget(null);
         }
     }
 
@@ -40,10 +50,13 @@ public class RTSManager : MonoBehaviour
                         // point.GetComponent<MeshRenderer>().material.color = Color.red;
                         unitMovement.MoveTo(finalPosition);
                         CancelBuildingCommand(unit);
+                        CancelHealingCommand(unit);
                     }
                 }
             }
         }
+
+        Instantiate(moveIdicatorPrefab, position, Quaternion.identity);
     }
 
     private void SetTarget(Damagable target, Selectable selectable) {
@@ -99,6 +112,21 @@ public class RTSManager : MonoBehaviour
         }
     }
 
+    private void HealCommand(List<Selectable> healers, Damagable target) {
+        foreach (var healer in healers) {
+            var healerScript = healer.GetComponent<Healer>();
+            var damagableScript = healer.GetComponent<Damagable>();
+
+            if (damagableScript == target) {
+                continue;
+            }
+
+            if (healerScript != null) {
+                healerScript.SetTarget(target);
+            }
+        }
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
@@ -121,6 +149,14 @@ public class RTSManager : MonoBehaviour
                     if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.playerId == PlayerController.Instance.playerId && constructionScript != null) {
                         // Build
                         BuildCommand(constructionScript);
+                        return;
+                    }
+
+                    // Heal 
+                    if (damagableScript.playerId == PlayerController.Instance.playerId && damagableScript.health < damagableScript.damagableSo.health) {
+                        var healers = SelectionManager.Instance.GetHealers();
+
+                        HealCommand(healers, damagableScript);
                         return;
                     }
                 }

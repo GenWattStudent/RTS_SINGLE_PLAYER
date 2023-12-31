@@ -32,6 +32,7 @@ public class Viisibility : MonoBehaviour
 
             if (unit == null) return;
             Debug.Log("Make unit visible " + unit.material.name);
+            unitScript.ShowUiPrefabs();
             unitScript.ChangeMaterial(unit.material);
         }
     }
@@ -65,6 +66,7 @@ public class Viisibility : MonoBehaviour
             if (attackScript != null) attackScript.OnTarget += HandleOnTarget;
 
             units.Add(new UnitData { unit = unitScript, material = unitScript.unitMaterial });     
+            unitScript.HideUiPrefabs();
             unitScript.ChangeMaterial(inVisibleMaterial);
         }
     }
