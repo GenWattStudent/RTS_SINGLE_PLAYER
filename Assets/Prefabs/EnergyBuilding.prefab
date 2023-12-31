@@ -115,6 +115,7 @@ MonoBehaviour:
   - {fileID: 4304358997482882887}
   - {fileID: 4304358997841353857}
   - {fileID: 4304358993666588431}
+  unitUiPrefabs: []
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -344,6 +345,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7563983821104451940}
     m_Modifications:
+    - target: {fileID: 686972331546150805, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 884223108550053241, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -448,6 +454,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.698
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000029802
       objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}

@@ -14,16 +14,27 @@ public class PopupManager : Singleton<PopupManager>
     }
 
     [SerializeField] private GameObject popupPrefab;
+    [SerializeField] private GameObject popupWorldPrefab;
     [SerializeField] private GameObject popupPrefabError;
     [SerializeField] private GameObject popupPrefabInfo;
     public List<PopupData> popups = new ();
 
-    public Popup ShowPopup(string message, float duration = 2f, bool followMouse = false, Vector2 offset = new Vector2()) {
-        var popup = Instantiate(popupPrefab, transform);
+    public Popup ShowPopup(string message, Vector3 position, float duration = 2f, bool followMouse = false, Vector2 offset = new Vector2()) {
+        var popup = Instantiate(popupPrefab, position, Quaternion.identity);
         var popupScript = popup.GetComponent<Popup>();
 
         popupScript.Show(message, duration);
         popups.Add(new PopupData { message = message, duration = duration, followMouse = followMouse, offset = offset, popup = popupScript });
+
+        return popupScript;
+    }
+
+    public Popup ShowPopupWorld(string message, Vector3 position, float duration = 2f, Vector3 offset = new Vector3()) {
+        var popup = Instantiate(popupWorldPrefab, position + offset, Quaternion.identity);
+        var popupScript = popup.GetComponent<Popup>();
+
+        popupScript.Show(message, duration);
+        popups.Add(new PopupData { message = message, duration = duration, popup = popupScript });
 
         return popupScript;
     }

@@ -11,7 +11,6 @@ public class Damagable : MonoBehaviour
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private GameObject destroyedObjectPrefab;
     private ProgresBar progressBarScript;
-    private Animator animator;
     public Guid playerId;
     public Levelable levelable;
 
@@ -30,7 +29,6 @@ public class Damagable : MonoBehaviour
         health = damagableSo.health;
         maxHealth = damagableSo.health;
         progressBarScript = healthBar.GetComponent<ProgresBar>();
-        animator = GetComponent<Animator>();
         levelable = GetComponent<Levelable>();
         attackScript = GetComponent<Attack>();
         collider = GetComponent<Collider>();
@@ -96,16 +94,14 @@ public class Damagable : MonoBehaviour
         progressBarScript.UpdateProgresBar(health, damagableSo.health);
 
         if (health <= 0f) {
+            isDead = true;
             PlayDisapperShader();
             InstantiateExplosion(); 
             InstantiateDestroyedObject();
             OnDead?.Invoke();
-            isDead = true;
-            if (animator != null) {
-                animator.SetBool("isDead", isDead);
-            }
             Destroy(gameObject, 1f);
             DisableAfterDeath();
+            PopupManager.Instance.ShowPopupWorld($"{damagableSo.deathExpirence} exp", transform.position, 20f, new Vector3(0, 1, 0));
             return true;
         }
 

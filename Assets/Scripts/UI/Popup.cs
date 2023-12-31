@@ -43,7 +43,7 @@ public class Popup : MonoBehaviour
 
     private IEnumerator ShowPopup(string message, float duration) {
         popupText.text = message;
-        SetColor();
+        // SetColor();
         yield return new WaitForSeconds(duration);
         Destroy(gameObject);
     }

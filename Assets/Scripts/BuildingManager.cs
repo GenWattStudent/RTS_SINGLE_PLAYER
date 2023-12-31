@@ -64,7 +64,7 @@ public class BuildingSystem : Singleton<BuildingSystem>
     private void SetPopup() {
         if (popup == null) {
             var message = $"{SelectedBuilding.name} ({PlayerController.Instance.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
-            popup = PopupManager.Instance.ShowPopup(message, -1, true, new Vector2(25, 0));
+            popup = PopupManager.Instance.ShowPopup(message, Vector3.zero, -1, true, new Vector2(25, 0));
         }
     }
 

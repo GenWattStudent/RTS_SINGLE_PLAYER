@@ -6,9 +6,9 @@ public class UnitMovement : MonoBehaviour
 {
     public NavMeshAgent agent;
     private Unit unit;
-    private Animator animator;
     public bool isReachedDestinationAfterSpawn = false;
     public Vector3 destinationAfterSpawn = Vector3.zero;
+    public bool isMoving = false;
 
     private void SetNavMeshValues()
     {
@@ -27,14 +27,7 @@ public class UnitMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         unit = GetComponent<Unit>();
-        animator = GetComponent<Animator>();
         SetNavMeshValues();
-    }
-
-    private void SetIsWalking(bool isWalking)
-    {
-        if (animator == null) return;
-        animator.SetBool("isWalking", isWalking);
     }
 
     public void MoveTo(Vector3 destination)
@@ -63,7 +56,7 @@ public class UnitMovement : MonoBehaviour
         {
             isReachedDestinationAfterSpawn = true;
             agent.enabled = true;
-            SetIsWalking(false);
+            isMoving = false;
         }
     }
 
@@ -76,16 +69,16 @@ public class UnitMovement : MonoBehaviour
     {
         if (!isReachedDestinationAfterSpawn) {
             MoveToWithoutNavMesh(destinationAfterSpawn);
-            SetIsWalking(true);
+            isMoving = true;
         }
 
         if (!agent.enabled) return;
-
+        Debug.Log(agent.remainingDistance);
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            SetIsWalking(false);
+            isMoving = false;
         } else {
-            SetIsWalking(true);
+            isMoving = true;
         }
     }
 }

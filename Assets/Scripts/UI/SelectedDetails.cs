@@ -21,8 +21,6 @@ public class SelectedDetails : MonoBehaviour
         healthBar = healthBarGameObject.GetComponent<ProgresBar>();
         stats = GetComponentInChildren<Stats>();
         expirenceBar = expirenceGameObject.GetComponent<ProgresBar>();
-        healthBar.UpdateProgresBar(0, 0);
-        expirenceBar.UpdateProgresBar(0, 0);
         ActivateButtons(false);
     }
 

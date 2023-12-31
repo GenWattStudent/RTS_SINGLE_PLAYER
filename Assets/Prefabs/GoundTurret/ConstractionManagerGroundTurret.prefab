@@ -77,6 +77,7 @@ MonoBehaviour:
   unitMaterial: {fileID: 0}
   shouldChangeMaterial: 0
   unitPrefabs: []
+  unitUiPrefabs: []
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -411,6 +412,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 6.513336
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.937125
       objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}

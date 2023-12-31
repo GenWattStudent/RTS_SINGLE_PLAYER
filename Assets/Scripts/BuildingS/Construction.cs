@@ -12,6 +12,7 @@ public class Construction : MonoBehaviour
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
     private ProgresBar progresBar;
+    private Damagable damagable;
 
     public void AddWorker(Unit unit)
     {
@@ -88,7 +89,8 @@ public class Construction : MonoBehaviour
     void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
-        progresBar.UpdateProgresBar(0, buildingSo.health);
+        damagable = GetComponent<Damagable>();
+        progresBar.UpdateProgresBar(damagable.health, buildingSo.health);
     }
 
     void Update()
@@ -96,6 +98,7 @@ public class Construction : MonoBehaviour
         if (isCurrentlyConstructing)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
+            damagable.health = Mathf.Floor(constructionTimer);
             progresBar.UpdateProgresBar(constructionTimer, buildingSo.health);
 
             if (constructionTimer >= buildingSo.health)

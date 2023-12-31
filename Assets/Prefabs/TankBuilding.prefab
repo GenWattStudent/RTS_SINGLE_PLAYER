@@ -207,6 +207,10 @@ MonoBehaviour:
   - {fileID: 624017856343578708}
   - {fileID: 5866930156689998923}
   - {fileID: 6654852335577202702}
+  unitUiPrefabs: []
+  effectTimer: 0
+  effectValue: 0
+  effectKey: 
 --- !u!114 &5025436868650576337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,12 +225,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagableSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   health: 0
+  maxHealth: 0
   healthBar: {fileID: 7893409644182956996}
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 2936924105273951565}
+  isDead: 0
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,6 +685,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2231143994585503189}
     m_Modifications:
+    - target: {fileID: 686972331546150805, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 884223108550053241, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -793,6 +804,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.69025
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000039439
       objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}

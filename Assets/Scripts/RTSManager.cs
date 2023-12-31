@@ -56,8 +56,9 @@ public class RTSManager : MonoBehaviour
             }
         }
 
-        Instantiate(moveIdicatorPrefab, position, Quaternion.identity);
-    }
+        var go = Instantiate(moveIdicatorPrefab, position, Quaternion.identity);
+        Destroy(go, 2f);
+    }   
 
     private void SetTarget(Damagable target, Selectable selectable) {
         var attackScript = selectable.GetComponent<Attack>();
