@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8313467023724853444}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1064544973242020393}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 5690719388988737463}
   - component: {fileID: 558224528843994076}
   - component: {fileID: -461790862820127622}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GroundTurretInvalid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2940899205175170807}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3487054955064293466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 269016206362438011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4952626641856016365}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,6 +296,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5638679581261296277}
     m_Modifications:
+    - target: {fileID: 49458481628656127, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935354294218772697, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3927660489607591011, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -310,6 +320,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: struct_Turret_Gun_A_yup
+      objectReference: {fileID: 0}
+    - target: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6763935058192817144, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}

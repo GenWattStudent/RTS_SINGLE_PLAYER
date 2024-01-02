@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1085479836852595376}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 940070815723618674}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 351301156028441589}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4771914273955358483}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8757430684289377893}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: -1126729875877027336}
   - component: {fileID: 254359164404943873}
   - component: {fileID: 2318186868687602162}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ForceFieldConstructionValid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 351301156028441589}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2487478634161233613}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,6 +365,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: struct_Slab_1x1_A_yup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603255856444034891, guid: dc52fbc906cb33244ac2dc411d832583,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6251629548511096478, guid: dc52fbc906cb33244ac2dc411d832583,
         type: 3}

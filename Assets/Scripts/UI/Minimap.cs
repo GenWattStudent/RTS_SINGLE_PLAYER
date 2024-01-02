@@ -23,13 +23,6 @@ public class MiniMapRectangle : MonoBehaviour
         // RenderPipelineManager.endCameraRendering += OnPostRenderr;
     }
 
-    void OnDisable()
-    {
-        // remove click listener from the minimap
-        minimapImage.GetComponent<Button>().onClick.RemoveListener(MoveCameraToMousePosition);
-        // RenderPipelineManager.endCameraRendering -= OnPostRenderr;
-    }
-
     void MoveCameraToMousePosition()
     {
         // calculate mouse position - minimap postion

@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8220468093923170762
 Transform:
@@ -98,7 +98,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3793915001638884661
 Transform:
@@ -132,7 +132,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &295224009480188700
 RectTransform:
@@ -227,7 +227,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4756382604343162958
 Transform:
@@ -284,12 +284,15 @@ MonoBehaviour:
   unitSo: {fileID: 0}
   attackableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
   unitMaterial: {fileID: 0}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 5956001520663812265}
   - {fileID: 2227511722294446386}
   - {fileID: 332635648250210324}
   unitUiPrefabs: []
+  bushes: []
+  isVisibile: 1
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -385,7 +388,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.05, y: 0.5, z: 0.05}
+  m_Extents: {x: 0.345, y: 0.5, z: 0.32}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -441,7 +444,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &4845328954537052235
 RectTransform:
@@ -540,7 +543,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2093499168987745780
 Transform:
@@ -565,10 +568,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4756382604343162958}
     m_Modifications:
+    - target: {fileID: 49458481628656127, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935354294218772697, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}
       propertyPath: m_Name
       value: struct_Turret_Gun_A_yup
+      objectReference: {fileID: 0}
+    - target: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6763935058192817144, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}
@@ -833,6 +851,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4034682668121724817, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453752601555573901, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -843,10 +871,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1.795875
       objectReference: {fileID: 0}
+    - target: {fileID: 6632132950714805415, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6738776593526716770, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_Name
       value: ProgressBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9169929176097034445, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}

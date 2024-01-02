@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
+  m_Name: WorkerSpawner
+  m_EditorClassIdentifier: 
+  attackDamage: 0
+  attackRange: 0
+  attackSpeed: 0
+  attackCooldown: 0
+  acceleration: 0
+  canAttack: 0
+  bulletPrefab: {fileID: 0}
+  ammo: 0
+  attackAngle: 0
+  hasTurret: 0
+  rotateSpeed: 0
+  turretRotateSpeed: 0
+  bulletSo: {fileID: 0}
+  health: 300
+  deathExpirence: 60
+  deathMaterial: {fileID: 0}
+  type: 0
+  buildingName: Worker Spawner
+  description: Worker haha
+  sprite: {fileID: 0}
+  prefab: {fileID: 3393997211609255391, guid: 7cf47f9a5ec98974db522a1c380bae13, type: 3}
+  validPrefab: {fileID: 3393997211609255391, guid: feeacafca65ac7449b22830667189fc9,
+    type: 3}
+  invalidPrefab: {fileID: 3393997211609255391, guid: 2b90365b8e08e344cbf632e31ffe6bbb,
+    type: 3}
+  constructionManagerPrefab: {fileID: 3286866004926964515, guid: e3b21bfbe4b8990459cdc95806e9f444,
+    type: 3}
+  income: 0
+  incomeInterval: 0
+  unitsToSpawn:
+  - {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
+  maxBuildingCount: 2
+  cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}

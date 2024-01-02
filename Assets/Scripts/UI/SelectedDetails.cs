@@ -74,7 +74,6 @@ public class SelectedDetails : MonoBehaviour
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
         imageGameObject.GetComponent<Image>().sprite = unit.unitSo.sprite;
-        Debug.Log("Update unit details " + damagable.health + " " + damagable.damagableSo.health + " ");
         healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
     }
 
@@ -91,7 +90,6 @@ public class SelectedDetails : MonoBehaviour
                 CreateDamageStat(building.attackableSo);
             }
 
-            levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
             healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
 
             var construction = selectable.GetComponent<Construction>();
@@ -104,6 +102,7 @@ public class SelectedDetails : MonoBehaviour
             }
 
             if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
+                levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
                 this.building = building;
                 ActivateButtons(true);
             } else {

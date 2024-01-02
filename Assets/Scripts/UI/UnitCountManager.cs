@@ -18,6 +18,7 @@ public class UnitCountManager : MonoBehaviour
     }
 
     private void OnDisable() {
+        if (PlayerController.Instance is null) return;
         PlayerController.Instance.OnUnitChange -= OnUnitChange;
     }
 

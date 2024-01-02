@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8288756818514282229}
   - component: {fileID: 6397952256328889063}
   - component: {fileID: 6617179139036957556}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,6 +168,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass 001
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: be42946b3c86f6642a5f90b2c03bc973,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: be42946b3c86f6642a5f90b2c03bc973,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -246,6 +256,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Grass 003
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54eb94bfa8ec7c64db4a1bb2eed32430,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 54eb94bfa8ec7c64db4a1bb2eed32430,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -326,6 +346,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass 003 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54eb94bfa8ec7c64db4a1bb2eed32430,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 54eb94bfa8ec7c64db4a1bb2eed32430,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -405,6 +435,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass 004
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a7b6bbc0927ad7346b0d5a573947f0e8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: a7b6bbc0927ad7346b0d5a573947f0e8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -483,6 +523,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Grass 004 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a7b6bbc0927ad7346b0d5a573947f0e8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: a7b6bbc0927ad7346b0d5a573947f0e8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -63,12 +63,14 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         
         if (DamagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.Instance.playerId;
         unitScript.playerId = PlayerController.Instance.playerId;
-        unitScript.ChangeMaterial(PlayerController.Instance.playerMaterial);   
+        unitScript.ChangeMaterial(PlayerController.Instance.playerMaterial, true);   
 
-        var unitMovement = unitInstance.GetComponent<UnitMovement>();
-        if (unitMovement == null) return;
+        if (unitMovePoint != null) {
+            var unitMovement = unitInstance.GetComponent<UnitMovement>();
+            if (unitMovement == null) return;
 
-        unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
+            unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
+        }
 
         PlayerController.Instance.AddUnit(unitScript);
 

@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8313467023724853444}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8313467023724853444
 Transform:
@@ -40,12 +40,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1064544973242020393}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1064544973242020393
 Transform:
@@ -74,12 +74,12 @@ GameObject:
   - component: {fileID: 5690719388988737463}
   - component: {fileID: 558224528843994076}
   - component: {fileID: -461790862820127622}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MassValid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5638679581261296277
 Transform:
@@ -168,12 +168,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2940899205175170807}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2940899205175170807
 Transform:
@@ -199,12 +199,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5615530270919039294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5615530270919039294
 Transform:
@@ -231,12 +231,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3487054955064293466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3487054955064293466
 Transform:
@@ -267,12 +267,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 269016206362438011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &269016206362438011
 Transform:
@@ -298,12 +298,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4952626641856016365}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4952626641856016365
 Transform:
@@ -332,6 +332,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: struct_Silo_A_yup
+      objectReference: {fileID: 0}
+    - target: {fileID: 449311907384158923, guid: 790e91a93f6a8194288975cddfb8e63c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 449311907384158923, guid: 790e91a93f6a8194288975cddfb8e63c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 970409583821205617, guid: 790e91a93f6a8194288975cddfb8e63c,
         type: 3}

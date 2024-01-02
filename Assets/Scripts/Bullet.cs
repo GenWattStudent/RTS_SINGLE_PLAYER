@@ -60,6 +60,10 @@ public class Bullet : MonoBehaviour
         var direction = transform.position - previousPosition;
         
         if (Physics.Raycast(previousPosition, direction.normalized, out hit, direction.magnitude)) {
+            if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost") {
+                return;
+            }
+            
             if (IsOwnUnit(hit)) return;
 
             if (bulletSo.radius > 0) {

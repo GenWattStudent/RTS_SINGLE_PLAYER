@@ -28,6 +28,7 @@ public class UIUnitManager : MonoBehaviour
     }
     
     private void OnDisable() {
+        if (SelectionManager.Instance is null) return;
         SelectionManager.Instance.OnSelect -= CreateSelectionUnitTab;
     }
 

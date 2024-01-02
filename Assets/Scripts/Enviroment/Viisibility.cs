@@ -14,13 +14,25 @@ public class Viisibility : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         var damagableScript = other.GetComponent<Damagable>();
+        if (damagableScript == null) return;
+        var attckScript = other.GetComponent<Attack>();
 
-        HideUnit(damagableScript);
+        if (attckScript == null) {
+            HideUnit(damagableScript);
+            return;
+        }
+
+        if (attckScript.target == null) {
+            HideUnit(damagableScript);
+            return;
+        }
+
+        attckScript.OnTarget += HandleOnTarget;        
     }
 
     private void OnTriggerExit(Collider other) {
         var damagableScript = other.GetComponent<Damagable>();
-
+        if (damagableScript == null) return;
         MakeUnitVisible(damagableScript);
         RemoveUnit(other.GetComponent<Unit>());
     }
@@ -32,22 +44,28 @@ public class Viisibility : MonoBehaviour
 
             if (unit == null) return;
             Debug.Log("Make unit visible " + unit.material.name);
+
+            unitScript.bushes.Remove(gameObject);
+            Debug.Log("Bushes count " + unitScript.bushes.Count);
+            if (unitScript.bushes.Count > 0) return;
             unitScript.ShowUiPrefabs();
             unitScript.ChangeMaterial(unit.material);
+            unitScript.isVisibile = true;
         }
     }
 
     private void RemoveUnit(Unit unit) {
         var unitData = units.Find(u => u.unit == unit);
+        if (unitData == null) return;
 
-        if (unitData != null) units.Remove(unitData);
-
-        var attackScript = unit.GetComponent<Attack>();
+        var attackScript = unitData.unit.GetComponent<Attack>();
 
         if (attackScript != null) attackScript.OnTarget -= HandleOnTarget;
+        if (unitData != null) units.Remove(unitData);
     }
 
     private void HandleOnTarget(Damagable target, Unit currentUnit) {
+        if (currentUnit == null) return;
         var damagableScript = currentUnit.GetComponent<Damagable>();
 
         if (target == null) {  
@@ -65,9 +83,12 @@ public class Viisibility : MonoBehaviour
 
             if (attackScript != null) attackScript.OnTarget += HandleOnTarget;
 
-            units.Add(new UnitData { unit = unitScript, material = unitScript.unitMaterial });     
+            unitScript.bushes.Add(gameObject);
+            
+            units.Add(new UnitData { unit = unitScript, material = unitScript.originalMaterial });     
             unitScript.HideUiPrefabs();
             unitScript.ChangeMaterial(inVisibleMaterial);
+            unitScript.isVisibile = false;
         }
     }
 }

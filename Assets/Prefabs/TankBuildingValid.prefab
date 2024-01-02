@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8834277960112883732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4293735190851768806}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: -2247602394841310920}
   - component: {fileID: 4893364905410990338}
   - component: {fileID: 5917593818874613851}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TankBuildingValid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8877881594973221000}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4047067802270706523}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7987569380415702562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3389186054488552868}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeightPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4700887954246426167}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,6 +328,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5638679581261296277}
     m_Modifications:
+    - target: {fileID: 270268923959103934, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 420371540457613136, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -388,16 +393,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: struct_Factory_Heavy_A_yup
       objectReference: {fileID: 0}
+    - target: {fileID: 2221833450515023493, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5306333864963223862, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9c73438867f6157488fa4ec0f27d2866, type: 2}
+    - target: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6486099545665834401, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6892744233494811307, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9c73438867f6157488fa4ec0f27d2866, type: 2}
+    - target: {fileID: 7490102040393659225, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7528952854760032665, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

@@ -119,6 +119,7 @@ public class SelectionManager : Singleton<SelectionManager>
         // Loop through all the objects
         foreach (RaycastHit hit in hits)
         {
+            if (hit.collider.gameObject.CompareTag("ForceField")) continue;
             // Check if the object is selectable
             Selectable selectable = hit.collider.GetComponent<Selectable>();
 

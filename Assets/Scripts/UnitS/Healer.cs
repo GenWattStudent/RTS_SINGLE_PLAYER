@@ -4,18 +4,18 @@ public class Healer : MonoBehaviour
 {
     public Damagable target;
     public DamagableSo damagableSo;
-    private float timer = 0f;
     private float healRate = 1f;
     private UnitMovement unitMovement;
     private Laser laser;
+    private float healPoints = 0f;
 
-    public void Heal(Damagable target, DamagableSo damagableSo)
+    public void Heal(Damagable target)
     {
-        target.Heal(damagableSo.attackDamage);
-
         if (target.health >= target.damagableSo.health) {
             SetTarget(null);
         }
+
+        target.Heal(healPoints * Time.deltaTime);
     }
 
     public void SetTarget(Damagable target)
@@ -61,23 +61,19 @@ public class Healer : MonoBehaviour
         unitMovement = GetComponent<UnitMovement>();
         laser = GetComponent<Laser>();
         healRate = damagableSo.attackSpeed;
+        healPoints = damagableSo.attackDamage / healRate;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (target == null) return;
-        timer += Time.deltaTime;
+        if (target == null) return;;
 
         if (IsInRange() == false) {
             MoveToTarget();
         }
 
-        if (timer >= healRate)
-        {
-            timer = 0f;
-            unitMovement.RotateToTarget(target.transform.position);
-            Heal(target, damagableSo);
-        }
+        unitMovement.RotateToTarget(target.transform.position);
+        Heal(target);
     }
 }

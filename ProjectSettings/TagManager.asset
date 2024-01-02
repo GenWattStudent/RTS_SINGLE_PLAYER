@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Building
   - Terrain
+  - ForceField
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Minimap
-  - 
-  - 
+  - Bush
+  - Ghost
   - 
   - 
   - 

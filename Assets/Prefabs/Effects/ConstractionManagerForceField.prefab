@@ -23,7 +23,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8418543292980964833
 Transform:
@@ -75,8 +75,12 @@ MonoBehaviour:
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 0
   unitPrefabs: []
+  unitUiPrefabs: []
+  bushes: []
+  isVisibile: 1
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -175,7 +179,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.05, y: 0.5, z: 0.05}
+  m_Extents: {x: 0.295, y: 0.5, z: 0.285}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 0
@@ -194,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
-  attackableSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
+  attackableSo: {fileID: 0}
   buildingLevelable: {fileID: 0}
 --- !u!114 &7313554900080219477
 MonoBehaviour:
@@ -326,15 +330,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4034682668121724817, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453752601555573901, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4942858795294729723, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_LocalScale.x
       value: 6.513336
       objectReference: {fileID: 0}
+    - target: {fileID: 6632132950714805415, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6738776593526716770, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_Name
       value: ProgressBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279134288878146095, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9169929176097034445, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
@@ -371,6 +400,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 350299373017475802, guid: 7c8d37b542446844c934fce385a09fda,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 7c8d37b542446844c934fce385a09fda,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -421,6 +455,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2248170552658854873, guid: 7c8d37b542446844c934fce385a09fda,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8981118739002768634, guid: 7c8d37b542446844c934fce385a09fda,
         type: 3}
       propertyPath: m_Name
@@ -456,6 +495,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 4742284195946579420, guid: e6eac0ac888d52c4a8c1f14ad5f09039,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6036516917040061338, guid: e6eac0ac888d52c4a8c1f14ad5f09039,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -510,6 +554,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ForceFieldConstruction
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494298419494808799, guid: e6eac0ac888d52c4a8c1f14ad5f09039,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

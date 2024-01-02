@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RTSManager : MonoBehaviour
 {
-    [SerializeField] private GameObject unitPrefab;
     [SerializeField] private GameObject moveIdicatorPrefab;
     public float unitSpacing = 0.2f;
 
@@ -33,25 +32,19 @@ public class RTSManager : MonoBehaviour
             for (int col = 0; col < cols; col++)
             {
                 var index = row * cols + col;
+                if (index >= unitsCount) continue;
                 var unit = SelectionManager.Instance.selectedObjects[index];
                 if (unit.selectableType == Selectable.SelectableType.Unit) {
-                    if (index < unitsCount)
-                    {
-                        Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
-                        Vector3 finalPosition = position + offset;
-                        var unitMovement = SelectionManager.Instance.selectedObjects[index].GetComponent<UnitMovement>();
-                        
-                        finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
-                        finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
-                        // draw point on the ground
-                        // GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        // point.transform.position = finalPosition;
-                        // point.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                        // point.GetComponent<MeshRenderer>().material.color = Color.red;
-                        unitMovement.MoveTo(finalPosition);
-                        CancelBuildingCommand(unit);
-                        CancelHealingCommand(unit);
-                    }
+                    Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
+                    Vector3 finalPosition = position + offset;
+                    var unitMovement = SelectionManager.Instance.selectedObjects[index].GetComponent<UnitMovement>();
+                    
+                    finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
+                    finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
+
+                    unitMovement.MoveTo(finalPosition);
+                    CancelBuildingCommand(unit);
+                    CancelHealingCommand(unit);
                 }
             }
         }
@@ -133,12 +126,15 @@ public class RTSManager : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] raycastHits = Physics.RaycastAll(ray, float.MaxValue);
 
-            if (Physics.Raycast(ray, out RaycastHit hit) && hit.point != null)
+            foreach (RaycastHit raycastHit in raycastHits)
             {
-                var damagableScript = hit.transform.gameObject.GetComponent<Damagable>();
-                var selectableScript = hit.transform.gameObject.GetComponent<Selectable>();
-                var constructionScript = hit.transform.gameObject.GetComponent<Construction>();
+                if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
+
+                var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
+                var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
+                var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
 
                 if (damagableScript != null && selectableScript != null) {
                     // Attack
@@ -154,7 +150,7 @@ public class RTSManager : MonoBehaviour
                     }
 
                     // Heal 
-                    if (damagableScript.playerId == PlayerController.Instance.playerId && damagableScript.health < damagableScript.damagableSo.health) {
+                    if (damagableScript.playerId == PlayerController.Instance.playerId && damagableScript.health < damagableScript.damagableSo.health && damagableScript.gameObject.CompareTag("ForceField")) {
                         var healers = SelectionManager.Instance.GetHealers();
 
                         HealCommand(healers, damagableScript);
@@ -162,12 +158,9 @@ public class RTSManager : MonoBehaviour
                     }
                 }
 
-                MoveCommand(hit.point);
+                MoveCommand(raycastHit.point);
+                return;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Instantiate(unitPrefab, new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)), Quaternion.identity);
-        }   
     }
 }

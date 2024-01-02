@@ -8,17 +8,26 @@ public class Unit : MonoBehaviour
     public AttackableSo attackableSo;
     public Guid playerId;
     public Material unitMaterial;
+    public Material originalMaterial;
     public bool shouldChangeMaterial = true;
     public List<GameObject> unitPrefabs = new ();
     public List<GameObject> unitUiPrefabs = new ();
+    public List<GameObject> bushes = new ();
+    private Damagable damagable;
+    public bool isVisibile = true;
 
     private float effectDuration;
     public float effectTimer = 0;
     public float effectValue;
     public string effectKey;
 
-    public void ChangeMaterial(Material material) {
+    public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false) {
         if (!shouldChangeMaterial) return;
+
+        if (shouldChangeOriginalMaterial) {
+            originalMaterial = material;
+        }
+
         unitMaterial = material;
         
         if (unitMaterial != null) {
@@ -64,6 +73,14 @@ public class Unit : MonoBehaviour
                 if (renderer == null) continue;
                 renderer.material.SetVector(key, new Vector4(0, lerpValue, 0, 0));
             }
+        }
+    }
+
+    private void Start() {
+        damagable = GetComponent<Damagable>();
+
+        if (damagable != null) {
+            damagable.OnDead += HideUiPrefabs;        
         }
     }
 

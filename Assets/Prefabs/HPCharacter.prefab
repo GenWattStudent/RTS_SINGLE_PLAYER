@@ -860,6 +860,7 @@ GameObject:
   - component: {fileID: 3743362079215078247}
   - component: {fileID: 3372196632889626661}
   - component: {fileID: -2642368696131063431}
+  - component: {fileID: 7294596467931841221}
   m_Layer: 0
   m_Name: HPCharacter
   m_TagString: Untagged
@@ -949,6 +950,7 @@ MonoBehaviour:
   unitSo: {fileID: 11400000, guid: 7e78a67b93d453b478591502bb70d19c, type: 2}
   attackableSo: {fileID: 11400000, guid: 7e78a67b93d453b478591502bb70d19c, type: 2}
   unitMaterial: {fileID: 0}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 4078261128673861799}
@@ -959,6 +961,8 @@ MonoBehaviour:
   - {fileID: 7571700067864268399}
   - {fileID: 8673674343154182211}
   - {fileID: 8199242462070866894}
+  bushes: []
+  isVisibile: 1
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -1115,6 +1119,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 787f778a2a034164cb56ec981157e5e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7294596467931841221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3912865232768828701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c16dfeed133594a8057f84dde5291b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4078261128673861799

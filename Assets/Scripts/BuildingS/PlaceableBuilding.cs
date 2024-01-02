@@ -7,14 +7,14 @@ public class PlaceableBuilding : MonoBehaviour
 
   private void OnTriggerEnter(Collider other)
   {
-    if (other.CompareTag("Terrain")) return;
+    if (other.CompareTag("Terrain") || other.CompareTag("ForceField")) return;
     Debug.Log("OnTriggerEnter");
     colliders.Add(other);
   }
 
   private void OnTriggerExit(Collider other)
   {
-    if (other.CompareTag("Terrain")) return;
+    if (other.CompareTag("Terrain") || other.CompareTag("ForceField")) return;
     Debug.Log("OnTriggerExit");
     colliders.Remove(other);
   }

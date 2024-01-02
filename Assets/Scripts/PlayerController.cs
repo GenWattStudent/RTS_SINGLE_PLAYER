@@ -27,7 +27,7 @@ public class PlayerController : Singleton<PlayerController>
 
         damagableScript.playerId = playerId;
         unitScript.playerId = playerId;
-        unitScript.ChangeMaterial(playerMaterial);
+        unitScript.ChangeMaterial(playerMaterial, true);
         units.Add(unitScript);
 
         spawnPosition += new Vector3(2, 0 ,0);
@@ -94,7 +94,7 @@ public class PlayerController : Singleton<PlayerController>
 
                 damagableScript.playerId = playerId;
                 unitScript.playerId = playerId;
-                unitScript.ChangeMaterial(playerMaterial);
+                unitScript.ChangeMaterial(playerMaterial, true);
                 AddUnit(unitScript);
 
                 spawnPosition += new Vector3(2, 0 ,0);
@@ -104,6 +104,7 @@ public class PlayerController : Singleton<PlayerController>
 
     void Start()
     {
+        Debug.Log("PlayerController Start");
         playerId = Guid.NewGuid();;
         SpawnUnits();
     }

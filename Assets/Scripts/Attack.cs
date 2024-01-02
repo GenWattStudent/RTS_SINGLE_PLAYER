@@ -7,8 +7,8 @@ public class Attack : MonoBehaviour
 {
     public Damagable target;
     [SerializeField] private float checkTargetTimer = 0.2f;
+    private float checkTargetTimerTimer = 0f;
     public Unit currentUnit;
-    private Animator animator;
     [SerializeField] private GameObject bulletSpawnPoint;
     private float attackSpeedTimer;
     public float attackCooldownTimer;
@@ -16,7 +16,6 @@ public class Attack : MonoBehaviour
     private Turret turret;
     private UnitMovement unitMovement;
     [SerializeField] private bool autoAttack = true;
-    private Coroutine checkForTargetsCoroutine;
     private bool isRealoading = false;
 
     public event Action OnAttack;
@@ -27,13 +26,25 @@ public class Attack : MonoBehaviour
         currentUnit = GetComponent<Unit>();
         currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
-        animator = GetComponent<Animator>();
 
         if (currentUnit.attackableSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
         }
 
-        if (autoAttack) checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
+        if (autoAttack) checkTargetTimerTimer = checkTargetTimer;
+    }
+
+    private bool IsTargetHideInTerrain(Damagable target) {
+        if (target == null) return false;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, Mathf.Infinity)) {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void CheckForTargets() {
@@ -43,26 +54,23 @@ public class Attack : MonoBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
 
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead) {
+                if (IsTargetHideInTerrain(damagableScript)) return;
                 SetTarget(damagableScript);
                 break;
             }
         }
     }
 
-    public void SetTarget(Damagable target, bool isDead = false) {
+    public void SetTarget(Damagable target) {
         this.target = target;
 
         if (this.target != null) {
-            if (checkForTargetsCoroutine != null) StopCoroutine(checkForTargetsCoroutine);
             target.OnDead += OnTargetDead;
             OnTarget?.Invoke(target, currentUnit);
             return;
         } 
 
-        if (autoAttack && !isDead) {
-            checkForTargetsCoroutine = StartCoroutine(CheckForTargetsCoroutine());
-            OnTarget?.Invoke(target, currentUnit);
-        }
+        OnTarget?.Invoke(target, currentUnit);
     }   
 
     private void OnTargetDead() {
@@ -117,13 +125,6 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private IEnumerator CheckForTargetsCoroutine() {
-        while (true) {
-            CheckForTargets();
-            yield return new WaitForSeconds(checkTargetTimer);
-        }
-    }
-
     private void Realod() {
         if (!isRealoading) attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
         isRealoading = true;
@@ -149,6 +150,12 @@ public class Attack : MonoBehaviour
     {
         attackSpeedTimer -= Time.deltaTime;
         attackCooldownTimer -= Time.deltaTime;
+        checkTargetTimerTimer -= Time.deltaTime;
+
+        if (checkTargetTimerTimer <= 0 && autoAttack && target == null) {
+            CheckForTargets();
+            checkTargetTimerTimer = checkTargetTimer;
+        }
 
         if (target != null) {
             if (IsInRange() && currentUnit.attackableSo.canAttack) {

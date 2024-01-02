@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: -5733962355213376312}
   - component: {fileID: 6850857979240665187}
   - component: {fileID: 5612132779967306674}
+  - component: {fileID: 6605644502072312755}
   m_Layer: 0
   m_Name: ForcefieldSphere
-  m_TagString: Untagged
+  m_TagString: ForceField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -165,8 +166,12 @@ MonoBehaviour:
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
   unitPrefabs: []
+  unitUiPrefabs: []
+  bushes: []
+  isVisibile: 1
   effectTimer: 0
   effectValue: 0
   effectKey: 
@@ -185,6 +190,21 @@ MonoBehaviour:
   selectionCircle: {fileID: 0}
   selectableType: 0
   isSelected: 0
+--- !u!114 &6605644502072312755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866086072177546433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
+  attackableSo: {fileID: 0}
+  buildingLevelable: {fileID: 0}
 --- !u!1 &4146919873050078455
 GameObject:
   m_ObjectHideFlags: 0

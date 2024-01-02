@@ -72,7 +72,7 @@ public class Damagable : MonoBehaviour
         }
 
         if (attackScript != null) {
-            attackScript.SetTarget(null, true);
+            attackScript.SetTarget(null);
             attackScript.enabled = false;
         }
 
@@ -101,7 +101,6 @@ public class Damagable : MonoBehaviour
             OnDead?.Invoke();
             Destroy(gameObject, 1f);
             DisableAfterDeath();
-            PopupManager.Instance.ShowPopupWorld($"{damagableSo.deathExpirence} exp", transform.position, 20f, new Vector3(0, 1, 0));
             return true;
         }
 

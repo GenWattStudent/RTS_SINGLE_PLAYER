@@ -73,7 +73,7 @@ public class UnitMovement : MonoBehaviour
         }
 
         if (!agent.enabled) return;
-        Debug.Log(agent.remainingDistance);
+
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
             isMoving = false;
