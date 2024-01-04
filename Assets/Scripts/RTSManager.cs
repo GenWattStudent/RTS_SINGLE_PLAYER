@@ -126,12 +126,8 @@ public class RTSManager : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] raycastHits = Physics.RaycastAll(ray, float.MaxValue);
-
-            foreach (RaycastHit raycastHit in raycastHits)
-            {
-                if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
-
+       
+            if (Physics.Raycast(ray, out RaycastHit raycastHit)) {
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
@@ -159,8 +155,7 @@ public class RTSManager : MonoBehaviour
                 }
 
                 MoveCommand(raycastHit.point);
-                return;
-            }
+            }  
         }
     }
 }
