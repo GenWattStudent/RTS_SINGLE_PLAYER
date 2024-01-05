@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectionManager : Singleton<SelectionManager>
+public class SelectionManager : MonoBehaviour
 {
-    [HideInInspector] public List<Selectable> selectedObjects;
+    [HideInInspector] public static List<Selectable> selectedObjects;
     private bool isDragging = false;
     private Vector3 mouseStartPosition;
     private Vector3 mouseThreshold = new Vector3(0.1f, 0.1f, 0.1f);
     [SerializeField] private RectTransform selectionBox;
     // select event
     public delegate void SelectAction();
-    public event SelectAction OnSelect;
+    public static event SelectAction OnSelect;
 
     public void DeselectAll()
     {
@@ -32,10 +32,10 @@ public class SelectionManager : Singleton<SelectionManager>
         if (selectable == null) return true;
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
-        return unitScript.playerId != PlayerController.Instance.playerId;
+        return unitScript.playerId != PlayerController.playerId;
     }
 
-    public bool IsCanAttack() {
+    public static bool IsCanAttack() {
         if (selectedObjects.Count == 0) return false;
         foreach (Selectable selectable in selectedObjects) {
             var unitScript = selectable.GetComponent<Unit>();
@@ -48,7 +48,7 @@ public class SelectionManager : Singleton<SelectionManager>
         return false;
     }
 
-    public List<Selectable> GetWorkers() {
+    public static List<Selectable> GetWorkers() {
         var workers = new List<Selectable>();
 
         foreach (Selectable selectable in selectedObjects) {
@@ -61,7 +61,7 @@ public class SelectionManager : Singleton<SelectionManager>
         return workers;
     }
 
-    public List<Selectable> GetHealers() {
+    public static List<Selectable> GetHealers() {
         var healers = new List<Selectable>();
 
         foreach (Selectable selectable in selectedObjects) {
@@ -76,7 +76,7 @@ public class SelectionManager : Singleton<SelectionManager>
         return healers;
     }
 
-    public bool IsBuilding(Selectable selectable) {
+    public static bool IsBuilding(Selectable selectable) {
         if (selectable == null) return false;
         var buildingScript = selectable.GetComponent<Building>();
         if (buildingScript == null) return false;
@@ -89,7 +89,7 @@ public class SelectionManager : Singleton<SelectionManager>
         OnSelect?.Invoke(); 
     }
 
-    public void Deselect(Selectable selectable) {
+    public static void Deselect(Selectable selectable) {
         selectable.Deselect();
         selectedObjects.Remove(selectable);
         OnSelect?.Invoke();

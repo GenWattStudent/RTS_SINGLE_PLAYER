@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BuildingSystem : Singleton<BuildingSystem>
+public class BuildingSystem : MonoBehaviour
 {
     [SerializeField] private LayerMask terrainLayer;
     public BuildingSo SelectedBuilding { get; private set; }
@@ -63,8 +63,8 @@ public class BuildingSystem : Singleton<BuildingSystem>
 
     private void SetPopup() {
         if (popup == null) {
-            var message = $"{SelectedBuilding.name} ({PlayerController.Instance.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
-            popup = PopupManager.Instance.ShowPopup(message, Vector3.zero, -1, true, new Vector2(25, 0));
+            var message = $"{SelectedBuilding.name} ({PlayerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+            popup = PopupManager.Instance.ShowPopup(message, Vector3.zero, -1, true, new Vector2(20, 0));
         }
     }
 
@@ -100,11 +100,11 @@ public class BuildingSystem : Singleton<BuildingSystem>
         var damagableScript = newBuilding.GetComponent<Damagable>();
 
         damagableScript.health = 1;
-        damagableScript.playerId = PlayerController.Instance.playerId;
+        damagableScript.playerId = PlayerController.playerId;
 
         var unitScript = newBuilding.GetComponent<Unit>();
-        unitScript.playerId = PlayerController.Instance.playerId;
-        PlayerController.Instance.AddBuilding(newBuilding.GetComponent<Building>());
+        unitScript.playerId = PlayerController.playerId;
+        PlayerController.AddBuilding(newBuilding.GetComponent<Building>());
     }
 
     private void PlaceBuilding() {
@@ -117,7 +117,7 @@ public class BuildingSystem : Singleton<BuildingSystem>
     private bool IsValidPosition() {
         return placeableBuilding != null && 
         placeableBuilding.colliders.Count == 0 && 
-        !PlayerController.Instance.IsMaxBuildingOfType(SelectedBuilding) && 
+        !PlayerController.IsMaxBuildingOfType(SelectedBuilding) && 
         IsFlatTerrain();
     }
 
@@ -154,7 +154,7 @@ public class BuildingSystem : Singleton<BuildingSystem>
         }
 
         CheckSelectedBuilding();
-        PlaceBuilding();
         BuildingPreview();
+        PlaceBuilding();
     }
 }

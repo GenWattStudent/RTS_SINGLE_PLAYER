@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
     
         if (unitMovement != null) {
             Destroy(unitMovement);
-            unitScript.AddComponent<EnemyUnitMovement>();
+            // unitScript.AddComponent<EnemyUnitMovement>();
         }
 
         damagableScript.playerId = enemyId;

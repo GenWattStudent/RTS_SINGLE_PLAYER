@@ -23,7 +23,7 @@ public class RTSManager : MonoBehaviour
     }
 
     private void MoveCommand(Vector3 position) {
-        int unitsCount = SelectionManager.Instance.selectedObjects.Count;
+        int unitsCount = SelectionManager.selectedObjects.Count;
         int rows = Mathf.CeilToInt(Mathf.Sqrt(unitsCount));
         int cols = Mathf.CeilToInt((float)unitsCount / rows);
 
@@ -33,11 +33,11 @@ public class RTSManager : MonoBehaviour
             {
                 var index = row * cols + col;
                 if (index >= unitsCount) continue;
-                var unit = SelectionManager.Instance.selectedObjects[index];
+                var unit = SelectionManager.selectedObjects[index];
                 if (unit.selectableType == Selectable.SelectableType.Unit) {
                     Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
                     Vector3 finalPosition = position + offset;
-                    var unitMovement = SelectionManager.Instance.selectedObjects[index].GetComponent<UnitMovement>();
+                    var unitMovement = SelectionManager.selectedObjects[index].GetComponent<UnitMovement>();
                     
                     finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
                     finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
@@ -63,7 +63,7 @@ public class RTSManager : MonoBehaviour
     }
 
     private void AttackCommand(Damagable target) {
-        foreach (Selectable selectable in SelectionManager.Instance.selectedObjects) {
+        foreach (Selectable selectable in SelectionManager.selectedObjects) {
             var unitScript = selectable.GetComponent<Unit>();
             var distance = Vector3.Distance(target.transform.position, selectable.transform.position);
             
@@ -86,7 +86,7 @@ public class RTSManager : MonoBehaviour
     }
 
     private void BuildCommand(Construction construction) {
-        var workers = SelectionManager.Instance.GetWorkers();
+        var workers = SelectionManager.GetWorkers();
 
         foreach (var worker in workers) {
             var workerScript = worker.GetComponent<Worker>();
@@ -123,39 +123,47 @@ public class RTSManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && SelectionManager.Instance.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
+        if (Input.GetMouseButtonDown(1) && SelectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-       
-            if (Physics.Raycast(ray, out RaycastHit raycastHit)) {
+            RaycastHit[] raycastHits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
+            bool isAction = false;
+
+            foreach (var raycastHit in raycastHits) {
+                if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
+                Debug.Log(raycastHit.transform.gameObject.name);
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
 
                 if (damagableScript != null && selectableScript != null) {
                     // Attack
-                    if (damagableScript.playerId != PlayerController.Instance.playerId) {
+                    if (damagableScript.playerId != PlayerController.playerId) {
                         AttackCommand(damagableScript);
+                        isAction = true;
                         return;
                     }
                     // ------------------------------------------------
-                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.playerId == PlayerController.Instance.playerId && constructionScript != null) {
+                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.playerId == PlayerController.playerId && constructionScript != null) {
                         // Build
                         BuildCommand(constructionScript);
+                        isAction = true;
                         return;
                     }
 
                     // Heal 
-                    if (damagableScript.playerId == PlayerController.Instance.playerId && damagableScript.health < damagableScript.damagableSo.health && damagableScript.gameObject.CompareTag("ForceField")) {
-                        var healers = SelectionManager.Instance.GetHealers();
+                    if (damagableScript.playerId == PlayerController.playerId && damagableScript.health < damagableScript.damagableSo.health) {
+                        var healers = SelectionManager.GetHealers();
 
                         HealCommand(healers, damagableScript);
+                        isAction = true;
                         return;
                     }
                 }
-
-                MoveCommand(raycastHit.point);
-            }  
+            }
+            // Move
+            if (!isAction) {
+                MoveCommand(raycastHits[0].point);
+            }
         }
     }
 }

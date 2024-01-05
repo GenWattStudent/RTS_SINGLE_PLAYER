@@ -17,10 +17,11 @@ public class PopupManager : Singleton<PopupManager>
     [SerializeField] private GameObject popupWorldPrefab;
     [SerializeField] private GameObject popupPrefabError;
     [SerializeField] private GameObject popupPrefabInfo;
-    public List<PopupData> popups = new ();
+    public static List<PopupData> popups = new ();
 
     public Popup ShowPopup(string message, Vector3 position, float duration = 2f, bool followMouse = false, Vector2 offset = new Vector2()) {
         var popup = Instantiate(popupPrefab, position, Quaternion.identity);
+        popup.transform.SetParent(transform);
         var popupScript = popup.GetComponent<Popup>();
 
         popupScript.Show(message, duration);
@@ -59,10 +60,9 @@ public class PopupManager : Singleton<PopupManager>
         return popupScript;
     }
 
-    public void DestroyPopup(Popup popup) {
+    public  void DestroyPopup(Popup popup) {
         if (popup == null) return;
         popups.Remove(popups.Find(p => p.popup == popup));
-        Debug.Log("Destroy popup " + popup);
         // destroy ui element
         Destroy(popup.gameObject);
     }
@@ -70,8 +70,7 @@ public class PopupManager : Singleton<PopupManager>
     private void Update() {
         foreach (var popup in popups) {
             if (popup.followMouse) {
-                var mousePosition = Input.mousePosition + (Vector3)popup.offset;
-                mousePosition.z = 10;
+                var mousePosition = Input.mousePosition + new Vector3(popup.offset.x, popup.offset.y, 0);
                 popup.popup.transform.position = mousePosition;
             }
         }

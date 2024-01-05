@@ -38,7 +38,7 @@ public class EnemyUnitMovement : MonoBehaviour
     }
 
     private void FindClosestPlayerTarget() {
-        var players = PlayerController.Instance.units;
+        var players = PlayerController.units;
         if (players.Count == 0) return;
 
         var closestPlayer = players[0];

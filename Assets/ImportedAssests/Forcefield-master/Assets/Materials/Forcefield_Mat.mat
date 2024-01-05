@@ -140,17 +140,17 @@ Material:
     - _enableIntersection: 1
     - _enableRimGlow: 1
     - _enableRipple: 1
-    - _enableScanLine: 0
+    - _enableScanLine: 1
     - _fill: 0.05
-    - _impactRippleAmplitude: 0.1
+    - _impactRippleAmplitude: 1
     - _impactRippleMaxRadius: 2
     - _impactRippleSpeed: 10
     - _intersectionMultiplier: 100
-    - _intersectionOffset: 0.912
+    - _intersectionOffset: 0.99
     - _rimGlowNoiseDensity: 1
     - _rimGlowNoiseSpeed: 1
     - _rimPulseSpeed: 1
-    - _scanSize: 0.6
+    - _scanSize: 1
     - _scanSpeed: 1
     m_Colors:
     - Color_4113B2A7: {r: 0.01401742, g: 0.990566, b: 0.1985787, a: 0}

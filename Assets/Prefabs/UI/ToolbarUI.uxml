@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(255, 242, 242, 0); justify-content: flex-end;">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0.86); height: 400px; width: 100%;">
+            <ui:VisualElement name="SelectionInfo" style="flex-grow: 1; width: 300px; justify-content: flex-start; align-self: auto; flex-shrink: 1;">
+                <ui:VisualElement name="Actions" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: 40px;">
+                    <ui:VisualElement name="Image" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Prefabs/HeavyTank/HeavyTankSprite.png?fileID=2800000&amp;guid=8426e27361e479a43bf8528363a5bcb3&amp;type=3#HeavyTankSprite&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: 100%; align-self: auto; align-items: auto; justify-content: space-evenly;" />
+                    <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="position: absolute; bottom: 30px; width: 99%; justify-content: flex-start;" />
+                    <ui:ProgressBar value="70" title="Exp: 20/100" name="Expirencebar" class="expirence" style="position: absolute; bottom: 0; width: 99%; justify-content: flex-start;" />
+                    <ui:Button text="^" display-tooltip-when-elided="true" name="LevelUp" class="btn-primary btn-small btn-rounded-small text-bold text-medium" style="position: absolute; right: 0; top: auto; bottom: 105px;" />
+                    <ui:Button text="$" display-tooltip-when-elided="true" name="Sell" class="btn-danger btn-small btn-rounded-small text-bold text-medium" style="position: absolute; right: 0; top: auto; bottom: 65px;" />
+                    <ui:Label tabindex="-1" text="4 LVL&#10;" display-tooltip-when-elided="true" name="Level" class="text-primary text-bold text-large" style="position: absolute; bottom: 25px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Info" style="flex-grow: 1; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: 200px;">
+                    <ui:VisualElement name="Stats" style="flex-grow: 1; align-items: auto; flex-shrink: 0; justify-content: flex-start; align-self: auto; width: 100%;">
+                        <ui:VisualElement name="Stat" class="stat" style="justify-content: space-around;">
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="color: rgb(255, 239, 239);" />
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="color: rgb(255, 247, 247);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Stat" class="stat" style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: stretch; width: 100%;">
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="color: rgb(255, 239, 239);" />
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="color: rgb(255, 247, 247);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Stat" class="stat" style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: stretch; width: 100%;">
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="color: rgb(255, 239, 239);" />
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="color: rgb(255, 247, 247);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Stat" style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: stretch; width: 100%;">
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="color: rgb(255, 239, 239);" />
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="color: rgb(255, 247, 247);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Stat" class="stat" style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: stretch; width: 100%;">
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="color: rgb(255, 239, 239);" />
+                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="color: rgb(255, 247, 247);" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

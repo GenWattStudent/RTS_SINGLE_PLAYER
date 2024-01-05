@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class Bullet : MonoBehaviour
     public Guid playerId;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
+    public ObjectPool<Bullet> pool;
     private Vector3 previousPosition;
+    private float lifeTimeTimer = 0f;
 
     private void Awake() {
         damage = bulletSo.damage;
@@ -73,18 +76,23 @@ public class Bullet : MonoBehaviour
                 DealDamage(hit.collider);
             }
 
-            Destroy(gameObject);
+            pool.Release(this);
         }
     }
 
-    void Start()
-    {
-        Destroy(gameObject, bulletSo.lifeTime);
+    public void Reset() {
+        lifeTimeTimer = 0f;
+        previousPosition = transform.position;
     }
 
     void Update()
     {
+        lifeTimeTimer += Time.deltaTime;
         Move();
         CheckHit();
+
+        if (lifeTimeTimer > bulletSo.lifeTime) {
+            pool.Release(this);
+        }
     }
 }

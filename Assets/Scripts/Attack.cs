@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
@@ -91,14 +90,16 @@ public class Attack : MonoBehaviour
     }
 
     private void ShootBullet() {
-        GameObject bullet = Instantiate(currentUnit.attackableSo.bulletPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
-        var bulletScript = bullet.GetComponent<Bullet>();
+        Bullet bullet = BulletPool.Instance.bulletPool.Get();
+        bullet.transform.position = bulletSpawnPoint.transform.position;
+        bullet.transform.rotation = Quaternion.identity;
+
         var targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
-        bulletScript.bulletSo = currentUnit.attackableSo.bulletSo;
-        bulletScript.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
-        bulletScript.playerId = currentUnit.playerId;
-        bulletScript.unitsBullet = GetComponent<Damagable>();
+        bullet.bulletSo = currentUnit.attackableSo.bulletSo;
+        bullet.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
+        bullet.playerId = currentUnit.playerId;
+        bullet.unitsBullet = GetComponent<Damagable>();
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;

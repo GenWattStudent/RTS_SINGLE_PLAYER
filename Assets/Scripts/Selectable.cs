@@ -21,7 +21,7 @@ public class Selectable : MonoBehaviour
 
     private void OnDead() {
         Debug.Log("OnDead");
-        SelectionManager.Instance.Deselect(this);
+        SelectionManager.Deselect(this);
         Deselect();
     }
 

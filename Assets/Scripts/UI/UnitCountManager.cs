@@ -14,12 +14,11 @@ public class UnitCountManager : MonoBehaviour
     }
 
     private void Start() {
-        PlayerController.Instance.OnUnitChange += OnUnitChange;
+        PlayerController.OnUnitChange += OnUnitChange;
     }
 
     private void OnDisable() {
-        if (PlayerController.Instance is null) return;
-        PlayerController.Instance.OnUnitChange -= OnUnitChange;
+        PlayerController.OnUnitChange -= OnUnitChange;
     }
 
     public bool CanSpawnUnit() {

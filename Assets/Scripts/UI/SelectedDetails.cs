@@ -1,71 +1,107 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static Selectable;
 
 public class SelectedDetails : MonoBehaviour
 {
-    [SerializeField] private RectTransform imageGameObject;
-    [SerializeField] private RectTransform healthBarGameObject;
-    [SerializeField] private TextMeshProUGUI levelTextGameObject;
-    [SerializeField] private RectTransform expirenceGameObject;
-    [SerializeField] private Button upgradeButton;
-    [SerializeField] private Button sellButton;
-    private ProgresBar healthBar;
-    private ProgresBar expirenceBar;
-    private Stats stats;
+    UIDocument UIDocument;
     private Building building;
+    private VisualElement root;
+    private Button levelUpButton;
+    private Button sellButton;
+    private VisualElement statsContainer;
+    private VisualElement image;
+    private Label levelText;
+    private ProgressBar healthBar;
+    private ProgressBar expirenceBar;
 
-    private void Awake()
+    private void Start()
     {
-        healthBar = healthBarGameObject.GetComponent<ProgresBar>();
-        stats = GetComponentInChildren<Stats>();
-        expirenceBar = expirenceGameObject.GetComponent<ProgresBar>();
+        Debug.Log("Selected details start");
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        Debug.Log("Selected details started " + root.name);
+        levelUpButton = root.Q<Button>("LevelUp");
+        sellButton = root.Q<Button>("Sell");
+        statsContainer = root.Q<VisualElement>("Stats");
+        image = root.Q<VisualElement>("Image");
+        levelText = root.Q<Label>("Level");
+        healthBar = root.Q<ProgressBar>("Healthbar");
+        expirenceBar = root.Q<ProgressBar>("Expirencebar");
+        Debug.Log("Selected details started " + levelUpButton.text);
+
         ActivateButtons(false);
     }
 
     private void OnEnable() {
-        upgradeButton.onClick.AddListener(OnUpgradeButtonClick);
-        sellButton.onClick.AddListener(OnSellButtonClick);
+        SelectionManager.OnSelect += UpdateSelectedDetails;
+        levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
     }
 
     private void OnDisable() {
-        upgradeButton.onClick.RemoveListener(OnUpgradeButtonClick);
-        sellButton.onClick.RemoveListener(OnSellButtonClick);
+        SelectionManager.OnSelect -= UpdateSelectedDetails;
+        levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
 
     private void ActivateButtons(bool isActive) {
-        upgradeButton.gameObject.SetActive(isActive);
-        sellButton.gameObject.SetActive(isActive);
+        levelUpButton.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
+        sellButton.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    private void OnUpgradeButtonClick() {
+    private void OnUpgradeButtonClick(ClickEvent ev) {
         building.buildingLevelable.LevelUp();
     }
 
-    private void OnSellButtonClick() {
+    private void OnSellButtonClick(ClickEvent ev) {
         building.Sell();
     }
 
+    private void CreateStat(string name, string value) {
+        var statBox = new VisualElement
+        {
+            name = name
+        };
+
+        statBox.AddToClassList("stat");
+        var statLabel = new Label(name);
+        var statValue = new Label(value);
+
+        statBox.Add(statLabel);
+        statBox.Add(statValue);
+        Debug.Log("Created stat " + name);
+        Debug.Log(" LOL" + statsContainer.name);
+        statsContainer.Add(statBox);
+    }
+
     private void CreateHealthStat(Damagable damagable) {
-        stats.CreateStat("Health", $"{damagable.health}/{damagable.damagableSo.health}");
+        CreateStat("Health", $"{damagable.health}/{damagable.damagableSo.health}");
     }
 
     private void CreateDamageStat(AttackableSo attackableSo) {
-        stats.CreateStat("Damage", $"{attackableSo.bulletSo.damage}");
+        CreateStat("Damage", $"{attackableSo.bulletSo.damage}");
     }
 
     private void CreateExpirenceStat(Damagable damagable) {
-        stats.CreateStat("Expirence", $"{damagable.levelable.expirence}");
-        expirenceBar.UpdateProgresBar(damagable.levelable.expirence, damagable.levelable.expirenceToNextLevel);
-        levelTextGameObject.text = $"{damagable.levelable.level} LVL";
+        CreateStat("Expirence", $"{damagable.levelable.expirence}");
+        expirenceBar.lowValue = 0;
+        expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
+        levelText.text = $"{damagable.levelable.level} LVL";
     }
 
     private void ClearStats() {
-        stats.ClearStats();
+        statsContainer.Clear();
         // healthBar.UpdateProgresBar(0, 0);
-        imageGameObject.GetComponent<Image>().sprite = null;
+        image.style.backgroundImage = null;
         ActivateButtons(false);
+    }
+
+    private void UpdateHealthBar(Damagable damagable) {
+        healthBar.lowValue = 0;
+        Debug.Log(damagable.health);
+        healthBar.value = damagable.health;
+        healthBar.highValue = damagable.damagableSo.health;
     }
 
     private void UpdateUnitDetails(Unit unit, Damagable damagable)
@@ -73,8 +109,9 @@ public class SelectedDetails : MonoBehaviour
         CreateHealthStat(damagable);
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
-        imageGameObject.GetComponent<Image>().sprite = unit.unitSo.sprite;
-        healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
+        image.style.backgroundImage = new StyleBackground(unit.unitSo.sprite);
+
+        UpdateHealthBar(damagable);
     }
 
     private void UpdateBuildingDetails(Selectable selectable)
@@ -84,30 +121,30 @@ public class SelectedDetails : MonoBehaviour
         CreateHealthStat(damagable);
 
         if (building != null) {
-            imageGameObject.GetComponent<Image>().sprite = building.buildingSo.sprite;
+           image.style.backgroundImage = new StyleBackground(building.buildingSo.sprite);
 
             if (building.attackableSo != null) {
                 CreateDamageStat(building.attackableSo);
             }
 
-            healthBar.UpdateProgresBar(damagable.health, damagable.damagableSo.health);
+            UpdateHealthBar(damagable);
 
             var construction = selectable.GetComponent<Construction>();
 
             if (construction != null) {
                 this.building = building;
-                upgradeButton.gameObject.SetActive(false);
-                sellButton.gameObject.SetActive(true);
+                levelUpButton.style.display = DisplayStyle.None;
+                sellButton.style.display = DisplayStyle.Flex;
                 return;
             }
 
             if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
-                levelTextGameObject.text = $"{building.buildingLevelable.level} LVL";
+                levelText.text = $"{building.buildingLevelable.level} LVL";
                 this.building = building;
                 ActivateButtons(true);
             } else {
-                upgradeButton.gameObject.SetActive(false);
-                sellButton.gameObject.SetActive(true);
+                levelUpButton.style.display = DisplayStyle.None;
+                sellButton.style.display = DisplayStyle.Flex;
             }
         }
     }
@@ -120,11 +157,11 @@ public class SelectedDetails : MonoBehaviour
     private void UpdateSelectedDetails()
     {
         ClearStats();
-        if (SelectionManager.Instance.selectedObjects.Count == 0) return;
+        if (SelectionManager.selectedObjects.Count == 0) return;
 
-        if (SelectionManager.Instance.selectedObjects.Count == 1)
+        if (SelectionManager.selectedObjects.Count == 1)
         {
-            var selectable = SelectionManager.Instance.selectedObjects[0];
+            var selectable = SelectionManager.selectedObjects[0];
             var unit = selectable.GetComponent<Unit>();
             var damagable = selectable.GetComponent<Damagable>();
 
@@ -141,10 +178,5 @@ public class SelectedDetails : MonoBehaviour
         {
             UpdateMultipleDetails();
         }
-    }
-
-    private void FixedUpdate()
-    {
-        UpdateSelectedDetails();
     }
 }

@@ -61,9 +61,9 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         var unitScript = unitInstance.GetComponent<Unit>();
         var DamagableScript = unitInstance.GetComponent<Damagable>();
         
-        if (DamagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.Instance.playerId;
-        unitScript.playerId = PlayerController.Instance.playerId;
-        unitScript.ChangeMaterial(PlayerController.Instance.playerMaterial, true);   
+        if (DamagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.playerId;
+        unitScript.playerId = PlayerController.playerId;
+        unitScript.ChangeMaterial(PlayerController.playerMaterial, true);   
 
         if (unitMovePoint != null) {
             var unitMovement = unitInstance.GetComponent<UnitMovement>();
@@ -72,7 +72,7 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
             unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
         }
 
-        PlayerController.Instance.AddUnit(unitScript);
+        PlayerController.AddUnit(unitScript);
 
         OpenDoor();
         // calculate time when unit will be in unit move point

@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : MonoBehaviour
 {
-    public Guid playerId;
-    public Color playerColor;
-    public Material playerMaterial;
-    public List<Unit> units = new ();
-    public List<Building> buildings = new ();
+    public static Guid playerId;
+    public static Color playerColor;
+    public static Material playerMaterial;
+    public static List<Unit> units = new ();
+    public static List<Building> buildings = new ();
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
 
     // add unit event
-    public event Action<Unit, List<Unit>> OnUnitChange;
-    public event Action<Building, List<Building>> OnBuildingChange;
+    public static event Action<Unit, List<Unit>> OnUnitChange;
+    public static event Action<Building, List<Building>> OnBuildingChange;
 
     private void SpawnHero() {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
@@ -33,7 +33,7 @@ public class PlayerController : Singleton<PlayerController>
         spawnPosition += new Vector3(2, 0 ,0);
     }
 
-    public void AddUnit(Unit unit) {
+    public static void AddUnit(Unit unit) {
         var damagableScript = unit.GetComponent<Damagable>();
         units.Add(unit);
         damagableScript.OnDead += () => {
@@ -43,12 +43,12 @@ public class PlayerController : Singleton<PlayerController>
         OnUnitChange?.Invoke(unit, units);
     }
 
-    public void RemoveUnit(Unit unit) {
+    public static void RemoveUnit(Unit unit) {
         units.Remove(unit);
         OnUnitChange?.Invoke(unit, units);
     }
 
-    public void AddBuilding(Building building) {
+    public static void AddBuilding(Building building) {
         var damagableScript = building.GetComponent<Damagable>();
         buildings.Add(building);
 
@@ -60,17 +60,17 @@ public class PlayerController : Singleton<PlayerController>
         OnBuildingChange?.Invoke(building, buildings);
     }
 
-    public void RemoveBuilding(Building building) {
+    public static void RemoveBuilding(Building building) {
         buildings.Remove(building);
         OnBuildingChange?.Invoke(building, buildings);
     }
 
-    public bool IsMaxBuildingOfType(BuildingSo buildingSo) {
+    public static bool IsMaxBuildingOfType(BuildingSo buildingSo) {
         int count = GetBuildingCountOfType(buildingSo);
         return count >= buildingSo.maxBuildingCount;
     }
 
-    public int GetBuildingCountOfType(BuildingSo buildingSo) {
+    public static int GetBuildingCountOfType(BuildingSo buildingSo) {
         int count = 0;
 
         foreach (var building in buildings) {

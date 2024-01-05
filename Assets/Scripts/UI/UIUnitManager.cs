@@ -24,12 +24,11 @@ public class UIUnitManager : MonoBehaviour
     }
 
     private void Start() {
-        SelectionManager.Instance.OnSelect += CreateSelectionUnitTab;
+        SelectionManager.OnSelect += CreateSelectionUnitTab;
     }
     
     private void OnDisable() {
-        if (SelectionManager.Instance is null) return;
-        SelectionManager.Instance.OnSelect -= CreateSelectionUnitTab;
+        SelectionManager.OnSelect -= CreateSelectionUnitTab;
     }
 
     // private void HandleUpgrade() {
@@ -77,17 +76,17 @@ public class UIUnitManager : MonoBehaviour
     }
 
     public void CreateSelectionUnitTab() {
-        if (unitCountPrev == 0 && SelectionManager.Instance.selectedObjects.Count == 0) return;
-        if (SelectionManager.Instance.selectedObjects.Count == 1 && SelectionManager.Instance.IsBuilding(SelectionManager.Instance.selectedObjects[0])) return;
+        if (unitCountPrev == 0 && SelectionManager.selectedObjects.Count == 0) return;
+        if (SelectionManager.selectedObjects.Count == 1 && SelectionManager.IsBuilding(SelectionManager.selectedObjects[0])) return;
 
-        unitCountPrev = SelectionManager.Instance.selectedObjects.Count;
+        unitCountPrev = SelectionManager.selectedObjects.Count;
         ClearTabs();
         unitSlotTabs.Clear();
         unitsAttachedToTab.Clear();
         unitQueue.Clear();
 
         Debug.Log("CreateSelectionUnitTab");
-        foreach(var selectable in SelectionManager.Instance.selectedObjects) {
+        foreach(var selectable in SelectionManager.selectedObjects) {
             if (selectable.selectableType == Selectable.SelectableType.Unit) {
                 var unit = selectable.GetComponent<Unit>();
                 var unitSo = unit.unitSo;

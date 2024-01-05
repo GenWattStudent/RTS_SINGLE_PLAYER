@@ -38,7 +38,7 @@ public class Viisibility : MonoBehaviour
     }
 
     private void MakeUnitVisible(Damagable damagable) {
-        if (damagable != null && damagable.playerId != PlayerController.Instance.playerId) {
+        if (damagable != null && damagable.playerId != PlayerController.playerId) {
             var unitScript = damagable.GetComponent<Unit>();
             var unit = units.Find(u => u.unit == unitScript);
 
@@ -77,7 +77,7 @@ public class Viisibility : MonoBehaviour
     }
 
     private void HideUnit(Damagable damagable) {
-        if (damagable != null && damagable.playerId != PlayerController.Instance.playerId) {
+        if (damagable != null && damagable.playerId != PlayerController.playerId) {
             var unitScript = damagable.GetComponent<Unit>();
             var attackScript = damagable.GetComponent<Attack>();
 
