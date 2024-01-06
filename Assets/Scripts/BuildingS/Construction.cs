@@ -57,13 +57,30 @@ public class Construction : MonoBehaviour
         }
     }
 
+    private void RemoveConstructionIfSelected()
+    {
+        if (SelectionManager.selectedObjects.Count == 1)
+        {
+            var selectedConstruction = SelectionManager.selectedObjects[0].GetComponent<Construction>();
+
+            if (selectedConstruction == this) {
+                var selectable = SelectionManager.selectedObjects[0].GetComponent<Selectable>();
+                SelectionManager.Deselect(selectable);
+            }
+        }
+    }
+
     private void InstantiateBuilding()
     {
         // Finished building
         StopWorkersConstruction();
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
+        RemoveConstructionIfSelected();
+        var selectable = building.GetComponent<Selectable>();
+
         building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
         building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
+        SelectionManager.SelectBuilding(selectable);
         Destroy(gameObject);
     }
 

@@ -614,6 +614,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   isReachedDestinationAfterSpawn: 0
   destinationAfterSpawn: {x: 0, y: 0, z: 0}
+  isMoving: 0
 --- !u!114 &8007638447650181562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,6 +645,7 @@ MonoBehaviour:
   unitSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   attackableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   unitMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 548744067611726451}
@@ -654,6 +656,8 @@ MonoBehaviour:
   - {fileID: 5638854283228320419}
   - {fileID: 7799355497773167089}
   - {fileID: 4647910288746205808}
+  bushes: []
+  isVisibile: 1
   effectTimer: 0
   effectValue: 0
   effectKey: 

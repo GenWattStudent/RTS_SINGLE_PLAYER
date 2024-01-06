@@ -2079,6 +2079,8 @@ GameObject:
   - component: {fileID: 871500974}
   - component: {fileID: 871500973}
   - component: {fileID: 871500975}
+  - component: {fileID: 871500976}
+  - component: {fileID: 871500977}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -2130,6 +2132,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c2639bea4faab41b04611f1284a952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &871500976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 995ee7a525be1714394625fc8318c4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &871500977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d60d9566c684924999ee6af3c69e0cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildings:
+  - {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
+  - {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
+  - {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
+  - {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
+  - {fileID: 11400000, guid: cdacdcd8334f71e4faf58e784f8a9e90, type: 2}
+  - {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
+  visualTree: {fileID: 9197481963319205126, guid: 4c4dab1f694f6e549b4b8c1cd9d53b4f,
+    type: 3}
 --- !u!114 &880837993 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2701267134769049055, guid: da8a3cb4cc0499e41a2c390d748e63ae,
@@ -2664,6 +2699,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206551002567003423, guid: 045f1cd9b92202548998188336627a17,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5206551002567003423, guid: 045f1cd9b92202548998188336627a17,
+        type: 3}
       propertyPath: buildings.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -2862,6 +2902,7 @@ PrefabInstance:
     - {fileID: 3853156865074998109, guid: 045f1cd9b92202548998188336627a17, type: 3}
     - {fileID: 9000792107589033555, guid: 045f1cd9b92202548998188336627a17, type: 3}
     - {fileID: 8514969473039095888, guid: 045f1cd9b92202548998188336627a17, type: 3}
+    - {fileID: 9007787469705061650, guid: 045f1cd9b92202548998188336627a17, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6688124450344574052, guid: 045f1cd9b92202548998188336627a17,
@@ -7416,7 +7457,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1579055632}
-  - {fileID: 871500974}
   - {fileID: 283071114}
   - {fileID: 25975394}
   - {fileID: 1942974170}
@@ -7437,3 +7477,4 @@ SceneRoots:
   - {fileID: 896888321}
   - {fileID: 751772665}
   - {fileID: 1678167677}
+  - {fileID: 871500974}

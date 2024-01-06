@@ -74,9 +74,8 @@ public class CursorManager : MonoBehaviour
             if (hit.transform.gameObject.CompareTag("ForceField")) continue;
             
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            var healer = hit.collider.gameObject.GetComponent<Healer>();
 
-            if (damagable != null && healer != null && !damagable.isDead && damagable.playerId == PlayerController.playerId && damagable.health < damagable.damagableSo.health) {
+            if (damagable != null && !damagable.isDead && damagable.playerId == PlayerController.playerId && damagable.health < damagable.damagableSo.health) {
                 return true;
             }
         }

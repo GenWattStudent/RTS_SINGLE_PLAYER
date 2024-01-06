@@ -15,12 +15,11 @@ public class Selectable : MonoBehaviour
     private Damagable damagable;
 
     // when unit killed should be diselected
-    private void Start() {
+    private void Awake() {
         damagable = GetComponent<Damagable>();
     }
 
     private void OnDead() {
-        Debug.Log("OnDead");
         SelectionManager.Deselect(this);
         Deselect();
     }

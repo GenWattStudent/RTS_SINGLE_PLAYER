@@ -16,6 +16,7 @@ public class Damagable : MonoBehaviour
 
     // On dead event handler
     public event Action OnDead;
+    public event Action OnTakeDamage;
     public GameObject targetPoint;
     private Attack attackScript;
     private Collider collider;
@@ -92,7 +93,8 @@ public class Damagable : MonoBehaviour
     public bool TakeDamage(float damage) {
         health -= damage;
         progressBarScript.UpdateProgresBar(health, damagableSo.health);
-
+        OnTakeDamage?.Invoke();
+        
         if (health <= 0f) {
             isDead = true;
             PlayDisapperShader();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Selectable;
@@ -14,13 +15,14 @@ public class SelectedDetails : MonoBehaviour
     private Label levelText;
     private ProgressBar healthBar;
     private ProgressBar expirenceBar;
+    private VisualElement selectionInfo;
+    private Damagable damagable;
 
     private void Start()
     {
-        Debug.Log("Selected details start");
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
-        Debug.Log("Selected details started " + root.name);
+        selectionInfo = root.Q<VisualElement>("SelectionInfo");
         levelUpButton = root.Q<Button>("LevelUp");
         sellButton = root.Q<Button>("Sell");
         statsContainer = root.Q<VisualElement>("Stats");
@@ -28,19 +30,14 @@ public class SelectedDetails : MonoBehaviour
         levelText = root.Q<Label>("Level");
         healthBar = root.Q<ProgressBar>("Healthbar");
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
-        Debug.Log("Selected details started " + levelUpButton.text);
+
+        levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
 
         ActivateButtons(false);
     }
 
-    private void OnEnable() {
-        SelectionManager.OnSelect += UpdateSelectedDetails;
-        levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
-        sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
-    }
-
     private void OnDisable() {
-        SelectionManager.OnSelect -= UpdateSelectedDetails;
         levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
@@ -51,10 +48,12 @@ public class SelectedDetails : MonoBehaviour
     }
 
     private void OnUpgradeButtonClick(ClickEvent ev) {
+        Debug.Log("Upgrade button click");
         building.buildingLevelable.LevelUp();
     }
 
     private void OnSellButtonClick(ClickEvent ev) {
+        Debug.Log("Sell button click");
         building.Sell();
     }
 
@@ -70,8 +69,7 @@ public class SelectedDetails : MonoBehaviour
 
         statBox.Add(statLabel);
         statBox.Add(statValue);
-        Debug.Log("Created stat " + name);
-        Debug.Log(" LOL" + statsContainer.name);
+
         statsContainer.Add(statBox);
     }
 
@@ -84,24 +82,38 @@ public class SelectedDetails : MonoBehaviour
     }
 
     private void CreateExpirenceStat(Damagable damagable) {
-        CreateStat("Expirence", $"{damagable.levelable.expirence}");
-        expirenceBar.lowValue = 0;
-        expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
+        UpdateExpirenceBar(damagable);
         levelText.text = $"{damagable.levelable.level} LVL";
     }
 
     private void ClearStats() {
-        statsContainer.Clear();
-        // healthBar.UpdateProgresBar(0, 0);
-        image.style.backgroundImage = null;
+        List<VisualElement> elementsToRemove = new ();
+
+        foreach (var stat in statsContainer.Children())
+        {
+            elementsToRemove.Add(stat);
+        }
+
+        foreach (var stat in elementsToRemove)
+        {
+            statsContainer.Remove(stat);
+        }
+
         ActivateButtons(false);
+    }
+
+    private void UpdateExpirenceBar(Damagable damagable) {
+        expirenceBar.lowValue = 0;
+        expirenceBar.value = damagable.levelable.expirence;
+        expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
+        expirenceBar.title = $"EXP: {damagable.levelable.expirence}/{damagable.levelable.expirenceToNextLevel}";
     }
 
     private void UpdateHealthBar(Damagable damagable) {
         healthBar.lowValue = 0;
-        Debug.Log(damagable.health);
         healthBar.value = damagable.health;
         healthBar.highValue = damagable.damagableSo.health;
+        healthBar.title = $"HP: {damagable.health}/{damagable.damagableSo.health}";
     }
 
     private void UpdateUnitDetails(Unit unit, Damagable damagable)
@@ -109,19 +121,25 @@ public class SelectedDetails : MonoBehaviour
         CreateHealthStat(damagable);
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
-        image.style.backgroundImage = new StyleBackground(unit.unitSo.sprite);
+        if (damagable != this.damagable) image.style.backgroundImage = new StyleBackground(unit.unitSo.sprite);
 
         UpdateHealthBar(damagable);
+        this.damagable = damagable;
     }
 
     private void UpdateBuildingDetails(Selectable selectable)
     {
         var damagable = selectable.GetComponent<Damagable>();
         var building = selectable.GetComponent<Building>();
+
         CreateHealthStat(damagable);
 
+        if (building.buildingLevelable != null && building.buildingSo.unitsToSpawn.GetLength(0) > 0) {
+            CreateStat("Spawn time reduction", $"{building.buildingLevelable.reduceSpawnTime}");
+        }
+
         if (building != null) {
-           image.style.backgroundImage = new StyleBackground(building.buildingSo.sprite);
+            if (this.damagable != damagable) image.style.backgroundImage = new StyleBackground(building.buildingSo.sprite);
 
             if (building.attackableSo != null) {
                 CreateDamageStat(building.attackableSo);
@@ -146,21 +164,39 @@ public class SelectedDetails : MonoBehaviour
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
             }
+
+            this.damagable = damagable;
         }
+    }
+
+    private void Hide()
+    {
+        selectionInfo.style.display = DisplayStyle.None;
+    }
+
+    private void Show()
+    {
+        selectionInfo.style.display = DisplayStyle.Flex;
     }
 
     private void UpdateMultipleDetails()
     {
+        Hide();
         // Debug.Log("Update multiple details");
     }
 
     private void UpdateSelectedDetails()
     {
         ClearStats();
-        if (SelectionManager.selectedObjects.Count == 0) return;
+        Debug.Log("Update selected details " + SelectionManager.selectedObjects.Count);
+        if (SelectionManager.selectedObjects.Count == 0) {
+            Hide();
+            return;
+        };
 
         if (SelectionManager.selectedObjects.Count == 1)
         {
+            Show();
             var selectable = SelectionManager.selectedObjects[0];
             var unit = selectable.GetComponent<Unit>();
             var damagable = selectable.GetComponent<Damagable>();
@@ -176,7 +212,13 @@ public class SelectedDetails : MonoBehaviour
         }
         else
         {
+            this.damagable = null;
             UpdateMultipleDetails();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateSelectedDetails();
     }
 }

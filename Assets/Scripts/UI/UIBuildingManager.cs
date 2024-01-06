@@ -1,18 +1,37 @@
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UIBuildingManager : Singleton<UIBuildingManager>
 {
     [SerializeField] private BuildingSo[] buildings;
-    [SerializeField] private GameObject buildingTabPrefab;
+    private UIDocument UIDocument;
+
     // [SerializeField] private Button upgradeButton;
     private BuildingSo selectedBuilding;
 
+    private VisualElement root;
+    private VisualElement slotContainer;
+    public VisualTreeAsset visualTree;
+
+    private void Start()
+    {
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        slotContainer = root.Q<VisualElement>("TabContent");
+    }
+
     public void ClearTabs() {
-        foreach (Transform child in transform)
+        List<VisualElement> tabs = new ();
+
+        foreach (var tab in slotContainer.Children())
         {
-            Destroy(child.gameObject);
+            tabs.Add(tab);
+        }
+
+        foreach (var tab in tabs)
+        {
+            slotContainer.Remove(tab);
         }
     }
 
@@ -39,33 +58,41 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
         }
     }
 
-    private void SetBuildingData(GameObject buildingTab, BuildingSo BuildingSo) {
-        var buildingNameText = buildingTab.GetComponentsInChildren<TextMeshProUGUI>()[0];
-        var costText = buildingTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
-        var button = buildingTab.GetComponentInChildren<Image>();
+    private void OnSlotClick(BuildingSo buildingSo) {
+        Debug.Log("Clicked on " + buildingSo.buildingName);
+        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
+        selectedBuilding = buildingSo;
+    }
+
+    private void SetBuildingData(TemplateContainer buildingTab, BuildingSo BuildingSo) {
+        var buildingNameText = buildingTab.Q<Label>("SlotName");
+        var costText = buildingTab.Q<Label>("SlotValue");
+        var image = buildingTab.Q<VisualElement>("ImageBox");
+        var slot = buildingTab.Q<VisualElement>("Slot");
+        var quantityText = buildingTab.Q<Label>("Quantity");
+        var progressBar = buildingTab.Q<ProgressBar>("ProgressBarTimer");
+
+        quantityText.style.display = DisplayStyle.None;
+        progressBar.style.display = DisplayStyle.None;
 
         buildingNameText.text = BuildingSo.buildingName;
         costText.text = BuildingSo.cost.ToString();
 
-        button.GetComponent<Button>().onClick.AddListener(() => {
-            Debug.Log("Clicked on " + BuildingSo.buildingName);
-            if (!UIStorage.Instance.HasEnoughResource(BuildingSo.costResource, BuildingSo.cost)) return;
-            selectedBuilding = BuildingSo;
+        slot.RegisterCallback((ClickEvent ev) => {
+            OnSlotClick(BuildingSo);
         });
 
-        Image[] images = buildingTab.GetComponentsInChildren<Image>();
-
-        var image = images[1];
-
         if (image is not null) {
-            image.sprite = BuildingSo.sprite;
+            Debug.Log("Image is not null");
+            image.style.backgroundImage = new StyleBackground(BuildingSo.sprite);
         }
     }
 
     public void CreateBuildingTab(BuildingSo bulding) {
-        GameObject buildingTab = Instantiate(buildingTabPrefab, transform);
+        TemplateContainer buildingTab = visualTree.Instantiate();
         buildingTab.name = bulding.buildingName;
 
         SetBuildingData(buildingTab, bulding);
+        slotContainer.Add(buildingTab);
     }
 }

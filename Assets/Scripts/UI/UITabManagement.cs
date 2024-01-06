@@ -1,12 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UITabManagement : MonoBehaviour
 {
-    private List<GameObject> tabs = new List<GameObject>();
-    [SerializeField] private GameObject tabButtonPrefab;
+    private List<Button> tabs = new ();
     public string CurrentTab { get; private set; }
+    private UIDocument UIDocument;
+    private VisualElement root;
+    private VisualElement tabContainer;
+
+    private void OnTabClick(string tabName)
+    {
+        CurrentTab = tabName;
+        UIBuildingManager.Instance.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tabName));
+    }
 
     private void CreateTabs()
     {
@@ -15,27 +23,51 @@ public class UITabManagement : MonoBehaviour
 
         foreach (var unitType in unitTypes)
         {
-            // Create tab 
-            GameObject tab = Instantiate(tabButtonPrefab, transform);
-            tab.name = unitType.ToString();
-            // Get text component from tab
-            var tabText = tab.GetComponentInChildren<Text>();
-            // Set text to tab
-            tabText.text = unitType.ToString();
-            // add event listener to tab
-            tab.GetComponent<Button>().onClick.AddListener(() => {
-                // Set current tab
-                Debug.Log("Clicked on " + tab.name);
-                CurrentTab = tab.name; 
-                UIBuildingManager.Instance.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tab.name));
+            var tabName = unitType.ToString();
+            Button tab = new Button
+            {
+                name = tabName,
+                text = tabName
+            };
+
+            tab.AddToClassList("btn-primary");
+            tab.AddToClassList("btn-rounded-small");
+            tab.AddToClassList("btn-medium");
+
+            tab.RegisterCallback<ClickEvent>(ev => {
+                tabs.ForEach(tab => tab.RemoveFromClassList("active"));
+                tab.AddToClassList("active");
+                OnTabClick(tabName);
             });
+
             // Add tab to list
             tabs.Add(tab);
+            tabContainer.Add(tab);
+        }
+    }
+
+    private void ClearButtons()
+    {
+        List<Button> buttons = new ();
+
+        foreach (var tab in tabContainer.Children())
+        {
+            buttons.Add((Button)tab);
+        }
+
+        foreach (var tab in buttons)
+        {
+            tabContainer.Remove(tab);
         }
     }
 
     void Start()
     {
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        tabContainer = root.Q<VisualElement>("BuildingTabs");
+
+        ClearButtons();
         CreateTabs();
     }
 }

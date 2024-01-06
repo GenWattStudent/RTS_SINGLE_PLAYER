@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+[DefaultExecutionOrder(-1)]
 public class SelectionManager : MonoBehaviour
 {
     [HideInInspector] public static List<Selectable> selectedObjects;
@@ -12,7 +12,7 @@ public class SelectionManager : MonoBehaviour
     public delegate void SelectAction();
     public static event SelectAction OnSelect;
 
-    public void DeselectAll()
+    public static void DeselectAll()
     {
         foreach (Selectable selectable in selectedObjects)
         {
@@ -83,7 +83,7 @@ public class SelectionManager : MonoBehaviour
         return true;
     }
 
-    private void Select(Selectable selectable) {
+    public static void Select(Selectable selectable) {
         selectable.Select();
         selectedObjects.Add(selectable);
         OnSelect?.Invoke(); 
@@ -95,7 +95,7 @@ public class SelectionManager : MonoBehaviour
         OnSelect?.Invoke();
     }
 
-    private void SelectBuilding(Selectable selectable) {
+    public static void SelectBuilding(Selectable selectable) {
         DeselectAll();
         var buildingScript = selectable.GetComponent<Building>();
         var tankBuildingScript = selectable.GetComponent<TankBuilding>();
@@ -107,7 +107,7 @@ public class SelectionManager : MonoBehaviour
             return;
         }
 
-        if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        // if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
         selectable.Select();
         selectedObjects.Add(selectable);
     }

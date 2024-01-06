@@ -21,6 +21,6 @@ public class PlaceableBuilding : MonoBehaviour
 
   private void Update()
   {
-    Debug.Log(colliders.Count);
+    // Debug.Log(colliders.Count);
   }
 }
