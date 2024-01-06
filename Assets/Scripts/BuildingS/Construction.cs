@@ -57,7 +57,7 @@ public class Construction : MonoBehaviour
         }
     }
 
-    private void RemoveConstructionIfSelected()
+    private bool RemoveConstructionIfSelected()
     {
         if (SelectionManager.selectedObjects.Count == 1)
         {
@@ -66,8 +66,13 @@ public class Construction : MonoBehaviour
             if (selectedConstruction == this) {
                 var selectable = SelectionManager.selectedObjects[0].GetComponent<Selectable>();
                 SelectionManager.Deselect(selectable);
+                return true;
             }
+
+            return false;
         }
+
+        return false;
     }
 
     private void InstantiateBuilding()
@@ -75,12 +80,12 @@ public class Construction : MonoBehaviour
         // Finished building
         StopWorkersConstruction();
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
-        RemoveConstructionIfSelected();
+        var isRemoved = RemoveConstructionIfSelected();
         var selectable = building.GetComponent<Selectable>();
 
         building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
         building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
-        SelectionManager.SelectBuilding(selectable);
+        if (isRemoved) SelectionManager.SelectBuilding(selectable);
         Destroy(gameObject);
     }
 

@@ -1,39 +1,45 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class MiniMapRectangle : MonoBehaviour
 {
     public Material cameraBoxMaterial;
-    public RawImage minimapImage;
+    public VisualElement minimapImage;
     public Camera mainCamera;
     public Camera minimap;
     public CameraSystem cameraSystem;
     public Collider terrainCollider;
     public float lineWidth = 0.001f;
     public Vector3 topLeftPosition, topRightPosition, bottomLeftPosition, bottomRightPosition;
+    public UIDocument UIDocument;
 
     void OnEnable()
     {
+        UIDocument = GetComponent<UIDocument>();
+        var root = UIDocument.rootVisualElement;
+        minimapImage = root.Q<VisualElement>("Minimap");
         // add click listener to the minimap
-        minimapImage.GetComponent<Button>().onClick.AddListener(MoveCameraToMousePosition);
+        minimapImage.RegisterCallback((ClickEvent ev) => {
+            MoveCameraToMousePosition(Input.mousePosition);
+        });
         // add post render listener to the minimap camera 
 
         // add post render listener to the minimap camera
         // RenderPipelineManager.endCameraRendering += OnPostRenderr;
     }
 
-    void MoveCameraToMousePosition()
+    void MoveCameraToMousePosition(Vector2 position)
     {
         // calculate mouse position - minimap postion
-        Vector2 mousePosition = Input.mousePosition;
+        Debug.Log("Minimap position: " + position);
         Vector2 minimapPosition = minimapImage.transform.position;
-        Vector2 mousePositionOnMinimap = mousePosition - minimapPosition;
+        Vector2 mousePositionOnMinimap = position - minimapPosition;
         // Take terrain widht and height and calculate camera postion
         float terrainWidth = Terrain.activeTerrain.terrainData.size.x;
         float terrainHeight = Terrain.activeTerrain.terrainData.size.z;
-        float minimapPercentageX = mousePositionOnMinimap.x / (minimapImage.rectTransform.rect.width * 0.6f);
-        float minimapPercentageY = mousePositionOnMinimap.y / (minimapImage.rectTransform.rect.height * 0.6f);
+        float minimapPercentageX = mousePositionOnMinimap.x / (minimapImage.resolvedStyle.width);
+        float minimapPercentageY = mousePositionOnMinimap.y / (minimapImage.resolvedStyle.height);
         float cameraX = terrainWidth * minimapPercentageX;
         float cameraZ = terrainHeight * minimapPercentageY;
         // Move camera to calculated position

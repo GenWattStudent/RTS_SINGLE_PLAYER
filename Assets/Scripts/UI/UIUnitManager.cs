@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UIUnitManager : MonoBehaviour
 {
-    [SerializeField] private GameObject unitSlotTabPrefab;
-    // [SerializeField] private Button upgradeButton;
-    private List<GameObject> unitSlotTabs = new ();
+    private List<VisualElement> unitSlotTabs = new ();
     private List<UnitSo> unitsAttachedToTab = new ();
     public static UIUnitManager Instance { get; private set; }
     private BuildingSo selectedBuilding;
@@ -17,6 +14,10 @@ public class UIUnitManager : MonoBehaviour
     public bool IsUnitSelectionTabOpen { get; set; } = false;
     private Dictionary<string, List<UnitSo>> unitQueue = new ();
     private int unitCountPrev = 0;
+    private UIDocument UIDocument;
+    private VisualElement root;
+    public VisualTreeAsset slot;
+    private VisualElement unitSlotContainer;
 
     private void Awake()
     {
@@ -24,6 +25,10 @@ public class UIUnitManager : MonoBehaviour
     }
 
     private void Start() {
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        unitSlotContainer = root.Q<VisualElement>("TabContent");
+
         SelectionManager.OnSelect += CreateSelectionUnitTab;
     }
     
@@ -31,45 +36,52 @@ public class UIUnitManager : MonoBehaviour
         SelectionManager.OnSelect -= CreateSelectionUnitTab;
     }
 
-    // private void HandleUpgrade() {
-    //     var levelableObject = curentBuilding.GetComponent<LevelableObject>();
+    private void UpdateProgressBar(ProgressBar progressBar, float currentTime, float totalSpawnTime) {
+        progressBar.lowValue = 0;
+        progressBar.highValue = totalSpawnTime;
+        progressBar.value = currentTime;
+    }
 
-    //     if (levelableObject != null) {
-    //         levelableObject.LevelUp();
-    //     }
-    // }
+    public void SetSpawnData(VisualElement slot, int unitQueueCount, float currentTime, float totalSpawnTime) {
+        var spawnUnitCountText = slot.Q<Label>("Quantity");
+        var progressTime = slot.Q<ProgressBar>("ProgressBarTimer");
 
-    // private void OnEnable() {
-    //     upgradeButton.onClick.AddListener(HandleUpgrade);
-    // }
+        spawnUnitCountText.style.display = DisplayStyle.Flex;
+        progressTime.style.display = DisplayStyle.Flex;
 
-    // private void OnDisable() {
-    //     upgradeButton.onClick.RemoveListener(HandleUpgrade);
-    // }
+        var timeRounded = Mathf.RoundToInt(currentTime);
+
+        progressTime.title = timeRounded.ToString() + "s";
+        spawnUnitCountText.text = unitQueueCount.ToString() + "x";
+        UpdateProgressBar(progressTime, currentTime, totalSpawnTime);
+    }
+
+    private void HideSpawnInfo(VisualElement unitTab) {
+        var spawnUnitCountText = unitTab.Q<Label>("Quantity");
+        var progressTime = unitTab.Q<ProgressBar>("ProgressBarTimer");
+
+        spawnUnitCountText.style.display = DisplayStyle.None;
+        progressTime.style.display = DisplayStyle.None;
+    }
 
     private void FixedUpdate() {
         if (!IsUnitSelectionTabOpen && IsUnitUIOpen && spawnerBuilding is not null) {
             foreach (var unitTab in unitSlotTabs) {
-                var nameText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[0];
                 var currentTime = spawnerBuilding.GetSpawnTimer();
                 var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
                 var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(unitTab.name);
                 var soUnit = unitsAttachedToTab.Find(x => x.unitName == unitTab.name);
                
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name) {
-                    var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                    spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                    SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
                 }
 
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName != unitTab.name && unitQueueCount > 0) {
-                    var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                    spawnPanel.SetSpawnData(unitQueueCount, 0, spawnerBuilding.totalSpawnTime);
+                    SetSpawnData(unitTab, unitQueueCount, 0, spawnerBuilding.totalSpawnTime);
                 }
 
                 if (unitQueueCount <= 0) {
-                    var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                    if (!spawnPanel) return;
-                    spawnPanel.gameObject.SetActive(false);
+                    HideSpawnInfo(unitTab);
                 }
             }
         }
@@ -100,49 +112,64 @@ public class UIUnitManager : MonoBehaviour
         }
 
         foreach(var unit in unitQueue) {
-            GameObject unitTab = Instantiate(unitSlotTabPrefab, transform);
-            unitTab.name = unit.Key;
+            TemplateContainer templateContainer = slot.Instantiate();
+            templateContainer.name = unit.Key;
             var unitQueueCount = unit.Value.Count;
 
-            SetUnitData(unitTab, unit.Value[0], unitQueueCount);
-            unitSlotTabs.Add(unitTab);
+            SetUnitData(templateContainer, unit.Value[0], unitQueueCount);
+
+            var progressBar = templateContainer.Q<ProgressBar>("ProgressBarTimer");
+            var quantityText = templateContainer.Q<Label>("Quantity");
+
+            quantityText.style.display = DisplayStyle.Flex;
+            progressBar.style.display = DisplayStyle.None;
+
+            unitSlotTabs.Add(templateContainer);
             unitsAttachedToTab.Add(unit.Value[0]);
+            unitSlotContainer.Add(templateContainer);
         }
 
         IsUnitUIOpen = true;
         IsUnitSelectionTabOpen = true;
     }
 
-    private void SetUnitData(GameObject unitTab, UnitSo soUnit, int cost = -1) {
-        var unitNameText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[0];
-        var button = unitTab.GetComponentInChildren<Image>();
+    private void SetUnitData(VisualElement unitTab, UnitSo soUnit, int cost = -1) {
+        var unitNameText = unitTab.Q<Label>("SlotName");
+        var button = unitTab.Q<VisualElement>("Slot");
 
         unitNameText.text = soUnit.unitName;
 
         if (cost < 0 && soUnit.cost > 0) {
-            var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
+            var costText = unitTab.Q<Label>("SlotValue");
             costText.text = soUnit.cost.ToString();
                 
-            button.GetComponent<Button>().onClick.AddListener(() => {
+            button.RegisterCallback((ClickEvent ev) => {
                 spawnerBuilding.AddUnitToQueue(soUnit);
             });
         } else {
-            var costText = unitTab.GetComponentsInChildren<TextMeshProUGUI>()[1];
+            var costText = unitTab.Q<Label>("Quantity");
+            var value = unitTab.Q<Label>("SlotValue");
+            
+            value.style.display = DisplayStyle.None;
             costText.text = cost.ToString();
         }
 
-        Image[] images = unitTab.GetComponentsInChildren<Image>();
-        var image = images[1];
+        VisualElement image = unitTab.Q<VisualElement>("ImageBox");
 
         if (image is not null) {
-            image.sprite = soUnit.sprite;
+            image.style.backgroundImage = new StyleBackground(soUnit.sprite);
         }
     }
 
     public void ClearTabs() {
-        foreach (Transform child in transform)
-        {
-            Destroy(child.gameObject);
+        List<VisualElement> visualElements = new ();
+
+        foreach (var child in unitSlotContainer.Children()) {
+            visualElements.Add(child);
+        }
+
+        foreach (var visualElement in visualElements) {
+            unitSlotContainer.Remove(visualElement);
         }
     }
 
@@ -153,27 +180,27 @@ public class UIUnitManager : MonoBehaviour
         selectedBuilding = BuildingSo;
         this.spawnerBuilding = spawnerBuilding;
         currentBuilding = building;
-        // upgradeButton.gameObject.SetActive(true); 
 
         var currentTime = spawnerBuilding.GetSpawnTimer();
         var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
 
         foreach(var soUnit in BuildingSo.unitsToSpawn) {
-            GameObject unitTab = Instantiate(unitSlotTabPrefab, transform);
+            TemplateContainer unitTab = slot.Instantiate();
             unitTab.name = soUnit.unitName;
             var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(soUnit.unitName);
 
             if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName) {
-                var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
             } else if (unitQueueCount > 0) {
-                var spawnPanel = unitTab.GetComponentInChildren<SpawnPanel>(true);
-                spawnPanel.SetSpawnData(unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
             }
+
+            HideSpawnInfo(unitTab);
 
             SetUnitData(unitTab, soUnit);
             unitSlotTabs.Add(unitTab);
             unitsAttachedToTab.Add(soUnit);
+            unitSlotContainer.Add(unitTab);
         }
 
         IsUnitUIOpen = true;

@@ -69,5 +69,8 @@ public class UITabManagement : MonoBehaviour
 
         ClearButtons();
         CreateTabs();
+        var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
+        var economyTab = tabs.GetValue(0).ToString();
+        OnTabClick(economyTab);
     }
 }

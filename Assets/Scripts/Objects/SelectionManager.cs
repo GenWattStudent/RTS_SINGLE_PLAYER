@@ -107,7 +107,7 @@ public class SelectionManager : MonoBehaviour
             return;
         }
 
-        // if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
         selectable.Select();
         selectedObjects.Add(selectable);
     }

@@ -2,7 +2,13 @@
     <ui:Template name="Slot" src="project://database/Assets/UI%20Toolkit/Slot.uxml?fileID=9197481963319205126&amp;guid=4c4dab1f694f6e549b4b8c1cd9d53b4f&amp;type=3#Slot" />
     <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(255, 242, 242, 0); justify-content: flex-end;">
-        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 400px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+        <ui:VisualElement name="ResourceData" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 700px; height: 200px; background-color: rgba(55, 55, 55, 0.95);">
+            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; justify-content: space-evenly;">
+                <ui:ProgressBar value="200" title="Mass: 200/1000" name="Mass" high-value="1000" class="mass" style="position: relative; bottom: auto; width: 97%; justify-content: flex-start; height: 46px;" />
+                <ui:ProgressBar value="200" title="Energy: 200/1000" name="Energy" high-value="1000" class="mass energy" style="position: relative; bottom: auto; width: 97%; justify-content: flex-start; height: 46px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Toolbar" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 400px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             <ui:VisualElement name="SelectionInfo" class="border-medium border-secondary btn-rounded-small" style="flex-grow: 0; width: 300px; justify-content: flex-start; align-self: auto; flex-shrink: 1; height: 100%;">
                 <ui:VisualElement name="Actions" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: 40px; border-top-left-radius: 10px;">
                     <ui:VisualElement name="Image" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Prefabs/HeavyTank/HeavyTankSprite.png?fileID=2800000&amp;guid=8426e27361e479a43bf8528363a5bcb3&amp;type=3#HeavyTankSprite&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: 100%; align-self: auto; align-items: auto; justify-content: space-evenly; border-top-left-radius: 10px;" />
@@ -43,11 +49,24 @@
                     <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
                     <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
                 </ui:VisualElement>
-                <ui:VisualElement name="TabContent" style="flex-grow: 1; height: 200px; flex-direction: row; align-items: flex-start; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
-                    <ui:Instance template="Slot" name="Slot" />
+                <ui:VisualElement name="TabBox" style="flex-grow: 1; height: 200px; flex-direction: row; align-items: flex-end; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; justify-content: flex-start;">
+                    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" name="TabContent">
+                        <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
+                        <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
+                        <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
+                        <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
+                    </ui:ScrollView>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="Minimap" class="btn-rounded-small border-medium border-secondary" style="flex-grow: 0; width: 400px; background-image: url(&apos;project://database/Assets/Textures/MinimapTexture.renderTexture?fileID=8400000&amp;guid=9a82a27deeae96e478a349f3546e8b28&amp;type=2#MinimapTexture&apos;); border-top-right-radius: 10px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Details" style="flex-grow: 1; position: absolute; top: 0; right: 0; background-color: rgb(55, 55, 55); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-bottom-left-radius: 20px; flex-direction: row; width: auto; align-items: center; justify-content: flex-end; align-self: auto; flex-wrap: nowrap;">
+        <ui:VisualElement name="UnitCount" class="border-secondary" style="flex-grow: 0; padding-top: 30px; padding-right: 20px; padding-bottom: 30px; padding-left: 20px; align-items: auto; border-top-width: 0; border-right-width: 10px; border-bottom-width: 0; border-left-width: 0;">
+            <ui:Label tabindex="-1" text="30/50" display-tooltip-when-elided="true" class="text-xxl text-bold" style="color: rgb(255, 255, 255); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Clock" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0); border-bottom-left-radius: 30px; padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; align-items: stretch; justify-content: flex-start; align-self: auto;">
+            <ui:Label tabindex="-1" text="14:20" display-tooltip-when-elided="true" class="text-bold text-primary text-xxl" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
