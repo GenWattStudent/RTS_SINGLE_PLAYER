@@ -116,12 +116,20 @@ public class SelectedDetails : MonoBehaviour
         healthBar.title = $"HP: {damagable.health}/{damagable.damagableSo.health}";
     }
 
+    private void ActivateUnitCamera(Damagable damagable) {
+        if (damagable == null) return;
+        var camera = damagable.GetComponentInChildren<Camera>(true);
+        Debug.Log("Camera: " + camera);
+        if (camera == null) return;
+        Debug.Log("Activate unit camera");  
+        camera.gameObject.SetActive(true);
+    }
     private void UpdateUnitDetails(Unit unit, Damagable damagable)
     {
         CreateHealthStat(damagable);
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
-        if (damagable != this.damagable) image.style.backgroundImage = new StyleBackground(unit.unitSo.sprite);
+        ActivateUnitCamera(damagable);
 
         UpdateHealthBar(damagable);
         this.damagable = damagable;
@@ -139,7 +147,7 @@ public class SelectedDetails : MonoBehaviour
         }
 
         if (building != null) {
-            if (this.damagable != damagable) image.style.backgroundImage = new StyleBackground(building.buildingSo.sprite);
+            ActivateUnitCamera(damagable);
 
             if (building.attackableSo != null) {
                 CreateDamageStat(building.attackableSo);

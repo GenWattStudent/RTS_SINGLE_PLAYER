@@ -14,11 +14,12 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
     private VisualElement slotContainer;
     public VisualTreeAsset visualTree;
 
-    private void Start()
+    private void OnEnable()
     {
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         slotContainer = root.Q<VisualElement>("TabContent");
+        Debug.Log("Slot container: " + slotContainer);
     }
 
     public void ClearTabs() {

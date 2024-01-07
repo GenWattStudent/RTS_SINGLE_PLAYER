@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UnitCountManager : MonoBehaviour
 {
+    private UIDocument UIDocument;
+    private VisualElement root;
+    private Label unitCountText;
     [SerializeField] private int maxUnitCount = 20;
     [SerializeField] private int currentUnitCount = 0;
-    [SerializeField] private TextMeshProUGUI unitCountText;
     public static UnitCountManager Instance;
 
     private void Awake() {
@@ -14,6 +16,9 @@ public class UnitCountManager : MonoBehaviour
     }
 
     private void Start() {
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        unitCountText = root.Q<Label>("UnitCountLabel");
         PlayerController.OnUnitChange += OnUnitChange;
     }
 

@@ -1,13 +1,17 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameTime : MonoBehaviour
 {
-    private TextMeshProUGUI timeText;
+    private UIDocument UIDocument;
+    private Label timeText;
+    private VisualElement root;
 
     void Start()
     {
-        timeText = GetComponent<TextMeshProUGUI>();
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+        timeText = root.Q<Label>("ClockLabel");
     }
 
     void FixedUpdate()
