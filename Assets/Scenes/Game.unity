@@ -455,7 +455,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 246812526}
-  - component: {fileID: 246812527}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -483,21 +482,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -900}
   m_SizeDelta: {x: 800, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &246812527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246812525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2415a57335384d4a990d2445214883c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settingsPrefab: {fileID: 670907603}
-  text: {fileID: 1158360342}
-  button: {fileID: 2097186244}
 --- !u!1 &283071112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,6 +1770,10 @@ GameObject:
   - component: {fileID: 871500979}
   - component: {fileID: 871500981}
   - component: {fileID: 871500980}
+  - component: {fileID: 871500982}
+  - component: {fileID: 871500983}
+  - component: {fileID: 871500984}
+  - component: {fileID: 871500985}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -1837,6 +1825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c2639bea4faab41b04611f1284a952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
 --- !u!114 &871500976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1933,6 +1922,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxUnitCount: 20
   currentUnitCount: 0
+--- !u!114 &871500982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9223b25c62a84b9439b11e77373ac409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  lowFPS: 30
+  highFPS: 60
+  updateTimer: 0
+  updateInterval: 0.5
+--- !u!114 &871500983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e5ab749377d2084a8e74d0bcf06d774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resources:
+  - resourceSO: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  - resourceSO: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+--- !u!114 &871500984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2415a57335384d4a990d2445214883c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  isSettingsOpen: 0
+--- !u!114 &871500985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bfd22cfbf82cf6449397bd99b2a508f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  isSetTargetMode: 0
 --- !u!114 &880837993 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2701267134769049055, guid: da8a3cb4cc0499e41a2c390d748e63ae,
@@ -2861,6 +2910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c2639bea4faab41b04611f1284a952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
 --- !u!114 &1109233439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7257,7 +7307,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654,
         type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9053985979329459804, guid: da8a3cb4cc0499e41a2c390d748e63ae, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6172999904378635274, guid: da8a3cb4cc0499e41a2c390d748e63ae,

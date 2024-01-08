@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Storage {
     public ResourceSO recourceSO;
@@ -11,15 +11,14 @@ public class Storage {
 [System.Serializable]
 public class StorageData {
     public ResourceSO resourceSO;
-    public TextMeshProUGUI text;
-    public RectTransform bar;
 }
 
 public class UIStorage : Singleton<UIStorage>
 {
     [SerializeField] private List<StorageData> resources = new ();
-
     private List<Storage> storages = new ();
+    private UIDocument UIDocument;
+    private VisualElement root;
 
     public Storage GetStorageByResource(ResourceSO resource) {
         return storages.Find(x => x.recourceSO == resource);
@@ -42,9 +41,14 @@ public class UIStorage : Singleton<UIStorage>
     }
 
     private void UpdatResourceData(Storage storage) {
-        storage.storageData.text.text = $"{storage.currentValue}/{storage.recourceSO.maxValue}";
-        var progressBarScript = storage.storageData.bar.GetComponent<ProgresBar>();
-        progressBarScript.UpdateProgresBar(storage.currentValue, storage.recourceSO.maxValue);
+        var progressBar = root.Q<ProgressBar>(storage.recourceSO.resourceName);
+
+        if (progressBar is null) return;
+        
+        progressBar.lowValue = 0;
+        progressBar.highValue = storage.recourceSO.maxValue;
+        progressBar.value = storage.currentValue;
+        progressBar.title = $"{storage.recourceSO.resourceName} {storage.currentValue}/{storage.recourceSO.maxValue}";
     }
 
     public void IncreaseResource(ResourceSO resourceSO, int amount) {
@@ -94,6 +98,11 @@ public class UIStorage : Singleton<UIStorage>
 
             storages.Add(storage);
         }
+    }
+
+    private void OnEnable() {
+        UIDocument = GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
     }
 
     private void Start() {

@@ -1,26 +1,62 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class Settings : MonoBehaviour
+public class Settings : ToolkitHelper
 {
-    [SerializeField] private GameObject settingsPrefab;
-    [SerializeField] private TextMeshProUGUI text;
-    [SerializeField] private Button button;
-    // Start is called before the first frame update
+
+    private Button settingsButton;
+    private Button mainMenuButton;
+    private Button backButton;
+    private VisualElement settingsContainer;
+    public bool isSettingsOpen = false;
+
     void Start()
     {
-        button.onClick.AddListener(() => {
-            SceneManager.LoadScene(0);
-        });
+        settingsButton = GetButton("SettingsButton");
+        mainMenuButton = GetButton("MainMenuButton");
+        backButton = GetButton("BackButton");
+        settingsContainer = GetVisualElement("SettingsModal");
+
+        settingsButton.RegisterCallback<ClickEvent>(OnSettingsButtonClick);
+        mainMenuButton.RegisterCallback<ClickEvent>(OnMainMenuButtonClick);
+        backButton.RegisterCallback<ClickEvent>(OnBackButtonClick);
     }
 
-    // Update is called once per frame
+    private void OnSettingsButtonClick(ClickEvent ev) {
+        OpenSettings();
+    }
+
+    private void OnMainMenuButtonClick(ClickEvent ev) {
+        LoadMainMenu();
+    }
+
+    private void OpenSettings() {
+        settingsContainer.style.display = DisplayStyle.Flex;
+        isSettingsOpen = true;
+    }
+
+    private void OnBackButtonClick(ClickEvent ev) {
+        CloseSettings();
+    }
+
+    private void CloseSettings() {
+        settingsContainer.style.display = DisplayStyle.None;
+        isSettingsOpen = false;
+    }
+
+    private void LoadMainMenu() {
+        SceneManager.LoadScene(0);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            settingsPrefab.gameObject.SetActive(true);
+            if (isSettingsOpen) {
+                CloseSettings();
+            } else {
+                OpenSettings();
+            }
         }
     }
 }

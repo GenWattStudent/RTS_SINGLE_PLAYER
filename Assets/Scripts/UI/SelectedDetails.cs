@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static Selectable;
 
-public class SelectedDetails : MonoBehaviour
+public class SelectedDetails : ToolkitHelper
 {
-    UIDocument UIDocument;
     private Building building;
-    private VisualElement root;
     private Button levelUpButton;
     private Button sellButton;
     private VisualElement statsContainer;
@@ -16,12 +14,11 @@ public class SelectedDetails : MonoBehaviour
     private ProgressBar healthBar;
     private ProgressBar expirenceBar;
     private VisualElement selectionInfo;
-    private Damagable damagable;
+    private VisualElement actions;
+    private bool isGoToTab = true;
 
     private void Start()
     {
-        UIDocument = GetComponent<UIDocument>();
-        root = UIDocument.rootVisualElement;
         selectionInfo = root.Q<VisualElement>("SelectionInfo");
         levelUpButton = root.Q<Button>("LevelUp");
         sellButton = root.Q<Button>("Sell");
@@ -30,6 +27,7 @@ public class SelectedDetails : MonoBehaviour
         levelText = root.Q<Label>("Level");
         healthBar = root.Q<ProgressBar>("Healthbar");
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
+        actions = GetVisualElement("Actions");
 
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
@@ -74,7 +72,7 @@ public class SelectedDetails : MonoBehaviour
     }
 
     private void CreateHealthStat(Damagable damagable) {
-        CreateStat("Health", $"{damagable.health}/{damagable.damagableSo.health}");
+        CreateStat("Health", $"{damagable.health}/{damagable.maxHealth}");
     }
 
     private void CreateDamageStat(AttackableSo attackableSo) {
@@ -112,31 +110,31 @@ public class SelectedDetails : MonoBehaviour
     private void UpdateHealthBar(Damagable damagable) {
         healthBar.lowValue = 0;
         healthBar.value = damagable.health;
-        healthBar.highValue = damagable.damagableSo.health;
-        healthBar.title = $"HP: {damagable.health}/{damagable.damagableSo.health}";
+        healthBar.highValue = damagable.maxHealth;
+        healthBar.title = $"HP: {damagable.health}/{damagable.maxHealth}";
     }
 
     private void ActivateUnitCamera(Damagable damagable) {
         if (damagable == null) return;
         var camera = damagable.GetComponentInChildren<Camera>(true);
-        Debug.Log("Camera: " + camera);
         if (camera == null) return;
-        Debug.Log("Activate unit camera");  
         camera.gameObject.SetActive(true);
     }
+
     private void UpdateUnitDetails(Unit unit, Damagable damagable)
     {
+        actions.style.display = DisplayStyle.Flex;
+        expirenceBar.style.display = DisplayStyle.Flex;
         CreateHealthStat(damagable);
         CreateDamageStat(unit.attackableSo);
         CreateExpirenceStat(damagable);
         ActivateUnitCamera(damagable);
-
         UpdateHealthBar(damagable);
-        this.damagable = damagable;
     }
 
     private void UpdateBuildingDetails(Selectable selectable)
     {
+        actions.style.display = DisplayStyle.Flex;
         var damagable = selectable.GetComponent<Damagable>();
         var building = selectable.GetComponent<Building>();
 
@@ -154,6 +152,7 @@ public class SelectedDetails : MonoBehaviour
             }
 
             UpdateHealthBar(damagable);
+            expirenceBar.style.display = DisplayStyle.None;
 
             var construction = selectable.GetComponent<Construction>();
 
@@ -172,8 +171,6 @@ public class SelectedDetails : MonoBehaviour
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
             }
-
-            this.damagable = damagable;
         }
     }
 
@@ -189,18 +186,28 @@ public class SelectedDetails : MonoBehaviour
 
     private void UpdateMultipleDetails()
     {
-        Hide();
-        // Debug.Log("Update multiple details");
+        Show();
+        actions.style.display = DisplayStyle.None;
+        CreateStat("Selected", $"{SelectionManager.selectedObjects.Count} units");
     }
 
     private void UpdateSelectedDetails()
     {
         ClearStats();
-        Debug.Log("Update selected details " + SelectionManager.selectedObjects.Count);
+
         if (SelectionManager.selectedObjects.Count == 0) {
             Hide();
+            if (!isGoToTab) {
+                var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
+                var tabName = tabs.GetValue(0).ToString();
+                UITabManagement.Instance.OnTabClick(tabName);
+                isGoToTab = true;
+            }
+
             return;
         };
+
+        isGoToTab = false;
 
         if (SelectionManager.selectedObjects.Count == 1)
         {
@@ -220,7 +227,6 @@ public class SelectedDetails : MonoBehaviour
         }
         else
         {
-            this.damagable = null;
             UpdateMultipleDetails();
         }
     }

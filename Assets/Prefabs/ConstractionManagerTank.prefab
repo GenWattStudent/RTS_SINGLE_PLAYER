@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   buildingUnits: []
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 1728324892412086157}
   buildingInProgressPrefab: {fileID: 4626188909790913038}
   constructionPrefab: {fileID: 583100300255767749}
 --- !u!114 &5807540428542867514
@@ -229,7 +229,7 @@ MonoBehaviour:
   damagableSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   health: 0
   maxHealth: 0
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 1728324892412086157}
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
@@ -475,6 +475,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.013493
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.026856402
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -533,11 +543,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8038668621565483422, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6528704abe87a54ab03b7642f06dcc8, type: 3}
+--- !u!224 &1728324892412086157 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2494718034336087024, guid: c6528704abe87a54ab03b7642f06dcc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3846982830549433469}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6854994907649830671 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,

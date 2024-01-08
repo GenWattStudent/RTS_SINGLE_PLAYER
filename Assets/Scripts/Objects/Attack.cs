@@ -19,6 +19,7 @@ public class Attack : MonoBehaviour
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
+    public Vector3 targetPosition;
 
     void Start()
     {
@@ -64,12 +65,19 @@ public class Attack : MonoBehaviour
         this.target = target;
 
         if (this.target != null) {
+            targetPosition = target.transform.position;
             target.OnDead += OnTargetDead;
             OnTarget?.Invoke(target, currentUnit);
             return;
         } 
 
+        targetPosition = Vector3.zero;
         OnTarget?.Invoke(target, currentUnit);
+    }
+
+    public void SetTargetPosition(Vector3 position) {
+        targetPosition = position;
+        target = null;
     }   
 
     private void OnTargetDead() {
@@ -89,12 +97,19 @@ public class Attack : MonoBehaviour
         return false;
     }
 
+    private bool IsInRange(Vector3 targetPosition) {
+        return Vector3.Distance(transform.position, targetPosition) <= currentUnit.attackableSo.attackRange;
+    }
+
     private void ShootBullet() {
         Bullet bullet = BulletPool.Instance.bulletPool.Get();
         bullet.transform.position = bulletSpawnPoint.transform.position;
         bullet.transform.rotation = Quaternion.identity;
 
-        var targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
+        var targetPosition = this.targetPosition;
+
+        if (target != null)
+            targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
@@ -111,10 +126,10 @@ public class Attack : MonoBehaviour
 
     private bool IsInAngle() {
         if (currentUnit.attackableSo.hasTurret) {
-            return turret.IsInFieldOfView(target.transform.position, currentUnit.attackableSo.attackAngle);
+            return turret.IsInFieldOfView(targetPosition, currentUnit.attackableSo.attackAngle);
         } else {
             // calculate angle between unit and target
-            Vector3 targetDir = target.transform.position - transform.position;
+            Vector3 targetDir = targetPosition - transform.position;
             float angle = Vector3.Angle(targetDir, transform.forward);
 
             // if angle is less than attack angle, return true
@@ -147,29 +162,48 @@ public class Attack : MonoBehaviour
         }
     }
 
+    private void PerformTargetAiming() {
+        if (IsInRange() && currentUnit.attackableSo.canAttack) {
+            PerformAttack();             
+        } else {
+            SetTarget(null);
+            return;
+        }
+
+        RotateToTarget();
+    }
+
+    private void RotateToTarget() {
+        if (currentUnit.attackableSo.hasTurret) {
+            turret.RotateToTarget(targetPosition, currentUnit.attackableSo.turretRotateSpeed);
+        } else {
+            unitMovement.RotateToTarget(targetPosition);
+        }
+    }
+
     void Update()
     {
         attackSpeedTimer -= Time.deltaTime;
         attackCooldownTimer -= Time.deltaTime;
         checkTargetTimerTimer -= Time.deltaTime;
 
-        if (checkTargetTimerTimer <= 0 && autoAttack && target == null) {
+        if (checkTargetTimerTimer <= 0 && autoAttack && target == null && targetPosition == Vector3.zero) {
             CheckForTargets();
             checkTargetTimerTimer = checkTargetTimer;
         }
 
         if (target != null) {
-            if (IsInRange() && currentUnit.attackableSo.canAttack) {
-              PerformAttack();             
+            PerformTargetAiming();
+        }
+
+        if (targetPosition != Vector3.zero) {
+            Debug.Log("Target position attack: " + targetPosition);
+            if (IsInRange(targetPosition) && currentUnit.attackableSo.canAttack) {
+                PerformAttack();
+                RotateToTarget();
             } else {
                 SetTarget(null);
                 return;
-            }
-
-            if (currentUnit.attackableSo.hasTurret) {
-                turret.RotateToTarget(target.transform.position, currentUnit.attackableSo.turretRotateSpeed);
-            } else {
-                unitMovement.RotateToTarget(target.transform.position);
             }
         }
     }

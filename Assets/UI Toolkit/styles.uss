@@ -161,14 +161,19 @@
 }
 
 .border-medium {
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 
 .text-primary {
     color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
 }
 
 .btn-rounded-small {

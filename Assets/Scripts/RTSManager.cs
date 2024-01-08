@@ -125,6 +125,10 @@ public class RTSManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && SelectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
+            if (UIRTSActions.Instance.isSetTargetMode) {
+                return;
+            }
+            
             RaycastHit[] raycastHits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
             bool isAction = false;
 
@@ -162,7 +166,9 @@ public class RTSManager : MonoBehaviour
             }
             // Move
             if (!isAction) {
-                MoveCommand(raycastHits[0].point);
+                if (raycastHits.Length > 0) {
+                    MoveCommand(raycastHits[0].point);
+                }
             }
         }
     }

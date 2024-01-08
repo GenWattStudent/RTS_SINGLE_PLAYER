@@ -49,6 +49,11 @@ public class EnemyController : MonoBehaviour
         var unitScript = Instantiate(unitPrefab, spawnPosition, Quaternion.identity).GetComponent<Unit>();
         var damagableScript = unitScript.GetComponent<Damagable>();
         var unitMovement = unitScript.GetComponent<UnitMovement>();
+        var selectable = unitScript.GetComponent<Selectable>();
+
+        if (selectable != null) {
+            selectable.enabled = false;
+        }
     
         if (unitMovement != null) {
             Destroy(unitMovement);

@@ -124,7 +124,7 @@ MonoBehaviour:
   damagableSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
   health: 0
   maxHealth: 0
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 479566747583137955}
   explosionPrefab: {fileID: 0}
   destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
@@ -9884,6 +9884,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6528704abe87a54ab03b7642f06dcc8, type: 3}
+--- !u!224 &479566747583137955 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2494718034336087024, guid: c6528704abe87a54ab03b7642f06dcc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2610055607894717267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5654877032202117153 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,

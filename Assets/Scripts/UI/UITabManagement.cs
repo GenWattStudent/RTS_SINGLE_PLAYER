@@ -9,8 +9,9 @@ public class UITabManagement : MonoBehaviour
     private UIDocument UIDocument;
     private VisualElement root;
     private VisualElement tabContainer;
+    public static UITabManagement Instance { get; private set; }
 
-    private void OnTabClick(string tabName)
+    public void OnTabClick(string tabName)
     {
         CurrentTab = tabName;
         UIBuildingManager.Instance.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tabName));
@@ -63,6 +64,7 @@ public class UITabManagement : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         tabContainer = root.Q<VisualElement>("BuildingTabs");

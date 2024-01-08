@@ -13,10 +13,12 @@ public class Selectable : MonoBehaviour
     public SelectableType selectableType;
     [HideInInspector] public bool isSelected = false;
     private Damagable damagable;
+    private Camera unitCamera;
 
     // when unit killed should be diselected
     private void Awake() {
         damagable = GetComponent<Damagable>();
+        unitCamera = GetComponentInChildren<Camera>(true);
     }
 
     private void OnDead() {
@@ -35,6 +37,7 @@ public class Selectable : MonoBehaviour
     public void Deselect()
     {
         isSelected = false;
+        if (unitCamera != null) unitCamera.gameObject.SetActive(false);
         damagable.OnDead -= OnDead;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(false);

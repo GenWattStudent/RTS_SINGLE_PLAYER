@@ -15,7 +15,7 @@ public class UnitCountManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start() {
+    private void OnEnable() {
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         unitCountText = root.Q<Label>("UnitCountLabel");

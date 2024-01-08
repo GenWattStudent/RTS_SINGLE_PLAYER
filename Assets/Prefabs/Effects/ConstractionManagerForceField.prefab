@@ -57,7 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
   buildingUnits: []
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 8521102515514173841}
   buildingInProgressPrefab: {fileID: 3261315199320783877}
   constructionPrefab: {fileID: 4331978935220324178}
 --- !u!114 &5807540428542867514
@@ -99,7 +99,7 @@ MonoBehaviour:
   damagableSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
   health: 0
   maxHealth: 0
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 8521102515514173841}
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   destroyedObjectPrefab: {fileID: 0}
@@ -453,6 +453,12 @@ PrefabInstance:
 --- !u!224 &4511729755125219603 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6115339925307265633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &8521102515514173841 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2494718034336087024, guid: c6528704abe87a54ab03b7642f06dcc8,
     type: 3}
   m_PrefabInstance: {fileID: 6115339925307265633}
   m_PrefabAsset: {fileID: 0}

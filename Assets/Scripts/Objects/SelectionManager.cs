@@ -169,7 +169,7 @@ public class SelectionManager : MonoBehaviour
 
         foreach (Selectable selectable in FindObjectsOfType<Selectable>())
         {
-            if (IsEnemy(selectable)) continue;
+            if (IsEnemy(selectable) || IsBuilding(selectable)) continue;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(selectable.transform.position);
 
             if (screenPosition.x > min.x && screenPosition.x < max.x && screenPosition.y > min.y && screenPosition.y < max.y)
@@ -198,7 +198,15 @@ public class SelectionManager : MonoBehaviour
     // Select unit if clicked on it, deselect when nothing is clicked on
     private void Update()
     {
-        if (UIHelper.Instance.IsPointerOverUIElement()) return;
+        if (UIHelper.Instance.IsPointerOverUIElement()) {
+            if (isDragging) {
+                SelectObjectsInRectangle();
+                isDragging = false;
+                return;
+            }
+
+            return;
+        };
 
         if (Input.GetMouseButtonDown(0))
         {
