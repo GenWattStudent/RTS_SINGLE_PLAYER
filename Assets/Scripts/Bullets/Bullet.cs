@@ -2,27 +2,24 @@ using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[RequireComponent(typeof(Motion))]
 public class Bullet : MonoBehaviour
 {
     public float damage;
-    public Vector3 direction;
-    public float speed = 2f;
     public Guid playerId;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
-    private Vector3 previousPosition;
     private float lifeTimeTimer = 0f;
+    private TrailRenderer trailRenderer;
+    public Motion motion;
 
     private void Awake() {
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
+        motion = GetComponent<Motion>();
         damage = bulletSo.damage;
-        speed = bulletSo.speed;
-    }
-
-    private void Move() {
-        previousPosition = transform.position;
-        transform.rotation = Quaternion.LookRotation(direction);
-        transform.position += direction * speed * Time.deltaTime;
+        motion.speed = bulletSo.speed;
+        motion.arcHeight = bulletSo.arcHeight;
     }
 
     private void Explode() {
@@ -60,9 +57,10 @@ public class Bullet : MonoBehaviour
 
     private void CheckHit() {
         RaycastHit hit;
-        var direction = transform.position - previousPosition;
+        var direction = transform.position - motion.previousPosition;
         
-        if (Physics.Raycast(previousPosition, direction.normalized, out hit, direction.magnitude)) {
+        if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude)) {
+            Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
             if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost") {
                 return;
             }
@@ -82,13 +80,16 @@ public class Bullet : MonoBehaviour
 
     public void Reset() {
         lifeTimeTimer = 0f;
-        previousPosition = transform.position;
+        motion.previousPosition = transform.position;
+        if (trailRenderer != null) {
+            trailRenderer.Clear();
+        }
     }
 
     void Update()
     {
         lifeTimeTimer += Time.deltaTime;
-        Move();
+        motion.Move();
         CheckHit();
 
         if (lifeTimeTimer > bulletSo.lifeTime) {

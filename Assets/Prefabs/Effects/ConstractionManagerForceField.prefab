@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 7313554900080219477}
   m_Layer: 0
   m_Name: ConstractionManagerForceField
-  m_TagString: Untagged
+  m_TagString: ForceField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

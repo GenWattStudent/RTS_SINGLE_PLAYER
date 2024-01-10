@@ -79,13 +79,11 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Instance template="SettingsModal" name="SettingsModal" style="display: none; position: absolute; left: 50%; top: 15%; translate: -50% 0;" />
-        <ui:VisualElement name="ResultModal" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 30%; background-color: rgb(55, 55, 55); width: 400px; height: 500px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; display: none;">
+        <ui:VisualElement name="ResultModal" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 37%; background-color: rgb(55, 55, 55); width: 400px; height: 500px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; display: none; translate: -50% -50%;">
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="GameResult" class="text-xxl text-bold text-primary" />
             </ui:VisualElement>
-            <ui:Button text="Button" display-tooltip-when-elided="true" name="MainMenuButtonResult" class="btn-primary">
-                <ui:Button text="X" display-tooltip-when-elided="true" name="CloseGameResult" class="btn-danger text-xxl text-bold" style="position: absolute; right: 5px; top: 5px; width: 50px; height: 50px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%;" />
-            </ui:Button>
+            <ui:Button text="Go to main menu" display-tooltip-when-elided="true" name="MainMenuButtonResult" class="btn-primary" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

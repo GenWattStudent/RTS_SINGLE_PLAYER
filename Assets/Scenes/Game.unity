@@ -546,7 +546,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402744565}
-  - component: {fileID: 402744566}
   m_Layer: 5
   m_Name: ResultScreen
   m_TagString: Untagged
@@ -574,19 +573,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -800}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &402744566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402744564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b63cae0eea886745ace563ea775e66e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resultPrefab: {fileID: 0}
 --- !u!1 &425325042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,6 +1760,7 @@ GameObject:
   - component: {fileID: 871500983}
   - component: {fileID: 871500984}
   - component: {fileID: 871500985}
+  - component: {fileID: 871500986}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -1982,6 +1969,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 0}
   isSetTargetMode: 0
+--- !u!114 &871500986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b63cae0eea886745ace563ea775e66e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
 --- !u!114 &880837993 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2701267134769049055, guid: da8a3cb4cc0499e41a2c390d748e63ae,
@@ -5733,6 +5733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
     type: 3}
+  rocketPrefab: {fileID: 0}
   poolSize: 100
 --- !u!1001 &1793705181
 PrefabInstance:

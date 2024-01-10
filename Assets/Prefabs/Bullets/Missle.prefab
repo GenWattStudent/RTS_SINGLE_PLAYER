@@ -180,6 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1654249786358649304}
   - component: {fileID: 2753135743361072677}
+  - component: {fileID: -3058146708177544648}
   m_Layer: 0
   m_Name: Missle
   m_TagString: Untagged
@@ -195,7 +196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3824120718455233952}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -203,7 +204,7 @@ Transform:
   - {fileID: 3749540202247176751}
   - {fileID: 6117702271686112739}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 90}
 --- !u!114 &2753135743361072677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,10 +218,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  direction: {x: 0, y: 0, z: 0}
-  speed: 100
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   unitsBullet: {fileID: 0}
+  motion: {fileID: 0}
+--- !u!114 &-3058146708177544648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3824120718455233952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f93f504438bdd8408c6349a70ff2a0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  target: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  previousPosition: {x: 0, y: 0, z: 0}
+  arcHeight: 0
 --- !u!1 &7123755891975240884
 GameObject:
   m_ObjectHideFlags: 0

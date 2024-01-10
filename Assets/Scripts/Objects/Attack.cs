@@ -102,7 +102,8 @@ public class Attack : MonoBehaviour
     }
 
     private void ShootBullet() {
-        Bullet bullet = BulletPool.Instance.bulletPool.Get();
+        Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
+        bullet.Reset();
         bullet.transform.position = bulletSpawnPoint.transform.position;
         bullet.transform.rotation = Quaternion.identity;
 
@@ -112,9 +113,10 @@ public class Attack : MonoBehaviour
             targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
-        bullet.direction = (targetPosition- bulletSpawnPoint.transform.position).normalized;
+        bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;
         bullet.unitsBullet = GetComponent<Damagable>();
+        bullet.motion.Setup();
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
@@ -197,7 +199,6 @@ public class Attack : MonoBehaviour
         }
 
         if (targetPosition != Vector3.zero) {
-            Debug.Log("Target position attack: " + targetPosition);
             if (IsInRange(targetPosition) && currentUnit.attackableSo.canAttack) {
                 PerformAttack();
                 RotateToTarget();

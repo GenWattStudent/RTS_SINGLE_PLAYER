@@ -6,6 +6,7 @@ public class BulletSo : ScriptableObject
     public string bulletName;
     public float damage;
     public float speed;
+    public float arcHeight;
     public GameObject prefab;
     public float lifeTime;
     public float radius;

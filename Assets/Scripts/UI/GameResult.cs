@@ -1,25 +1,35 @@
 using UnityEngine.SceneManagement;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.UIElements;
 
-public class GameResult : Singleton<GameResult>
+public class GameResult : ToolkitHelper
 {
-    [SerializeField] private GameObject resultPrefab;
-    [SerializeField] private static Button button;
-    [SerializeField] private static TextMeshProUGUI text;
+    public static GameResult Instance;
+    private Label resultText;
+    private Button goToMainMenuButton;
+    private VisualElement resultModal;
+
+    private void GoToMainMenu(ClickEvent ev) {
+        SceneManager.LoadScene(0);
+    }
+
+    void Start() {
+        Instance = this;
+        resultText = GetLabel("GameResult");
+        goToMainMenuButton = GetButton("MainMenuButtonResult");
+        resultModal = GetVisualElement("ResultModal");
+    }
 
     public  void Victory() {
         // change text to "Victory
-        resultPrefab.gameObject.SetActive(true);
-        text.text = "You win!";
-        button.onClick.AddListener(() => SceneManager.LoadScene(0));
+        resultModal.style.display = DisplayStyle.Flex;
+        resultText.text = "You win!";
+        goToMainMenuButton.RegisterCallback<ClickEvent>(GoToMainMenu);
     }
 
     public  void Defeat() {
         // change text to "Defeat"
-        resultPrefab.gameObject.SetActive(true);
-        text.text = "You lose!";
-        button.onClick.AddListener(() => SceneManager.LoadScene(0));
+        resultModal.style.display = DisplayStyle.Flex;
+        resultText.text = "You lose!";
+        goToMainMenuButton.RegisterCallback<ClickEvent>(GoToMainMenu);
     }
 }
