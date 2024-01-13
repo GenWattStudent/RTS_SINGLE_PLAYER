@@ -2,24 +2,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public class SlotData {
+    public TemplateContainer templateContainer;
+    public BuildingSo buildingSo;
+}
+
 public class UIBuildingManager : Singleton<UIBuildingManager>
 {
     [SerializeField] private BuildingSo[] buildings;
     private UIDocument UIDocument;
 
-    // [SerializeField] private Button upgradeButton;
     private BuildingSo selectedBuilding;
 
     private VisualElement root;
     private VisualElement slotContainer;
     public VisualTreeAsset visualTree;
+    private List<SlotData> slots = new ();
 
     private void OnEnable()
     {
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         slotContainer = root.Q<VisualElement>("TabContent");
-        Debug.Log("Slot container: " + slotContainer);
     }
 
     public void ClearTabs() {
@@ -34,6 +38,8 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
         {
             slotContainer.Remove(tab);
         }
+
+        slots.Clear();
     }
 
     public BuildingSo GetSelectedBuilding() {
@@ -48,7 +54,6 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
         ClearTabs();
         UIUnitManager.Instance.IsUnitUIOpen = false;
         UIUnitManager.Instance.IsUnitSelectionTabOpen = false;
-        // upgradeButton.gameObject.SetActive(false);
 
         foreach (var building in buildings)
         {
@@ -65,7 +70,7 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
         selectedBuilding = buildingSo;
     }
 
-    private void SetBuildingData(TemplateContainer buildingTab, BuildingSo BuildingSo) {
+    private void SetBuildingData(TemplateContainer buildingTab, BuildingSo buildingSo) {
         var buildingNameText = buildingTab.Q<Label>("SlotName");
         var costText = buildingTab.Q<Label>("SlotValue");
         var image = buildingTab.Q<VisualElement>("ImageBox");
@@ -76,24 +81,40 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
         quantityText.style.display = DisplayStyle.None;
         progressBar.style.display = DisplayStyle.None;
 
-        buildingNameText.text = BuildingSo.buildingName;
-        costText.text = BuildingSo.cost.ToString();
-
-        slot.RegisterCallback((ClickEvent ev) => {
-            OnSlotClick(BuildingSo);
-        });
+        buildingNameText.text = buildingSo.buildingName;
+        costText.text = buildingSo.cost.ToString();
 
         if (image is not null) {
-            Debug.Log("Image is not null");
-            image.style.backgroundImage = new StyleBackground(BuildingSo.sprite);
+            image.style.backgroundImage = new StyleBackground(buildingSo.sprite);
+        }
+
+        UpdateSlot(buildingSo, buildingTab);
+
+        slot.RegisterCallback((ClickEvent ev) => {
+            OnSlotClick(buildingSo);
+        });
+    }
+
+    public void CreateBuildingTab(BuildingSo building) {
+        TemplateContainer buildingTab = visualTree.Instantiate();
+        buildingTab.name = building.buildingName;
+
+        SetBuildingData(buildingTab, building);
+        slotContainer.Add(buildingTab);
+        slots.Add(new SlotData { buildingSo = building, templateContainer = buildingTab });
+    }
+
+    private void UpdateSlot(BuildingSo buildingSo, TemplateContainer container) {
+        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) {
+            container.SetEnabled(false);
+        } else {
+            container.SetEnabled(true);
         }
     }
 
-    public void CreateBuildingTab(BuildingSo bulding) {
-        TemplateContainer buildingTab = visualTree.Instantiate();
-        buildingTab.name = bulding.buildingName;
-
-        SetBuildingData(buildingTab, bulding);
-        slotContainer.Add(buildingTab);
+    private void FixedUpdate() {
+        foreach (var slotData in slots) {
+            UpdateSlot(slotData.buildingSo, slotData.templateContainer);
+        }   
     }
 }

@@ -211,7 +211,7 @@
     color: rgb(84, 84, 84);
 }
 
-.disabled-slot {
+.btn-primary:disabled {
     opacity: 0.4;
     visibility: visible;
 }
