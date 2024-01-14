@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: -6002317933877532533}
   - component: {fileID: -619140009929304772}
   - component: {fileID: 8816775167768068385}
+  - component: {fileID: 5398851165965161297}
   m_Layer: 0
   m_Name: TankBuilding
   m_TagString: Building
@@ -158,7 +159,6 @@ MonoBehaviour:
   unitToSpawn: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   unitSpawnPoint: {fileID: 4700887954246426167}
   unitMovePoint: {fileID: 7304531776999461873}
-  building: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
 --- !u!54 &4962824280736601957
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -285,6 +285,19 @@ MonoBehaviour:
   buildingSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   attackableSo: {fileID: 0}
   buildingLevelable: {fileID: 0}
+--- !u!114 &5398851165965161297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e58d3a96d09177c4091838bd6ddc4877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInDebt: 0
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0

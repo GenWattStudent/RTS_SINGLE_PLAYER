@@ -52,8 +52,9 @@ public class Attack : MonoBehaviour
         
         foreach (var collider in colliders) {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
+            var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead) {
+            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead && unitScript.isVisibile) {
                 if (IsTargetHideInTerrain(damagableScript)) return;
                 SetTarget(damagableScript);
                 break;
@@ -103,9 +104,9 @@ public class Attack : MonoBehaviour
 
     private void ShootBullet() {
         Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
-        bullet.Reset();
         bullet.transform.position = bulletSpawnPoint.transform.position;
         bullet.transform.rotation = Quaternion.identity;
+        bullet.Reset();
 
         var targetPosition = this.targetPosition;
 

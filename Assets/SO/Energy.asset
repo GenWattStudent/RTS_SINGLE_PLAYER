@@ -45,3 +45,6 @@ MonoBehaviour:
   maxBuildingCount: 2
   cost: 100
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  resourceUsage: {fileID: 0}
+  usage: 0
+  usageInterval: 0

@@ -21,6 +21,8 @@ public class MiniMapRectangle : MonoBehaviour
         minimapImage = root.Q<VisualElement>("Minimap");
         // add click listener to the minimap
         minimapImage.RegisterCallback((ClickEvent ev) => {
+
+            Debug.Log($"mousePositionOnMinimap: {Input.mousePosition}");
             MoveCameraToMousePosition(Input.mousePosition);
         });
         // add post render listener to the minimap camera 
@@ -32,9 +34,8 @@ public class MiniMapRectangle : MonoBehaviour
     void MoveCameraToMousePosition(Vector2 position)
     {
         // calculate mouse position - minimap postion
-        Debug.Log("Minimap position: " + position);
-        Vector2 minimapPosition = minimapImage.transform.position;
-        Vector2 mousePositionOnMinimap = position - minimapPosition;
+        Vector2 mousePositionOnMinimap = position - minimapImage.WorldToLocal(minimapImage.worldBound.position);
+        Debug.Log($"mousePositionOnMinimap: {mousePositionOnMinimap} {minimapImage.worldBound.position} {minimapImage.resolvedStyle.width}");
         // Take terrain widht and height and calculate camera postion
         float terrainWidth = Terrain.activeTerrain.terrainData.size.x;
         float terrainHeight = Terrain.activeTerrain.terrainData.size.z;

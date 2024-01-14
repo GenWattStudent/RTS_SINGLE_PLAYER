@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6036516917040061338}
   - component: {fileID: 5507317521260695193}
   m_Layer: 0
-  m_Name: MassConstruction
+  m_Name: RocketTurretConstruction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

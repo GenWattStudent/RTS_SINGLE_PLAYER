@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
+  m_Name: RocketTurret
+  m_EditorClassIdentifier: 
+  attackDamage: 100
+  attackRange: 25
+  attackSpeed: 4
+  attackCooldown: 6
+  acceleration: 0
+  canAttack: 1
+  bulletPrefab: {fileID: 5697498854208013853, guid: 12789bb5d4b4d4b428c28627819f2500,
+    type: 3}
+  ammo: 8
+  attackAngle: 15
+  hasTurret: 1
+  rotateSpeed: 0
+  turretRotateSpeed: 50
+  bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
+  health: 100
+  deathExpirence: 60
+  deathMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
+  type: 2
+  buildingName: Rocket Turret
+  description: Turret lol
+  sprite: {fileID: 0}
+  prefab: {fileID: 8989622198761688359, guid: 133b0c64da67ff644a0747bde0b41b63, type: 3}
+  validPrefab: {fileID: 3393997211609255391, guid: 9351f3755d877624aaa655137cee528c,
+    type: 3}
+  invalidPrefab: {fileID: 3393997211609255391, guid: 8f9948de298392c4c9e035ec66f21b24,
+    type: 3}
+  constructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
+    type: 3}
+  income: 0
+  incomeInterval: 0
+  unitsToSpawn: []
+  maxBuildingCount: 2
+  cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+  usage: 10
+  usageInterval: 5

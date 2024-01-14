@@ -20,4 +20,8 @@ public class UnitSo : DamagableSo
     public float spawnTime;
     public Sprite sprite;
     public GameObject prefab;
+    public ushort spawnerLevelToUnlock;
+    public ResourceSO resourceUsage;
+    public int usage;
+    public float usageInterval;
 }

@@ -50,6 +50,11 @@ public class EnemyController : MonoBehaviour
         var damagableScript = unitScript.GetComponent<Damagable>();
         var unitMovement = unitScript.GetComponent<UnitMovement>();
         var selectable = unitScript.GetComponent<Selectable>();
+        var resourceUsage = unitScript.GetComponent<ResourceUsage>();
+
+        if (resourceUsage != null) {
+            resourceUsage.enabled = false;
+        }
 
         if (selectable != null) {
             selectable.enabled = false;
@@ -57,7 +62,7 @@ public class EnemyController : MonoBehaviour
     
         if (unitMovement != null) {
             Destroy(unitMovement);
-            // unitScript.AddComponent<EnemyUnitMovement>();
+            unitScript.AddComponent<EnemyUnitMovement>();
         }
 
         damagableScript.playerId = enemyId;

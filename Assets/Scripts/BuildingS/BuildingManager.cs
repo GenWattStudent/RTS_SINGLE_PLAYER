@@ -9,7 +9,6 @@ public class BuildingSystem : MonoBehaviour
     private bool wasValid = false;
     private GameObject[] heightsPoint;
     public float diffranceBetweenMaxAndMinHeight = 1f;
-    private Popup popup;
 
     private bool IsFlatTerrain() {
         if (heightsPoint == null) return false;
@@ -62,10 +61,9 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private void SetPopup() {
-        if (popup == null) {
-            var message = $"{SelectedBuilding.name} ({PlayerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
-            popup = PopupManager.Instance.ShowPopup(message, Vector3.zero, -1, true, new Vector2(20, 0));
-        }
+        var message = $"{SelectedBuilding.name} ({PlayerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+        MousePopup.Instance.SetText(message);
+        MousePopup.Instance.Show();
     }
 
     private void BuildingPreview() {
@@ -93,7 +91,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private void PlaceBuilding(Vector3 position) {
-        if (SelectedBuilding == null || !UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
+        if (!UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
         UIStorage.Instance.DecreaseResource(SelectedBuilding.costResource, SelectedBuilding.cost);
 
         var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, Quaternion.identity);
@@ -108,7 +106,13 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private void PlaceBuilding() {
-        if (Input.GetMouseButtonDown(0) && IsValidPosition()) {
+        if (Input.GetMouseButtonDown(0) && SelectedBuilding != null) {
+
+            if (!IsValidPosition()) {
+                InfoBox.Instance.AddError("You cant place building here!");
+                return;
+            };
+
             PlaceBuilding(previewPrefab.transform.position);
             CancelBuilding();
         }
@@ -125,8 +129,7 @@ public class BuildingSystem : MonoBehaviour
         if (previewPrefab != null) Destroy(previewPrefab);
         SelectedBuilding = null;
         UIBuildingManager.Instance.SetSelectedBuilding(null);
-        PopupManager.Instance.DestroyPopup(popup);
-        popup = null;
+        MousePopup.Instance.Hide();
     }
 
     private void CheckSelectedBuilding() {

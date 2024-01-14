@@ -35,7 +35,11 @@ public class BuildingLevelable : MonoBehaviour
         damagable.maxHealth += levelData.health;
 
         if (building.attackableSo != null) building.attackableSo.attackDamage += levelData.attackDamage;
-        building.buildingSo.income += levelData.income;
+
+        var resource = GetComponent<Resource>();
+
+        if (resource != null) resource.income += levelData.income;
+        
         reduceSpawnTime += levelData.reduceSpawnTime;
         UpdateScreen();
     }

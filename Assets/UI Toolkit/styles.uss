@@ -153,6 +153,8 @@
     border-right-color: rgb(212, 212, 212);
     border-top-color: rgb(212, 212, 212);
     border-bottom-color: rgb(212, 212, 212);
+    border-bottom-width: 5px;
+    border-right-width: 5px;
 }
 
 .btn-medium {
@@ -205,7 +207,7 @@
     margin-right: 10px;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:enabled {
     scale: 1 1;
     background-color: rgb(207, 207, 207);
     color: rgb(84, 84, 84);
@@ -269,4 +271,8 @@
 
 .text-success {
     color: rgb(53, 255, 0);
+}
+
+.opacity-0 {
+    opacity: 0;
 }

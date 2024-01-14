@@ -60,7 +60,7 @@ public class Bullet : MonoBehaviour
         var direction = transform.position - motion.previousPosition;
         
         if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude)) {
-            Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
+
             if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost") {
                 return;
             }
@@ -68,9 +68,11 @@ public class Bullet : MonoBehaviour
             if (IsOwnUnit(hit)) return;
 
             if (bulletSo.radius > 0) {
+                Debug.Log(hit.collider.gameObject.name + " Explode");
                 Explode();
             }
             else {
+                Debug.Log(hit.collider.gameObject.name);
                 DealDamage(hit.collider);
             }
 

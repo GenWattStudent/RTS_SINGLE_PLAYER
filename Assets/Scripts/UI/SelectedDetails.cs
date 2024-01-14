@@ -96,8 +96,6 @@ public class SelectedDetails : ToolkitHelper
         {
             statsContainer.Remove(stat);
         }
-
-        ActivateButtons(false);
     }
 
     private void UpdateExpirenceBar(Damagable damagable) {
@@ -130,6 +128,7 @@ public class SelectedDetails : ToolkitHelper
         CreateExpirenceStat(damagable);
         ActivateUnitCamera(damagable);
         UpdateHealthBar(damagable);
+        ActivateButtons(false);
     }
 
     private void UpdateBuildingDetails(Selectable selectable)
@@ -168,6 +167,7 @@ public class SelectedDetails : ToolkitHelper
                 this.building = building;
                 ActivateButtons(true);
             } else {
+                levelText.text = $"MAX {building.buildingLevelable.level} LVL";
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
             }
@@ -189,6 +189,7 @@ public class SelectedDetails : ToolkitHelper
         Show();
         actions.style.display = DisplayStyle.None;
         CreateStat("Selected", $"{SelectionManager.selectedObjects.Count} units");
+        ActivateButtons(false);
     }
 
     private void UpdateSelectedDetails()

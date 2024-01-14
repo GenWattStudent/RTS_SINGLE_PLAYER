@@ -11,8 +11,9 @@ public class Healer : MonoBehaviour
 
     public void Heal(Damagable target)
     {
-        if (target.health >= target.damagableSo.health) {
+        if (target.health >= target.maxHealth) {
             SetTarget(null);
+            return;
         }
 
         target.Heal(healPoints * Time.deltaTime);
@@ -73,7 +74,7 @@ public class Healer : MonoBehaviour
             MoveToTarget();
         }
 
-        unitMovement.RotateToTarget(target.transform.position);
+        if (unitMovement != null)  unitMovement.RotateToTarget(target.transform.position);
         Heal(target);
     }
 }

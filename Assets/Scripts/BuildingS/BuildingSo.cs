@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Building", menuName = "ScriptableObjects/Create Building")]
@@ -24,4 +25,7 @@ public class BuildingSo : DamagableSo
     public int maxBuildingCount;
     public int cost;
     public ResourceSO costResource;
-}
+    public ResourceSO resourceUsage;
+    public int usage;
+    public float usageInterval;
+ }

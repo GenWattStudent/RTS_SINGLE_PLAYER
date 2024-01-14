@@ -83,7 +83,24 @@ public class UIUnitManager : MonoBehaviour
                 if (unitQueueCount <= 0) {
                     HideSpawnInfo(unitTab);
                 }
+
+                var buildingLevelable = currentBuilding.GetComponent<BuildingLevelable>();
+                
+                ToogleTabEnableBasedOnLevel(buildingLevelable, soUnit, unitTab);
             }
+        }
+    }
+
+    private void ToogleTabEnableBasedOnLevel(BuildingLevelable buildingLevelable, UnitSo unitSo, VisualElement unitTab) {
+        var quantityText = unitTab.Q<Label>("Quantity");
+        if (buildingLevelable != null && buildingLevelable.level < unitSo.spawnerLevelToUnlock) {
+            unitTab.SetEnabled(false);
+
+            quantityText.style.display = DisplayStyle.Flex;
+            quantityText.text = $"Level {unitSo.spawnerLevelToUnlock} required";
+        } else {
+            quantityText.style.display = DisplayStyle.None;
+            unitTab.SetEnabled(true);
         }
     }
 
@@ -188,6 +205,7 @@ public class UIUnitManager : MonoBehaviour
             TemplateContainer unitTab = slot.Instantiate();
             unitTab.name = soUnit.unitName;
             var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(soUnit.unitName);
+            var buildingLevelable = building.GetComponent<BuildingLevelable>();
 
             if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName) {
                 SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
@@ -196,8 +214,9 @@ public class UIUnitManager : MonoBehaviour
             }
 
             HideSpawnInfo(unitTab);
-
+            ToogleTabEnableBasedOnLevel(buildingLevelable, soUnit, unitTab);
             SetUnitData(unitTab, soUnit);
+
             unitSlotTabs.Add(unitTab);
             unitsAttachedToTab.Add(soUnit);
             unitSlotContainer.Add(unitTab);

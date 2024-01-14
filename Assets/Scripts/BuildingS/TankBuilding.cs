@@ -7,19 +7,20 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
     [SerializeField] private UnitSo unitToSpawn;
     [SerializeField] private Transform unitSpawnPoint;
     [SerializeField] private Transform unitMovePoint;
-    [SerializeField] private BuildingSo building;
     private List<UnitSo> unitsQueue = new ();
     private float spawnTimer;
     private bool isUnitSpawning = false;
     private UnitSo currentSpawningUnit;
     private List<Animator> doorAnimators = new ();
     private Building buildingScript;
-    public float totalSpawnTime {get; set;} = 0;
+    public float totalSpawnTime { get; set; } = 0;
+    private ResourceUsage resourceUsage;
 
     private void Awake()
     {
         var animators = GetComponentsInChildren<Animator>();
         buildingScript = GetComponent<Building>();
+        resourceUsage = GetComponent<ResourceUsage>();
 
         foreach (var animator in animators)
         {
@@ -87,11 +88,10 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void StartQueue()
     {
-        if (unitsQueue.Count > 0 && !isUnitSpawning && UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost))
+        if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
             spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
             totalSpawnTime = spawnTimer;
-            Debug.Log($"StartQueue {spawnTimer}");
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }
@@ -99,7 +99,7 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void SpawnUnit()
     {
-        if (spawnTimer > 0) return;
+        if (spawnTimer > 0 && UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost) && !resourceUsage.isInDebt) return;
     
         if (unitsQueue.Count > 0)
         {

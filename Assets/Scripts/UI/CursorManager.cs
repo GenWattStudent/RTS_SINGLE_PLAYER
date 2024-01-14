@@ -59,7 +59,7 @@ public class CursorManager : MonoBehaviour
     }
 
     public bool IsHealHovering() {
-        if (SelectionManager.selectedObjects.Count == 0 && SelectionManager.GetHealers().Count == 0) return false;
+        if (SelectionManager.GetHealers().Count == 0) return false;
 
         if (SelectionManager.selectedObjects.Count == 1) {
             var healer = SelectionManager.selectedObjects[0].GetComponent<Healer>();
@@ -75,7 +75,7 @@ public class CursorManager : MonoBehaviour
             
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.playerId == PlayerController.playerId && damagable.health < damagable.damagableSo.health) {
+            if (damagable != null && !damagable.isDead && damagable.playerId == PlayerController.playerId && damagable.health < damagable.maxHealth) {
                 return true;
             }
         }
