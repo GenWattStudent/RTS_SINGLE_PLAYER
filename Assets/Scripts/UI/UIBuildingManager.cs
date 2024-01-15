@@ -98,6 +98,7 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
     public void CreateBuildingTab(BuildingSo building) {
         TemplateContainer buildingTab = visualTree.Instantiate();
         buildingTab.name = building.buildingName;
+        buildingTab.style.height = Length.Percent(100);
 
         SetBuildingData(buildingTab, building);
         slotContainer.Add(buildingTab);

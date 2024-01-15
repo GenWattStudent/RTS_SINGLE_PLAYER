@@ -14,6 +14,15 @@ public class BulletMotion : Motion
         float distance = Vector3.Distance(_startPosition, targetPosition);
         // This is one divided by the total flight duration, to help convert it to 0-1 progress.
         _stepSize = speed / distance;
+        
+
+        float gravity = 9.81f; // Approximate value for Earth's gravity in m/s²
+        arcHeight = (speed * speed * Mathf.Sin(launchAngle) * Mathf.Sin(launchAngle)) / (2 * gravity);
+
+        // Rotate to arc height.
+        Vector3 direction = targetPosition - _startPosition;
+        direction.y = arcHeight;
+        RotateInDirection(direction);
     }
 
     private void RotateInDirection(Vector3 direction) {

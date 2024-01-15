@@ -60,7 +60,6 @@ public class BuildingSystem : MonoBehaviour
         foreach(var hightPoint in hightPoints) {
             var rayPosition = new Vector3(hightPoint.x, 100f, hightPoint.z);
             Ray ray = new Ray(rayPosition, Vector3.down);
-            Debug.DrawRay(rayPosition, Vector3.down * 100f, Color.red);
 
             RaycastHit[] hits = Physics.RaycastAll(ray, float.MaxValue);
             foreach (var hit in hits) {
@@ -71,7 +70,7 @@ public class BuildingSystem : MonoBehaviour
                 }
             }
         }
-        Debug.Log(isCollidingWithOtherUnits);
+
         return isCollidingWithOtherUnits;
     }
  
@@ -119,10 +118,8 @@ public class BuildingSystem : MonoBehaviour
         SetPopup();
         if (mousePosition != null) {
             if (isValid) {
-                Debug.Log("valid");
                 SetValidMaterial();
             } else {
-                Debug.Log("invalid");
                 SetInvalidMaterial();
             }
 

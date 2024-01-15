@@ -131,6 +131,7 @@ public class UIUnitManager : MonoBehaviour
         foreach(var unit in unitQueue) {
             TemplateContainer templateContainer = slot.Instantiate();
             templateContainer.name = unit.Key;
+            templateContainer.style.height = Length.Percent(100);
             var unitQueueCount = unit.Value.Count;
 
             SetUnitData(templateContainer, unit.Value[0], unitQueueCount);
@@ -204,6 +205,7 @@ public class UIUnitManager : MonoBehaviour
         foreach(var soUnit in BuildingSo.unitsToSpawn) {
             TemplateContainer unitTab = slot.Instantiate();
             unitTab.name = soUnit.unitName;
+            unitTab.style.height = Length.Percent(100);
             var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(soUnit.unitName);
             var buildingLevelable = building.GetComponent<BuildingLevelable>();
 

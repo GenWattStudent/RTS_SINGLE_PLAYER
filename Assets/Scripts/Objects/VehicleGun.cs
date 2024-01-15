@@ -3,7 +3,7 @@ using UnityEngine;
 public class VehicleGun : MonoBehaviour
 {
     private Attack attack;
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 8f;
     public float rotationAngle = -20f;
 
     void Start()
@@ -14,6 +14,10 @@ public class VehicleGun : MonoBehaviour
     private void SlerpRotation(float angle) {
         var targetRotation = Quaternion.Euler(angle, transform.eulerAngles.y, transform.eulerAngles.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    public bool IsFinisehdRotation() {
+        return transform.rotation == Quaternion.Euler(rotationAngle, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 
     // Update is called once per frame

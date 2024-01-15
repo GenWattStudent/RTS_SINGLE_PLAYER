@@ -6,21 +6,21 @@
         <ui:VisualElement name="MousePopup" class="border-secondary border-medium" style="flex-grow: 1; position: absolute; left: 0; top: 0; background-color: rgba(55, 55, 55, 0.95); color: rgb(209, 209, 209); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; translate: 0 0; display: none;">
             <ui:Label tabindex="-1" text="Tank Spawner 0/3" display-tooltip-when-elided="true" name="MousePopupMessage" class="text-large" />
         </ui:VisualElement>
-        <ui:VisualElement name="ResourceData" class="border-secondary" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 700px; height: 200px; background-color: rgba(55, 55, 55, 0.95); border-bottom-right-radius: 20px;">
+        <ui:VisualElement name="ResourceData" class="border-secondary" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 700px; height: 150px; background-color: rgba(55, 55, 55, 0.95); border-bottom-right-radius: 20px;">
             <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; justify-content: space-evenly;">
                 <ui:ProgressBar value="200" title="Mass: 200/1000" name="Mass" high-value="1000" class="mass" style="position: relative; bottom: auto; width: 97%; justify-content: flex-start; height: 46px;" />
                 <ui:ProgressBar value="200" title="Energy: 200/1000" name="Energy" high-value="1000" class="mass energy" style="position: relative; bottom: auto; width: 97%; justify-content: flex-start; height: 46px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Toolbar" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 400px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+        <ui:VisualElement name="Toolbar" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 300px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             <ui:VisualElement name="SelectionInfo" class="border-medium border-secondary btn-rounded-small" style="flex-grow: 0; width: 300px; justify-content: flex-start; align-self: auto; flex-shrink: 1; height: 100%; border-top-width: 2px; border-right-width: 3px; border-bottom-width: 0; border-left-width: 0;">
                 <ui:VisualElement name="Actions" class="border-secondary" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: 50%; border-top-left-radius: 20px; border-bottom-width: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; display: flex; border-top-width: 0; border-right-width: 0; border-left-width: 0;">
                     <ui:VisualElement name="Image" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Textures/UnitView.renderTexture?fileID=8400000&amp;guid=ddc110a189a88164ebe1b68d5534392f&amp;type=2#UnitView&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: 100%; align-self: auto; align-items: auto; justify-content: space-evenly; border-top-left-radius: 20px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
                         <ui:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; justify-content: space-between; align-items: flex-end;">
                             <ui:Label tabindex="-1" text="4 LVL&#10;" display-tooltip-when-elided="true" name="Level" class="text-primary text-bold text-large" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; height: 31px;" />
-                            <ui:VisualElement style="flex-grow: 0; margin-bottom: 10px;">
-                                <ui:Button text="$" display-tooltip-when-elided="true" name="Sell" class="btn-danger btn-small btn-rounded-small text-bold text-medium" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0;" />
-                                <ui:Button text="^" display-tooltip-when-elided="true" name="LevelUp" class="btn-primary btn-small btn-rounded-small text-bold text-medium" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                            <ui:VisualElement style="flex-grow: 0; margin-bottom: 10px; flex-wrap: wrap;">
+                                <ui:Button text="$" display-tooltip-when-elided="true" name="Sell" class="btn-danger btn-small btn-rounded-small text-bold text-medium" style="margin-top: 0; margin-right: 5px; margin-bottom: 10px; margin-left: 0;" />
+                                <ui:Button text="^" display-tooltip-when-elided="true" name="LevelUp" class="btn-primary btn-small btn-rounded-small text-bold text-medium" style="margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 0;" />
                             </ui:VisualElement>
                         </ui:VisualElement>
                         <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="width: 100%; justify-content: flex-start; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
@@ -48,8 +48,8 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="AttackActions" class="border-secondary" style="flex-grow: 1; height: 15%; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-items: flex-start; justify-content: space-between;">
-                    <ui:Button text="Target" display-tooltip-when-elided="true" name="Target" class="btn-danger text-large" style="height: 50px; width: 35%; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-                    <ui:Button text="Cancel" display-tooltip-when-elided="true" name="Cancel" class="btn-danger text-large" style="height: 50px; width: 35%; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    <ui:Button text="Target" display-tooltip-when-elided="true" name="Target" class="btn-danger text-large" style="height: 100%; width: 35%; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    <ui:Button text="Cancel" display-tooltip-when-elided="true" name="Cancel" class="btn-danger text-large" style="height: 100%; width: 35%; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="RTSTabInfo" style="flex-grow: 1;">
@@ -59,10 +59,7 @@
                     <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
                 </ui:VisualElement>
                 <ui:VisualElement name="TabContent" style="flex-grow: 1; height: 75%; flex-direction: row; align-items: flex-end; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; justify-content: flex-start;">
-                    <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
-                    <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
-                    <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
-                    <ui:Instance template="Slot" name="Slot" class="disabled-slot" />
+                    <ui:Instance template="Slot" name="Slot" class="disabled-slot" style="height: 100%; flex-grow: 1;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="Minimap" class="btn-rounded-small border-medium border-secondary" style="flex-grow: 0; width: 400px; background-image: url(&apos;project://database/Assets/Textures/MinimapTexture.renderTexture?fileID=8400000&amp;guid=9a82a27deeae96e478a349f3546e8b28&amp;type=2#MinimapTexture&apos;); border-top-right-radius: 10px; border-top-width: 2px; border-right-width: 0; border-bottom-width: 0; border-left-width: 3px;" />

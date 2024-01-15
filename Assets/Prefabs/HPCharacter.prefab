@@ -994,7 +994,6 @@ GameObject:
   - component: {fileID: 6451795301113717441}
   - component: {fileID: 2993480397647512918}
   - component: {fileID: 182582431717544544}
-  - component: {fileID: 3743362079215078247}
   - component: {fileID: 3372196632889626661}
   - component: {fileID: -2642368696131063431}
   - component: {fileID: 7294596467931841221}
@@ -1145,6 +1144,7 @@ MonoBehaviour:
   attackCooldownTimer: 0
   currentAmmo: 0
   autoAttack: 1
+  targetPosition: {x: 0, y: 0, z: 0}
 --- !u!195 &6451795301113717441
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1204,33 +1204,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &3743362079215078247
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3912865232768828701}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &3372196632889626661
 MonoBehaviour:
   m_ObjectHideFlags: 0

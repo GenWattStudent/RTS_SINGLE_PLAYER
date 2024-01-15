@@ -671,9 +671,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7376408679298543943}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -5.8787594, z: 0.33895782}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8694003614287634246}
@@ -688,7 +688,7 @@ Transform:
   - {fileID: 6485758722135407253}
   - {fileID: 8014307936864784654}
   - {fileID: 6657002223578342882}
-  m_Father: {fileID: 7563983821104451940}
+  m_Father: {fileID: 4632927779917307988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7603643373064955746
 GameObject:
@@ -901,7 +901,6 @@ Transform:
   - {fileID: 6259324541909070047}
   - {fileID: 2868847120382099442}
   - {fileID: 1584033083420203465}
-  - {fileID: 7635729701328100265}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6772602172885490389
@@ -1080,7 +1079,7 @@ MonoBehaviour:
   target: {fileID: 0}
   checkTargetTimer: 0.2
   currentUnit: {fileID: 0}
-  bulletSpawnPoint: {fileID: 7146612582821094182}
+  bulletSpawnPoint: {fileID: 7376408679298543943}
   attackCooldownTimer: 0
   currentAmmo: 0
   autoAttack: 1
@@ -1205,7 +1204,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 199477215824272259, guid: d71a8540f077deb4b8fd664d76698739,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7635729701328100265}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1112021919535837592, guid: d71a8540f077deb4b8fd664d76698739,
         type: 3}
@@ -1225,6 +1228,12 @@ Transform:
 --- !u!1 &2211352212495008627 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6647195554574366884, guid: d71a8540f077deb4b8fd664d76698739,
+    type: 3}
+  m_PrefabInstance: {fileID: 4796289887059835863}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4632927779917307988 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 199477215824272259, guid: d71a8540f077deb4b8fd664d76698739,
     type: 3}
   m_PrefabInstance: {fileID: 4796289887059835863}
   m_PrefabAsset: {fileID: 0}
@@ -1265,6 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 1
+  rotationAngle: -20
 --- !u!1001 &6528234542985035174
 PrefabInstance:
   m_ObjectHideFlags: 0

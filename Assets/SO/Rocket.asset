@@ -19,5 +19,6 @@ MonoBehaviour:
   prefab: {fileID: 5697498854208013853, guid: 12789bb5d4b4d4b428c28627819f2500, type: 3}
   lifeTime: 6
   radius: 4
-  explosionPrefab: {fileID: 100010, guid: 14d59fd63a842674992eb9579f7b50c7, type: 3}
+  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
+    type: 3}
   initialExplosionPrefab: {fileID: 0}

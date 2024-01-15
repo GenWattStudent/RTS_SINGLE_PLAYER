@@ -14,18 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 100
   attackRange: 25
-  attackSpeed: 4
+  attackSpeed: 0.4
   attackCooldown: 6
   acceleration: 0
   canAttack: 1
   bulletPrefab: {fileID: 5697498854208013853, guid: 12789bb5d4b4d4b428c28627819f2500,
     type: 3}
-  ammo: 8
+  ammo: 12
   attackAngle: 15
   hasTurret: 1
   rotateSpeed: 0
   turretRotateSpeed: 50
   bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
+  CanSalve: 1
   health: 100
   deathExpirence: 60
   deathMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}

@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: LiberationSans SDF - Fallback
   m_EditorClassIdentifier: 
+  m_InstanceID: 30148
   hashCode: -1699145518
   material: {fileID: 2180264}
   materialHashCode: 462855346
@@ -200,6 +201,7 @@ MonoBehaviour:
     m_TabWidth: 24
   m_GlyphTable: []
   m_CharacterTable: []
+  m_AtlasTexture: {fileID: 28268798066460806}
   m_AtlasTextures:
   - {fileID: 28268798066460806}
   m_AtlasTextureIndex: 0
@@ -263,53 +265,41 @@ MonoBehaviour:
     renderMode: 4169
     includeFontFeatures: 1
   m_FontWeightTable:
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
   fontWeights:
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
+  - {regularTypeface: {fileID: 0}, italicTypeface: {fileID: 0}}
   normalStyle: 0
   normalSpacingOffset: 0
   boldStyle: 0.75
   boldSpacing: 7
   italicStyle: 35
   tabSize: 10
+  IsFontAssetLookupTablesDirty: 0
+  m_GlyphsToRender: []
+  m_GlyphsRendered: []
+  m_GlyphIndexList: []
+  m_GlyphIndexListNewlyAdded: []
+  m_GlyphsToAdd: []
+  m_CharactersToAdd: []
+  s_MissingCharacterList: []
 --- !u!28 &28268798066460806
 Texture2D:
   m_ObjectHideFlags: 0

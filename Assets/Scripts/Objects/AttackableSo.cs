@@ -15,4 +15,5 @@ public class AttackableSo : ScriptableObject
     public float rotateSpeed;
     public float turretRotateSpeed;
     public BulletSo bulletSo;
+    public bool CanSalve;
 }

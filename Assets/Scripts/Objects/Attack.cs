@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
@@ -13,6 +14,7 @@ public class Attack : MonoBehaviour
     public float attackCooldownTimer;
     public int currentAmmo;
     private Turret turret;
+    private VehicleGun vehicleGun;
     private UnitMovement unitMovement;
     [SerializeField] private bool autoAttack = true;
     private bool isRealoading = false;
@@ -20,18 +22,28 @@ public class Attack : MonoBehaviour
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
     public Vector3 targetPosition;
+    private List<GameObject> salvePoints = new ();
+    private int salveIndex = 0;
 
     void Start()
     {
         currentUnit = GetComponent<Unit>();
         currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
+        vehicleGun = GetComponentInChildren<VehicleGun>();
 
         if (currentUnit.attackableSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
         }
 
         if (autoAttack) checkTargetTimerTimer = checkTargetTimer;
+
+        if (currentUnit.attackableSo.CanSalve) {
+            // all children of bulletSpawnPoint are salve points
+            foreach (Transform child in bulletSpawnPoint.transform) {
+                salvePoints.Add(child.gameObject);
+            }
+        }
     }
 
     private bool IsTargetHideInTerrain(Damagable target) {
@@ -104,6 +116,17 @@ public class Attack : MonoBehaviour
 
     private void ShootBullet() {
         Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
+        var bulletSpawnPoint = this.bulletSpawnPoint;
+
+        if (currentUnit.attackableSo.CanSalve) {
+            bulletSpawnPoint = salvePoints[salveIndex];
+            salveIndex++;
+
+            if (salveIndex >= salvePoints.Count) {
+                salveIndex = 0;
+            }
+        }
+
         bullet.transform.position = bulletSpawnPoint.transform.position;
         bullet.transform.rotation = Quaternion.identity;
         bullet.Reset();
@@ -116,6 +139,7 @@ public class Attack : MonoBehaviour
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;
+        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.rotation.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
 
@@ -155,7 +179,6 @@ public class Attack : MonoBehaviour
     }
 
     private void PerformAttack() {
-        Debug.Log(IsInAngle() + " jest");
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
             OnAttack?.Invoke();
             ShootBullet();
