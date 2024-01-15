@@ -33,9 +33,7 @@ MonoBehaviour:
   description: Worker haha
   sprite: {fileID: 0}
   prefab: {fileID: 3393997211609255391, guid: 7cf47f9a5ec98974db522a1c380bae13, type: 3}
-  validPrefab: {fileID: 3393997211609255391, guid: feeacafca65ac7449b22830667189fc9,
-    type: 3}
-  invalidPrefab: {fileID: 3393997211609255391, guid: 2b90365b8e08e344cbf632e31ffe6bbb,
+  previewPrefab: {fileID: 2824673038589032327, guid: 047448c67ae8e1d45b83d6049ce39dbb,
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: e3b21bfbe4b8990459cdc95806e9f444,
     type: 3}
@@ -46,3 +44,6 @@ MonoBehaviour:
   maxBuildingCount: 2
   cost: 100
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  resourceUsage: {fileID: 0}
+  usage: 0
+  usageInterval: 0

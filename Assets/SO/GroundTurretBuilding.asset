@@ -34,9 +34,7 @@ MonoBehaviour:
   description: lalaa
   sprite: {fileID: 21300000, guid: 83180f082d4a54f4289be6f03ce8cbe1, type: 3}
   prefab: {fileID: 5393129853425955648, guid: 825765985e9e9074491829f7a4327bd5, type: 3}
-  validPrefab: {fileID: 3393997211609255391, guid: 66026f8c49ae57244a3184e4b68c04b6,
-    type: 3}
-  invalidPrefab: {fileID: 3393997211609255391, guid: 74e702fa1f9cb9644a003753a01f0df1,
+  previewPrefab: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 801935982bfa58240af8575938c394c1,
     type: 3}
@@ -46,3 +44,6 @@ MonoBehaviour:
   maxBuildingCount: 4
   cost: 100
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  resourceUsage: {fileID: 0}
+  usage: 0
+  usageInterval: 0

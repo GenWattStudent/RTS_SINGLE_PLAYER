@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletName: Rocket
   damage: 100
-  speed: 8
+  speed: 50
   arcHeight: 5
   prefab: {fileID: 5697498854208013853, guid: 12789bb5d4b4d4b428c28627819f2500, type: 3}
   lifeTime: 6

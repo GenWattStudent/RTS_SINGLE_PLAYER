@@ -95,5 +95,8 @@
             <ui:Label tabindex="-1" text="You have not enough resources to build that" display-tooltip-when-elided="true" class="text-danger text-medium" style="white-space: normal;" />
             <ui:Label tabindex="-1" text="You have not enough resources to build that" display-tooltip-when-elided="true" class="text-danger text-medium" style="white-space: normal;" />
         </ui:VisualElement>
+        <ui:VisualElement name="TimerPanel" class="border-small border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 25%; translate: -50% -50%; background-color: rgba(55, 55, 55, 0.51); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+            <ui:Label tabindex="-1" text="30s to spawn enemyies" display-tooltip-when-elided="true" name="TimeToSpawnEnemyText" class="text-large text-bold text-primary" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

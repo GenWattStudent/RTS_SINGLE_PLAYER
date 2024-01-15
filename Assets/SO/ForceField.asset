@@ -33,9 +33,7 @@ MonoBehaviour:
   description: Force with you
   sprite: {fileID: 21300000, guid: 89a8a255b1b6e454aa699618ef43518d, type: 3}
   prefab: {fileID: 3866086072177546433, guid: ee52a160e67e4e145b51611619c1e701, type: 3}
-  validPrefab: {fileID: 6494298419494808799, guid: ae9933ef1fb0726498a8fbffdaf524e4,
-    type: 3}
-  invalidPrefab: {fileID: 6494298419494808799, guid: 5c2acd7eed809814484293abaf32b0ff,
+  previewPrefab: {fileID: 6494298419494808799, guid: 7ae6ee2b0d584fa4484094c8ebdab555,
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 692d08ec7ce21b749b31d4b703b18e8f,
     type: 3}

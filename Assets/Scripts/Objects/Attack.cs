@@ -155,6 +155,7 @@ public class Attack : MonoBehaviour
     }
 
     private void PerformAttack() {
+        Debug.Log(IsInAngle() + " jest");
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
             OnAttack?.Invoke();
             ShootBullet();

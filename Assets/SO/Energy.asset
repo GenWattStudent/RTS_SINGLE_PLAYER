@@ -33,9 +33,7 @@ MonoBehaviour:
   description: lalala
   sprite: {fileID: 21300000, guid: d56b5386733fd314891209268b641430, type: 3}
   prefab: {fileID: 8989622198761688359, guid: ab070f6ef0626334d8856e5d4c530f2e, type: 3}
-  validPrefab: {fileID: 8989622198761688359, guid: b31c6d3572a07044ca387fd1fdbcdb6b,
-    type: 3}
-  invalidPrefab: {fileID: 8989622198761688359, guid: 4bf57783983b2f64184b3d4225f467a3,
+  previewPrefab: {fileID: 1000012258327032, guid: 3011a6b85952555428f465b78c4c9adc,
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: fcb368d001f9ded49af221a21ffb0846,
     type: 3}

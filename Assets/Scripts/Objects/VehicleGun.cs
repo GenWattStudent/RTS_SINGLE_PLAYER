@@ -4,12 +4,12 @@ public class VehicleGun : MonoBehaviour
 {
     private Attack attack;
     public float rotationSpeed = 5f;
+    public float rotationAngle = -20f;
 
     void Start()
     {
         attack = GetComponentInParent<Attack>();
     }
-
 
     private void SlerpRotation(float angle) {
         var targetRotation = Quaternion.Euler(angle, transform.eulerAngles.y, transform.eulerAngles.z);
@@ -24,6 +24,6 @@ public class VehicleGun : MonoBehaviour
             return;
         };
 
-        SlerpRotation(20);
+        SlerpRotation(rotationAngle);
     }
 }

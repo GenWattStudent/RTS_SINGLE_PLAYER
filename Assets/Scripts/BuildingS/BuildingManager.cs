@@ -3,23 +3,45 @@ using UnityEngine;
 public class BuildingSystem : MonoBehaviour
 {
     [SerializeField] private LayerMask terrainLayer;
+    [SerializeField] private Material validMaterial;
+    [SerializeField] private Material invalidMaterial;
     public BuildingSo SelectedBuilding { get; private set; }
-    private PlaceableBuilding placeableBuilding;
     private GameObject previewPrefab;
-    private bool wasValid = false;
-    private GameObject[] heightsPoint;
+    private bool wasValid;
     public float diffranceBetweenMaxAndMinHeight = 1f;
+    public int heightRaysCount = 15;
+    private Vector3[] hightPoints;
+
+    private void Awake() {
+        hightPoints = new Vector3[heightRaysCount * heightRaysCount];
+    }
+
+    private void GetHightPoints() {
+        if (previewPrefab == null) return;
+        var collider = previewPrefab.GetComponent<BoxCollider>();
+        var bounds = collider.bounds;
+        var rows = heightRaysCount;
+        var cols = heightRaysCount;
+        var index = 0;
+
+        for (int i = 0; i < rows; i++) {
+            var x = bounds.min.x + (bounds.size.x / rows) * i;
+            for (int j = 0; j < cols; j++) {
+                var z = bounds.min.z + (bounds.size.z / cols) * j;
+                hightPoints[index] = new Vector3(x, 100f, z);
+                index++;
+            }
+        }
+    }
 
     private bool IsFlatTerrain() {
-        if (heightsPoint == null) return false;
-
-        // make raycast fromm the height points to the ground then chek diff between  min and max height
         float maxHeight = 0;
         float minHeight = 0;
 
-        foreach (var point in heightsPoint) {
-            var rayPosition = new Vector3(point.transform.position.x, 100f, point.transform.position.z);
+        foreach (var point in hightPoints) {
+            var rayPosition = new Vector3(point.x, 100f, point.z);
             Ray ray = new Ray(rayPosition, Vector3.down);
+
             // if ray hit notthing then return false
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, terrainLayer)) {
                 if (hit.point.y > maxHeight) maxHeight = hit.point.y;
@@ -30,6 +52,27 @@ public class BuildingSystem : MonoBehaviour
         }
 
         return Mathf.Abs(maxHeight - minHeight) <= diffranceBetweenMaxAndMinHeight;
+    }
+
+    private bool IsBuildingColliding() {
+        bool isCollidingWithOtherUnits = false;
+
+        foreach(var hightPoint in hightPoints) {
+            var rayPosition = new Vector3(hightPoint.x, 100f, hightPoint.z);
+            Ray ray = new Ray(rayPosition, Vector3.down);
+            Debug.DrawRay(rayPosition, Vector3.down * 100f, Color.red);
+
+            RaycastHit[] hits = Physics.RaycastAll(ray, float.MaxValue);
+            foreach (var hit in hits) {
+                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Terrain") && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ghost")) {
+                    Debug.Log(hit.collider.gameObject.name);
+                    isCollidingWithOtherUnits = true;
+                    break;
+                }
+            }
+        }
+        Debug.Log(isCollidingWithOtherUnits);
+        return isCollidingWithOtherUnits;
     }
  
     public void SetSelectedBuilding(BuildingSo building) {
@@ -47,43 +90,42 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    private void GetHeightPoints() {
-        if (previewPrefab == null) return;
-        var heightPoints = previewPrefab.transform.Find("HeightPoints");
-
-        if (heightPoints != null) {
-            heightsPoint = new GameObject[heightPoints.childCount];
-
-            for (int i = 0; i < heightPoints.childCount; i++) {
-                heightsPoint[i] = heightPoints.GetChild(i).gameObject;
-            }
-        }
-    }
-
     private void SetPopup() {
         var message = $"{SelectedBuilding.name} ({PlayerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
         MousePopup.Instance.SetText(message);
         MousePopup.Instance.Show();
     }
 
+    private void SetValidMaterial() {
+        var renderers = previewPrefab.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers) {
+            renderer.material = validMaterial;
+        }
+    }
+
+    private void SetInvalidMaterial() {
+        var renderers = previewPrefab.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers) {
+            renderer.material = invalidMaterial;
+        }
+    }
+
     private void BuildingPreview() {
         if (SelectedBuilding is null) return;
-
+        GetHightPoints();
         var mousePosition = GetMouseWorldPosition();
         bool isValid = IsValidPosition();
 
         SetPopup();
-        if (isValid != wasValid && mousePosition != null) {
-            if (previewPrefab != null) Destroy(previewPrefab);
+        if (mousePosition != null) {
             if (isValid) {
-                previewPrefab = Instantiate(SelectedBuilding.validPrefab);
-                GetHeightPoints();
+                Debug.Log("valid");
+                SetValidMaterial();
             } else {
-                previewPrefab = Instantiate(SelectedBuilding.invalidPrefab);
-                GetHeightPoints();
+                Debug.Log("invalid");
+                SetInvalidMaterial();
             }
 
-            placeableBuilding = previewPrefab.GetComponent<PlaceableBuilding>();
             wasValid = isValid;
         }
 
@@ -107,7 +149,6 @@ public class BuildingSystem : MonoBehaviour
 
     private void PlaceBuilding() {
         if (Input.GetMouseButtonDown(0) && SelectedBuilding != null) {
-
             if (!IsValidPosition()) {
                 InfoBox.Instance.AddError("You cant place building here!");
                 return;
@@ -119,8 +160,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private bool IsValidPosition() {
-        return placeableBuilding != null && 
-        placeableBuilding.colliders.Count == 0 && 
+        return !IsBuildingColliding() &&
         !PlayerController.IsMaxBuildingOfType(SelectedBuilding) && 
         IsFlatTerrain();
     }
@@ -143,12 +183,23 @@ public class BuildingSystem : MonoBehaviour
             var mousePosition = GetMouseWorldPosition();
 
             if (mousePosition != null) {
-                previewPrefab = Instantiate(SelectedBuilding.validPrefab);
+                previewPrefab = Instantiate(SelectedBuilding.previewPrefab);
                 previewPrefab.transform.position = (Vector3)mousePosition;
-                placeableBuilding = previewPrefab.GetComponent<PlaceableBuilding>();
-                GetHeightPoints();
+                GetHightPoints();
             }
         }
+    }
+
+    private void OnDrawGizmos() {
+        if (SelectedBuilding == null || previewPrefab == null) return;
+
+        Gizmos.color = Color.blue;
+
+        var collider = previewPrefab.GetComponent<BoxCollider>();
+        var bounds = collider.bounds;
+
+        // draw rectangle around the building
+        Gizmos.DrawWireCube(previewPrefab.transform.position, bounds.size);
     }
 
     private void Update() {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Building", menuName = "ScriptableObjects/Create Building")]
@@ -16,8 +15,7 @@ public class BuildingSo : DamagableSo
     public string description;
     public Sprite sprite;
     public GameObject prefab;
-    public GameObject validPrefab;
-    public GameObject invalidPrefab;
+   public GameObject previewPrefab;
     public GameObject constructionManagerPrefab;
     public int income;
     public float incomeInterval;

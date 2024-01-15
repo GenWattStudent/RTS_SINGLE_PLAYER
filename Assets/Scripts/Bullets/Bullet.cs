@@ -68,11 +68,9 @@ public class Bullet : MonoBehaviour
             if (IsOwnUnit(hit)) return;
 
             if (bulletSo.radius > 0) {
-                Debug.Log(hit.collider.gameObject.name + " Explode");
                 Explode();
             }
             else {
-                Debug.Log(hit.collider.gameObject.name);
                 DealDamage(hit.collider);
             }
 

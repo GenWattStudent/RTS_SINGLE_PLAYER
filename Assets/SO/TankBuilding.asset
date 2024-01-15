@@ -33,9 +33,7 @@ MonoBehaviour:
   description: hahaha
   sprite: {fileID: 21300000, guid: d70a06d335e0618448d3b1e9c5c484d9, type: 3}
   prefab: {fileID: 3393997211609255391, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
-  validPrefab: {fileID: 3393997211609255391, guid: e212ec9e2a5084344b87cbf29ec39a8f,
-    type: 3}
-  invalidPrefab: {fileID: 3393997211609255391, guid: 33842045b219b06419d7d23cd26ccc87,
+  previewPrefab: {fileID: 2221833450515023493, guid: 763ac2e96f15bb9468a550a30817a5eb,
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 2b26e748323e95248a204999e565f996,
     type: 3}

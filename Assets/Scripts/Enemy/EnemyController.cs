@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,8 +13,6 @@ public class EnemyController : MonoBehaviour
     public List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(6, 0, 10f);
     [SerializeField] private float timeToSpawnEnemy = 20f;
-    [SerializeField] private TextMeshProUGUI timeToSpawnEnemyText;
-    [SerializeField] private RectTransform timerPanel;
     [SerializeField] private List<EnemySpawner> enemySpawners = new ();
     private float timeToSpawnEnemyTimer = 0f;
     private bool isSpawning = false;
@@ -62,7 +59,7 @@ public class EnemyController : MonoBehaviour
     
         if (unitMovement != null) {
             Destroy(unitMovement);
-            unitScript.AddComponent<EnemyUnitMovement>();
+            // unitScript.AddComponent<EnemyUnitMovement>();
         }
 
         damagableScript.playerId = enemyId;
@@ -79,7 +76,7 @@ public class EnemyController : MonoBehaviour
         var minutes = Mathf.FloorToInt(timer / 60f);
         var seconds = Mathf.FloorToInt(timer % 60f);
 
-        timeToSpawnEnemyText.text = $"Time to spawn enemies: {minutes:00}:{seconds:00}";
+        MiddleMessage.Instance.SetText($"Time to spawn enemies: {minutes:00}:{seconds:00}");
     }
 
     private void StartSpawners() {
@@ -106,7 +103,7 @@ public class EnemyController : MonoBehaviour
             timeToSpawnEnemyTimer = 0f; 
             StartSpawners();
             isSpawning = true;
-            timerPanel.gameObject.SetActive(false);
+            MiddleMessage.Instance.HideTimerPanel();
         }
     }
 }
