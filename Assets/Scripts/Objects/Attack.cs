@@ -136,6 +136,12 @@ public class Attack : MonoBehaviour
         if (target != null)
             targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
 
+        // take in account unit acccuracy to target position
+        var accuracy = currentUnit.attackableSo.accuracy;
+        var randomX = UnityEngine.Random.Range(-accuracy, accuracy);
+        var randomZ = UnityEngine.Random.Range(-accuracy, accuracy);
+        targetPosition += new Vector3(randomX, 0, randomZ);
+
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;

@@ -25,7 +25,6 @@ public class BuildingLevelable : MonoBehaviour
     private void InstantiateLevelUpEffects() {
         for (int i = 0; i < 5; i++) {
             var effect = Instantiate(building.buildingSo.levelUpEffect, transform.position, Quaternion.identity);
-            effect.transform.SetParent(transform);
             effect.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
             Destroy(effect, 1f);
         }
@@ -40,7 +39,7 @@ public class BuildingLevelable : MonoBehaviour
         Debug.Log($"Level up to {levelData.cost} level");
         UIStorage.Instance.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
-        damagable.health += levelData.health;
+        damagable.Heal(levelData.health);
         damagable.maxHealth += levelData.health;
 
         if (building.attackableSo != null) building.attackableSo.attackDamage += levelData.attackDamage;

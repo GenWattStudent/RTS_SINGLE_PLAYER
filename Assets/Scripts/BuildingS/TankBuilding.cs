@@ -52,7 +52,10 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void InstantiateUnit()
     {
-        if (!UnitCountManager.Instance.CanSpawnUnit()) return;
+        if (!UnitCountManager.Instance.CanSpawnUnit()) {
+            InfoBox.Instance.AddError("You have reached unit limit");
+            return;
+        };
         UIStorage.Instance.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
 
         var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();

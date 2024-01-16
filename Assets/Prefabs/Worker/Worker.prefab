@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 325383662786411873}
   - component: {fileID: 7144610241314663701}
   - component: {fileID: -8534491582296696178}
+  - component: {fileID: 162731384845106653}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -292,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a2346c456f7be4fa2b99527995f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inVisibleMaterial: {fileID: 2100000, guid: b2834166b8117bf4eb8c2172d4ba52da, type: 2}
   unitSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   attackableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   unitMaterial: {fileID: 0}
@@ -306,9 +308,6 @@ MonoBehaviour:
   - {fileID: 6977154542806008979}
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!195 &6739326068420461195
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -378,9 +377,6 @@ MonoBehaviour:
   health: 0
   maxHealth: 0
   healthBar: {fileID: 3706828982024979038}
-  explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
-    type: 3}
-  destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 5575477033357697071}
   isDead: 0
@@ -467,6 +463,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   damagableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
+--- !u!54 &162731384845106653
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0

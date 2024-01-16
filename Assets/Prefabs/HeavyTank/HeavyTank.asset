@@ -23,10 +23,11 @@ MonoBehaviour:
   ammo: 4
   attackAngle: 15
   hasTurret: 1
-  rotateSpeed: 20
   turretRotateSpeed: 50.1
+  rotateSpeed: 20
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   CanSalve: 0
+  accuracy: 0.1
   health: 500
   deathExpirence: 40
   deathEffect: {fileID: 4733315693632023546, guid: 164a2d9557a6150419a46c42aa95588b,

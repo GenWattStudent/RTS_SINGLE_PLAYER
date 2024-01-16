@@ -126,8 +126,6 @@ MonoBehaviour:
   health: 0
   maxHealth: 0
   healthBar: {fileID: 479566747583137955}
-  explosionPrefab: {fileID: 0}
-  destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 7877395160037817998}
   isDead: 0
@@ -143,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a2346c456f7be4fa2b99527995f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inVisibleMaterial: {fileID: 0}
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
@@ -152,9 +151,6 @@ MonoBehaviour:
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!114 &5612132779967306674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9778,6 +9774,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.82867944
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -9821,12 +9832,12 @@ PrefabInstance:
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0039286697
+      value: 0.0027402472
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0015759022
+      value: 0.0010524663
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}

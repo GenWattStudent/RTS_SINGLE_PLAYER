@@ -175,7 +175,7 @@
 
 .text-primary {
     color: rgb(255, 255, 255);
-    -unity-text-align: upper-center;
+    -unity-text-align: upper-left;
 }
 
 .btn-rounded-small {

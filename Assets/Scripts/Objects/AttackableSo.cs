@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AttackableSo : ScriptableObject
 {
+    [Header("Attack options")]
     public float attackDamage;
     public float attackRange;
     public float attackSpeed;
@@ -11,9 +12,11 @@ public class AttackableSo : ScriptableObject
     public GameObject bulletPrefab;
     public int ammo;
     public int attackAngle;
+    [Header("Turret options")]
     public bool hasTurret;
-    public float rotateSpeed;
     public float turretRotateSpeed;
+    public float rotateSpeed;
     public BulletSo bulletSo;
     public bool CanSalve;
+    public float accuracy = 0.5f;
 }

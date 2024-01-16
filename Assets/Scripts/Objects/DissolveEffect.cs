@@ -15,7 +15,15 @@ public class DissolveEffect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var material = GetComponent<MeshRenderer>().material;
+        Renderer meshRenderer = GetComponent<MeshRenderer>();
+
+        if (meshRenderer == null) {
+            meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        };
+
+        if (meshRenderer == null) return;
+
+        var material = meshRenderer.material;
         startValue = material.GetVector("_DissolveOffest");
 
         if (materials != null) {
