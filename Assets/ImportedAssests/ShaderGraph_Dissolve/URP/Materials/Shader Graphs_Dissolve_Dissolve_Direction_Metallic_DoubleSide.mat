@@ -85,7 +85,7 @@ Material:
     - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
     - _DirectionFactor: {r: 0, g: 0.1, b: 0, a: 0}
     - _DissolveDirection: {r: 0, g: 0.1, b: 0, a: 0}
-    - _DissolveOffest: {r: 0, g: -0.99, b: 0, a: 0}
+    - _DissolveOffest: {r: 0, g: 0, b: 0, a: 0}
     - _EdgeColor: {r: 0, g: 5.960783, b: 0.18724972, a: 1}
     - _NoiseUVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Offest: {r: 0, g: 0, b: 0, a: 0}

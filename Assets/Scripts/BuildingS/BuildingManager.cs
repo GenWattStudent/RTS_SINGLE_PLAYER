@@ -133,7 +133,7 @@ public class BuildingSystem : MonoBehaviour
         if (!UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
         UIStorage.Instance.DecreaseResource(SelectedBuilding.costResource, SelectedBuilding.cost);
 
-        var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, Quaternion.identity);
+        var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, SelectedBuilding.constructionManagerPrefab.transform.rotation);
         var damagableScript = newBuilding.GetComponent<Damagable>();
 
         damagableScript.health = 1;

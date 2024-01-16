@@ -82,9 +82,6 @@ MonoBehaviour:
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!114 &2943060365431914200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,9 +98,6 @@ MonoBehaviour:
   health: 0
   maxHealth: 0
   healthBar: {fileID: 4151513591459172356}
-  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
-    type: 3}
-  destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
   isDead: 0
@@ -552,22 +546,22 @@ PrefabInstance:
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
@@ -577,7 +571,7 @@ PrefabInstance:
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 68d237602c28087418083d4e759b0323,
         type: 3}

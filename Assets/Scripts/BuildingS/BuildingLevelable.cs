@@ -22,6 +22,15 @@ public class BuildingLevelable : MonoBehaviour
         screenController.SetText($"{level} lvl");
     }
 
+    private void InstantiateLevelUpEffects() {
+        for (int i = 0; i < 5; i++) {
+            var effect = Instantiate(building.buildingSo.levelUpEffect, transform.position, Quaternion.identity);
+            effect.transform.SetParent(transform);
+            effect.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+            Destroy(effect, 1f);
+        }
+    }
+
     public void LevelUp() {
         Debug.Log($"Level up to {level} level {building.buildingSo.costResource}  {buildingLevelableSo.levels[level].cost}");
         if (level >= maxLevel || !UIStorage.Instance.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
@@ -42,5 +51,6 @@ public class BuildingLevelable : MonoBehaviour
         
         reduceSpawnTime += levelData.reduceSpawnTime;
         UpdateScreen();
+        InstantiateLevelUpEffects();
     }
 }

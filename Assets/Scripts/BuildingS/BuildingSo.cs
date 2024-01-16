@@ -26,4 +26,5 @@ public class BuildingSo : DamagableSo
     public ResourceSO resourceUsage;
     public int usage;
     public float usageInterval;
+    public GameObject levelUpEffect;
  }

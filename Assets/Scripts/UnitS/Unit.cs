@@ -16,11 +16,6 @@ public class Unit : MonoBehaviour
     private Damagable damagable;
     public bool isVisibile = true;
 
-    private float effectDuration;
-    public float effectTimer = 0;
-    public float effectValue;
-    public string effectKey;
-
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false) {
         if (!shouldChangeMaterial) return;
 
@@ -54,44 +49,11 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void StartShaderValues(string key, float value, float duration = 1f) {
-        if (unitMaterial == null) return;
-
-        effectKey = key;
-        effectValue = value;
-        effectDuration = duration;
-        effectTimer = 0f;
-    } 
-
-    public void UpdateShaderValues(string key, float value, float duration) {
-        if (effectKey == key) {
-            effectTimer += Time.deltaTime;
-            float lerpValue = Mathf.Lerp(0, value, effectTimer / duration);
-
-            foreach (var unitPrefab in unitPrefabs) {
-                var renderer = unitPrefab.GetComponent<Renderer>();
-                if (renderer == null) continue;
-                renderer.material.SetVector(key, new Vector4(0, lerpValue, 0, 0));
-            }
-        }
-    }
-
     private void Start() {
         damagable = GetComponent<Damagable>();
 
         if (damagable != null) {
             damagable.OnDead += HideUiPrefabs;        
-        }
-    }
-
-    private void Update() {
-        if (!string.IsNullOrEmpty(effectKey)) {
-            UpdateShaderValues(effectKey, effectValue, effectDuration);
-        }
-
-        if (effectTimer >= effectDuration) {
-            effectKey = null;
-            effectTimer = 0f;
         }
     }
  }

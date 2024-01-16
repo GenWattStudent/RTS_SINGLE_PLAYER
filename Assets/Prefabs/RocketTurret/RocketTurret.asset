@@ -29,7 +29,11 @@ MonoBehaviour:
   CanSalve: 1
   health: 100
   deathExpirence: 60
-  deathMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
+  deathEffect: {fileID: 6647195554574366884, guid: 1b7b4ff0c29298749aeb2dea43a96a1a,
+    type: 3}
+  deathEffectTime: 2
+  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
+    type: 3}
   type: 2
   buildingName: Rocket Turret
   description: Turret lol
@@ -48,3 +52,5 @@ MonoBehaviour:
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   usage: 10
   usageInterval: 5
+  levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
+    type: 3}
