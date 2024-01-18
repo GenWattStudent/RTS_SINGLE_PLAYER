@@ -276,3 +276,17 @@
 .opacity-0 {
     opacity: 0;
 }
+
+.btn-secondary {
+    background-color: rgb(221, 221, 221);
+    border-left-color: rgb(55, 55, 55);
+    border-right-color: rgb(55, 55, 55);
+    border-top-color: rgb(55, 55, 55);
+    border-bottom-color: rgb(55, 55, 55);
+    transition-property: background-color;
+    transition-duration: 0.4s;
+}
+
+.btn-secondary:hover {
+    background-color: rgb(137, 137, 137);
+}
