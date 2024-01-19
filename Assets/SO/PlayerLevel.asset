@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7201115ea1736a94491ece343e74cac0, type: 3}
   m_Name: PlayerLevel
   m_EditorClassIdentifier: 
-  playerLevel: 0
-  expToNextLevel: 0
-  playerLevelSo: []
+  levelsData:
+  - Level: 1
+    expToNextLevel: 0
+  - Level: 2
+    expToNextLevel: 100
+  - Level: 3
+    expToNextLevel: 200

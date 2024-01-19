@@ -401,6 +401,9 @@ MonoBehaviour:
   - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
   spawnPosition: {x: 1.5, y: 0, z: 2}
+  playerLevel: 1
+  playerExpierence: 0
+  playerLevelSo: {fileID: 11400000, guid: 5ebbb1ff371dbf8458c816a299c3ecee, type: 2}
 --- !u!4 &283071114
 Transform:
   m_ObjectHideFlags: 0
@@ -1061,6 +1064,7 @@ GameObject:
   - component: {fileID: 871500988}
   - component: {fileID: 871500989}
   - component: {fileID: 871500990}
+  - component: {fileID: 871500991}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -1345,6 +1349,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2edca1abcdde53a449588d030e90c747, type: 2}
   - {fileID: 11400000, guid: fc29b08a9c596a742b64115c53d58563, type: 2}
   unlockedSkills: []
+--- !u!114 &871500991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879427bef94d1554cb12c58efe6b2753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
 --- !u!1 &882230388
 GameObject:
   m_ObjectHideFlags: 0
