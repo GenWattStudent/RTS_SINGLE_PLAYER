@@ -16,11 +16,23 @@ public class Damagable : MonoBehaviour
     public event Action OnTakeDamage;
     public GameObject targetPoint;
     public bool isDead = false;
+    public float damageBoost = 0;
+    public float damage = 0f;
+
+    public void AddDamageBoost(float boost) {
+        damageBoost += boost;
+        var damageToAdd = damagableSo.bulletSo.damage * boost / 100;
+        damage += damageToAdd;
+    }
 
     void Awake()
     {
         health = damagableSo.health;
         maxHealth = damagableSo.health;
+        if (damagableSo.bulletSo) {
+            damage = damagableSo.bulletSo.damage;
+        }
+
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
 

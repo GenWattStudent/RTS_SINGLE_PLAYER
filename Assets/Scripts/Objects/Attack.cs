@@ -24,6 +24,7 @@ public class Attack : MonoBehaviour
     public Vector3 targetPosition;
     private List<GameObject> salvePoints = new ();
     private int salveIndex = 0;
+    public float lastAttackTime;
 
     void Start()
     {
@@ -31,6 +32,7 @@ public class Attack : MonoBehaviour
         currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
         vehicleGun = GetComponentInChildren<VehicleGun>();
+        lastAttackTime = Time.time;
 
         if (currentUnit.attackableSo.hasTurret) {
             turret = GetComponentInChildren<Turret>();
@@ -148,6 +150,7 @@ public class Attack : MonoBehaviour
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.rotation.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
+        bullet.Setup();
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
@@ -188,7 +191,7 @@ public class Attack : MonoBehaviour
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
             OnAttack?.Invoke();
             ShootBullet();
-            
+            lastAttackTime = Time.time;
             if (currentAmmo <= 0) {
                 Realod();
             }

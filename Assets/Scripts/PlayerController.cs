@@ -16,6 +16,11 @@ public class PlayerController : MonoBehaviour
     // add unit event
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
+    public int playerLevel = 1;
+    public int playerExpierence = 0;
+    public static PlayerController Instance;
+    public PlayerLevelSo playerLevelSo;
+    public event Action<int, int, int> OnPlayerLevelChange;
 
     private void SpawnHero() {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
@@ -41,6 +46,22 @@ public class PlayerController : MonoBehaviour
         };
 
         OnUnitChange?.Invoke(unit, units);
+    }
+
+    public void AddExpiernce(int amount) {
+        playerExpierence += amount;
+        var nextLevelData = playerLevelSo.levelsData[playerLevel]; 
+        var diffrence = playerExpierence - nextLevelData.expToNextLevel;
+        Debug.Log(nextLevelData.expToNextLevel + " " +  " ALAL" + diffrence);
+
+        if (playerLevel < playerLevelSo.levelsData.Count && playerExpierence >= nextLevelData.expToNextLevel) {
+            Debug.Log("Level up!");
+            playerLevel++;
+            playerExpierence = diffrence;
+            SkillTreeManager.Instance.AddSkillPoints(1);
+        }
+
+        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence, playerLevel);
     }
 
     public static void RemoveUnit(Unit unit) {
@@ -101,10 +122,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Awake() {
+        Instance = this;
+    }
+
     void Start()
     {
-        Debug.Log("PlayerController Start");
-        playerId = Guid.NewGuid();;
+        playerId = Guid.NewGuid();
+        AddExpiernce(0);
         SpawnUnits();
     }
 

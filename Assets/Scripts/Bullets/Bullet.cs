@@ -17,6 +17,7 @@ public class Bullet : MonoBehaviour
     private void Awake() {
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
+
         damage = bulletSo.damage;
         motion.speed = bulletSo.speed;
         motion.arcHeight = bulletSo.arcHeight;
@@ -41,6 +42,9 @@ public class Bullet : MonoBehaviour
         if (damegableScript != null && damegableScript.playerId != playerId) {
             if (damegableScript.TakeDamage(damage)) {
                 unitsBullet.AddExpiernce(damegableScript.damagableSo.deathExpirence);
+                if (unitsBullet.playerId == PlayerController.playerId) {
+                    PlayerController.Instance.AddExpiernce(damegableScript.damagableSo.deathExpirence);
+                }
             }
         }
     }
@@ -76,6 +80,11 @@ public class Bullet : MonoBehaviour
 
             pool.Release(this);
         }
+    }
+
+    public void Setup() {
+        var boostDamage = unitsBullet.damageBoost * bulletSo.damage / 100f;
+        damage = bulletSo.damage + boostDamage;
     }
 
     public void Reset() {

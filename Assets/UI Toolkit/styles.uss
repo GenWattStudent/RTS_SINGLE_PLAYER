@@ -290,3 +290,31 @@
 .btn-secondary:hover {
     background-color: rgb(137, 137, 137);
 }
+
+.skill {
+    border-left-color: rgb(212, 212, 212);
+    border-right-color: rgb(212, 212, 212);
+    border-top-color: rgb(212, 212, 212);
+    border-bottom-color: rgb(212, 212, 212);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    width: 150px;
+    height: 150px;
+    background-color: rgb(118, 118, 118);
+    transition-property: background-color, opacity;
+    transition-duration: 0.3s, 0.3s;
+}
+
+.skill:hover:enabled {
+    background-color: rgb(77, 77, 77);
+}
+
+.skill:disabled {
+    opacity: 0.4;
+}

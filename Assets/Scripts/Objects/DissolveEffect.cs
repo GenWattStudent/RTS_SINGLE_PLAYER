@@ -11,6 +11,7 @@ public class DissolveEffect : MonoBehaviour
     private List<MaterialData> materials = new ();
     private Vector4 startValue;
     public float dissolveSpeed = .3f;
+    public float dissolveValue = 5f;
     float startTime;
     // Start is called before the first frame update
     void Start()
@@ -54,7 +55,7 @@ public class DissolveEffect : MonoBehaviour
             float elapsedTime = Time.time - startTime;
 
             // Calculate the new y value for _DissolveOffest
-            float newValue = Mathf.Lerp(materialData.startValue.y, 2f, elapsedTime * dissolveSpeed);
+            float newValue = Mathf.Lerp(materialData.startValue.y, dissolveValue, elapsedTime * dissolveSpeed);
             // Set the new value
             materialData.material.SetVector("_DissolveOffest", new Vector4(0f, newValue, 0f, 0f));
         }

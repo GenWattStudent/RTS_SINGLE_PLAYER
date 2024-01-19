@@ -1,53 +1,128 @@
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SkillTreeManager : ToolkitHelper
 {
-    public List<SkillSo> skills = new ();
-    public int marginBetweenSkills = 50;
-    public VisualTreeAsset skillUi;
-    private VisualElement skillTreeContainer;
+    [SerializeField] private List<SkillSo> skills = new ();
+    private int skillPoints = 0;
+    public List<SkillSo> unlockedSkills = new ();
+    private Label skillPointsText;
+    private Button skillTreeClose;
+    private VisualElement skillTree;
+    public static SkillTreeManager Instance;
 
-    private void GenerateHorizontalSkillTree(SkillSo skill = null, int depth = 0, int x = 0, int y = 0) {
-        if (skill == null) {
-            var rootSkills = skills.Where(s => s.requiredSkills.Count == 0).ToList();
-            foreach (var rootSkill in rootSkills) {
-                GenerateHorizontalSkillTree(rootSkill, depth, x, y);
-            }
-        } else {
-            var skillUiInstance = skillUi.Instantiate();
-            var skillName = skillUiInstance.Q<Label>("SkillName");
-
-            skillUiInstance.style.position = Position.Absolute;
-            skillUiInstance.style.left = x;
-            skillUiInstance.style.top = y;
-            skillUiInstance.style.marginLeft = marginBetweenSkills * depth;
-            skillUiInstance.style.marginTop = marginBetweenSkills * depth;
-
-            skillName.text = skill.skillName;
-
-            skillTreeContainer.Add(skillUiInstance);
-
-            if (skill.requiredSkills.Count > 0) {
-                var requiredSkills = skill.requiredSkills;
-                foreach (var requiredSkill in requiredSkills) {
-                    GenerateHorizontalSkillTree(requiredSkill, depth + 1, x, y);
-                }
-            }
+    private void PurchaseSkill(SkillSo skillSo)
+    {
+        if (skillSo.Unlock(unlockedSkills, skillPoints))
+        {
+            unlockedSkills.Add(skillSo);
+            RemoveSkillPoints(skillSo.requiredSkillPoints);
+            UpdateUI();
         }
+    }
+
+    public bool IsPurchased(SkillSo skillSo)
+    {
+        return skillSo.IsUnlocked(unlockedSkills);
+    }
+
+    private void UpdateSkillUIData(SkillSo skillSo) {
+        var skill = GetVisualElement(skillSo.skillTag);
+        var title = skill.Q<Label>("Title");
+        var description = skill.Q<Label>("Value");
+        var cost = skill.Q<Label>("Points");
+        var alreadyPurchased = skill.Q<VisualElement>("AlreadyPurchased");
+
+        if (skillSo.CanBePurchased(unlockedSkills, skillPoints))
+        {
+            skill.SetEnabled(true);
+        }
+        else if (IsPurchased(skillSo))
+        {
+            skill.SetEnabled(false);
+            alreadyPurchased.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            skill.SetEnabled(false);
+        }
+
+        title.text = skillSo.skillName;
+        description.text = skillSo.description;
+        cost.text = skillSo.requiredSkillPoints.ToString();
+    }
+
+    private void UpdateUI() {
+        foreach (var skill in skills)
+        {
+            UpdateSkillUIData(skill);
+        }
+    }
+
+    private void AddSkillEvent() {
+        foreach (var skill in skills)
+        {
+            var skillEl = GetVisualElement(skill.skillTag);
+            skillEl.RegisterCallback((ClickEvent ev) => PurchaseSkill(skill));
+        }
+    }
+
+    private void UpdateSkillPoints() {
+        skillPointsText.text = $"Skill points: {skillPoints}";
+    }
+
+    public void AddSkillPoints(int amount) {
+        skillPoints += amount;
+        UpdateSkillPoints();
+        UpdateUI();
+    }
+
+    public void RemoveSkillPoints(int amount) {
+        skillPoints -= amount;
+        UpdateSkillPoints();
+    }
+
+    public void Show() {
+        skillTree.style.display = DisplayStyle.Flex;
+    }
+
+    public void Hide() {
+        skillTree.style.display = DisplayStyle.None;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        skillTreeContainer = GetVisualElement("SkillTreeContainer");
-        GenerateHorizontalSkillTree();
+        Instance = this;
+        skillPointsText = GetLabel("SkillPoints");
+        skillTreeClose = GetButton("SkillTreeClose");
+        skillTree = GetVisualElement("SkillTree");
+
+        skillTreeClose.RegisterCallback((ClickEvent ev) => Hide());
+        AddSkillEvent();
+        UpdateUI();
+        UpdateSkillPoints();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (skillTree.style.display == DisplayStyle.None)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AddSkillPoints(1);
+        }
     }
 }

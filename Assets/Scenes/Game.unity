@@ -156,7 +156,7 @@ MonoBehaviour:
   - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 3393997211609255391, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
   spawnPosition: {x: 1, y: 0, z: 30}
-  timeToSpawnEnemy: 5
+  timeToSpawnEnemy: 3
   enemySpawners:
   - {fileID: 185573517}
 --- !u!4 &25975394
@@ -1060,6 +1060,7 @@ GameObject:
   - component: {fileID: 871500987}
   - component: {fileID: 871500988}
   - component: {fileID: 871500989}
+  - component: {fileID: 871500990}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -1325,6 +1326,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 0}
+--- !u!114 &871500990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871500972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc981023fc211254585538dca81be4e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  skills:
+  - {fileID: 11400000, guid: aae4b54a4078c7648b39e435044ed24f, type: 2}
+  - {fileID: 11400000, guid: 801d55a6c98246249b4bdee44c16fdb4, type: 2}
+  - {fileID: 11400000, guid: 2edca1abcdde53a449588d030e90c747, type: 2}
+  - {fileID: 11400000, guid: fc29b08a9c596a742b64115c53d58563, type: 2}
+  unlockedSkills: []
 --- !u!1 &882230388
 GameObject:
   m_ObjectHideFlags: 0

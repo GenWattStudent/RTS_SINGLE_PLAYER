@@ -159,6 +159,8 @@ public class UIUnitManager : MonoBehaviour
 
         if (cost < 0 && soUnit.cost > 0) {
             var costText = unitTab.Q<Label>("SlotValue");
+            var valueIcon = unitTab.Q<VisualElement>("ValueIcon");
+            valueIcon.style.backgroundImage = new StyleBackground(soUnit.costResource.icon);
             costText.text = soUnit.cost.ToString();
                 
             button.RegisterCallback((ClickEvent ev) => {
@@ -166,7 +168,7 @@ public class UIUnitManager : MonoBehaviour
             });
         } else {
             var costText = unitTab.Q<Label>("Quantity");
-            var value = unitTab.Q<Label>("SlotValue");
+            var value = unitTab.Q<VisualElement>("SlotValueBox");
             
             value.style.display = DisplayStyle.None;
             costText.text = cost.ToString();

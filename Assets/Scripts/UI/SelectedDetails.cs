@@ -46,12 +46,10 @@ public class SelectedDetails : ToolkitHelper
     }
 
     private void OnUpgradeButtonClick(ClickEvent ev) {
-        Debug.Log("Upgrade button click");
         building.buildingLevelable.LevelUp();
     }
 
     private void OnSellButtonClick(ClickEvent ev) {
-        Debug.Log("Sell button click");
         building.Sell();
     }
 
@@ -75,8 +73,8 @@ public class SelectedDetails : ToolkitHelper
         CreateStat("Health", $"{damagable.health}/{damagable.maxHealth}");
     }
 
-    private void CreateDamageStat(AttackableSo attackableSo) {
-        CreateStat("Damage", $"{attackableSo.bulletSo.damage}");
+    private void CreateDamageStat(Damagable damagable) {
+        CreateStat("Damage", $"{damagable.damage}");
     }
 
     private void CreateExpirenceStat(Damagable damagable) {
@@ -124,7 +122,7 @@ public class SelectedDetails : ToolkitHelper
         actions.style.display = DisplayStyle.Flex;
         expirenceBar.style.display = DisplayStyle.Flex;
         CreateHealthStat(damagable);
-        CreateDamageStat(unit.attackableSo);
+        CreateDamageStat(damagable);
         CreateExpirenceStat(damagable);
         ActivateUnitCamera(damagable);
         UpdateHealthBar(damagable);
@@ -147,7 +145,7 @@ public class SelectedDetails : ToolkitHelper
             ActivateUnitCamera(damagable);
 
             if (building.attackableSo != null) {
-                CreateDamageStat(building.attackableSo);
+                CreateDamageStat(damagable);
             }
 
             UpdateHealthBar(damagable);

@@ -6,4 +6,5 @@ public class ResourceSO : ScriptableObject
     public string resourceName;
     public int maxValue;
     public int startValue;
+    public Texture2D icon;
 }

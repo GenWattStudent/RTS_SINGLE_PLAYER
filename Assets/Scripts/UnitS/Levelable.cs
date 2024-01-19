@@ -22,17 +22,17 @@ public class Levelable : MonoBehaviour
 
     public void AddExpirence(int amount) {
         expirence += amount;
+        if (level >= maxLevel) return;
+
         if (expirence >= levelableSo.levels[level].expirence) {
             LevelUp();
         }
     }
 
     public void LevelUp() {
-        if (level >= maxLevel) return;
-
         level++;
         expirence = 0;
-        var levelData = levelableSo.levels[level];
+        var levelData = levelableSo.levels[level - 1];
 
         damagable.health += levelData.health;
         attack.currentUnit.attackableSo.attackDamage += levelData.attackDamage;

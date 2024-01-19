@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private Material inVisibleMaterial;
     public UnitSo unitSo;
     public AttackableSo attackableSo;
     public Guid playerId;
@@ -31,12 +30,8 @@ public class Unit : MonoBehaviour
         
         if (unitMaterial != null) {
             foreach (var unitPrefab in unitPrefabs) {
-                var meshRenderer = unitPrefab.GetComponent<MeshRenderer>();
-                if (meshRenderer == null) {
-                    unitPrefab.GetComponent<SkinnedMeshRenderer>().material = unitMaterial;
-                    continue;
-                }
-                meshRenderer.material = unitMaterial;
+                var renderer = unitPrefab.GetComponent<Renderer>();
+                renderer.material = unitMaterial;
             }
         }
     }
@@ -63,11 +58,33 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void HideUnit() {
+        isVisibile = false;
+
+        foreach (var unitPrefab in unitPrefabs) {
+            var renderer = unitPrefab.GetComponent<Renderer>();
+            renderer.enabled = false;
+        }
+
+        HideUiPrefabs();
+    }
+
+    private void ShowUnit() {
+        isVisibile = true;
+
+        foreach (var unitPrefab in unitPrefabs) {
+            var renderer = unitPrefab.GetComponent<Renderer>();
+            renderer.enabled = true;
+        }
+
+        ShowUiPrefabs();
+    }
+
     private void Update() {
         visibleTimer += Time.deltaTime;
 
-        if (attack != null && attack.target != null) {
-            ChangeMaterial(originalMaterial);
+        if (attack != null && bushes.Count > 0 && attack.lastAttackTime - Time.time < visibleInterval) {
+            ShowUnit();
             visibleTimer = 0f;
             return;
         }
@@ -77,11 +94,9 @@ public class Unit : MonoBehaviour
         }
 
         if (bushes.Count > 0) {
-            isVisibile = false;
-            ChangeMaterial(inVisibleMaterial);
+            HideUnit();
         } else {
-            isVisibile = true;
-            ChangeMaterial(originalMaterial);
-        }
+            ShowUnit();
+        }   
     }
  }

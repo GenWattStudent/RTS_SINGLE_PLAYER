@@ -73,6 +73,7 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
     private void SetBuildingData(TemplateContainer buildingTab, BuildingSo buildingSo) {
         var buildingNameText = buildingTab.Q<Label>("SlotName");
         var costText = buildingTab.Q<Label>("SlotValue");
+        var valueIcon = buildingTab.Q<VisualElement>("ValueIcon");
         var image = buildingTab.Q<VisualElement>("ImageBox");
         var slot = buildingTab.Q<VisualElement>("Slot");
         var quantityText = buildingTab.Q<Label>("Quantity");
@@ -83,6 +84,7 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
 
         buildingNameText.text = buildingSo.buildingName;
         costText.text = buildingSo.cost.ToString();
+        valueIcon.style.backgroundImage = new StyleBackground(buildingSo.costResource.icon);
 
         if (image is not null) {
             image.style.backgroundImage = new StyleBackground(buildingSo.sprite);
