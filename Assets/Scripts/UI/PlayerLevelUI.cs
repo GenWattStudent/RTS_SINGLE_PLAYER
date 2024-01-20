@@ -12,12 +12,17 @@ public class PlayerLevelUI : ToolkitHelper
         PlayerController.Instance.OnPlayerLevelChange -= UpdateUI;
     }
 
-    private void UpdateUI(int expToNextLevel, int playerExpierence, int level)
+    private void UpdateUI(int expToNextLevel, int playerExpierence, int level, int maxLevel)
     {
+        if (level == maxLevel) {
+            playerLevelText.text = $"{level} Max LVL";
+            playerLevelFill.style.height = new Length(100, LengthUnit.Percent);
+            levelBox.tooltip = $"{playerExpierence}/{expToNextLevel} EXP";
+            return;
+        }
+
         playerLevelText.text = $"{level}LVL";
-        Debug.Log(playerExpierence + " " + expToNextLevel);
         var heightPercentage = (float)playerExpierence / expToNextLevel;
-        Debug.Log(heightPercentage);
         playerLevelFill.style.height = new Length(heightPercentage * 100, LengthUnit.Percent);
         levelBox.tooltip = $"{playerExpierence}/{expToNextLevel} EXP";
     }

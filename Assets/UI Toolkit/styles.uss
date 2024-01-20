@@ -115,6 +115,14 @@
     -unity-font-style: bold;
 }
 
+.text-large {
+    font-size: 28px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
 .btn-danger:hover {
     scale: 1 1;
     background-color: rgb(166, 0, 0);
@@ -131,14 +139,6 @@
     padding-left: 0;
     padding-top: 0;
     padding-bottom: 0;
-}
-
-.text-large {
-    font-size: 28px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
 }
 
 .border-small {
@@ -167,10 +167,10 @@
     border-right-width: 4px;
     border-bottom-width: 4px;
     border-left-width: 4px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .text-primary {
@@ -317,4 +317,36 @@
 
 .skill:disabled {
     opacity: 0.4;
+}
+
+.text-input .unity-base-field__input {
+    border-left-color: rgba(202, 202, 202, 0.91);
+    border-right-color: rgba(202, 202, 202, 0.91);
+    border-top-color: rgba(202, 202, 202, 0.91);
+    border-bottom-color: rgba(202, 202, 202, 0.91);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    background-color: rgba(39, 39, 39, 0.79);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: rgb(207, 206, 206);
+}
+
+.border-secondary {
+    border-left-color: rgb(212, 212, 212);
+    border-right-color: rgb(212, 212, 212);
+    border-top-color: rgb(212, 212, 212);
+    border-bottom-color: rgb(212, 212, 212);
+    border-bottom-width: 5px;
+    border-right-width: 5px;
+}
+
+.text-input .unity-base-field__label {
+    color: rgb(236, 236, 236);
+    -unity-text-align: upper-left;
+    -unity-font-style: bold;
 }

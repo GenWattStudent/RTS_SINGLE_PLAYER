@@ -82,20 +82,22 @@ public class Unit : MonoBehaviour
 
     private void Update() {
         visibleTimer += Time.deltaTime;
+        if (attack != null) {
+            Debug.Log(attack.targetPosition);
+        }
 
-        if (attack != null && bushes.Count > 0 && attack.lastAttackTime - Time.time < visibleInterval) {
+        if (attack != null && bushes.Count > 0 && attack.targetPosition != Vector3.zero) {
             ShowUnit();
+            Debug.Log("Show unit");
             visibleTimer = 0f;
             return;
         }
 
-        if (visibleTimer >= visibleInterval) {
-            return;
-        }
-
         if (bushes.Count > 0) {
+            Debug.Log("Bush");
             HideUnit();
         } else {
+            Debug.Log("Show");
             ShowUnit();
         }   
     }

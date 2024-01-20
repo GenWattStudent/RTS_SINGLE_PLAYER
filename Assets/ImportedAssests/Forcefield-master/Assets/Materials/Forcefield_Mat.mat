@@ -146,7 +146,7 @@ Material:
     - _impactRippleMaxRadius: 2
     - _impactRippleSpeed: 10
     - _intersectionMultiplier: 100
-    - _intersectionOffset: 0.99
+    - _intersectionOffset: 0.658
     - _rimGlowNoiseDensity: 1
     - _rimGlowNoiseSpeed: 1
     - _rimPulseSpeed: 1

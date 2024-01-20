@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public int playerExpierence = 0;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
-    public event Action<int, int, int> OnPlayerLevelChange;
+    public event Action<int, int, int, int> OnPlayerLevelChange;
 
     private void SpawnHero() {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
@@ -49,19 +49,19 @@ public class PlayerController : MonoBehaviour
     }
 
     public void AddExpiernce(int amount) {
+        if (playerLevel == playerLevelSo.levelsData.Count) return;
+
         playerExpierence += amount;
         var nextLevelData = playerLevelSo.levelsData[playerLevel]; 
         var diffrence = playerExpierence - nextLevelData.expToNextLevel;
-        Debug.Log(nextLevelData.expToNextLevel + " " +  " ALAL" + diffrence);
 
         if (playerLevel < playerLevelSo.levelsData.Count && playerExpierence >= nextLevelData.expToNextLevel) {
-            Debug.Log("Level up!");
             playerLevel++;
             playerExpierence = diffrence;
             SkillTreeManager.Instance.AddSkillPoints(1);
         }
 
-        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence, playerLevel);
+        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence, playerLevel, playerLevelSo.levelsData.Count);
     }
 
     public static void RemoveUnit(Unit unit) {

@@ -18,6 +18,7 @@ public class LightManager : MonoBehaviour
     private const float inverseDayLength = 1f / 1440f;
 
     public static LightManager Instance { get; private set; }
+    public static bool IsNight => Instance.TimeOfDay > 1200 || Instance.TimeOfDay < 550;
 
     /// <summary>
     /// On project start, if controlLights is true, collect all non-directional lights in the current scene and place in a list
@@ -64,6 +65,7 @@ public class LightManager : MonoBehaviour
         TimeOfDay = TimeOfDay + (Time.deltaTime * TimeMultiplier);
         TimeOfDay = TimeOfDay % 1440;
         UpdateLighting(TimeOfDay * inverseDayLength);
+        Debug.Log("Time of day: " + TimeOfDay);
     }
 
     /// <summary>
