@@ -151,7 +151,7 @@ public class BuildingSystem : MonoBehaviour
                 return;
             };
 
-            PlaceBuilding(previewPrefab.transform.position);
+            if (previewPrefab != null) PlaceBuilding(previewPrefab.transform.position);
             CancelBuilding();
         }
     }

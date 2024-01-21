@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicManager : Singleton<MusicManager>
@@ -9,6 +7,7 @@ public class MusicManager : Singleton<MusicManager>
     void Start()
     {
         globalMusic.loop = true;
+        globalMusic.volume = 0.5f;
         globalMusic.Play();
     }
 
