@@ -92,14 +92,10 @@ MonoBehaviour:
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
-  unitPrefabs:
-  - {fileID: 0}
+  unitPrefabs: []
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!114 &7163232982638283826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,12 +112,11 @@ MonoBehaviour:
   health: 0
   maxHealth: 0
   healthBar: {fileID: 0}
-  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
-    type: 3}
-  destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
   isDead: 0
+  damageBoost: 0
+  damage: 0
 --- !u!54 &5776599522645334268
 Rigidbody:
   m_ObjectHideFlags: 0

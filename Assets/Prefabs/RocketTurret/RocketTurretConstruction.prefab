@@ -48,12 +48,12 @@ MonoBehaviour:
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
+  originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
-  unitPrefabs:
-  - {fileID: 0}
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
+  unitPrefabs: []
+  unitUiPrefabs: []
+  bushes: []
+  isVisibile: 1
 --- !u!1001 &868413912282892951
 PrefabInstance:
   m_ObjectHideFlags: 0

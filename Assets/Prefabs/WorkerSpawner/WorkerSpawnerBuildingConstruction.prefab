@@ -50,14 +50,10 @@ MonoBehaviour:
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
-  unitPrefabs:
-  - {fileID: 0}
+  unitPrefabs: []
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!1001 &868413912282892951
 PrefabInstance:
   m_ObjectHideFlags: 0

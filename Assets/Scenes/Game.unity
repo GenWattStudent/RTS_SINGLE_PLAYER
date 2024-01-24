@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16604999, g: 0.1953727, b: 0.22385864, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -156,7 +156,7 @@ MonoBehaviour:
   - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 3393997211609255391, guid: f8f1c037243de2446a3f8c1256a72502, type: 3}
   spawnPosition: {x: 1, y: 0, z: 30}
-  timeToSpawnEnemy: 3
+  timeToSpawnEnemy: 70
   enemySpawners:
   - {fileID: 185573517}
 --- !u!4 &25975394
@@ -2288,7 +2288,7 @@ PrefabInstance:
     - target: {fileID: 3364325394453186254, guid: 3940a4795f91c674fb48d6d4e299297a,
         type: 3}
       propertyPath: TimeMultiplier
-      value: 100
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3364325394453186254, guid: 3940a4795f91c674fb48d6d4e299297a,
         type: 3}

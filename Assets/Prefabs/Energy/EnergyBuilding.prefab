@@ -245,7 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a2346c456f7be4fa2b99527995f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inVisibleMaterial: {fileID: 0}
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
@@ -254,7 +253,6 @@ MonoBehaviour:
   unitPrefabs:
   - {fileID: 4304358997482882887}
   - {fileID: 4304358997841353857}
-  - {fileID: 4304358993666588431}
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
@@ -277,6 +275,8 @@ MonoBehaviour:
   levelable: {fileID: 0}
   targetPoint: {fileID: 33262721970858854}
   isDead: 0
+  damageBoost: 0
+  damage: 0
 --- !u!54 &-6088940530253509853
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -644,12 +644,6 @@ PrefabInstance:
 --- !u!4 &4301394834325064359 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000012487996440, guid: 3011a6b85952555428f465b78c4c9adc,
-    type: 3}
-  m_PrefabInstance: {fileID: 4305346903095443135}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4304358993666588431 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1000012713935280, guid: 3011a6b85952555428f465b78c4c9adc,
     type: 3}
   m_PrefabInstance: {fileID: 4305346903095443135}
   m_PrefabAsset: {fileID: 0}
