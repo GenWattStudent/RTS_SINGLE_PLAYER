@@ -129,8 +129,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerId = Guid.NewGuid();
-        AddExpiernce(0);
         SpawnUnits();
+        AddExpiernce(0);
     }
 
     // Update is called once per frame

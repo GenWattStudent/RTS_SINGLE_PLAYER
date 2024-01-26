@@ -6,6 +6,7 @@
                 <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="SettingsHeading" class="text-primary text-xxl text-bold" style="justify-content: flex-start; -unity-text-align: upper-center;" />
                 <ui:Button text="X" display-tooltip-when-elided="true" name="BackButton" class="btn-danger text-bold text-xxl" style="position: absolute; right: 0; width: 50px; height: 50px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
             </ui:VisualElement>
+            <ui:Button text="Sound Settings" display-tooltip-when-elided="true" name="SoundsSettings" class="btn-primary" style="margin-bottom: 10px;" />
             <ui:Button text="GO TO MAIN MENU" display-tooltip-when-elided="true" name="MainMenuButton" class="btn-primary" />
         </ui:VisualElement>
     </ui:VisualElement>

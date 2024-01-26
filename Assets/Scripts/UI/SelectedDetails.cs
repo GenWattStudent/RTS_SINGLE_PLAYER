@@ -9,7 +9,6 @@ public class SelectedDetails : ToolkitHelper
     private Button levelUpButton;
     private Button sellButton;
     private VisualElement statsContainer;
-    private VisualElement image;
     private Label levelText;
     private ProgressBar healthBar;
     private ProgressBar expirenceBar;
@@ -23,7 +22,6 @@ public class SelectedDetails : ToolkitHelper
         levelUpButton = root.Q<Button>("LevelUp");
         sellButton = root.Q<Button>("Sell");
         statsContainer = root.Q<VisualElement>("Stats");
-        image = root.Q<VisualElement>("Image");
         levelText = root.Q<Label>("Level");
         healthBar = root.Q<ProgressBar>("Healthbar");
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
@@ -82,6 +80,11 @@ public class SelectedDetails : ToolkitHelper
         levelText.text = $"{damagable.levelable.level} LVL";
     }
 
+    private void ShowHideAttackActions(bool isActive) {
+        var attackActions = GetVisualElement("AttackActions");
+        attackActions.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
     private void ClearStats() {
         List<VisualElement> elementsToRemove = new ();
 
@@ -117,7 +120,7 @@ public class SelectedDetails : ToolkitHelper
         camera.gameObject.SetActive(true);
     }
 
-    private void UpdateUnitDetails(Unit unit, Damagable damagable)
+    private void UpdateUnitDetails(Damagable damagable)
     {
         actions.style.display = DisplayStyle.Flex;
         expirenceBar.style.display = DisplayStyle.Flex;
@@ -127,6 +130,12 @@ public class SelectedDetails : ToolkitHelper
         ActivateUnitCamera(damagable);
         UpdateHealthBar(damagable);
         ActivateButtons(false);
+
+        if (damagable.damagableSo.canAttack) {
+            ShowHideAttackActions(true);
+        } else {
+            ShowHideAttackActions(false);
+        }
     }
 
     private void UpdateBuildingDetails(Selectable selectable)
@@ -146,6 +155,9 @@ public class SelectedDetails : ToolkitHelper
 
             if (building.attackableSo != null) {
                 CreateDamageStat(damagable);
+                ShowHideAttackActions(true);
+            } else {
+                ShowHideAttackActions(false);
             }
 
             UpdateHealthBar(damagable);
@@ -217,7 +229,7 @@ public class SelectedDetails : ToolkitHelper
 
             if (unit != null && selectable.selectableType == SelectableType.Unit)
             {
-                UpdateUnitDetails(unit, damagable);
+                UpdateUnitDetails(damagable);
             }
             else
             {

@@ -157,6 +157,7 @@ public class Attack : MonoBehaviour
 
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null) {
             Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
+            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, bulletSpawnPoint.transform.position);
         }
     }
 

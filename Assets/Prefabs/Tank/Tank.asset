@@ -28,6 +28,7 @@ MonoBehaviour:
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   CanSalve: 0
   accuracy: 0.1
+  attackSound: 4
   health: 200
   deathExpirence: 10
   deathEffect: {fileID: 5849282407134596234, guid: c66bd4aadaca5554c99947dce4b7b7b1,

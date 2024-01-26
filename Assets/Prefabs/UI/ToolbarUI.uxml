@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="Slot" src="project://database/Assets/UI%20Toolkit/Slot.uxml?fileID=9197481963319205126&amp;guid=4c4dab1f694f6e549b4b8c1cd9d53b4f&amp;type=3#Slot" />
     <ui:Template name="SettingsModal" src="project://database/Assets/Prefabs/UI/SettingsModal.uxml?fileID=9197481963319205126&amp;guid=01b192d55b905284681372f7fa632d74&amp;type=3#SettingsModal" />
+    <ui:Template name="SettingsBox" src="project://database/Assets/Prefabs/UI/SettingsBox.uxml?fileID=9197481963319205126&amp;guid=cf3949801f299bb48aa6d181cbe4601c&amp;type=3#SettingsBox" />
     <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(255, 242, 242, 0); justify-content: flex-end;">
         <ui:VisualElement name="MousePopup" class="border-secondary border-medium" style="flex-grow: 1; position: absolute; left: 0; top: 0; background-color: rgba(55, 55, 55, 0.95); color: rgb(209, 209, 209); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; translate: 0 0; display: none;">
@@ -9,7 +10,7 @@
         <ui:VisualElement name="ResourceData" class="border-secondary" style="flex-grow: 1; position: absolute; top: 0; left: 0; width: 700px; height: 150px; background-color: rgba(55, 55, 55, 0.95); border-bottom-right-radius: 20px; flex-direction: row; align-items: center; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
             <ui:VisualElement name="Level" style="flex-grow: 0; justify-content: center; align-items: center; width: 80px; height: 100%; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px; border-bottom-left-radius: 12px; background-color: rgba(115, 115, 115, 0.93); border-left-color: rgb(250, 250, 250); border-right-color: rgb(250, 250, 250); border-top-color: rgb(250, 250, 250); border-bottom-color: rgb(250, 250, 250);">
                 <ui:VisualElement name="LevelFill" style="flex-grow: 1; background-color: rgb(236, 236, 236); position: absolute; bottom: 0; width: 100%; height: 50%; transition-property: height; transition-duration: 0.2s;" />
-                <ui:Label tabindex="-1" text="400 Max LVL" display-tooltip-when-elided="true" name="PlayerLevel" class="text-bold text-large" style="-unity-text-outline-color: rgba(115, 115, 115, 0); color: rgb(0, 0, 0); white-space: normal; -unity-text-align: upper-center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                <ui:Label tabindex="-1" text="400 MAX LVL" display-tooltip-when-elided="true" name="PlayerLevel" class="text-bold white-space-normal" style="-unity-text-outline-color: rgba(115, 115, 115, 0); color: rgb(0, 0, 0); white-space: normal; -unity-text-align: middle-center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; font-size: 24px;" />
             </ui:VisualElement>
             <ui:VisualElement name="Resource" style="flex-grow: 1; padding-top: 5px; padding-right: 0; padding-bottom: 5px; padding-left: 0; justify-content: space-between; height: 100%; margin-left: 10px; align-items: center;">
                 <ui:VisualElement name="EnergyBox" style="flex-grow: 1; width: 100%; flex-direction: row; justify-content: space-between; align-items: center;">
@@ -23,9 +24,9 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Toolbar" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 300px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-            <ui:VisualElement name="SelectionInfo" class="border-medium border-secondary btn-rounded-small" style="flex-grow: 0; width: 300px; justify-content: flex-start; align-self: auto; flex-shrink: 1; height: 130%; border-top-width: 2px; border-right-width: 3px; border-bottom-width: 0; border-left-width: 0; top: -30%; background-color: rgba(55, 55, 55, 0.95); border-top-left-radius: 0; border-top-right-radius: 10px; border-bottom-right-radius: 0; border-bottom-left-radius: 10px;">
+            <ui:VisualElement name="SelectionInfo" class="border-medium border-secondary btn-rounded-small" style="flex-grow: 0; width: 300px; justify-content: flex-start; align-self: auto; flex-shrink: 1; height: 135%; border-top-width: 2px; border-right-width: 3px; border-bottom-width: 0; border-left-width: 0; top: -35%; background-color: rgba(55, 55, 55, 0.95); border-top-left-radius: 0; border-top-right-radius: 10px; border-bottom-right-radius: 0; border-bottom-left-radius: 10px;">
                 <ui:VisualElement name="Actions" class="border-secondary" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: 50%; border-top-left-radius: 20px; border-bottom-width: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; display: flex; border-top-width: 0; border-right-width: 0; border-left-width: 0;">
-                    <ui:VisualElement name="Image" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Textures/UnitView.renderTexture?fileID=8400000&amp;guid=ddc110a189a88164ebe1b68d5534392f&amp;type=2#UnitView&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: auto; align-self: auto; align-items: auto; justify-content: space-evenly; border-top-left-radius: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                    <ui:VisualElement name="Image" class="border-secondary" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Textures/UnitView.renderTexture?fileID=8400000&amp;guid=ddc110a189a88164ebe1b68d5534392f&amp;type=2#UnitView&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: auto; align-self: auto; align-items: auto; justify-content: space-evenly; border-top-left-radius: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-right-width: 0; border-bottom-width: 3px;">
                         <ui:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; justify-content: space-between; align-items: flex-end; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
                             <ui:Label tabindex="-1" text="4 LVL&#10;" display-tooltip-when-elided="true" name="Level" class="text-primary text-bold text-large" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; height: 31px;" />
                             <ui:VisualElement style="flex-grow: 0; margin-bottom: 10px; flex-wrap: wrap;">
@@ -34,12 +35,14 @@
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="width: 95%; justify-content: flex-start; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
-                        <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons8-heart-50.png?fileID=2800000&amp;guid=467c785996b12d44293a6b13f8d411c6&amp;type=3#icons8-heart-50&apos;); width: 20px; height: 20px; position: absolute; left: 5px; top: 2px;" />
-                    </ui:ProgressBar>
-                    <ui:ProgressBar value="70" title="Exp: 20/100" name="Expirencebar" class="expirence" style="width: 95%; justify-content: flex-start; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0; align-self: center;">
-                        <ui:Label tabindex="-1" text="EXP" display-tooltip-when-elided="true" name="Label" style="position: absolute; top: 4px; left: 5px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-                    </ui:ProgressBar>
+                    <ui:VisualElement name="Bars" style="flex-grow: 0; width: 100%; margin-top: 5px; margin-bottom: 5px;">
+                        <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="width: 95%; justify-content: flex-start; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
+                            <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons8-heart-50.png?fileID=2800000&amp;guid=467c785996b12d44293a6b13f8d411c6&amp;type=3#icons8-heart-50&apos;); width: 20px; height: 20px; position: absolute; left: 5px; top: 2px;" />
+                        </ui:ProgressBar>
+                        <ui:ProgressBar value="70" title="Exp: 20/100" name="Expirencebar" class="expirence" style="width: 95%; justify-content: flex-start; margin-top: 5px; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
+                            <ui:Label tabindex="-1" text="EXP" display-tooltip-when-elided="true" name="Label" style="position: absolute; top: 4px; left: 5px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                        </ui:ProgressBar>
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="Info" style="flex-grow: 1; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: 30%; padding-bottom: 10px; padding-top: 10px; padding-right: 10px; padding-left: 10px;">
                     <ui:VisualElement name="Stats" style="flex-grow: 1; width: 100%;">
@@ -98,13 +101,6 @@
                 </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Instance template="SettingsModal" name="SettingsModal" style="display: none; position: absolute; left: 50%; top: 15%; translate: -50% 0;" />
-        <ui:VisualElement name="ResultModal" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 37%; background-color: rgba(55, 55, 55, 0.95); width: 400px; height: 500px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; display: none; translate: -50% -50%;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="GameResult" class="text-xxl text-bold text-primary" />
-            </ui:VisualElement>
-            <ui:Button text="Go to main menu" display-tooltip-when-elided="true" name="MainMenuButtonResult" class="btn-primary" />
-        </ui:VisualElement>
         <ui:VisualElement name="InfoBox" style="flex-grow: 1; position: absolute; top: 200px; width: 400px; height: 300px; background-color: rgba(55, 55, 55, 0.48); border-top-left-radius: 0; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 0;">
             <ui:Label tabindex="-1" text="You have not enough resources to build that" display-tooltip-when-elided="true" class="text-danger text-medium" style="white-space: normal;" />
             <ui:Label tabindex="-1" text="You have not enough resources to build that" display-tooltip-when-elided="true" class="text-danger text-medium" style="white-space: normal;" />
@@ -113,7 +109,7 @@
             <ui:Label tabindex="-1" text="You have not enough resources to build that" display-tooltip-when-elided="true" class="text-danger text-medium" style="white-space: normal;" />
         </ui:VisualElement>
         <ui:VisualElement name="TimerPanel" class="border-small border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 25%; translate: -50% -50%; background-color: rgb(55, 55, 55); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; border-top-width: 5px; border-left-width: 5px;">
-            <ui:Label tabindex="-1" text="30s to spawn enemyies" display-tooltip-when-elided="true" name="TimeToSpawnEnemyText" class="text-large text-bold text-primary" />
+            <ui:Label tabindex="-1" text="30s to spawn enemies" display-tooltip-when-elided="true" name="TimeToSpawnEnemyText" class="text-large text-bold text-primary" />
         </ui:VisualElement>
         <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="SkillTree" mode="Horizontal" style="position: absolute; top: 40%; width: 1000px; height: 700px; left: 50%; translate: -50% -50%; background-color: rgb(35, 35, 35); display: none; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
             <ui:Label tabindex="-1" text="Skill points: 45" display-tooltip-when-elided="true" name="SkillPoints" class="text-medium text-primary text-bold" style="position: absolute; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; left: 10px; top: 10px;" />
@@ -181,5 +177,15 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>
+        <ui:Instance template="SettingsModal" name="SettingsModal" style="display: none; position: absolute; left: 50%; top: 15%; translate: -50% 0;" />
+        <ui:Instance template="SettingsBox" name="SettingsBox" style="width: 100%; height: 100%; position: absolute; display: none;" />
+        <ui:VisualElement name="ResultModal" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; justify-content: center; align-items: center; background-color: rgba(55, 55, 55, 0.49); display: none;">
+            <ui:VisualElement name="ResultContent" class="border-medium border-secondary" style="flex-grow: 0; position: relative; left: auto; top: auto; background-color: rgba(55, 55, 55, 0.95); width: 400px; height: 500px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; display: flex; translate: 0 0;">
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="GameResult" class="text-xxl text-bold text-primary" style="-unity-text-align: upper-center;" />
+                </ui:VisualElement>
+                <ui:Button text="Go to main menu" display-tooltip-when-elided="true" name="MainMenuButtonResult" class="btn-primary" style="margin-right: 2px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

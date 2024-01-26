@@ -28,11 +28,11 @@ public class MainMenuManager : MonoBehaviour
         userModal = root.Q<VisualElement>("UserModalBox");
         submitUsernameButton = root.Q<Button>("AcceptUsername");
         singlePlayerButton = root.Q<Button>("SinglePlayer");
-        settingsButton = root.Q<Button>("Settings");
+        settingsButton = root.Q<Button>("SettingsButton");
         usernameInput = root.Q<TextField>("UserInput");
         usernameLabel = root.Q<Label>("Username");
         errorLabel = root.Q<Label>("ErrorLabel");
-        settingsBox = root.Q<VisualElement>("Settings");
+        settingsBox = root.Q<VisualElement>("SettingsBox");
         fps = root.Q<Label>("FPS");
         closeSettingsButton = root.Q<Button>("CloseSettings");
 

@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
+    <ui:VisualElement name="SettingsBox" style="flex-grow: 1; background-color: rgba(39, 39, 39, 0.61); display: flex;">
+        <ui:VisualElement name="SettingsModal" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; top: 50%; left: 50%; translate: -50% 0; width: 450px; height: 300px; flex-direction: column; background-color: rgb(39, 39, 39); padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
+                <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Label" class="text-large text-primary text-bold border-secondary" style="-unity-text-align: upper-left; margin-bottom: 20px; flex-grow: 1; border-right-width: 0; border-bottom-width: 3px;" />
+                <ui:Button text="X" display-tooltip-when-elided="true" name="CloseSettings" class="btn-danger text-bold text-large" style="position: relative; right: auto; top: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 50px; height: 50px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="EffectMusic" style="flex-grow: 1; flex-direction: column; align-items: stretch; flex-wrap: nowrap; justify-content: center;">
+                <ui:Slider label="Effect music (60%)" value="0.5" high-value="1" name="EffectMusicSlider" class="slider" style="color: rgb(221, 221, 221); flex-grow: 0; width: auto; align-items: stretch; align-self: auto; justify-content: flex-start; flex-direction: row;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="GlobalMusic" style="flex-grow: 1; flex-direction: column; align-items: stretch; justify-content: flex-start;">
+                <ui:Slider label="Global music(60%)" value="0.5" high-value="1" name="GlobalMusicSlider" class="slider" style="color: rgb(221, 221, 221); flex-grow: 0; width: auto; align-items: stretch; align-self: auto; justify-content: flex-start; flex-direction: row;" />
+            </ui:VisualElement>
+            <ui:Button text="Save" display-tooltip-when-elided="true" name="SettingsSave" class="btn-primary" style="margin-top: 10px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -7,8 +7,9 @@ public class ToolkitHelper : MonoBehaviour
     public UIDocument UIDocument;
     public VisualElement root;
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
+        Debug.Log("ToolkitHelper enabled");
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
     }

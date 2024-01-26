@@ -18,15 +18,17 @@ MonoBehaviour:
   attackCooldown: 1.4
   acceleration: 4
   canAttack: 1
-  bulletPrefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac,
+  bulletPrefab: {fileID: 3824120718455233952, guid: 376647ccba0758a49a3a69e68ca7e599,
     type: 3}
   ammo: 30
   attackAngle: 15
   hasTurret: 0
-  rotateSpeed: 10
   turretRotateSpeed: 0
+  rotateSpeed: 10
   bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
   CanSalve: 0
+  accuracy: 0.5
+  attackSound: 0
   health: 500
   deathExpirence: 10
   deathEffect: {fileID: 3912865232768828701, guid: 00e5ebe65b2b4d44ab4adcce7b264084,

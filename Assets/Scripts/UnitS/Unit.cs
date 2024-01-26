@@ -81,6 +81,7 @@ public class Unit : MonoBehaviour
     }
 
     private void Update() {
+        
         visibleTimer += Time.deltaTime;
         if (attack != null) {
             Debug.Log(attack.targetPosition);

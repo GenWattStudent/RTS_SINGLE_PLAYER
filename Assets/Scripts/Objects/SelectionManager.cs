@@ -167,8 +167,9 @@ public class SelectionManager : MonoBehaviour
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
-        foreach (Selectable selectable in FindObjectsOfType<Selectable>())
+        foreach (Unit unit in PlayerController.units)
         {
+            var selectable = unit.GetComponent<Selectable>();
             if (IsEnemy(selectable) || IsBuilding(selectable)) continue;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(selectable.transform.position);
 

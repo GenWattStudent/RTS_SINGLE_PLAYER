@@ -81,7 +81,7 @@
     -unity-font-style: bold;
     font-size: 16px;
     transition-duration: 0.3s;
-    margin-right: 10px;
+    margin-right: 0;
 }
 
 .btn-danger {
@@ -153,8 +153,8 @@
     border-right-color: rgb(212, 212, 212);
     border-top-color: rgb(212, 212, 212);
     border-bottom-color: rgb(212, 212, 212);
-    border-bottom-width: 5px;
-    border-right-width: 5px;
+    border-bottom-width: 0;
+    border-right-width: 0;
 }
 
 .btn-medium {
@@ -349,4 +349,24 @@
     color: rgb(236, 236, 236);
     -unity-text-align: upper-left;
     -unity-font-style: bold;
+}
+
+.white-space-normal {
+    white-space: normal;
+}
+
+.slider .unity-base-slider__dragger {
+    width: 20px;
+    height: 20px;
+    top: auto;
+    margin-top: 6px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background-color: rgb(255, 189, 0);
+}
+
+.slider .unity-base-slider__tracker {
+    background-color: rgb(96, 83, 49);
 }

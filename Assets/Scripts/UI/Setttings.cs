@@ -8,7 +8,10 @@ public class Settings : ToolkitHelper
     private Button settingsButton;
     private Button mainMenuButton;
     private Button backButton;
+    private Button soundButton;
+    private Button closeSettingsButton;
     private VisualElement settingsContainer;
+    private VisualElement settingsBox;
     public bool isSettingsOpen = false;
 
     void Start()
@@ -17,10 +20,15 @@ public class Settings : ToolkitHelper
         mainMenuButton = GetButton("MainMenuButton");
         backButton = GetButton("BackButton");
         settingsContainer = GetVisualElement("SettingsModal");
+        soundButton = GetButton("SoundsSettings");
+        settingsBox = GetVisualElement("SettingsBox");
+        closeSettingsButton = GetButton("CloseSettings");
 
         settingsButton.RegisterCallback<ClickEvent>(OnSettingsButtonClick);
         mainMenuButton.RegisterCallback<ClickEvent>(OnMainMenuButtonClick);
         backButton.RegisterCallback<ClickEvent>(OnBackButtonClick);
+        soundButton.RegisterCallback<ClickEvent>(OnSoundButtonClick);
+        closeSettingsButton.RegisterCallback<ClickEvent>(OnCloseSettingsButtonClick);
     }
 
     private void OnSettingsButtonClick(ClickEvent ev) {
@@ -29,6 +37,14 @@ public class Settings : ToolkitHelper
 
     private void OnMainMenuButtonClick(ClickEvent ev) {
         LoadMainMenu();
+    }
+
+    private void OnSoundButtonClick(ClickEvent ev) {
+        settingsBox.style.display = DisplayStyle.Flex;
+    }
+
+    private void OnCloseSettingsButtonClick(ClickEvent ev) {
+        settingsBox.style.display = DisplayStyle.None;
     }
 
     private void OpenSettings() {

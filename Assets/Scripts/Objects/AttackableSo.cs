@@ -19,4 +19,5 @@ public class AttackableSo : ScriptableObject
     public BulletSo bulletSo;
     public bool CanSalve;
     public float accuracy = 0.5f;
+    public MusicManager.MusicType attackSound;
 }

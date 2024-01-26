@@ -21,17 +21,19 @@ public class PlayerLevelUI : ToolkitHelper
             return;
         }
 
-        playerLevelText.text = $"{level}LVL";
+        playerLevelText.text = $"{level} LVL";
         var heightPercentage = (float)playerExpierence / expToNextLevel;
         playerLevelFill.style.height = new Length(heightPercentage * 100, LengthUnit.Percent);
         levelBox.tooltip = $"{playerExpierence}/{expToNextLevel} EXP";
     }
 
-    private void Start()
+    protected override void OnEnable()
     {
-        PlayerController.Instance.OnPlayerLevelChange += UpdateUI;
+        base.OnEnable();
+        Debug.Log("PlayerLevelUI enabled");
         playerLevelText = GetLabel("PlayerLevel");
         playerLevelFill = GetVisualElement("LevelFill");
         levelBox = GetVisualElement("Level");
+        PlayerController.Instance.OnPlayerLevelChange += UpdateUI;
     }
 }
