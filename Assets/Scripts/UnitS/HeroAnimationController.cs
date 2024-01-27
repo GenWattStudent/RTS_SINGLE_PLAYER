@@ -23,7 +23,6 @@ public class HeroAnimationController : MonoBehaviour
 
     private void Update() {
         if (animator == null) return;
-        
         animator.SetBool("isWalking", unitMovement.isMoving);
         animator.SetBool("isShooting", attackScript.targetPosition != Vector3.zero);
     }

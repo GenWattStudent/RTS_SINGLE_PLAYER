@@ -34,8 +34,8 @@ public class SelectedDetails : ToolkitHelper
     }
 
     private void OnDisable() {
-        levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
-        sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
+        // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
 
     private void ActivateButtons(bool isActive) {
@@ -211,7 +211,7 @@ public class SelectedDetails : ToolkitHelper
             if (!isGoToTab) {
                 var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
                 var tabName = tabs.GetValue(0).ToString();
-                UITabManagement.Instance.OnTabClick(tabName);
+                UITabManagement.Instance.HandleTabClick(UITabManagement.Instance.GetTab(tabName));
                 isGoToTab = true;
             }
 

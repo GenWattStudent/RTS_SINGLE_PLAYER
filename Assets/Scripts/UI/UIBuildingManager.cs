@@ -7,7 +7,7 @@ public class SlotData {
     public BuildingSo buildingSo;
 }
 
-public class UIBuildingManager : Singleton<UIBuildingManager>
+public class UIBuildingManager : MonoBehaviour
 {
     [SerializeField] private BuildingSo[] buildings;
     private UIDocument UIDocument;
@@ -18,6 +18,12 @@ public class UIBuildingManager : Singleton<UIBuildingManager>
     private VisualElement slotContainer;
     public VisualTreeAsset visualTree;
     private List<SlotData> slots = new ();
+    public static UIBuildingManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void OnEnable()
     {

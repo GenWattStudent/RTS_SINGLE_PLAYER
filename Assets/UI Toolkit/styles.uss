@@ -370,3 +370,8 @@
 .slider .unity-base-slider__tracker {
     background-color: rgb(96, 83, 49);
 }
+
+.margin-left-md {
+    margin-right: 0;
+    margin-left: 10px;
+}

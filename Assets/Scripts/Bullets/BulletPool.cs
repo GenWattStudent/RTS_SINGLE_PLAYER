@@ -11,15 +11,20 @@ public class BulletPool : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject rocketPrefab;
+    [SerializeField] private GameObject heroBulletPrefab;
     [SerializeField] private int poolSize = 100;
     public ObjectPool<Bullet> bulletPool;
     public ObjectPool<Bullet> rocketPool;
+    public ObjectPool<Bullet> heroBulletPool;
+    private GameObject bulletParent;
+    private GameObject rocketParent;
+    private GameObject heroBulletParent;
     public List<PoolData> pools = new ();
     public static BulletPool Instance;
 
     private Bullet CreateBullet() {
         var bullet = Instantiate(bulletPrefab);
-        bullet.transform.SetParent(transform);
+        bullet.transform.SetParent(bulletParent.transform);
         var bulletScript = bullet.GetComponent<Bullet>();
         bulletScript.pool = bulletPool;
 
@@ -28,11 +33,20 @@ public class BulletPool : MonoBehaviour
 
     private Bullet CreateRocket() {
         var rocket = Instantiate(rocketPrefab);
-        rocket.transform.SetParent(transform);
+        rocket.transform.SetParent(rocketParent.transform);
         var rocketScript = rocket.GetComponent<Bullet>();
         rocketScript.pool = rocketPool;
 
         return rocketScript;
+    }
+
+    private Bullet CreateHeroBullet() {
+        var bullet = Instantiate(heroBulletPrefab);
+        bullet.transform.SetParent(heroBulletParent.transform);
+        var bulletScript = bullet.GetComponent<Bullet>();
+        bulletScript.pool = heroBulletPool;
+
+        return bulletScript;
     }
 
     private void OnGet(Bullet bullet) {
@@ -84,9 +98,30 @@ public class BulletPool : MonoBehaviour
             poolSize
         );
 
+        heroBulletPool = new ObjectPool<Bullet>(
+            CreateHeroBullet,
+            OnGet,
+            OnRelease,
+            OnDestroyed, 
+            false,
+            poolSize
+        );
+
+        bulletParent = new GameObject("Bullet Parent");
+        bulletParent.transform.SetParent(transform);
+        rocketParent = new GameObject("Rocket Parent");
+        rocketParent.transform.SetParent(transform);
+        heroBulletParent = new GameObject("Hero Bullet Parent");
+        heroBulletParent.transform.SetParent(transform);
+
         pools.Add(new PoolData {
             name = "Rocket",
             bulletPool = rocketPool
+        });
+
+        pools.Add(new PoolData {
+            name = "Hero Bullet",
+            bulletPool = heroBulletPool
         });
     }
 }

@@ -1085,7 +1085,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a2346c456f7be4fa2b99527995f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inVisibleMaterial: {fileID: 2100000, guid: b2834166b8117bf4eb8c2172d4ba52da, type: 2}
   unitSo: {fileID: 11400000, guid: 7e78a67b93d453b478591502bb70d19c, type: 2}
   attackableSo: {fileID: 11400000, guid: 7e78a67b93d453b478591502bb70d19c, type: 2}
   unitMaterial: {fileID: 0}
@@ -1120,6 +1119,8 @@ MonoBehaviour:
   levelable: {fileID: 3372196632889626661}
   targetPoint: {fileID: 6409524915884832550}
   isDead: 0
+  damageBoost: 0
+  damage: 0
 --- !u!114 &7673169960702776933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1139,7 +1140,9 @@ MonoBehaviour:
   attackCooldownTimer: 0
   currentAmmo: 0
   autoAttack: 1
+  isRealoading: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  lastAttackTime: 0
 --- !u!195 &6451795301113717441
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3355,7 +3358,7 @@ Transform:
   m_GameObject: {fileID: 8963895157291006664}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11801.2, y: 9964.4, z: 5974}
+  m_LocalPosition: {x: 11839.2, y: 9958.5, z: 5974}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

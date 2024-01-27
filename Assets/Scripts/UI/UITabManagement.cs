@@ -11,10 +11,22 @@ public class UITabManagement : MonoBehaviour
     private VisualElement tabContainer;
     public static UITabManagement Instance { get; private set; }
 
-    public void OnTabClick(string tabName)
+    public void CreateTabs(string tabName)
     {
         CurrentTab = tabName;
         UIBuildingManager.Instance.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tabName));
+    }
+
+    public void HandleTabClick(Button tab)
+    {
+        tabs.ForEach(tab => tab.RemoveFromClassList("active"));
+        tab.AddToClassList("active");
+        CreateTabs(tab.name);
+    }
+
+    public Button GetTab(string tabName)
+    {
+        return tabs.Find(tab => tab.name == tabName);
     }
 
     private void CreateTabs()
@@ -34,12 +46,9 @@ public class UITabManagement : MonoBehaviour
             tab.AddToClassList("btn-primary");
             tab.AddToClassList("btn-rounded-small");
             tab.AddToClassList("btn-medium");
+            tab.AddToClassList("margin-left-md");
 
-            tab.RegisterCallback<ClickEvent>(ev => {
-                tabs.ForEach(tab => tab.RemoveFromClassList("active"));
-                tab.AddToClassList("active");
-                OnTabClick(tabName);
-            });
+            tab.clicked += () => HandleTabClick(tab);
 
             // Add tab to list
             tabs.Add(tab);
@@ -73,6 +82,7 @@ public class UITabManagement : MonoBehaviour
         CreateTabs();
         var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
         var economyTab = tabs.GetValue(0).ToString();
-        OnTabClick(economyTab);
+
+        HandleTabClick(GetTab(economyTab));
     }
 }

@@ -20,6 +20,8 @@ public class VolumeManager : MonoBehaviour
 
         globalMusicSlider.RegisterCallback<ChangeEvent<float>>(HandleGlobalMusicVolumeChange);
         effectsSlider.RegisterCallback<ChangeEvent<float>>(HandleEffectsVolumeChange);
+        globalMusicSlider.label = $"Global Music ({globalMusicSlider.value * 100:0}%)";
+        effectsSlider.label = $"Effects Music ({effectsSlider.value * 100:0}%)";
     }
 
     private void HandleGlobalMusicVolumeChange(ChangeEvent<float> evt)

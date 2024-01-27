@@ -17,7 +17,7 @@ public class Attack : MonoBehaviour
     private VehicleGun vehicleGun;
     private UnitMovement unitMovement;
     [SerializeField] private bool autoAttack = true;
-    private bool isRealoading = false;
+    public bool isRealoading = false;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -25,6 +25,7 @@ public class Attack : MonoBehaviour
     private List<GameObject> salvePoints = new ();
     private int salveIndex = 0;
     public float lastAttackTime;
+    public float rot = 0;
 
     void Start()
     {
@@ -52,7 +53,7 @@ public class Attack : MonoBehaviour
         if (target == null) return false;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, Mathf.Infinity)) {
+        if (Physics.Raycast(transform.position + new Vector3(0, 1, 0), target.transform.position - transform.position, out hit, Mathf.Infinity)) {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
                 return true;
             }
@@ -69,7 +70,7 @@ public class Attack : MonoBehaviour
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
             if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead && unitScript.isVisibile) {
-                if (IsTargetHideInTerrain(damagableScript)) return;
+                if (IsTargetHideInTerrain(damagableScript)) continue;
                 SetTarget(damagableScript);
                 break;
             }
@@ -156,7 +157,9 @@ public class Attack : MonoBehaviour
         currentAmmo--;
 
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null) {
-            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, Quaternion.identity);
+            var rotation = Quaternion.LookRotation(bullet.motion.direction);
+            rotation *= Quaternion.Euler(0, -90, 0);
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, rotation);
             MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, bulletSpawnPoint.transform.position);
         }
     }

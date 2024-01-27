@@ -26,6 +26,7 @@ public class MusicManager : Singleton<MusicManager>
 
     void Start()
     {
+        if (globalMusic == null) return;
         globalMusic.loop = true;
         globalMusic.volume = 0.5f;
         globalMusic.Play();

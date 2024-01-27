@@ -13,12 +13,17 @@ public class StorageData {
     public ResourceSO resourceSO;
 }
 
-public class UIStorage : Singleton<UIStorage>
+public class UIStorage : MonoBehaviour
 {
     [SerializeField] private List<StorageData> resources = new ();
     private List<Storage> storages = new ();
     private UIDocument UIDocument;
     private VisualElement root;
+    public static UIStorage Instance { get; private set; }
+
+    private void Awake() {
+        Instance = this;
+    }
 
     public Storage GetStorageByResource(ResourceSO resource) {
         return storages.Find(x => x.recourceSO == resource);

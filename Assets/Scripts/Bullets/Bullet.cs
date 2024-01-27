@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
     private void Explode() {
         if (bulletSo.explosionPrefab != null)  {
             var explosion = Instantiate(bulletSo.explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(explosion, 1f);
+            Destroy(explosion, 2f);
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, bulletSo.radius);
@@ -102,6 +102,7 @@ public class Bullet : MonoBehaviour
         CheckHit();
 
         if (lifeTimeTimer > bulletSo.lifeTime) {
+            Explode();
             pool.Release(this);
         }
     }

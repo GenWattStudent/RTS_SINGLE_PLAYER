@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
   m_Name: Hero
   m_EditorClassIdentifier: 
-  attackDamage: 120
+  attackDamage: 145
   attackRange: 12
   attackSpeed: 0.4
-  attackCooldown: 1.4
+  attackCooldown: 2
   acceleration: 4
   canAttack: 1
   bulletPrefab: {fileID: 3824120718455233952, guid: 376647ccba0758a49a3a69e68ca7e599,
@@ -25,7 +25,7 @@ MonoBehaviour:
   hasTurret: 0
   turretRotateSpeed: 0
   rotateSpeed: 10
-  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
+  bulletSo: {fileID: 11400000, guid: ccaad882467b8cc49bb312a93e64231d, type: 2}
   CanSalve: 0
   accuracy: 0.5
   attackSound: 0

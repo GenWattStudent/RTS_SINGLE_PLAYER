@@ -21,4 +21,5 @@ MonoBehaviour:
   radius: 4
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
-  initialExplosionPrefab: {fileID: 0}
+  initialExplosionPrefab: {fileID: 6431751632817149005, guid: c396dca5e0ab4ef4982f1e3d90168b4c,
+    type: 3}

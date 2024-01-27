@@ -73,9 +73,9 @@
             </ui:VisualElement>
             <ui:VisualElement name="RTSTabInfo" style="flex-grow: 1;">
                 <ui:VisualElement name="BuildingTabs" class="border-medium" style="flex-grow: 0; height: 25%; min-height: auto; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 3px; align-self: auto; flex-direction: row; justify-content: flex-start; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; width: 100%; align-items: center; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 2px; border-right-width: 0; border-left-width: 0;">
-                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
-                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
-                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary" />
+                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary margin-left-md" />
+                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary margin-left-md" />
+                    <ui:Button text="Button" display-tooltip-when-elided="true" name="Button" class="btn-rounded-small btn-medium btn-primary margin-left-md" />
                 </ui:VisualElement>
                 <ui:VisualElement name="TabContent" style="flex-grow: 1; height: 75%; flex-direction: row; align-items: flex-end; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; justify-content: flex-start;">
                     <ui:Instance template="Slot" name="Slot" class="disabled-slot" style="height: 100%; flex-grow: 1;" />
