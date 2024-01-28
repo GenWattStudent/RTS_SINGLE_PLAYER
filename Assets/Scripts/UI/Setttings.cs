@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 public class Settings : ToolkitHelper
 {
-
     private Button settingsButton;
     private Button mainMenuButton;
     private Button backButton;

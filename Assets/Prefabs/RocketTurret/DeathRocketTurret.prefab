@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 5133937906508519793}
   - component: {fileID: 7316634264633218522}
   - component: {fileID: 4426606706297986571}
+  - component: {fileID: -3544181545042975216}
   m_Layer: 8
   m_Name: DeathRocketTurret
   m_TagString: Untagged
@@ -287,3 +288,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dissolveSpeed: 0.7
+  dissolveValue: 5
+--- !u!114 &-3544181545042975216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647195554574366884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

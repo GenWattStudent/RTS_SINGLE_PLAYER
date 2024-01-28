@@ -123,7 +123,8 @@ namespace ForcefieldDemo
             if (meshRenderer != null)
             {
                 EnableRipple(true);
-                Debug.Log("rippleDirection: " + hitPoint);
+                Debug.Log(meshRenderer);
+                Debug.Log("rippleDirection: " + hitPoint + " rippleDirection: " + rippleDirection + " impactRippleMaxRadius: " + impactRippleMaxRadius + " impactRippleAmplitude: " + impactRippleAmplitude);
                 meshRenderer.material.SetFloat("_impactRippleMaxRadius", impactRippleMaxRadius);
                 meshRenderer.material.SetFloat("_impactRippleAmplitude", impactRippleAmplitude);
                 meshRenderer.material.SetVector("_impactRippleDirection", rippleDirection);

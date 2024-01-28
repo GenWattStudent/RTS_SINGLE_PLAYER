@@ -375,3 +375,7 @@
     margin-right: 0;
     margin-left: 10px;
 }
+
+.slider .unity-base-slider__label:foucused {
+    color: rgb(236, 136, 1);
+}

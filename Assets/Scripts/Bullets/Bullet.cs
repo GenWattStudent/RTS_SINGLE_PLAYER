@@ -17,19 +17,15 @@ public class Bullet : MonoBehaviour
     private void Awake() {
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
-
-        damage = bulletSo.damage;
-        motion.speed = bulletSo.speed;
-        motion.arcHeight = bulletSo.arcHeight;
     }
 
     private void Explode() {
         if (bulletSo.explosionPrefab != null)  {
-            var explosion = Instantiate(bulletSo.explosionPrefab, transform.position, Quaternion.identity);
+            var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
             Destroy(explosion, 2f);
         }
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, bulletSo.radius);
+        Collider[] colliders = Physics.OverlapSphere(motion.previousPosition, bulletSo.radius);
         foreach (var collider in colliders) {
             if (IsOwnUnit(collider)) continue;
             DealDamage(collider);
@@ -37,13 +33,13 @@ public class Bullet : MonoBehaviour
     }
 
     private void DealDamage(Collider collider) {
-        var damegableScript = collider.gameObject.GetComponent<Damagable>();
-
-        if (damegableScript != null && damegableScript.playerId != playerId) {
-            if (damegableScript.TakeDamage(damage)) {
-                unitsBullet.AddExpiernce(damegableScript.damagableSo.deathExpirence);
+        var damageableScript = collider.gameObject.GetComponent<Damagable>();
+        Debug.Log($"Deal damage {damage} to {collider.gameObject.name}");
+        if (damageableScript != null && damageableScript.playerId != playerId) {
+            if (damageableScript.TakeDamage(damage)) {
+                unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 if (unitsBullet.playerId == PlayerController.playerId) {
-                    PlayerController.Instance.AddExpiernce(damegableScript.damagableSo.deathExpirence);
+                    PlayerController.Instance.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }
             }
         }
@@ -85,6 +81,7 @@ public class Bullet : MonoBehaviour
     public void Setup() {
         var boostDamage = unitsBullet.damageBoost * bulletSo.damage / 100f;
         damage = bulletSo.damage + boostDamage;
+        motion.speed = bulletSo.speed;
     }
 
     public void Reset() {

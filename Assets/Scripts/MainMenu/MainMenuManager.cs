@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine; 
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -16,6 +16,7 @@ public class MainMenuManager : MonoBehaviour
     private VisualElement settingsBox;
     private Button closeSettingsButton;
     private Label fps;
+    private Button quitButton;
     [SerializeField] private int minUsernameLength = 3;
     [SerializeField] private int maxUsernameLength = 10;
     [SerializeField] private float fpsInterval = 0.5f;
@@ -35,14 +36,16 @@ public class MainMenuManager : MonoBehaviour
         settingsBox = root.Q<VisualElement>("SettingsBox");
         fps = root.Q<Label>("FPS");
         closeSettingsButton = root.Q<Button>("CloseSettings");
+        quitButton = root.Q<Button>("QuitButton");
 
         userModal.style.display = DisplayStyle.None;
 
         singlePlayerButton.clicked += StartSinglePlayerGame;
-        settingsButton.clicked +=  ShowSettings;
+        settingsButton.clicked += ShowSettings;
         usernameLabel.RegisterCallback<ClickEvent>(HandleShowUserModal);
         submitUsernameButton.clicked += SubmitUsername;
         closeSettingsButton.clicked += CloseSettings;
+        quitButton.clicked += Application.Quit;
     }
 
     private void HandleShowUserModal(ClickEvent evt)
@@ -72,6 +75,7 @@ public class MainMenuManager : MonoBehaviour
         settingsButton.clicked -= ShowSettings;
         closeSettingsButton.clicked -= CloseSettings;
         usernameLabel.UnregisterCallback<ClickEvent>(HandleShowUserModal);
+        quitButton.clicked -= Application.Quit;
     }
 
     private void SubmitUsername()

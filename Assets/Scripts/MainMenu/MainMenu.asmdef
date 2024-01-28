@@ -1,3 +1,23 @@
 {
-	"name": "MainMenu"
+    "name": "MainMenu",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:9f4f5bf029cebb64f983b7bdc29f62a1",
+        "GUID:fe4fa159f4a96442ba22af67ddf20c65",
+        "GUID:de64d7f9ca85d4bf59c8c24738bc1057",
+        "GUID:072b82e2b7c1dcf439827d3fbc4f52a1",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:0d0243c226d5dab4fb5d34006a1ad53b",
+        "GUID:101012598ee9f064da897a34e72947f9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

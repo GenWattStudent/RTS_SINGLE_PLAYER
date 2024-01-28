@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: -6002317933877532533}
   - component: {fileID: -619140009929304772}
   - component: {fileID: 8816775167768068385}
+  - component: {fileID: 9155980179660922412}
   m_Layer: 0
   m_Name: WorkerSpawner
   m_TagString: Building
@@ -183,9 +184,6 @@ MonoBehaviour:
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
-  effectTimer: 0
-  effectValue: 0
-  effectKey: 
 --- !u!114 &5025436868650576337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,12 +200,11 @@ MonoBehaviour:
   health: 0
   maxHealth: 0
   healthBar: {fileID: 6725091364801705502}
-  explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
-    type: 3}
-  destroyedObjectPrefab: {fileID: 0}
   levelable: {fileID: 0}
   targetPoint: {fileID: 2936924105273951565}
   isDead: 0
+  damageBoost: 0
+  damage: 0
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +253,26 @@ MonoBehaviour:
   buildingSo: {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
   attackableSo: {fileID: 0}
   buildingLevelable: {fileID: 0}
+--- !u!114 &9155980179660922412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0

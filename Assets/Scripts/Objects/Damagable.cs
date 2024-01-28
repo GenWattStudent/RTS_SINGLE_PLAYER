@@ -60,7 +60,7 @@ public class Damagable : MonoBehaviour
 
     public bool TakeDamage(float damage) {
         health -= damage;
-        progressBarScript.UpdateProgresBar(health, damagableSo.health);
+        progressBarScript.UpdateProgresBar(health, maxHealth);
         OnTakeDamage?.Invoke();
         
         if (health <= 0f) {
@@ -77,9 +77,9 @@ public class Damagable : MonoBehaviour
 
     public void Heal(float amount) {
         health += amount;
-        if (health > damagableSo.health) {
-            health = damagableSo.health;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
-        progressBarScript.UpdateProgresBar(health, damagableSo.health);
+        progressBarScript.UpdateProgresBar(health, maxHealth);
     }
 }

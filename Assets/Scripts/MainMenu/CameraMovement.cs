@@ -8,7 +8,6 @@ public class CameraMovement : MonoBehaviour
 
     private void MoveCameraAnimation() {
         var newPosition = new Vector3(transform.position.x + maxDistance * direction, transform.position.y, transform.position.z);
-        Debug.Log(Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed));
         Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed);
     }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public static Guid playerId;
     public static Color playerColor;
     public static Material playerMaterial;
     public static List<Unit> units = new ();
@@ -12,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new ();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
+    public static Guid playerId;
 
     // add unit event
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void SpawnUnits() {
+        
         SpawnHero();
         foreach (var unitPrefab in unitPrefabs) {
             for (int i = 0; i < 2; i++) {
@@ -128,14 +129,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        playerId = Guid.NewGuid();
         SpawnUnits();
         AddExpiernce(0);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

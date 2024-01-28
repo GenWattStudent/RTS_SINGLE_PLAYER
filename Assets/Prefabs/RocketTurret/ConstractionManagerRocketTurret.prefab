@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4633497842560847797}
   - component: {fileID: -8262177101767174825}
   - component: {fileID: -8125373983021582785}
+  - component: {fileID: 4791337573148038701}
   m_Layer: 0
   m_Name: ConstractionManagerRocketTurret
   m_TagString: Untagged
@@ -215,6 +216,26 @@ MonoBehaviour:
   building: {fileID: 0}
   damagable: {fileID: 0}
   reduceSpawnTime: 0
+--- !u!114 &4791337573148038701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &5398051915011653896
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,6 +646,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 326025491214339538, guid: 4c363972f058105479aa01945feab5c8,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 4c363972f058105479aa01945feab5c8,
         type: 3}
       propertyPath: m_LocalPosition.x

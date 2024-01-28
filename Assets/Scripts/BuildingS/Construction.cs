@@ -112,7 +112,7 @@ public class Construction : MonoBehaviour
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
         damagable = GetComponent<Damagable>();
-        progresBar.UpdateProgresBar(damagable.health, buildingSo.health);
+        progresBar.UpdateProgresBar(damagable.health, damagable.maxHealth);
     }
 
     void Update()
@@ -121,9 +121,9 @@ public class Construction : MonoBehaviour
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
             damagable.health = Mathf.Floor(constructionTimer);
-            progresBar.UpdateProgresBar(constructionTimer, buildingSo.health);
+            progresBar.UpdateProgresBar(constructionTimer, damagable.maxHealth);
 
-            if (constructionTimer >= buildingSo.health)
+            if (constructionTimer >= damagable.maxHealth)
             {
                 isCurrentlyConstructing = false;
                 constructionTimer = 0;

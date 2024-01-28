@@ -34,6 +34,7 @@ public class Levelable : MonoBehaviour
         expirence = 0;
         var levelData = levelableSo.levels[level - 1];
 
+        damagable.maxHealth += levelData.health;
         damagable.health += levelData.health;
         attack.currentUnit.attackableSo.attackDamage += levelData.attackDamage;
         expirenceToNextLevel = levelData.expirence;

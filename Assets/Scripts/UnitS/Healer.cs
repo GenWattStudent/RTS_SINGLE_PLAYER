@@ -74,7 +74,7 @@ public class Healer : MonoBehaviour
             MoveToTarget();
         }
 
-        if (unitMovement != null)  unitMovement.RotateToTarget(target.transform.position);
+        if (unitMovement != null) unitMovement.RotateToTarget(target.transform.position);
         Heal(target);
     }
 }
