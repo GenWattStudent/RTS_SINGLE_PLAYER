@@ -23,3 +23,4 @@ MonoBehaviour:
     type: 3}
   initialExplosionPrefab: {fileID: 6431751632817149005, guid: c396dca5e0ab4ef4982f1e3d90168b4c,
     type: 3}
+  explosionSound: 4

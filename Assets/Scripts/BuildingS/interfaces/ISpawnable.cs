@@ -1,3 +1,4 @@
+using System;
 
 public interface ISpawnerBuilding
 {

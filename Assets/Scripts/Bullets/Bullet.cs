@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
         if (bulletSo.explosionPrefab != null)
         {
             var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
+            MusicManager.Instance.PlayMusic(bulletSo.explosionSound, motion.previousPosition);
             Destroy(explosion, 2f);
         }
 
@@ -69,7 +70,7 @@ public class Bullet : MonoBehaviour
     {
         RaycastHit hit;
         var direction = transform.position - motion.previousPosition;
-        Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude * 10, Color.red, 1f);
+
         if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude))
         {
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,56 +7,31 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 {
     [SerializeField] private UnitSo unitToSpawn;
     [SerializeField] private Transform unitSpawnPoint;
-    [SerializeField] private Transform unitMovePoint;
-    private List<UnitSo> unitsQueue = new ();
+    public Transform unitMovePoint;
+    private List<UnitSo> unitsQueue = new();
     private float spawnTimer;
     private bool isUnitSpawning = false;
     private UnitSo currentSpawningUnit;
-    private List<Animator> doorAnimators = new ();
     private Building buildingScript;
     public float totalSpawnTime { get; set; } = 0;
+
     private ResourceUsage resourceUsage;
+    public event Action<UnitSo, Unit> OnSpawnUnit;
 
     private void Awake()
     {
-        var animators = GetComponentsInChildren<Animator>();
         buildingScript = GetComponent<Building>();
         resourceUsage = GetComponent<ResourceUsage>();
+    }
 
-        foreach (var animator in animators)
+    private Unit InstantiateUnit()
+    {
+        if (!UnitCountManager.Instance.CanSpawnUnit())
         {
-            if (animator.gameObject.name == "Door") doorAnimators.Add(animator);
-        }
-    }
-
-    private void OpenDoor()
-    {
-        foreach (var animator in doorAnimators)
-        {
-            animator.Play("OpenDoor", 0, 0);
-        }
-    }
-
-    private void CloseDoor()
-    {
-        foreach (var animator in doorAnimators)
-        {
-            animator.SetBool("isOpen", false);
-        }
-    }
-
-    IEnumerator<WaitForSeconds> CloseDoorAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        CloseDoor();
-    }
-
-    private void InstantiateUnit()
-    {
-        if (!UnitCountManager.Instance.CanSpawnUnit()) {
             InfoBox.Instance.AddError("You have reached unit limit");
-            return;
+            return null;
         };
+
         UIStorage.Instance.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
 
         var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
@@ -63,30 +39,26 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
         GameObject unitInstance = Instantiate(unitToSpawn.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
-        var DamagableScript = unitInstance.GetComponent<Damagable>();
-        
-        if (DamagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.playerId;
+        var damagableScript = unitInstance.GetComponent<Damagable>();
+
+        if (damagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.playerId;
         unitScript.playerId = PlayerController.playerId;
-        unitScript.ChangeMaterial(PlayerController.playerMaterial, true);   
+        unitScript.ChangeMaterial(PlayerController.playerMaterial, true);
 
-        if (unitMovePoint != null) {
+        if (unitMovePoint != null)
+        {
             var unitMovement = unitInstance.GetComponent<UnitMovement>();
-            if (unitMovement == null) return;
-
-            unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
+            if (unitMovement != null) unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
         }
 
         PlayerController.AddUnit(unitScript);
-
-        OpenDoor();
-        // calculate time when unit will be in unit move point
-        float timeToMove = Vector3.Distance(unitSpawnPoint.position, unitMovePoint.position) / unitScript.unitSo.speed;
-        StartCoroutine(CloseDoorAfterDelay(timeToMove));
+        return unitScript;
     }
 
     public void AddUnitToQueue(UnitSo unit)
     {
         unitsQueue.Add(unit);
+        StartQueue();
     }
 
     private void StartQueue()
@@ -102,12 +74,11 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void SpawnUnit()
     {
-        if (spawnTimer > 0 && UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost) && !resourceUsage.isInDebt) return;
-    
-        if (unitsQueue.Count > 0)
+        if (unitsQueue.Count > 0 && spawnTimer < 0)
         {
             unitToSpawn = unitsQueue[0];
-            InstantiateUnit();
+            var unit = InstantiateUnit();
+            OnSpawnUnit?.Invoke(unitToSpawn, unit);
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
             currentSpawningUnit = null;
@@ -115,29 +86,33 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         }
     }
 
-    private void UpdateScreen() {
+    private void UpdateScreen()
+    {
         var screenController = GetComponentInChildren<ScreenController>();
 
         if (screenController == null) return;
 
-        if (currentSpawningUnit != null) {
+        if (currentSpawningUnit != null)
+        {
             screenController.SetProgresBar(spawnTimer, totalSpawnTime);
-        } else {
+        }
+        else
+        {
             screenController.SetProgresBar(0, 0);
         }
     }
 
-    private void Update() {
+    private void Update()
+    {
+        if (UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost) && !resourceUsage.isInDebt) return;
         spawnTimer -= Time.deltaTime;
         UpdateScreen();
-        StartQueue();
         SpawnUnit();
     }
 
     public float GetSpawnTimer()
     {
-        if (spawnTimer < 0) return 0;
-        return spawnTimer;
+        return spawnTimer < 0 ? 0 : spawnTimer;
     }
 
     public UnitSo GetCurrentSpawningUnit()

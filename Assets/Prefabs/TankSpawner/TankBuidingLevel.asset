@@ -25,9 +25,3 @@ MonoBehaviour:
     cost: 100
     income: 0
     reduceSpawnTime: 1
-  - level: 3
-    health: 200
-    attackDamage: 0
-    cost: 300
-    income: 0
-    reduceSpawnTime: 2

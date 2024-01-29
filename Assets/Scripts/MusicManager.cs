@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class MusicData {
+public class MusicData
+{
     public AudioClip clip;
     public MusicManager.MusicType type;
 }
@@ -19,9 +20,11 @@ public class MusicManager : Singleton<MusicManager>
         UnitTankAttack,
         Laser,
         HeroAttack,
+        ProjectileExplosion,
     }
+
     [SerializeField] private AudioSource globalMusic;
-    [SerializeField] private List<MusicData> effects = new ();
+    [SerializeField] private List<MusicData> effects = new();
     private float effectsVolume = 1;
 
     void Start()
@@ -55,7 +58,7 @@ public class MusicManager : Singleton<MusicManager>
             var audioSource = audioGameObject.AddComponent<AudioSource>();
 
             audioSource.clip = clip;
-            audioSource.volume = effectsVolume;  
+            audioSource.volume = effectsVolume;
             audioSource.Play();
             Destroy(audioGameObject, clip.length);
         }

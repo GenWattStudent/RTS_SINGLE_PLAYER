@@ -25,7 +25,7 @@ public class TankShotController : MonoBehaviour
         animator.SetBool("isShot", true);
     }
 
-    private void OnDestory()
+    private void OnDestroy()
     {
         attack.OnAttack -= HandleAttack;
     }

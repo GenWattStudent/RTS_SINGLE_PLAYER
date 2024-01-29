@@ -12,4 +12,5 @@ public class BulletSo : ScriptableObject
     public float radius;
     public GameObject explosionPrefab;
     public GameObject initialExplosionPrefab;
+    public MusicManager.MusicType explosionSound;
 }

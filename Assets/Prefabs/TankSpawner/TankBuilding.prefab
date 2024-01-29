@@ -797,6 +797,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4692319899747271729}
+    - targetCorrespondingSourceObject: {fileID: 6486099545665834401, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8742016494345647987}
     - targetCorrespondingSourceObject: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       insertIndex: -1
@@ -805,6 +809,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6464574854255275242}
+    - targetCorrespondingSourceObject: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3001685580801471978}
   m_SourcePrefab: {fileID: 100100000, guid: b426e496210a16744b3f6a654afe58b8, type: 3}
 --- !u!1 &624017856343578708 stripped
 GameObject:
@@ -866,6 +874,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 2176539136915573704}
+--- !u!114 &8742016494345647987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866930156689998923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7a5eda114f05542b1e4369c9c140c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6654852335577202702 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
@@ -908,6 +928,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 3940971513760965844}
+--- !u!114 &3001685580801471978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6654852335577202702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7a5eda114f05542b1e4369c9c140c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7825836509912857267 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7490102040393659225, guid: b426e496210a16744b3f6a654afe58b8,
