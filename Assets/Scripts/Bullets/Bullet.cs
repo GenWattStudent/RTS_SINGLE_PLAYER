@@ -96,8 +96,7 @@ public class Bullet : MonoBehaviour
 
     public void Setup()
     {
-        var boostDamage = unitsBullet.damageBoost * bulletSo.damage / 100f;
-        damage = bulletSo.damage + boostDamage;
+        damage = unitsBullet.stats.GetStat(StatType.Damage);
         motion.speed = bulletSo.speed;
     }
 

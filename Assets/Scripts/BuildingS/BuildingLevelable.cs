@@ -43,10 +43,10 @@ public class BuildingLevelable : MonoBehaviour
         Debug.Log($"Level up to {levelData.cost} level");
         UIStorage.Instance.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
-        damagable.Heal(levelData.health);
-        damagable.maxHealth += levelData.health;
+        damagable.stats.AddToStat(StatType.MaxHealth, levelData.health);
+        damagable.TakeDamage(-levelData.health);
 
-        if (building.attackableSo != null) building.attackableSo.attackDamage += levelData.attackDamage;
+        if (building.attackableSo != null) damagable.stats.AddToStat(StatType.Damage, levelData.attackDamage);
 
         var resource = GetComponent<Resource>();
 

@@ -22,12 +22,17 @@ MonoBehaviour:
   ammo: 0
   attackAngle: 0
   hasTurret: 0
-  rotateSpeed: 0
   turretRotateSpeed: 0
+  rotateSpeed: 0
   bulletSo: {fileID: 0}
+  CanSalve: 0
+  accuracy: 0.5
+  attackSound: 0
   health: 600
   deathExpirence: 10
-  deathMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
+  deathEffect: {fileID: 0}
+  deathEffectTime: 2
+  explosionPrefab: {fileID: 0}
   type: 2
   buildingName: Force Field
   description: Force with you
@@ -37,12 +42,22 @@ MonoBehaviour:
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 692d08ec7ce21b749b31d4b703b18e8f,
     type: 3}
-  income: 0
-  incomeInterval: 0
   unitsToSpawn: []
   maxBuildingCount: 2
-  cost: 400
   costResource: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+  levelUpEffect: {fileID: 0}
   usage: 50
   usageInterval: 2
+  cost: 400
+  income: 0
+  incomeInterval: 0
+  stats:
+  - Type: 1
+    Value: 600
+  - Type: 8
+    Value: 400
+  - Type: 9
+    Value: 40
+  - Type: 10
+    Value: 4

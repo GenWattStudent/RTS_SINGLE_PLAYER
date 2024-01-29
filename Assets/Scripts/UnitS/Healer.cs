@@ -11,12 +11,13 @@ public class Healer : MonoBehaviour
 
     public void Heal(Damagable target)
     {
-        if (target.health >= target.maxHealth) {
+        if (target.stats.GetStat(StatType.Health) >= target.stats.GetStat(StatType.MaxHealth))
+        {
             SetTarget(null);
             return;
         }
 
-        target.Heal(healPoints * Time.deltaTime);
+        target.TakeDamage(healPoints * Time.deltaTime * -1);
     }
 
     public void SetTarget(Damagable target)
@@ -68,9 +69,10 @@ public class Healer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target == null) return;;
+        if (target == null) return; ;
 
-        if (IsInRange() == false) {
+        if (IsInRange() == false)
+        {
             MoveToTarget();
         }
 

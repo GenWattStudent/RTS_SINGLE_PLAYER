@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 735062384095455769}
   - component: {fileID: -4489698176454476449}
   - component: {fileID: -6051118823644050701}
+  - component: {fileID: -6458254902149980187}
   m_Layer: 0
   m_Name: ConstractionManagerTank
   m_TagString: Untagged
@@ -225,15 +226,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 1728324892412086157}
+  damagableSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +366,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-6458254902149980187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8138062110081653526
 GameObject:
   m_ObjectHideFlags: 0

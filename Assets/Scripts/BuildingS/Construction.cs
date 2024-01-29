@@ -6,13 +6,13 @@ public class Construction : MonoBehaviour
     public BuildingSo buildingSo;
     private float constructionTimer = 0f;
     private bool isCurrentlyConstructing = false;
-    private float buildingSpeed  = 0f;
-    public List<Unit> buildingUnits = new ();
+    private float buildingSpeed = 0f;
+    public List<Unit> buildingUnits = new();
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
     private ProgresBar progresBar;
-    private Damagable damagable;
+    private Stats stats;
 
     public void AddWorker(Unit unit)
     {
@@ -63,7 +63,8 @@ public class Construction : MonoBehaviour
         {
             var selectedConstruction = SelectionManager.selectedObjects[0].GetComponent<Construction>();
 
-            if (selectedConstruction == this) {
+            if (selectedConstruction == this)
+            {
                 var selectable = SelectionManager.selectedObjects[0].GetComponent<Selectable>();
                 SelectionManager.Deselect(selectable);
                 return true;
@@ -111,8 +112,11 @@ public class Construction : MonoBehaviour
     void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
-        damagable = GetComponent<Damagable>();
-        progresBar.UpdateProgresBar(damagable.health, damagable.maxHealth);
+        stats = GetComponent<Stats>();
+        var health = stats.GetStat(StatType.Health);
+        var maxHealth = stats.GetStat(StatType.MaxHealth);
+
+        progresBar.UpdateProgresBar(health, maxHealth);
     }
 
     void Update()
@@ -120,10 +124,13 @@ public class Construction : MonoBehaviour
         if (isCurrentlyConstructing)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
-            damagable.health = Mathf.Floor(constructionTimer);
-            progresBar.UpdateProgresBar(constructionTimer, damagable.maxHealth);
+            stats.SetStat(StatType.Health, Mathf.Floor(constructionTimer));
 
-            if (constructionTimer >= damagable.maxHealth)
+            var maxHealth = stats.GetStat(StatType.MaxHealth);
+
+            progresBar.UpdateProgresBar(constructionTimer, maxHealth);
+
+            if (constructionTimer >= maxHealth)
             {
                 isCurrentlyConstructing = false;
                 constructionTimer = 0;

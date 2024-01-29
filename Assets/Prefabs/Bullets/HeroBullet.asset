@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: HeroBullet
   m_EditorClassIdentifier: 
   bulletName: Hero Bullet
-  damage: 20
-  speed: 25
   arcHeight: 0
   prefab: {fileID: 3824120718455233952, guid: 376647ccba0758a49a3a69e68ca7e599, type: 3}
   lifeTime: 4
-  radius: 0.3
   explosionPrefab: {fileID: 100010, guid: 14d59fd63a842674992eb9579f7b50c7, type: 3}
   initialExplosionPrefab: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030,
     type: 3}
   explosionSound: 6
+  radius: 0.3
+  damage: 20
+  speed: 25
+  stats:
+  - Type: 2
+    Value: 70
+  - Type: 5
+    Value: 25

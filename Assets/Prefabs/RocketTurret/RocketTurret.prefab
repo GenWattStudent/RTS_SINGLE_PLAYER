@@ -877,6 +877,7 @@ GameObject:
   - component: {fileID: -162578482409940836}
   - component: {fileID: 1358621241732574370}
   - component: {fileID: -8831838953260475191}
+  - component: {fileID: 1289164957371950929}
   m_Layer: 0
   m_Name: RocketTurret
   m_TagString: Untagged
@@ -961,15 +962,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 2161865639616813149}
+  damagableSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 33262721970858854}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!54 &-6088940530253509853
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1104,6 +1104,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &1289164957371950929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989622198761688359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4796289887059835863
 PrefabInstance:
   m_ObjectHideFlags: 0

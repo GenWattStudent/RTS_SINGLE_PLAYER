@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -8262177101767174825}
   - component: {fileID: 7824953477106566848}
   - component: {fileID: 879523128158356216}
+  - component: {fileID: 6822023021384147659}
   m_Layer: 0
   m_Name: ConstractionManagerGroundTurret
   m_TagString: Untagged
@@ -95,15 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 5749275408073883805}
+  damagableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,6 +236,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &6822023021384147659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8558679697309746195
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +727,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484907473236963366, guid: d368951a042558049999a0f701b0e530,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
       objectReference: {fileID: 0}
     - target: {fileID: 4488163828983251138, guid: d368951a042558049999a0f701b0e530,
         type: 3}

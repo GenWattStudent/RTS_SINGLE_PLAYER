@@ -33,25 +33,30 @@ public class SelectedDetails : ToolkitHelper
         ActivateButtons(false);
     }
 
-    private void OnDisable() {
-        // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
-        // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
+    private void OnDisable()
+    {
+        levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
 
-    private void ActivateButtons(bool isActive) {
+    private void ActivateButtons(bool isActive)
+    {
         levelUpButton.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
         sellButton.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    private void OnUpgradeButtonClick(ClickEvent ev) {
+    private void OnUpgradeButtonClick(ClickEvent ev)
+    {
         building.buildingLevelable.LevelUp();
     }
 
-    private void OnSellButtonClick(ClickEvent ev) {
+    private void OnSellButtonClick(ClickEvent ev)
+    {
         building.Sell();
     }
 
-    private void CreateStat(string name, string value) {
+    private void CreateStat(string name, string value)
+    {
         var statBox = new VisualElement
         {
             name = name
@@ -67,26 +72,31 @@ public class SelectedDetails : ToolkitHelper
         statsContainer.Add(statBox);
     }
 
-    private void CreateHealthStat(Damagable damagable) {
-        CreateStat("Health", $"{damagable.health}/{damagable.maxHealth}");
+    private void CreateHealthStat(float health, float maxHealth)
+    {
+        CreateStat("Health", $"{health}/{maxHealth}");
     }
 
-    private void CreateDamageStat(Damagable damagable) {
-        CreateStat("Damage", $"{damagable.damage}");
+    private void CreateDamageStat(float damage)
+    {
+        CreateStat("Damage", $"{damage}");
     }
 
-    private void CreateExpirenceStat(Damagable damagable) {
+    private void CreateExpirenceStat(Damagable damagable)
+    {
         UpdateExpirenceBar(damagable);
         levelText.text = $"{damagable.levelable.level} LVL";
     }
 
-    private void ShowHideAttackActions(bool isActive) {
+    private void ShowHideAttackActions(bool isActive)
+    {
         var attackActions = GetVisualElement("AttackActions");
         attackActions.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    private void ClearStats() {
-        List<VisualElement> elementsToRemove = new ();
+    private void ClearStats()
+    {
+        List<VisualElement> elementsToRemove = new();
 
         foreach (var stat in statsContainer.Children())
         {
@@ -99,41 +109,53 @@ public class SelectedDetails : ToolkitHelper
         }
     }
 
-    private void UpdateExpirenceBar(Damagable damagable) {
+    private void UpdateExpirenceBar(Damagable damagable)
+    {
         expirenceBar.lowValue = 0;
         expirenceBar.value = damagable.levelable.expirence;
         expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
         expirenceBar.title = $"EXP: {damagable.levelable.expirence}/{damagable.levelable.expirenceToNextLevel}";
     }
 
-    private void UpdateHealthBar(Damagable damagable) {
+    private void UpdateHealthBar(float health, float maxHealth)
+    {
         healthBar.lowValue = 0;
-        healthBar.value = damagable.health;
-        healthBar.highValue = damagable.maxHealth;
-        healthBar.title = $"HP: {damagable.health}/{damagable.maxHealth}";
+        healthBar.value = health;
+        healthBar.highValue = maxHealth;
+        healthBar.title = $"HP: {health}/{maxHealth}";
     }
 
-    private void ActivateUnitCamera(Damagable damagable) {
+    private void ActivateUnitCamera(Damagable damagable)
+    {
         if (damagable == null) return;
         var camera = damagable.GetComponentInChildren<Camera>(true);
         if (camera == null) return;
         camera.gameObject.SetActive(true);
     }
 
-    private void UpdateUnitDetails(Damagable damagable)
+    private void UpdateUnitDetails(Stats stats)
     {
         actions.style.display = DisplayStyle.Flex;
         expirenceBar.style.display = DisplayStyle.Flex;
-        CreateHealthStat(damagable);
-        CreateDamageStat(damagable);
+
+        var health = stats.GetStat(StatType.Health);
+        var maxHealth = stats.GetStat(StatType.MaxHealth);
+        var damage = stats.GetStat(StatType.Damage);
+        var damagable = stats.GetComponent<Damagable>();
+
+        CreateHealthStat(health, maxHealth);
+        CreateDamageStat(damage);
         CreateExpirenceStat(damagable);
         ActivateUnitCamera(damagable);
-        UpdateHealthBar(damagable);
+        UpdateHealthBar(health, maxHealth);
         ActivateButtons(false);
 
-        if (damagable.damagableSo.canAttack) {
+        if (damagable.damagableSo.canAttack)
+        {
             ShowHideAttackActions(true);
-        } else {
+        }
+        else
+        {
             ShowHideAttackActions(false);
         }
     }
@@ -143,40 +165,52 @@ public class SelectedDetails : ToolkitHelper
         actions.style.display = DisplayStyle.Flex;
         var damagable = selectable.GetComponent<Damagable>();
         var building = selectable.GetComponent<Building>();
+        var health = damagable.stats.GetStat(StatType.Health);
+        var maxHealth = damagable.stats.GetStat(StatType.MaxHealth);
 
-        CreateHealthStat(damagable);
+        CreateHealthStat(health, maxHealth);
 
-        if (building.buildingLevelable != null && building.buildingSo.unitsToSpawn.GetLength(0) > 0) {
+        if (building.buildingLevelable != null && building.buildingSo.unitsToSpawn.GetLength(0) > 0)
+        {
             CreateStat("Spawn time reduction", $"{building.buildingLevelable.reduceSpawnTime}");
         }
 
-        if (building != null) {
+        if (building != null)
+        {
             ActivateUnitCamera(damagable);
 
-            if (building.attackableSo != null) {
-                CreateDamageStat(damagable);
+            if (building.attackableSo != null)
+            {
+                var damage = damagable.stats.GetStat(StatType.Damage);
+                CreateDamageStat(damage);
                 ShowHideAttackActions(true);
-            } else {
+            }
+            else
+            {
                 ShowHideAttackActions(false);
             }
 
-            UpdateHealthBar(damagable);
+            UpdateHealthBar(health, maxHealth);
             expirenceBar.style.display = DisplayStyle.None;
 
             var construction = selectable.GetComponent<Construction>();
 
-            if (construction != null) {
+            if (construction != null)
+            {
                 this.building = building;
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
                 return;
             }
 
-            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level) {
+            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level)
+            {
                 levelText.text = $"{building.buildingLevelable.level} LVL";
                 this.building = building;
                 ActivateButtons(true);
-            } else {
+            }
+            else
+            {
                 levelText.text = $"MAX {building.buildingLevelable.level} LVL";
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
@@ -206,9 +240,11 @@ public class SelectedDetails : ToolkitHelper
     {
         ClearStats();
 
-        if (SelectionManager.selectedObjects.Count == 0) {
+        if (SelectionManager.selectedObjects.Count == 0)
+        {
             Hide();
-            if (!isGoToTab) {
+            if (!isGoToTab)
+            {
                 var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
                 var tabName = tabs.GetValue(0).ToString();
                 UITabManagement.Instance.HandleTabClick(UITabManagement.Instance.GetTab(tabName));
@@ -225,11 +261,11 @@ public class SelectedDetails : ToolkitHelper
             Show();
             var selectable = SelectionManager.selectedObjects[0];
             var unit = selectable.GetComponent<Unit>();
-            var damagable = selectable.GetComponent<Damagable>();
+            var stats = selectable.GetComponent<Stats>();
 
             if (unit != null && selectable.selectableType == SelectableType.Unit)
             {
-                UpdateUnitDetails(damagable);
+                UpdateUnitDetails(stats);
             }
             else
             {

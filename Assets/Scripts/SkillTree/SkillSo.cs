@@ -8,7 +8,7 @@ public class SkillSo : ScriptableObject
     public string skillName;
     public string description;
     public Sprite icon;
-    public List<SkillSo> requiredSkills = new ();
+    public List<SkillSo> requiredSkills = new();
     public int requiredSkillPoints;
     public event Action<SkillSo> OnSkillUnlocked;
     public string skillTag;
@@ -39,9 +39,9 @@ public class SkillSo : ScriptableObject
 
             if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
             {
-                var newHealth = damagable.maxHealth * value / 100;
+                var newHealth = damagable.stats.GetStat(StatType.MaxHealth) * value / 100;
 
-                damagable.maxHealth += newHealth;
+                damagable.stats.AddToStat(StatType.MaxHealth, newHealth);
                 damagable.TakeDamage(-newHealth);
             }
         }

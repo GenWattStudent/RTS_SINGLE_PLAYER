@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: TankBullet
   m_EditorClassIdentifier: 
   bulletName: Bullet
-  damage: 40
-  speed: 5
   arcHeight: 10
   prefab: {fileID: 3824120718455233952, guid: 4ad4319f3c4497f4bb29d26052c59eac, type: 3}
   lifeTime: 3
-  radius: 0.4
   explosionPrefab: {fileID: 100010, guid: 14d59fd63a842674992eb9579f7b50c7, type: 3}
   initialExplosionPrefab: {fileID: 6431751632817149005, guid: c396dca5e0ab4ef4982f1e3d90168b4c,
     type: 3}
   explosionSound: 4
+  radius: 0.4
+  damage: 40
+  speed: 5
+  stats:
+  - Type: 2
+    Value: 40
+  - Type: 3
+    Value: 5

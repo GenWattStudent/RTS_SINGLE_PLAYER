@@ -156,6 +156,7 @@ GameObject:
   - component: {fileID: -8262177101767174825}
   - component: {fileID: 7824953477106566848}
   - component: {fileID: 6718139705620661926}
+  - component: {fileID: 6684243117961527092}
   m_Layer: 0
   m_Name: ConstractionManagerWorkerSpawner
   m_TagString: Untagged
@@ -234,15 +235,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 7970542890910348107}
+  damagableSo: {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,6 +374,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &6684243117961527092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4784757724029589893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -382,6 +394,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 326025491214339538, guid: 0c5ec565d0687344892b31397bc303e2,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 2160088069970854832, guid: 0c5ec565d0687344892b31397bc303e2,
         type: 3}
       propertyPath: m_LocalPosition.x

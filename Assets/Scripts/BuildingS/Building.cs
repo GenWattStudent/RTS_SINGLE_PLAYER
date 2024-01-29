@@ -6,13 +6,15 @@ public class Building : MonoBehaviour
     public AttackableSo attackableSo;
     public BuildingLevelable buildingLevelable;
 
-    private void Start() {
+    private void Start()
+    {
         buildingLevelable = GetComponent<BuildingLevelable>();
     }
 
-    public void Sell() {
+    public void Sell()
+    {
         UIStorage.Instance.IncreaseResource(buildingSo.costResource, buildingSo.cost / 2);
         var damagableScript = GetComponent<Damagable>();
-        damagableScript.TakeDamage(damagableScript.health);
+        damagableScript.TakeDamage(damagableScript.stats.GetStat(StatType.Health));
     }
 }

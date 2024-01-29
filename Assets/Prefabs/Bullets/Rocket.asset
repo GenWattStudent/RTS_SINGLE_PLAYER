@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: Rocket
   m_EditorClassIdentifier: 
   bulletName: Rocket
-  damage: 100
-  speed: 50
   arcHeight: 5
   prefab: {fileID: 5697498854208013853, guid: 12789bb5d4b4d4b428c28627819f2500, type: 3}
   lifeTime: 6
-  radius: 4
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
   initialExplosionPrefab: {fileID: 6431751632817149005, guid: c396dca5e0ab4ef4982f1e3d90168b4c,
     type: 3}
   explosionSound: 4
+  radius: 4
+  damage: 100
+  speed: 15
+  stats:
+  - Type: 2
+    Value: 100
+  - Type: 3
+    Value: 15

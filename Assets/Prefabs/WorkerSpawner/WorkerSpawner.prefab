@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: -619140009929304772}
   - component: {fileID: 8816775167768068385}
   - component: {fileID: 9155980179660922412}
+  - component: {fileID: -9197262414064562621}
   m_Layer: 0
   m_Name: WorkerSpawner
   m_TagString: Building
@@ -196,15 +197,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 6725091364801705502}
+  damagableSo: {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 2936924105273951565}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +273,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-9197262414064562621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit", order = 1)]
@@ -11,6 +12,7 @@ public class UnitSo : DamagableSo
         Commander
     }
 
+    public List<Stat> stats = new();
     public UnitType type;
     public string unitName;
     public float speed;

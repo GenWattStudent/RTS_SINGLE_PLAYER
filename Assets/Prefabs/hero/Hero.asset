@@ -27,8 +27,8 @@ MonoBehaviour:
   rotateSpeed: 10
   bulletSo: {fileID: 11400000, guid: ccaad882467b8cc49bb312a93e64231d, type: 2}
   CanSalve: 0
-  accuracy: 0.5
-  attackSound: 0
+  accuracy: 0.3
+  attackSound: 6
   health: 500
   deathExpirence: 10
   deathEffect: {fileID: 3912865232768828701, guid: 00e5ebe65b2b4d44ab4adcce7b264084,
@@ -36,6 +36,15 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
+  stats:
+  - Type: 1
+    Value: 500
+  - Type: 4
+    Value: 12
+  - Type: 3
+    Value: 0.4
+  - Type: 5
+    Value: 5
   type: 3
   unitName: Argus
   speed: 5

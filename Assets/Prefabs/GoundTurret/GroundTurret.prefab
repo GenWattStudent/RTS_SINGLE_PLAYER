@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: -3640307160843702238}
   - component: {fileID: -3923161405272039909}
   - component: {fileID: -2468502465295515026}
+  - component: {fileID: -5262743305699413858}
   m_Layer: 0
   m_Name: GroundTurret
   m_TagString: Untagged
@@ -134,13 +135,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 8132519675546357993}
+  damagableSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 1947396230601766344}
   isDead: 0
+  damageBoost: 0
+  damage: 0
+  stats: {fileID: 0}
 --- !u!114 &7951579903449969910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +162,10 @@ MonoBehaviour:
   attackCooldownTimer: 0
   currentAmmo: 0
   autoAttack: 1
+  isRealoading: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  lastAttackTime: 0
+  rot: 0
 --- !u!114 &6064307292801402592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +257,18 @@ MonoBehaviour:
   building: {fileID: 0}
   damagable: {fileID: 0}
   reduceSpawnTime: 0
+--- !u!114 &-5262743305699413858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5393129853425955648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5471748725580403914
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +449,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061301267310199067, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
       objectReference: {fileID: 0}
     - target: {fileID: 1935354294218772697, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}

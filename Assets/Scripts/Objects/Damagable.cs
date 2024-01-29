@@ -3,69 +3,82 @@ using UnityEngine;
 
 public class Damagable : MonoBehaviour
 {
-    public DamagableSo damagableSo;
-    public float health;
-    public float maxHealth;
     [SerializeField] private RectTransform healthBar;
+    public DamagableSo damagableSo;
     private ProgresBar progressBarScript;
     public Guid playerId;
     public Levelable levelable;
-
-    // On dead event handler
-    public event Action OnDead;
-    public event Action OnTakeDamage;
     public GameObject targetPoint;
     public bool isDead = false;
     public float damageBoost = 0;
     public float damage = 0f;
+    public Stats stats;
 
-    public void AddDamageBoost(float boost) {
+    public event Action OnDead;
+    public event Action OnTakeDamage;
+
+    public void AddDamageBoost(float boost)
+    {
         damageBoost += boost;
-        var damageToAdd = damagableSo.bulletSo.damage * boost / 100;
-        damage += damageToAdd;
+        var damageToAdd = damagableSo.bulletSo.GetStat(StatType.Damage) * boost / 100;
+        stats.AddToStat(StatType.Damage, damageToAdd);
     }
 
-    void Awake()
+    void Start()
     {
-        health = damagableSo.health;
-        maxHealth = damagableSo.health;
-        if (damagableSo.bulletSo) {
-            damage = damagableSo.bulletSo.damage;
-        }
+        stats = GetComponent<Stats>();
+
+        if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
+        stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
 
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
 
-        TakeDamage(40);
+        // TakeDamage(40);
     }
 
-    private void InstantiateExplosion() {
-        if (damagableSo.explosionPrefab != null) {
+    private void InstantiateExplosion()
+    {
+        if (damagableSo.explosionPrefab != null)
+        {
             var explosion = Instantiate(damagableSo.explosionPrefab, transform.position, Quaternion.identity);
             Destroy(explosion, 2.4f);
         }
     }
 
-    private void InstantiateDestroyedObject() {
-        if (damagableSo.deathEffect != null) {
+    private void InstantiateDestroyedObject()
+    {
+        if (damagableSo.deathEffect != null)
+        {
             var destroyedObject = Instantiate(damagableSo.deathEffect, transform.position, transform.rotation);
             Destroy(destroyedObject, 2.4f);
         }
     }
 
-    public void AddExpiernce(int exp) {
+    public void AddExpiernce(int exp)
+    {
         if (levelable == null) return;
         levelable.AddExpirence(exp);
     }
 
-    public bool TakeDamage(float damage) {
-        health -= damage;
-        progressBarScript.UpdateProgresBar(health, maxHealth);
+    public bool TakeDamage(float damage)
+    {
+        var newHealth = stats.SubstractFromStat(StatType.Health, damage);
+        Debug.Log($"New health: {newHealth}");
+        var maxHealth = stats.GetStat(StatType.MaxHealth);
+
+        if (newHealth > maxHealth)
+        {
+            newHealth = maxHealth;
+        }
+
+        progressBarScript.UpdateProgresBar(newHealth, maxHealth);
         OnTakeDamage?.Invoke();
-        
-        if (health <= 0f) {
+
+        if (newHealth <= 0f)
+        {
             isDead = true;
-            InstantiateExplosion(); 
+            InstantiateExplosion();
             InstantiateDestroyedObject();
             OnDead?.Invoke();
             Destroy(gameObject);
@@ -73,13 +86,5 @@ public class Damagable : MonoBehaviour
         }
 
         return false;
-    }
-
-    public void Heal(float amount) {
-        health += amount;
-        if (health > maxHealth) {
-            health = maxHealth;
-        }
-        progressBarScript.UpdateProgresBar(health, maxHealth);
     }
 }

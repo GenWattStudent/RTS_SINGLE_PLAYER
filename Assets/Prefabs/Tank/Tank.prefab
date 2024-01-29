@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: -6072173990684141395}
   - component: {fileID: 2395872987072282882}
   - component: {fileID: 1498658269702412893}
+  - component: {fileID: -1620508549549775272}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -643,15 +644,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
-  health: 0
-  maxHealth: 0
   healthBar: {fileID: 6503492149020050981}
+  damagableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 5020726765372733000}
   isDead: 0
   damageBoost: 0
   damage: 0
+  stats: {fileID: 0}
 --- !u!114 &170826199209899036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,6 +780,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f1dc6a180d49f344bc43c7d243de166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-1620508549549775272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994407462191697491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1825093940579101902

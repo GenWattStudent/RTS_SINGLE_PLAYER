@@ -36,6 +36,19 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
+  stats:
+  - Type: 4
+    Value: 10
+  - Type: 8
+    Value: 250
+  - Type: 5
+    Value: 4
+  - Type: 3
+    Value: 4
+  - Type: 1
+    Value: 500
+  - Type: 7
+    Value: 8
   type: 1
   unitName: Heavy Tank
   speed: 4

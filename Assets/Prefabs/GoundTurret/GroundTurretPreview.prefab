@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 7670061777369683037}
   - component: {fileID: 5590514999077052567}
   - component: {fileID: -7845219290297878131}
-  - component: {fileID: 1061301267310199067}
+  - component: {fileID: 5274868833598084267}
   m_Layer: 8
   m_Name: GroundTurretPreview
   m_TagString: Untagged
@@ -336,7 +336,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5, y: 7.713764, z: 5}
   m_Center: {x: 0, y: 3.856882, z: 0}
---- !u!114 &1061301267310199067
+--- !u!114 &5274868833598084267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

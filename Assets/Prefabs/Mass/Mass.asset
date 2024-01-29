@@ -22,10 +22,12 @@ MonoBehaviour:
   ammo: 0
   attackAngle: 0
   hasTurret: 0
-  rotateSpeed: 0
   turretRotateSpeed: 0
+  rotateSpeed: 0
   bulletSo: {fileID: 0}
   CanSalve: 0
+  accuracy: 0.5
+  attackSound: 0
   health: 250
   deathExpirence: 70
   deathEffect: {fileID: 449311907384158923, guid: b4f5dab2116beda408e06676421916b8,
@@ -42,14 +44,23 @@ MonoBehaviour:
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 6e405cc4f3a128642afe32d9e4d20830,
     type: 3}
-  income: 30
-  incomeInterval: 2
   unitsToSpawn: []
   maxBuildingCount: 4
-  cost: 50
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   resourceUsage: {fileID: 0}
-  usage: 0
-  usageInterval: 0
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
+  usage: 0
+  usageInterval: 0
+  cost: 50
+  income: 30
+  incomeInterval: 2
+  stats:
+  - Type: 8
+    Value: 50
+  - Type: 1
+    Value: 250
+  - Type: 11
+    Value: 30
+  - Type: 12
+    Value: 2

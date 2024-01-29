@@ -28,6 +28,7 @@ MonoBehaviour:
   bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
   CanSalve: 1
   accuracy: 0.6
+  attackSound: 0
   health: 100
   deathExpirence: 60
   deathEffect: {fileID: 6647195554574366884, guid: 1b7b4ff0c29298749aeb2dea43a96a1a,
@@ -44,14 +45,27 @@ MonoBehaviour:
     type: 3}
   constructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
     type: 3}
-  income: 0
-  incomeInterval: 0
   unitsToSpawn: []
   maxBuildingCount: 2
-  cost: 100
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
-  usage: 10
-  usageInterval: 5
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
+  usage: 10
+  usageInterval: 5
+  cost: 100
+  income: 0
+  incomeInterval: 0
+  stats:
+  - Type: 1
+    Value: 100
+  - Type: 8
+    Value: 100
+  - Type: 9
+    Value: 10
+  - Type: 10
+    Value: 5
+  - Type: 4
+    Value: 25
+  - Type: 3
+    Value: 0.4
