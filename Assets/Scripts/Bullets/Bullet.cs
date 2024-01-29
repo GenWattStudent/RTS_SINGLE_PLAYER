@@ -14,63 +14,78 @@ public class Bullet : MonoBehaviour
     private TrailRenderer trailRenderer;
     public Motion motion;
 
-    private void Awake() {
+    private void Awake()
+    {
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
     }
 
-    private void Explode() {
-        if (bulletSo.explosionPrefab != null)  {
+    private void Explode()
+    {
+        if (bulletSo.explosionPrefab != null)
+        {
             var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
             Destroy(explosion, 2f);
         }
 
         Collider[] colliders = Physics.OverlapSphere(motion.previousPosition, bulletSo.radius);
-        foreach (var collider in colliders) {
+        foreach (var collider in colliders)
+        {
             if (IsOwnUnit(collider)) continue;
             DealDamage(collider);
         }
     }
 
-    private void DealDamage(Collider collider) {
+    private void DealDamage(Collider collider)
+    {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
         Debug.Log($"Deal damage {damage} to {collider.gameObject.name}");
-        if (damageableScript != null && damageableScript.playerId != playerId) {
-            if (damageableScript.TakeDamage(damage)) {
+        if (damageableScript != null && damageableScript.playerId != playerId)
+        {
+            if (damageableScript.TakeDamage(damage))
+            {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.playerId == PlayerController.playerId) {
+                if (unitsBullet.playerId == PlayerController.playerId)
+                {
                     PlayerController.Instance.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }
             }
         }
     }
 
-    private bool IsOwnUnit(RaycastHit hit) {
+    private bool IsOwnUnit(RaycastHit hit)
+    {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
         return damagable != null && !damagable.isDead && damagable.playerId == playerId;
     }
 
-    private bool IsOwnUnit(Collider collider) {
+    private bool IsOwnUnit(Collider collider)
+    {
         var damagable = collider.gameObject.GetComponent<Damagable>();
         return damagable != null && !damagable.isDead && damagable.playerId == playerId;
     }
 
-    private void CheckHit() {
+    private void CheckHit()
+    {
         RaycastHit hit;
         var direction = transform.position - motion.previousPosition;
-        
-        if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude)) {
+        Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude * 10, Color.red, 1f);
+        if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude))
+        {
 
-            if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost") {
+            if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost")
+            {
                 return;
             }
-            
+
             if (IsOwnUnit(hit)) return;
 
-            if (bulletSo.radius > 0) {
+            if (bulletSo.radius > 0)
+            {
                 Explode();
             }
-            else {
+            else
+            {
                 DealDamage(hit.collider);
             }
 
@@ -78,16 +93,19 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void Setup() {
+    public void Setup()
+    {
         var boostDamage = unitsBullet.damageBoost * bulletSo.damage / 100f;
         damage = bulletSo.damage + boostDamage;
         motion.speed = bulletSo.speed;
     }
 
-    public void Reset() {
+    public void Reset()
+    {
         lifeTimeTimer = 0f;
         motion.previousPosition = transform.position;
-        if (trailRenderer != null) {
+        if (trailRenderer != null)
+        {
             trailRenderer.Clear();
         }
     }
@@ -98,7 +116,8 @@ public class Bullet : MonoBehaviour
         motion.Move();
         CheckHit();
 
-        if (lifeTimeTimer > bulletSo.lifeTime) {
+        if (lifeTimeTimer > bulletSo.lifeTime)
+        {
             Explode();
             pool.Release(this);
         }

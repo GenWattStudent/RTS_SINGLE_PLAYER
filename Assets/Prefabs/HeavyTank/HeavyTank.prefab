@@ -448,9 +448,9 @@ GameObject:
   - component: {fileID: 1506612390311189066}
   - component: {fileID: 170826199209899036}
   - component: {fileID: 5458341479824949014}
-  - component: {fileID: -7177367025847938021}
   - component: {fileID: -5686902408921594706}
   - component: {fileID: 3312644192030623852}
+  - component: {fileID: 3222117766164707011}
   m_Layer: 0
   m_Name: HeavyTank
   m_TagString: Untagged
@@ -648,33 +648,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aed2f2dc5fa10746911906b453ce430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &-7177367025847938021
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994407462191697491}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &-5686902408921594706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,6 +698,18 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3222117766164707011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994407462191697491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1dc6a180d49f344bc43c7d243de166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6677125514317674343
 GameObject:
   m_ObjectHideFlags: 0

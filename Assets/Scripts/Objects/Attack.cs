@@ -22,7 +22,7 @@ public class Attack : MonoBehaviour
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
     public Vector3 targetPosition;
-    private List<GameObject> salvePoints = new ();
+    private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
     public float lastAttackTime;
     public float rot = 0;
@@ -35,26 +35,32 @@ public class Attack : MonoBehaviour
         vehicleGun = GetComponentInChildren<VehicleGun>();
         lastAttackTime = Time.time;
 
-        if (currentUnit.attackableSo.hasTurret) {
+        if (currentUnit.attackableSo.hasTurret)
+        {
             turret = GetComponentInChildren<Turret>();
         }
 
         if (autoAttack) checkTargetTimerTimer = checkTargetTimer;
 
-        if (currentUnit.attackableSo.CanSalve) {
+        if (currentUnit.attackableSo.CanSalve)
+        {
             // all children of bulletSpawnPoint are salve points
-            foreach (Transform child in bulletSpawnPoint.transform) {
+            foreach (Transform child in bulletSpawnPoint.transform)
+            {
                 salvePoints.Add(child.gameObject);
             }
         }
     }
 
-    private bool IsTargetHideInTerrain(Damagable target) {
+    private bool IsTargetHideInTerrain(Damagable target)
+    {
         if (target == null) return false;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + new Vector3(0, 1, 0), target.transform.position - transform.position, out hit, Mathf.Infinity)) {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
+        if (Physics.Raycast(transform.position + new Vector3(0, 1, 0), target.transform.position - transform.position, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+            {
                 return true;
             }
         }
@@ -62,14 +68,17 @@ public class Attack : MonoBehaviour
         return false;
     }
 
-    private void CheckForTargets() {
+    private void CheckForTargets()
+    {
         var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
-        
-        foreach (var collider in colliders) {
+
+        foreach (var collider in colliders)
+        {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead && unitScript.isVisibile) {
+            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead && unitScript.isVisibile)
+            {
                 if (IsTargetHideInTerrain(damagableScript)) continue;
                 SetTarget(damagableScript);
                 break;
@@ -77,35 +86,42 @@ public class Attack : MonoBehaviour
         }
     }
 
-    public void SetTarget(Damagable target) {
+    public void SetTarget(Damagable target)
+    {
         this.target = target;
 
-        if (this.target != null) {
+        if (this.target != null)
+        {
             targetPosition = target.transform.position;
             target.OnDead += OnTargetDead;
             OnTarget?.Invoke(target, currentUnit);
             return;
-        } 
+        }
 
         targetPosition = Vector3.zero;
         OnTarget?.Invoke(target, currentUnit);
     }
 
-    public void SetTargetPosition(Vector3 position) {
+    public void SetTargetPosition(Vector3 position)
+    {
         targetPosition = position;
         target = null;
-    }   
+    }
 
-    private void OnTargetDead() {
+    private void OnTargetDead()
+    {
         SetTarget(null);
     }
 
-    private bool IsInRange() {
+    private bool IsInRange()
+    {
         // we need to use target collider
         Collider[] colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
 
-        foreach (var collider in colliders) {
-            if (collider.gameObject == target.gameObject) {
+        foreach (var collider in colliders)
+        {
+            if (collider.gameObject == target.gameObject)
+            {
                 return true;
             }
         }
@@ -113,19 +129,23 @@ public class Attack : MonoBehaviour
         return false;
     }
 
-    private bool IsInRange(Vector3 targetPosition) {
+    private bool IsInRange(Vector3 targetPosition)
+    {
         return Vector3.Distance(transform.position, targetPosition) <= currentUnit.attackableSo.attackRange;
     }
 
-    private void ShootBullet() {
+    private void ShootBullet()
+    {
         Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
         var bulletSpawnPoint = this.bulletSpawnPoint;
 
-        if (currentUnit.attackableSo.CanSalve) {
+        if (currentUnit.attackableSo.CanSalve)
+        {
             bulletSpawnPoint = salvePoints[salveIndex];
             salveIndex++;
 
-            if (salveIndex >= salvePoints.Count) {
+            if (salveIndex >= salvePoints.Count)
+            {
                 salveIndex = 0;
             }
         }
@@ -148,7 +168,7 @@ public class Attack : MonoBehaviour
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;
-        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.rotation.x : 0;
+        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.rotation.x * 2 : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
         bullet.Setup();
@@ -156,7 +176,8 @@ public class Attack : MonoBehaviour
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null) {
+        if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
+        {
             var rotation = Quaternion.LookRotation(bullet.motion.direction);
             rotation *= Quaternion.Euler(0, -90, 0);
             Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, rotation);
@@ -164,16 +185,21 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private bool IsInAngle() {
-        if (currentUnit.attackableSo.hasTurret) {
+    private bool IsInAngle()
+    {
+        if (currentUnit.attackableSo.hasTurret)
+        {
             return turret.IsInFieldOfView(targetPosition, currentUnit.attackableSo.attackAngle);
-        } else {
+        }
+        else
+        {
             // calculate angle between unit and target
             Vector3 targetDir = targetPosition - transform.position;
             float angle = Vector3.Angle(targetDir, transform.forward);
 
             // if angle is less than attack angle, return true
-            if (angle < currentUnit.attackableSo.attackAngle) {
+            if (angle < currentUnit.attackableSo.attackAngle)
+            {
                 return true;
             }
 
@@ -181,42 +207,53 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private void Realod() {
+    private void Realod()
+    {
         if (!isRealoading) attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
         isRealoading = true;
-        
-        if (isRealoading && attackCooldownTimer <= 0) {
+
+        if (isRealoading && attackCooldownTimer <= 0)
+        {
             currentAmmo = currentUnit.attackableSo.ammo;
             isRealoading = false;
         }
     }
 
-    private void PerformAttack() {
-        if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle()) {
+    private void PerformAttack()
+    {
+        if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle())
+        {
             OnAttack?.Invoke();
             ShootBullet();
             lastAttackTime = Time.time;
-            if (currentAmmo <= 0) {
+            if (currentAmmo <= 0)
+            {
                 Realod();
             }
         }
     }
 
-    private void PerformTargetAiming() {
-        if (IsInRange() && currentUnit.attackableSo.canAttack) {
-            PerformAttack();             
-        } else {
+    private void PerformTargetAiming()
+    {
+        if (IsInRange() && currentUnit.attackableSo.canAttack)
+        {
+            PerformAttack();
+        }
+        else
+        {
             SetTarget(null);
             return;
         }
-
-        RotateToTarget();
     }
 
-    private void RotateToTarget() {
-        if (currentUnit.attackableSo.hasTurret) {
+    private void RotateToTarget()
+    {
+        if (currentUnit.attackableSo.hasTurret)
+        {
             turret.RotateToTarget(targetPosition, currentUnit.attackableSo.turretRotateSpeed);
-        } else {
+        }
+        else
+        {
             unitMovement.RotateToTarget(targetPosition);
         }
     }
@@ -227,20 +264,28 @@ public class Attack : MonoBehaviour
         attackCooldownTimer -= Time.deltaTime;
         checkTargetTimerTimer -= Time.deltaTime;
 
-        if (checkTargetTimerTimer <= 0 && autoAttack && target == null && targetPosition == Vector3.zero) {
+        if (checkTargetTimerTimer <= 0 && autoAttack && target == null && targetPosition == Vector3.zero)
+        {
             CheckForTargets();
             checkTargetTimerTimer = checkTargetTimer;
         }
 
-        if (target != null) {
+        if (target != null)
+        {
             PerformTargetAiming();
+            RotateToTarget();
+            return;
         }
 
-        if (targetPosition != Vector3.zero) {
-            if (IsInRange(targetPosition) && currentUnit.attackableSo.canAttack) {
+        if (targetPosition != Vector3.zero)
+        {
+            if (IsInRange(targetPosition) && currentUnit.attackableSo.canAttack)
+            {
                 PerformAttack();
                 RotateToTarget();
-            } else {
+            }
+            else
+            {
                 SetTarget(null);
                 return;
             }
