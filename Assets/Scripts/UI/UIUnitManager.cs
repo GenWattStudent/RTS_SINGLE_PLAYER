@@ -4,15 +4,15 @@ using UnityEngine.UIElements;
 
 public class UIUnitManager : MonoBehaviour
 {
-    private List<VisualElement> unitSlotTabs = new ();
-    private List<UnitSo> unitsAttachedToTab = new ();
+    private List<VisualElement> unitSlotTabs = new();
+    private List<UnitSo> unitsAttachedToTab = new();
     public static UIUnitManager Instance { get; private set; }
     private BuildingSo selectedBuilding;
     private ISpawnerBuilding spawnerBuilding;
     public GameObject currentBuilding;
     public bool IsUnitUIOpen { get; set; } = false;
     public bool IsUnitSelectionTabOpen { get; set; } = false;
-    private Dictionary<string, List<UnitSo>> unitQueue = new ();
+    private Dictionary<string, List<UnitSo>> unitQueue = new();
     private int unitCountPrev = 0;
     private UIDocument UIDocument;
     private VisualElement root;
@@ -24,25 +24,29 @@ public class UIUnitManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start() {
+    private void Start()
+    {
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         unitSlotContainer = root.Q<VisualElement>("TabContent");
 
         SelectionManager.OnSelect += CreateSelectionUnitTab;
     }
-    
-    private void OnDisable() {
+
+    private void OnDisable()
+    {
         SelectionManager.OnSelect -= CreateSelectionUnitTab;
     }
 
-    private void UpdateProgressBar(ProgressBar progressBar, float currentTime, float totalSpawnTime) {
+    private void UpdateProgressBar(ProgressBar progressBar, float currentTime, float totalSpawnTime)
+    {
         progressBar.lowValue = 0;
         progressBar.highValue = totalSpawnTime;
         progressBar.value = currentTime;
     }
 
-    public void SetSpawnData(VisualElement slot, int unitQueueCount, float currentTime, float totalSpawnTime) {
+    public void SetSpawnData(VisualElement slot, int unitQueueCount, float currentTime, float totalSpawnTime)
+    {
         var spawnUnitCountText = slot.Q<Label>("Quantity");
         var progressTime = slot.Q<ProgressBar>("ProgressBarTimer");
 
@@ -56,7 +60,8 @@ public class UIUnitManager : MonoBehaviour
         UpdateProgressBar(progressTime, currentTime, totalSpawnTime);
     }
 
-    private void HideSpawnInfo(VisualElement unitTab) {
+    private void HideSpawnInfo(VisualElement unitTab)
+    {
         var spawnUnitCountText = unitTab.Q<Label>("Quantity");
         var progressTime = unitTab.Q<ProgressBar>("ProgressBarTimer");
 
@@ -64,47 +69,57 @@ public class UIUnitManager : MonoBehaviour
         progressTime.style.display = DisplayStyle.None;
     }
 
-    private void FixedUpdate() {
-        if (!IsUnitSelectionTabOpen && IsUnitUIOpen && spawnerBuilding is not null) {
-            foreach (var unitTab in unitSlotTabs) {
+    private void FixedUpdate()
+    {
+        if (!IsUnitSelectionTabOpen && IsUnitUIOpen && spawnerBuilding is not null)
+        {
+            foreach (var unitTab in unitSlotTabs)
+            {
                 var currentTime = spawnerBuilding.GetSpawnTimer();
                 var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
                 var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(unitTab.name);
                 var soUnit = unitsAttachedToTab.Find(x => x.unitName == unitTab.name);
-               
-                if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name) {
+
+                if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name)
+                {
                     SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
                 }
 
-                if (currentSpawningUnit is not null && currentSpawningUnit.unitName != unitTab.name && unitQueueCount > 0) {
+                if (currentSpawningUnit is not null && currentSpawningUnit.unitName != unitTab.name && unitQueueCount > 0)
+                {
                     SetSpawnData(unitTab, unitQueueCount, 0, spawnerBuilding.totalSpawnTime);
                 }
 
-                if (unitQueueCount <= 0) {
+                if (unitQueueCount <= 0)
+                {
                     HideSpawnInfo(unitTab);
                 }
 
                 var buildingLevelable = currentBuilding.GetComponent<BuildingLevelable>();
-                
+
                 ToogleTabEnableBasedOnLevel(buildingLevelable, soUnit, unitTab);
             }
         }
     }
 
-    private void ToogleTabEnableBasedOnLevel(BuildingLevelable buildingLevelable, UnitSo unitSo, VisualElement unitTab) {
+    private void ToogleTabEnableBasedOnLevel(BuildingLevelable buildingLevelable, UnitSo unitSo, VisualElement unitTab)
+    {
         var quantityText = unitTab.Q<Label>("Quantity");
-        if (buildingLevelable != null && buildingLevelable.level < unitSo.spawnerLevelToUnlock) {
+        if (buildingLevelable != null && buildingLevelable.level < unitSo.spawnerLevelToUnlock)
+        {
             unitTab.SetEnabled(false);
 
             quantityText.style.display = DisplayStyle.Flex;
             quantityText.text = $"Level {unitSo.spawnerLevelToUnlock} required";
-        } else {
-            quantityText.style.display = DisplayStyle.None;
+        }
+        else
+        {
             unitTab.SetEnabled(true);
         }
     }
 
-    public void CreateSelectionUnitTab() {
+    public void CreateSelectionUnitTab()
+    {
         if (unitCountPrev == 0 && SelectionManager.selectedObjects.Count == 0) return;
         if (SelectionManager.selectedObjects.Count == 1 && SelectionManager.IsBuilding(SelectionManager.selectedObjects[0])) return;
 
@@ -115,20 +130,26 @@ public class UIUnitManager : MonoBehaviour
         unitQueue.Clear();
 
         Debug.Log("CreateSelectionUnitTab");
-        foreach(var selectable in SelectionManager.selectedObjects) {
-            if (selectable.selectableType == Selectable.SelectableType.Unit) {
+        foreach (var selectable in SelectionManager.selectedObjects)
+        {
+            if (selectable.selectableType == Selectable.SelectableType.Unit)
+            {
                 var unit = selectable.GetComponent<Unit>();
                 var unitSo = unit.unitSo;
 
-                if (unitQueue.ContainsKey(unitSo.unitName)) {
+                if (unitQueue.ContainsKey(unitSo.unitName))
+                {
                     unitQueue[unitSo.unitName].Add(unitSo);
-                } else {
+                }
+                else
+                {
                     unitQueue.Add(unitSo.unitName, new List<UnitSo> { unitSo });
                 }
             }
         }
 
-        foreach(var unit in unitQueue) {
+        foreach (var unit in unitQueue)
+        {
             TemplateContainer templateContainer = slot.Instantiate();
             templateContainer.name = unit.Key;
             templateContainer.style.height = Length.Percent(100);
@@ -151,49 +172,59 @@ public class UIUnitManager : MonoBehaviour
         IsUnitSelectionTabOpen = true;
     }
 
-    private void SetUnitData(VisualElement unitTab, UnitSo soUnit, int cost = -1) {
+    private void SetUnitData(VisualElement unitTab, UnitSo soUnit, int cost = -1)
+    {
         var unitNameText = unitTab.Q<Label>("SlotName");
         var button = unitTab.Q<VisualElement>("Slot");
 
         unitNameText.text = soUnit.unitName;
 
-        if (cost < 0 && soUnit.cost > 0) {
+        if (cost < 0 && soUnit.cost > 0)
+        {
             var costText = unitTab.Q<Label>("SlotValue");
             var valueIcon = unitTab.Q<VisualElement>("ValueIcon");
             valueIcon.style.backgroundImage = new StyleBackground(soUnit.costResource.icon);
             costText.text = soUnit.cost.ToString();
-                
-            button.RegisterCallback((ClickEvent ev) => {
+
+            button.RegisterCallback((ClickEvent ev) =>
+            {
                 spawnerBuilding.AddUnitToQueue(soUnit);
             });
-        } else {
+        }
+        else
+        {
             var costText = unitTab.Q<Label>("Quantity");
             var value = unitTab.Q<VisualElement>("SlotValueBox");
-            
+
             value.style.display = DisplayStyle.None;
             costText.text = cost.ToString();
         }
 
         VisualElement image = unitTab.Q<VisualElement>("ImageBox");
 
-        if (image is not null) {
+        if (image is not null)
+        {
             image.style.backgroundImage = new StyleBackground(soUnit.sprite);
         }
     }
 
-    public void ClearTabs() {
-        List<VisualElement> visualElements = new ();
+    public void ClearTabs()
+    {
+        List<VisualElement> visualElements = new();
 
-        foreach (var child in unitSlotContainer.Children()) {
+        foreach (var child in unitSlotContainer.Children())
+        {
             visualElements.Add(child);
         }
 
-        foreach (var visualElement in visualElements) {
+        foreach (var visualElement in visualElements)
+        {
             unitSlotContainer.Remove(visualElement);
         }
     }
 
-    public void CreateUnitTabs(BuildingSo BuildingSo, ISpawnerBuilding spawnerBuilding, GameObject building) {
+    public void CreateUnitTabs(BuildingSo BuildingSo, ISpawnerBuilding spawnerBuilding, GameObject building)
+    {
         ClearTabs();
         unitSlotTabs.Clear();
         unitsAttachedToTab.Clear();
@@ -204,20 +235,24 @@ public class UIUnitManager : MonoBehaviour
         var currentTime = spawnerBuilding.GetSpawnTimer();
         var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
 
-        foreach(var soUnit in BuildingSo.unitsToSpawn) {
+        foreach (var soUnit in BuildingSo.unitsToSpawn)
+        {
             TemplateContainer unitTab = slot.Instantiate();
             unitTab.name = soUnit.unitName;
             unitTab.style.height = Length.Percent(100);
             var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(soUnit.unitName);
             var buildingLevelable = building.GetComponent<BuildingLevelable>();
 
-            if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName) {
+            if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName)
+            {
                 SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
-            } else if (unitQueueCount > 0) {
+            }
+            else if (unitQueueCount > 0)
+            {
                 SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
             }
 
-            HideSpawnInfo(unitTab);
+            // HideSpawnInfo(unitTab);
             ToogleTabEnableBasedOnLevel(buildingLevelable, soUnit, unitTab);
             SetUnitData(unitTab, soUnit);
 

@@ -104,7 +104,10 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void Update()
     {
-        if (UIStorage.Instance.HasEnoughResource(unitsQueue[0].costResource, unitsQueue[0].cost) && !resourceUsage.isInDebt) return;
+        if (currentSpawningUnit == null
+            || !UIStorage.Instance.HasEnoughResource(currentSpawningUnit.costResource, currentSpawningUnit.cost)
+            || resourceUsage.isInDebt) return;
+
         spawnTimer -= Time.deltaTime;
         UpdateScreen();
         SpawnUnit();
