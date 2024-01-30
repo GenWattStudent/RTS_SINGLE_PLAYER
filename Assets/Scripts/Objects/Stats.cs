@@ -32,7 +32,6 @@ public class Stats : MonoBehaviour
     {
         foreach (var stat in stats)
         {
-            Debug.Log(stat.Type + " " + type);
             if (stat.Type == type)
             {
                 return stat.Value;

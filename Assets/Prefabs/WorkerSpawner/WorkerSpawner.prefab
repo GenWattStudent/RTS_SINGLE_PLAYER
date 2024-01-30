@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 8816775167768068385}
   - component: {fileID: 9155980179660922412}
   - component: {fileID: -9197262414064562621}
+  - component: {fileID: -2717489241088970413}
   m_Layer: 0
   m_Name: WorkerSpawner
   m_TagString: Building
@@ -285,6 +286,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2717489241088970413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e58d3a96d09177c4091838bd6ddc4877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInDebt: 0
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0

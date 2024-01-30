@@ -27,5 +27,5 @@ MonoBehaviour:
   stats:
   - Type: 2
     Value: 100
-  - Type: 3
+  - Type: 5
     Value: 15

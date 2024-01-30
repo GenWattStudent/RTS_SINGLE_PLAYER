@@ -1,49 +1,56 @@
+using System.Collections;
 using UnityEngine;
 
-public class BulletMotion : Motion
+public class ParabolicMotion : Motion
 {
     Vector3 startPosition;
-    Rigidbody rb;
+    private float gravity = 9.8f;
 
     public override void Setup()
     {
         base.Setup();
-
         startPosition = transform.position;
-
-        rb = gameObject.GetComponent<Rigidbody>();
-        rb.useGravity = false; // Disable gravity initially
-        rb.velocity = direction.normalized * speed;
-
-        // Rotate the rigidbody to match the launch angle
-        rb.rotation = Quaternion.Euler(launchAngle, 0f, 0f);
+        StartCoroutine(ParabolicMotion2(target, launchAngle + 10));
     }
 
-    private void RotateInDirection(Vector3 direction)
+    private IEnumerator ParabolicMotion2(Vector3 target, float angle)
     {
-        transform.rotation = Quaternion.LookRotation(direction);
+        float angleRad = angle * Mathf.Deg2Rad;
+        float heightDifference = startPosition.y - target.y;
+        Vector3 direction = (target - startPosition).normalized;
+        float targetRange = Vector3.Distance(startPosition, target);
+        float targetDistance = Vector3.Distance(startPosition, target);
+        // float targetRange = Mathf.Abs(startPosition.x - target.x) + Mathf.Abs(startPosition.z - target.z);
+
+        float projectile_Velocity
+            = (Mathf.Sqrt(2) * targetRange * Mathf.Sqrt(gravity) * Mathf.Sqrt(1 / (Mathf.Sin(2 * angleRad)))) /
+            (Mathf.Sqrt((2 * targetRange) + (heightDifference * Mathf.Sin(2 * angleRad) * (1 / Mathf.Sin(angleRad)) * (1 / Mathf.Sin(angleRad)))));
+
+        float Vx = projectile_Velocity * Mathf.Cos(angleRad);
+        float Vy = projectile_Velocity * Mathf.Sin(angleRad);
+
+        float flightDuration = targetRange / Vx;
+
+        float elapse_time = 0;
+        Debug.Log(flightDuration);
+        while (transform.position.y > 0)
+        {
+            float x = startPosition.x + direction.x * Vx * elapse_time;
+            float y = startPosition.y + Vy * elapse_time - 0.5f * gravity * elapse_time * elapse_time;
+            float z = startPosition.z + direction.z * Vx * elapse_time;
+
+            previousPosition = transform.position;
+            Vector3 newPosition = new Vector3(x, y, z);
+            transform.position = newPosition;
+
+            elapse_time += Time.deltaTime;
+            Debug.Log(elapse_time);
+            yield return null;
+        }
     }
 
     public override void Move()
     {
-        // Check if the bullet has reached the target
-        if (Vector3.Distance(transform.position, target) < 0.1f)
-        {
-            // If it's close enough, stop the bullet and enable gravity
-            rb.velocity = Vector3.zero;
-            rb.useGravity = true;
-        }
-        else
-        {
-            // Otherwise, continue with the parabolic motion
-            float t = Vector3.Distance(startPosition, transform.position) / Vector3.Distance(startPosition, target);
-            float parabola = 1.0f - 4.0f * (t - 0.5f) * (t - 0.5f);
-
-            Vector3 nextPos = Vector3.Lerp(startPosition, target, t);
-            nextPos.y += parabola * arcHeight;
-
-            RotateInDirection(nextPos - transform.position);
-            transform.position = nextPos;
-        }
+        // Implement this method if needed
     }
 }

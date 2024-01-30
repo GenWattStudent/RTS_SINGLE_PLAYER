@@ -64,7 +64,6 @@ public class Damagable : MonoBehaviour
     public bool TakeDamage(float damage)
     {
         var newHealth = stats.SubstractFromStat(StatType.Health, damage);
-        Debug.Log($"New health: {newHealth}");
         var maxHealth = stats.GetStat(StatType.MaxHealth);
 
         if (newHealth > maxHealth)

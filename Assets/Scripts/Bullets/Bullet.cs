@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
     private void DealDamage(Collider collider)
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
-        Debug.Log($"Deal damage {damage} to {collider.gameObject.name}");
+
         if (damageableScript != null && damageableScript.playerId != playerId)
         {
             if (damageableScript.TakeDamage(damage))
@@ -97,7 +97,7 @@ public class Bullet : MonoBehaviour
     public void Setup()
     {
         damage = unitsBullet.stats.GetStat(StatType.Damage);
-        motion.speed = bulletSo.speed;
+        motion.speed = bulletSo.GetStat(StatType.Speed);
     }
 
     public void Reset()
