@@ -1,28 +1,29 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public static Color playerColor;
     public static Material playerMaterial;
-    public static List<Unit> units = new ();
-    public static List<Building> buildings = new ();
+    public static List<Unit> units = new();
+    public static List<Building> buildings = new();
     [SerializeField] private GameObject hero;
-    [SerializeField] private List<GameObject> unitPrefabs = new ();
+    [SerializeField] private List<GameObject> unitPrefabs = new();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
     public static Guid playerId;
-
-    // add unit event
-    public static event Action<Unit, List<Unit>> OnUnitChange;
-    public static event Action<Building, List<Building>> OnBuildingChange;
     public int playerLevel = 1;
     public int playerExpierence = 0;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
-    public event Action<int, int, int, int> OnPlayerLevelChange;
 
-    private void SpawnHero() {
+    public event Action<int, int, int, int> OnPlayerLevelChange;
+    public static event Action<Unit, List<Unit>> OnUnitChange;
+    public static event Action<Building, List<Building>> OnBuildingChange;
+
+    private void SpawnHero()
+    {
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
         var damagableScript = heroInstance.GetComponent<Damagable>();
         var unitScript = heroInstance.GetComponent<Unit>();
@@ -35,27 +36,37 @@ public class PlayerController : MonoBehaviour
         unitScript.ChangeMaterial(playerMaterial, true);
         units.Add(unitScript);
 
-        spawnPosition += new Vector3(2, 0 ,0);
+        spawnPosition += new Vector3(2, 0, 0);
     }
 
-    public static void AddUnit(Unit unit) {
+    public static void AddUnit(Unit unit)
+    {
         var damagableScript = unit.GetComponent<Damagable>();
         units.Add(unit);
-        damagableScript.OnDead += () => {
+        damagableScript.OnDead += () =>
+        {
             RemoveUnit(unit);
         };
 
         OnUnitChange?.Invoke(unit, units);
     }
 
-    public void AddExpiernce(int amount) {
+    [ServerRpc(RequireOwnership = false)]
+    private void AddExpiernceServerRpc(int amount)
+    {
+        Debug.Log("AddExpiernceServerRpc");
+    }
+
+    public void AddExpiernce(int amount)
+    {
         if (playerLevel == playerLevelSo.levelsData.Count) return;
 
         playerExpierence += amount;
-        var nextLevelData = playerLevelSo.levelsData[playerLevel]; 
+        var nextLevelData = playerLevelSo.levelsData[playerLevel];
         var diffrence = playerExpierence - nextLevelData.expToNextLevel;
 
-        if (playerLevel < playerLevelSo.levelsData.Count && playerExpierence >= nextLevelData.expToNextLevel) {
+        if (playerLevel < playerLevelSo.levelsData.Count && playerExpierence >= nextLevelData.expToNextLevel)
+        {
             playerLevel++;
             playerExpierence = diffrence;
             SkillTreeManager.Instance.AddSkillPoints(1);
@@ -64,47 +75,57 @@ public class PlayerController : MonoBehaviour
         OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence, playerLevel, playerLevelSo.levelsData.Count);
     }
 
-    public static void RemoveUnit(Unit unit) {
+    public static void RemoveUnit(Unit unit)
+    {
         units.Remove(unit);
         OnUnitChange?.Invoke(unit, units);
     }
 
-    public static void AddBuilding(Building building) {
+    public static void AddBuilding(Building building)
+    {
         var damagableScript = building.GetComponent<Damagable>();
         buildings.Add(building);
 
-        damagableScript.OnDead += () => {
+        damagableScript.OnDead += () =>
+        {
             RemoveBuilding(building);
         };
 
         OnBuildingChange?.Invoke(building, buildings);
     }
 
-    public static void RemoveBuilding(Building building) {
+    public static void RemoveBuilding(Building building)
+    {
         buildings.Remove(building);
         OnBuildingChange?.Invoke(building, buildings);
     }
 
-    public static bool IsMaxBuildingOfType(BuildingSo buildingSo) {
+    public static bool IsMaxBuildingOfType(BuildingSo buildingSo)
+    {
         int count = GetBuildingCountOfType(buildingSo);
         return count >= buildingSo.maxBuildingCount;
     }
 
-    public static int GetBuildingCountOfType(BuildingSo buildingSo) {
+    public static int GetBuildingCountOfType(BuildingSo buildingSo)
+    {
         int count = 0;
 
-        foreach (var building in buildings) {
+        foreach (var building in buildings)
+        {
             if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
         }
 
         return count;
     }
 
-    private void SpawnUnits() {
-        
+    private void SpawnUnits()
+    {
+
         SpawnHero();
-        foreach (var unitPrefab in unitPrefabs) {
-            for (int i = 0; i < 2; i++) {
+        foreach (var unitPrefab in unitPrefabs)
+        {
+            for (int i = 0; i < 2; i++)
+            {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();
@@ -118,12 +139,13 @@ public class PlayerController : MonoBehaviour
                 unitScript.ChangeMaterial(playerMaterial, true);
                 AddUnit(unitScript);
 
-                spawnPosition += new Vector3(2, 0 ,0);
+                spawnPosition += new Vector3(2, 0, 0);
             }
         }
     }
 
-    void Awake() {
+    void Awake()
+    {
         Instance = this;
     }
 
@@ -131,6 +153,7 @@ public class PlayerController : MonoBehaviour
     {
         SpawnUnits();
         AddExpiernce(0);
+        AddExpiernceServerRpc(0);
     }
 
     void Update()

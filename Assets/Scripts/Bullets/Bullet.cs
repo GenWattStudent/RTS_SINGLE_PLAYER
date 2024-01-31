@@ -69,10 +69,12 @@ public class Bullet : MonoBehaviour
     private void CheckHit()
     {
         RaycastHit hit;
-        var direction = transform.position - motion.previousPosition;
 
+        var direction = transform.position - motion.previousPosition;
+        Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
         if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude))
         {
+            // Draw long ray from this postion to forward of the bullet
 
             if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost")
             {
@@ -90,8 +92,14 @@ public class Bullet : MonoBehaviour
                 DealDamage(hit.collider);
             }
 
-            pool.Release(this);
+            HideBullet();
         }
+    }
+
+    private void HideBullet()
+    {
+        pool.Release(this);
+        motion.Hide();
     }
 
     public void Setup()
@@ -119,7 +127,7 @@ public class Bullet : MonoBehaviour
         if (lifeTimeTimer > bulletSo.lifeTime)
         {
             Explode();
-            pool.Release(this);
+            HideBullet();
         }
     }
 }

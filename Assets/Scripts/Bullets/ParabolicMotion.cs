@@ -3,54 +3,58 @@ using UnityEngine;
 
 public class ParabolicMotion : Motion
 {
-    Vector3 startPosition;
-    private float gravity = 9.8f;
+    private Vector3 startPosition;
+    private float time = 0f;
+    private Vector3 targetPosition;
+    private Vector3 ControlPointInBetweenStartAndTarget;
 
     public override void Setup()
     {
         base.Setup();
         startPosition = transform.position;
-        StartCoroutine(ParabolicMotion2(target, launchAngle + 10));
+        targetPosition = target;
+        direction = (targetPosition - startPosition).normalized;
+        time = 0f;
+
+        // calulate ControlPointInBetweenStartAndTarget based on angle in between start and target
+        var distance = Vector3.Distance(startPosition, targetPosition);
+        var height = distance / 2f;
+        ControlPointInBetweenStartAndTarget = startPosition + (direction * distance / 2f) + (Vector3.up * height);
     }
 
-    private IEnumerator ParabolicMotion2(Vector3 target, float angle)
+    private Vector3 EvaluateCurve(float t)
     {
-        float angleRad = angle * Mathf.Deg2Rad;
-        float heightDifference = startPosition.y - target.y;
-        Vector3 direction = (target - startPosition).normalized;
-        float targetRange = Vector3.Distance(startPosition, target);
-        float targetDistance = Vector3.Distance(startPosition, target);
-        // float targetRange = Mathf.Abs(startPosition.x - target.x) + Mathf.Abs(startPosition.z - target.z);
-
-        float projectile_Velocity
-            = (Mathf.Sqrt(2) * targetRange * Mathf.Sqrt(gravity) * Mathf.Sqrt(1 / (Mathf.Sin(2 * angleRad)))) /
-            (Mathf.Sqrt((2 * targetRange) + (heightDifference * Mathf.Sin(2 * angleRad) * (1 / Mathf.Sin(angleRad)) * (1 / Mathf.Sin(angleRad)))));
-
-        float Vx = projectile_Velocity * Mathf.Cos(angleRad);
-        float Vy = projectile_Velocity * Mathf.Sin(angleRad);
-
-        float flightDuration = targetRange / Vx;
-
-        float elapse_time = 0;
-        Debug.Log(flightDuration);
-        while (transform.position.y > 0)
-        {
-            float x = startPosition.x + direction.x * Vx * elapse_time;
-            float y = startPosition.y + Vy * elapse_time - 0.5f * gravity * elapse_time * elapse_time;
-            float z = startPosition.z + direction.z * Vx * elapse_time;
-
-            previousPosition = transform.position;
-            Vector3 newPosition = new Vector3(x, y, z);
-            transform.position = newPosition;
-
-            elapse_time += Time.deltaTime;
-            Debug.Log(elapse_time);
-            yield return null;
-        }
+        var startToControl = Vector3.Lerp(startPosition, ControlPointInBetweenStartAndTarget, t);
+        var controlToEnd = Vector3.Lerp(ControlPointInBetweenStartAndTarget, targetPosition, t);
+        return Vector3.Lerp(startToControl, controlToEnd, t);
     }
 
     public override void Move()
     {
-        // Implement this method if needed
+        time += Time.deltaTime * speed;
+        var position = EvaluateCurve(time);
+        var nextPos = EvaluateCurve(time + 0.01f) - position;
+
+        transform.rotation = Quaternion.LookRotation(nextPos);
+        transform.position = position;
+        previousPosition = transform.position;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        for (float i = 0; i < 20; i++)
+        {
+            Gizmos.DrawSphere(EvaluateCurve(i / 20), 0.1f);
+        }
+
+        // draw previous position
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(previousPosition, 1f);
+    }
+
+    public override void Hide()
+    {
+        // this method runs when bu
     }
 }

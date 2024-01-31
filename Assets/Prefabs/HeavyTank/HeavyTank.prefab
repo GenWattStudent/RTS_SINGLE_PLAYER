@@ -1152,6 +1152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 8
   rotationAngle: -20
+  threshold: 0.4
 --- !u!95 &2383748232875807471
 Animator:
   serializedVersion: 7

@@ -168,7 +168,9 @@ public class Attack : MonoBehaviour
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;
-        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.rotation.x * 2 : 0;
+        // make rotation  from -360 to 360
+
+        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
         bullet.Setup();
@@ -219,9 +221,16 @@ public class Attack : MonoBehaviour
         }
     }
 
+    private bool IsInGunAngle()
+    {
+        if (vehicleGun == null) return true;
+
+        return vehicleGun.IsFinisehdRotation();
+    }
+
     private void PerformAttack()
     {
-        if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle())
+        if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle() && IsInGunAngle())
         {
             OnAttack?.Invoke();
             ShootBullet();
