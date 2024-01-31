@@ -168,7 +168,6 @@ public class Attack : MonoBehaviour
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
         bullet.playerId = currentUnit.playerId;
-        // make rotation  from -360 to 360
 
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();

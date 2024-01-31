@@ -22,7 +22,7 @@ MonoBehaviour:
   explosionSound: 4
   radius: 0.4
   damage: 40
-  speed: 5
+  speed: 1
   stats:
   - Type: 2
     Value: 40

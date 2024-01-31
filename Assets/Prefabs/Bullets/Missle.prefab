@@ -181,8 +181,6 @@ GameObject:
   - component: {fileID: 1654249786358649304}
   - component: {fileID: 2753135743361072677}
   - component: {fileID: -7307114883415932514}
-  - component: {fileID: 2255274949730263119}
-  - component: {fileID: 8299932532981390114}
   m_Layer: 0
   m_Name: Missle
   m_TagString: Untagged
@@ -241,83 +239,6 @@ MonoBehaviour:
   previousPosition: {x: 0, y: 0, z: 0}
   arcHeight: 0
   launchAngle: 0
---- !u!54 &2255274949730263119
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3824120718455233952}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &8299932532981390114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3824120718455233952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fac7ad8450e5042079f6f9f94e05fc58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_debug: 0
-  m_autoLaunch: 1
-  m_trackingDelay: 0
-  m_stopAtIntercept: 0
-  m_destroyAtHit: 0
-  m_interceptRange: 1
-  m_limitFlightTime: 0
-  m_flightTime: 100
-  m_guidanceSettings:
-    m_targetType: 0
-    m_limitAcceleration: 1
-    m_maxAcceleration: 100
-    m_guidanceType: 0
-    m_target: {fileID: 0}
-    m_loopPath: 0
-    m_tTurnIn: 0.5
-    m_turnMarginSimple: 0
-    m_pathN: 4
-    m_CLOSN: 4
-    m_pathObjs: []
-    m_N: 4
-  m_motorStages:
-  - m_motorType: 0
-    m_limitFlightTime: 0
-    m_flightTime: 10
-    m_speed: 1
-    m_limitMotorAcceleration: 0
-    m_maxAcceleration: 10
-  m_launchType: 0
-  m_launchCustomDir: {x: 0, y: 0, z: 0}
-  m_launchObject: {fileID: 0}
-  m_launchSpeed: 0
-  m_interceptEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_launchEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7123755891975240884
 GameObject:
   m_ObjectHideFlags: 0

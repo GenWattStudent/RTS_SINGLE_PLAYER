@@ -7,7 +7,6 @@ public class BuildingSystem : MonoBehaviour
     [SerializeField] private Material invalidMaterial;
     public BuildingSo SelectedBuilding { get; private set; }
     private GameObject previewPrefab;
-    private bool wasValid;
     public float diffranceBetweenMaxAndMinHeight = 1f;
     public int heightRaysCount = 15;
     private Vector3[] hightPoints;
@@ -75,9 +74,10 @@ public class BuildingSystem : MonoBehaviour
             RaycastHit[] hits = Physics.RaycastAll(ray, float.MaxValue);
             foreach (var hit in hits)
             {
-                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Terrain") && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ghost"))
+                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Terrain")
+                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ghost")
+                    && !hit.collider.gameObject.CompareTag("ForceField"))
                 {
-                    Debug.Log(hit.collider.gameObject.name);
                     isCollidingWithOtherUnits = true;
                     break;
                 }
@@ -150,8 +150,6 @@ public class BuildingSystem : MonoBehaviour
             {
                 SetInvalidMaterial();
             }
-
-            wasValid = isValid;
         }
 
         if (mousePosition != null && previewPrefab != null) previewPrefab.transform.position = (Vector3)mousePosition;

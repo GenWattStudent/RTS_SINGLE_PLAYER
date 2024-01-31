@@ -83,7 +83,7 @@ public class LightManager : MonoBehaviour
             if (DirectionalLight.enabled == true)
             {
                 DirectionalLight.color = DayNightPreset.DirectionalColour.Evaluate(timePercent);
-                 float rotationAngle = timePercent * 175f;
+                float rotationAngle = timePercent * 175f;
 
                 // Set the rotation of the DirectionalLight
                 DirectionalLight.transform.rotation = Quaternion.Euler(rotationAngle, SunDirection, 0);

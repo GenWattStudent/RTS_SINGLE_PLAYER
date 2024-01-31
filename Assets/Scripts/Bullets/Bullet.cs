@@ -71,7 +71,7 @@ public class Bullet : MonoBehaviour
         RaycastHit hit;
 
         var direction = transform.position - motion.previousPosition;
-        Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
+        // Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
         if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude))
         {
             // Draw long ray from this postion to forward of the bullet
@@ -99,7 +99,12 @@ public class Bullet : MonoBehaviour
     private void HideBullet()
     {
         pool.Release(this);
+        lifeTimeTimer = 0f;
         motion.Hide();
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear();
+        }
     }
 
     public void Setup()
@@ -110,19 +115,14 @@ public class Bullet : MonoBehaviour
 
     public void Reset()
     {
-        lifeTimeTimer = 0f;
         motion.previousPosition = transform.position;
-        if (trailRenderer != null)
-        {
-            trailRenderer.Clear();
-        }
     }
 
     void Update()
     {
         lifeTimeTimer += Time.deltaTime;
-        motion.Move();
         CheckHit();
+        motion.Move();
 
         if (lifeTimeTimer > bulletSo.lifeTime)
         {
