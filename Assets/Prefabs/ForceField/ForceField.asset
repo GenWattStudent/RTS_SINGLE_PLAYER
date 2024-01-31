@@ -49,12 +49,12 @@ MonoBehaviour:
   levelUpEffect: {fileID: 0}
   usage: 50
   usageInterval: 2
-  cost: 400
+  cost: 100
   income: 0
   incomeInterval: 0
   stats:
   - Type: 1
-    Value: 600
+    Value: 200
   - Type: 8
     Value: 400
   - Type: 9
