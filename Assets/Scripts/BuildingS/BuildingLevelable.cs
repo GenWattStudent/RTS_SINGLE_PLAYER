@@ -9,11 +9,13 @@ public class BuildingLevelable : MonoBehaviour
     public Damagable damagable;
     public int reduceSpawnTime = 0;
     private ScreenController screenController;
+    private Stats stats;
 
     private void Start()
     {
         building = GetComponent<Building>();
         damagable = GetComponent<Damagable>();
+        stats = GetComponent<Stats>();
         screenController = GetComponentInChildren<ScreenController>();
     }
 
@@ -22,6 +24,12 @@ public class BuildingLevelable : MonoBehaviour
         if (screenController == null) return;
 
         screenController.SetText($"{level} lvl");
+    }
+
+    public BuildingLevelableSo.BuildingLevel GetNextBuildingLevel()
+    {
+        if (level >= maxLevel) return null;
+        return buildingLevelableSo.levels[level];
     }
 
     private void InstantiateLevelUpEffects()
@@ -34,25 +42,44 @@ public class BuildingLevelable : MonoBehaviour
         }
     }
 
+    private void UpdateSpawner(BuildingLevelableSo.BuildingLevel buildingLevel)
+    {
+        var spawner = GetComponent<ISpawnerBuilding>();
+        if (spawner != null) reduceSpawnTime += buildingLevel.reduceSpawnTime;
+    }
+
+    private void UpdateMiner(BuildingLevelableSo.BuildingLevel buildingLevel)
+    {
+        if (stats != null) stats.AddToStat(StatType.Income, buildingLevel.income);
+    }
+
+    private void UpdateHealth(BuildingLevelableSo.BuildingLevel buildingLevel)
+    {
+        if (damagable != null)
+        {
+            damagable.stats.AddToStat(StatType.MaxHealth, buildingLevel.health);
+            damagable.TakeDamage(-buildingLevel.health);
+        }
+    }
+
+    private void UpdateAttack(BuildingLevelableSo.BuildingLevel buildingLevel)
+    {
+        if (building.attackableSo != null) damagable.stats.AddToStat(StatType.Damage, buildingLevel.attackDamage);
+    }
+
     public void LevelUp()
     {
         if (level >= maxLevel || !UIStorage.Instance.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
-        Debug.Log($"Level up to {buildingLevelableSo.levels[level].cost} level");
+
         level++;
         var levelData = buildingLevelableSo.levels[level - 1];
-        Debug.Log($"Level up to {levelData.cost} level");
         UIStorage.Instance.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
-        damagable.stats.AddToStat(StatType.MaxHealth, levelData.health);
-        damagable.TakeDamage(-levelData.health);
+        UpdateHealth(levelData);
+        UpdateAttack(levelData);
+        UpdateMiner(levelData);
+        UpdateSpawner(levelData);
 
-        if (building.attackableSo != null) damagable.stats.AddToStat(StatType.Damage, levelData.attackDamage);
-
-        var resource = GetComponent<Resource>();
-
-        if (resource != null) resource.income += levelData.income;
-
-        reduceSpawnTime += levelData.reduceSpawnTime;
         UpdateScreen();
         InstantiateLevelUpEffects();
     }

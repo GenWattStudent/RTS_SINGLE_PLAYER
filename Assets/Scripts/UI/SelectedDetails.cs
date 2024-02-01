@@ -47,7 +47,10 @@ public class SelectedDetails : ToolkitHelper
 
     private void OnUpgradeButtonClick(ClickEvent ev)
     {
-        building.buildingLevelable.LevelUp();
+        if (building.buildingLevelable != null)
+        {
+            building.buildingLevelable.LevelUp();
+        }
     }
 
     private void OnSellButtonClick(ClickEvent ev)
@@ -214,6 +217,20 @@ public class SelectedDetails : ToolkitHelper
                 levelText.text = $"MAX {building.buildingLevelable.level} LVL";
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
+            }
+
+            if (building.buildingLevelable != null)
+            {
+                var nextBuildingLevel = building.buildingLevelable.GetNextBuildingLevel();
+
+                if (nextBuildingLevel != null && UIStorage.Instance.HasEnoughResource(nextBuildingLevel.resourceSO, nextBuildingLevel.cost))
+                {
+                    levelUpButton.SetEnabled(true);
+                }
+                else
+                {
+                    levelUpButton.SetEnabled(false);
+                }
             }
         }
     }

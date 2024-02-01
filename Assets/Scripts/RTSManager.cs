@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RTSManager : MonoBehaviour
 {
-    [SerializeField] private GameObject moveIdicatorPrefab;
+    [SerializeField] private GameObject moveIndicatorPrefab;
     public float unitSpacing = 0.2f;
 
     private void CancelBuildingCommand(Selectable selectable)
@@ -55,7 +55,7 @@ public class RTSManager : MonoBehaviour
             }
         }
 
-        var go = Instantiate(moveIdicatorPrefab, position, Quaternion.identity);
+        var go = Instantiate(moveIndicatorPrefab, position, Quaternion.identity);
         Destroy(go, 2f);
     }
 

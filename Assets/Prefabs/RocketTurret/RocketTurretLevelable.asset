@@ -19,15 +19,18 @@ MonoBehaviour:
     cost: 0
     income: 0
     reduceSpawnTime: 0
+    resourceSO: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   - level: 2
     health: 50
     attackDamage: 30
     cost: 140
     income: 0
     reduceSpawnTime: 0
+    resourceSO: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   - level: 3
     health: 50
     attackDamage: 30
     cost: 190
     income: 0
     reduceSpawnTime: 0
+    resourceSO: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}

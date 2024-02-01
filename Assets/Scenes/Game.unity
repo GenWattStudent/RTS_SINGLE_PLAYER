@@ -701,8 +701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f9d1587b7cc8b47a45ca56ab6d6985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveIdicatorPrefab: {fileID: 8465652735642422970, guid: 71ed33c253b22a642bd21210b37db7f7,
-    type: 3}
+  moveIndicatorPrefab: {fileID: 0}
   unitSpacing: 1
 --- !u!1 &593574727
 GameObject:

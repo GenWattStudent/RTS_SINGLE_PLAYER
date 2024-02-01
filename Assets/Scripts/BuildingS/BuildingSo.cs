@@ -24,11 +24,7 @@ public class BuildingSo : DamagableSo
    public ResourceSO resourceUsage;
    public GameObject levelUpEffect;
 
-   public int usage;
-   public float usageInterval;
    public int cost;
-   public int income;
-   public float incomeInterval;
 
    public List<Stat> stats = new();
 }

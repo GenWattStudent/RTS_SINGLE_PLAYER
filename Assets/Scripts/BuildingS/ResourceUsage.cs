@@ -1,61 +1,52 @@
 using UnityEngine;
 
+public class UsageData
+{
+    public ResourceSO resourceSO;
+    public float usage;
+}
+
 public class ResourceUsage : MonoBehaviour
 {
-    private BuildingSo buildingSo;
-    private UnitSo unitSo;
     private float usageTimer = 0;
     private float usageInterval = 0;
     public bool isInDebt = false;
+    private Stats stats;
+    private Building building;
+    private Unit unit;
 
-    private void Awake()
+    private void Start()
     {
-        var selectable = GetComponent<Selectable>();
+        building = GetComponent<Building>();
+        unit = GetComponent<Unit>();
+        stats = GetComponent<Stats>();
+        usageInterval = stats.GetStat(StatType.UsageInterval);
+    }
 
-        if (selectable is null)
-        {
-            return;
-        }
+    private UsageData GetUsageDataFromStats()
+    {
+        var resourceSo = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
 
-        if (selectable.selectableType == Selectable.SelectableType.Building)
+        var usageData = new UsageData
         {
-            var building = GetComponent<Building>();
-            buildingSo = building.buildingSo;
-            usageInterval = buildingSo.usageInterval;
-        }
-        else if (selectable.selectableType == Selectable.SelectableType.Unit)
-        {
-            var unit = GetComponent<Unit>();
-            unitSo = unit.unitSo;
-            usageInterval = unitSo.usageInterval;
-        }
+            resourceSO = resourceSo,
+            usage = stats.GetStat(StatType.Usage),
+        };
+        return usageData;
     }
 
     public void UseResources()
     {
-        if (buildingSo is not null)
+        var usageData = GetUsageDataFromStats();
+
+        if (UIStorage.Instance.HasEnoughResource(usageData.resourceSO, usageData.usage))
         {
-            if (UIStorage.Instance.HasEnoughResource(buildingSo.resourceUsage, buildingSo.usage))
-            {
-                isInDebt = false;
-                UIStorage.Instance.DecreaseResource(buildingSo.resourceUsage, buildingSo.usage);
-            }
-            else
-            {
-                isInDebt = true;
-            }
+            isInDebt = false;
+            UIStorage.Instance.DecreaseResource(usageData.resourceSO, usageData.usage);
         }
-        else if (unitSo is not null)
+        else
         {
-            if (UIStorage.Instance.HasEnoughResource(unitSo.resourceUsage, unitSo.usage))
-            {
-                isInDebt = false;
-                UIStorage.Instance.DecreaseResource(unitSo.resourceUsage, unitSo.usage);
-            }
-            else
-            {
-                isInDebt = true;
-            }
+            isInDebt = true;
         }
     }
 

@@ -11,7 +11,7 @@ public class BuildingLevelableSo : ScriptableObject
         public int health;
         public int attackDamage;
         public int cost;
-        public int income;
+        public float income;
         public int reduceSpawnTime;
         public ResourceSO resourceSO;
     }
