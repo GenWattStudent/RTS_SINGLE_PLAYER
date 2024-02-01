@@ -25,19 +25,22 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
-        selectedObjects = new ();
+        selectedObjects = new();
     }
 
-    private bool IsEnemy(Selectable selectable) {
+    private bool IsEnemy(Selectable selectable)
+    {
         if (selectable == null) return true;
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
-        return unitScript.playerId != PlayerController.playerId;
+        return unitScript.OwnerClientId != PlayerController.OwnerClientId;
     }
 
-    public static bool IsCanAttack() {
+    public static bool IsCanAttack()
+    {
         if (selectedObjects.Count == 0) return false;
-        foreach (Selectable selectable in selectedObjects) {
+        foreach (Selectable selectable in selectedObjects)
+        {
             var unitScript = selectable.GetComponent<Unit>();
             if (unitScript == null) continue;
             if (unitScript.unitSo == null) continue;
@@ -48,12 +51,15 @@ public class SelectionManager : MonoBehaviour
         return false;
     }
 
-    public static List<Selectable> GetWorkers() {
+    public static List<Selectable> GetWorkers()
+    {
         var workers = new List<Selectable>();
 
-        foreach (Selectable selectable in selectedObjects) {
+        foreach (Selectable selectable in selectedObjects)
+        {
             var unitScript = selectable.GetComponent<Unit>();
-            if (unitScript != null && unitScript.unitSo != null && unitScript.unitSo.type == UnitSo.UnitType.Worker) {
+            if (unitScript != null && unitScript.unitSo != null && unitScript.unitSo.type == UnitSo.UnitType.Worker)
+            {
                 workers.Add(selectable);
             }
         }
@@ -61,14 +67,17 @@ public class SelectionManager : MonoBehaviour
         return workers;
     }
 
-    public static List<Selectable> GetHealers() {
+    public static List<Selectable> GetHealers()
+    {
         var healers = new List<Selectable>();
 
-        foreach (Selectable selectable in selectedObjects) {
+        foreach (Selectable selectable in selectedObjects)
+        {
             var unitScript = selectable.GetComponent<Unit>();
             var healerScript = selectable.GetComponent<Healer>();
 
-            if (unitScript != null && unitScript.unitSo != null && healerScript != null) {
+            if (unitScript != null && unitScript.unitSo != null && healerScript != null)
+            {
                 healers.Add(selectable);
             }
         }
@@ -76,32 +85,37 @@ public class SelectionManager : MonoBehaviour
         return healers;
     }
 
-    public static bool IsBuilding(Selectable selectable) {
+    public static bool IsBuilding(Selectable selectable)
+    {
         if (selectable == null) return false;
         var buildingScript = selectable.GetComponent<Building>();
         if (buildingScript == null) return false;
         return true;
     }
 
-    public static void Select(Selectable selectable) {
+    public static void Select(Selectable selectable)
+    {
         selectable.Select();
         selectedObjects.Add(selectable);
-        OnSelect?.Invoke(); 
+        OnSelect?.Invoke();
     }
 
-    public static void Deselect(Selectable selectable) {
+    public static void Deselect(Selectable selectable)
+    {
         selectable.Deselect();
         selectedObjects.Remove(selectable);
         OnSelect?.Invoke();
     }
 
-    public static void SelectBuilding(Selectable selectable) {
+    public static void SelectBuilding(Selectable selectable)
+    {
         DeselectAll();
         var buildingScript = selectable.GetComponent<Building>();
         var tankBuildingScript = selectable.GetComponent<TankBuilding>();
         var constructionScript = selectable.GetComponent<Construction>();
 
-        if (constructionScript != null) {
+        if (constructionScript != null)
+        {
             selectable.Select();
             selectedObjects.Add(selectable);
             return;
@@ -112,7 +126,8 @@ public class SelectionManager : MonoBehaviour
         selectedObjects.Add(selectable);
     }
 
-    private void OnClickHandler() {
+    private void OnClickHandler()
+    {
         // Get all the objects that are under the mouse position its 3D project!!
         RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 100f);
         bool isSelectableClicked = false;
@@ -123,7 +138,8 @@ public class SelectionManager : MonoBehaviour
             // Check if the object is selectable
             Selectable selectable = hit.collider.GetComponent<Selectable>();
 
-            if (IsBuilding(selectable) && !IsEnemy(selectable)) {
+            if (IsBuilding(selectable) && !IsEnemy(selectable))
+            {
                 SelectBuilding(selectable);
                 isSelectableClicked = true;
                 break;
@@ -132,7 +148,8 @@ public class SelectionManager : MonoBehaviour
             if (!IsEnemy(selectable))
             {
                 // Check if the object is already selected
-                if (Input.GetKey(KeyCode.LeftShift)) {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
                     if (selectable.isSelected)
                     {
                         Deselect(selectable);
@@ -163,7 +180,7 @@ public class SelectionManager : MonoBehaviour
     {
         DeselectAll();
         selectionBox.gameObject.SetActive(false);
-        
+
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
@@ -184,8 +201,10 @@ public class SelectionManager : MonoBehaviour
         selectionBox.sizeDelta = Vector2.zero;
     }
 
-    private void UpdateSelectionBox(Vector2 currentMousePosition) {
-        if (!selectionBox.gameObject.activeInHierarchy) {
+    private void UpdateSelectionBox(Vector2 currentMousePosition)
+    {
+        if (!selectionBox.gameObject.activeInHierarchy)
+        {
             selectionBox.gameObject.SetActive(true);
         }
 
@@ -199,8 +218,10 @@ public class SelectionManager : MonoBehaviour
     // Select unit if clicked on it, deselect when nothing is clicked on
     private void Update()
     {
-        if (UIHelper.Instance.IsPointerOverUIElement()) {
-            if (isDragging) {
+        if (UIHelper.Instance.IsPointerOverUIElement())
+        {
+            if (isDragging)
+            {
                 SelectObjectsInRectangle();
                 isDragging = false;
                 return;

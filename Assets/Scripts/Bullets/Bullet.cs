@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -6,7 +5,7 @@ using UnityEngine.Pool;
 public class Bullet : MonoBehaviour
 {
     public float damage;
-    public Guid playerId;
+    public ulong OwnerClientId;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
@@ -41,12 +40,12 @@ public class Bullet : MonoBehaviour
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
 
-        if (damageableScript != null && damageableScript.playerId != playerId)
+        if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
         {
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.playerId == PlayerController.playerId)
+                if (unitsBullet.OwnerClientId == PlayerController.OwnerClientId)
                 {
                     PlayerController.Instance.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }
@@ -57,13 +56,13 @@ public class Bullet : MonoBehaviour
     private bool IsOwnUnit(RaycastHit hit)
     {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.playerId == playerId;
+        return damagable != null && !damagable.isDead && damagable.OwnerClientId == OwnerClientId;
     }
 
     private bool IsOwnUnit(Collider collider)
     {
         var damagable = collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.playerId == playerId;
+        return damagable != null && !damagable.isDead && damagable.OwnerClientId == OwnerClientId;
     }
 
     private void CheckHit()

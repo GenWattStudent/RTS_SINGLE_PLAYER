@@ -77,7 +77,7 @@ public class Attack : MonoBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (damagableScript != null && damagableScript.playerId != currentUnit.playerId && !damagableScript.isDead && unitScript.isVisibile)
+            if (damagableScript != null && damagableScript.OwnerClientId != currentUnit.OwnerClientId && !damagableScript.isDead && unitScript.isVisibile)
             {
                 if (IsTargetHideInTerrain(damagableScript)) continue;
                 SetTarget(damagableScript);
@@ -167,7 +167,7 @@ public class Attack : MonoBehaviour
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
-        bullet.playerId = currentUnit.playerId;
+        bullet.OwnerClientId = currentUnit.OwnerClientId;
 
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();

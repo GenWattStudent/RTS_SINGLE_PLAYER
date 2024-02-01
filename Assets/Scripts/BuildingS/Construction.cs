@@ -84,8 +84,8 @@ public class Construction : MonoBehaviour
         var isRemoved = RemoveConstructionIfSelected();
         var selectable = building.GetComponent<Selectable>();
 
-        building.GetComponent<Unit>().playerId = GetComponent<Unit>().playerId;
-        building.GetComponent<Damagable>().playerId = GetComponent<Unit>().playerId;
+        building.GetComponent<Unit>().OwnerClientId = GetComponent<Unit>().OwnerClientId;
+        building.GetComponent<Damagable>().OwnerClientId = GetComponent<Unit>().OwnerClientId;
         if (isRemoved) SelectionManager.SelectBuilding(selectable);
         Destroy(gameObject);
     }

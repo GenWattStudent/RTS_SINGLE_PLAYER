@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     public static Color playerColor;
     public static Material playerMaterial;
@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
     public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
-    public static Guid playerId;
+    public static ulong OwnerClientId = 0;
     public int playerLevel = 1;
     public int playerExpierence = 0;
     public static PlayerController Instance;
@@ -31,8 +31,8 @@ public class PlayerController : NetworkBehaviour
 
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
-        damagableScript.playerId = playerId;
-        unitScript.playerId = playerId;
+        damagableScript.OwnerClientId = OwnerClientId;
+        unitScript.OwnerClientId = OwnerClientId;
         unitScript.ChangeMaterial(playerMaterial, true);
         units.Add(unitScript);
 
@@ -49,12 +49,6 @@ public class PlayerController : NetworkBehaviour
         };
 
         OnUnitChange?.Invoke(unit, units);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void AddExpiernceServerRpc(int amount)
-    {
-        Debug.Log("AddExpiernceServerRpc");
     }
 
     public void AddExpiernce(int amount)
@@ -134,8 +128,8 @@ public class PlayerController : NetworkBehaviour
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
-                damagableScript.playerId = playerId;
-                unitScript.playerId = playerId;
+                damagableScript.OwnerClientId = OwnerClientId;
+                unitScript.OwnerClientId = OwnerClientId;
                 unitScript.ChangeMaterial(playerMaterial, true);
                 AddUnit(unitScript);
 
@@ -153,11 +147,5 @@ public class PlayerController : NetworkBehaviour
     {
         SpawnUnits();
         AddExpiernce(0);
-        AddExpiernceServerRpc(0);
-    }
-
-    void Update()
-    {
-
     }
 }

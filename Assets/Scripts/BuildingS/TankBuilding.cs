@@ -41,8 +41,8 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         var unitScript = unitInstance.GetComponent<Unit>();
         var damagableScript = unitInstance.GetComponent<Damagable>();
 
-        if (damagableScript != null) unitInstance.GetComponent<Damagable>().playerId = PlayerController.playerId;
-        unitScript.playerId = PlayerController.playerId;
+        if (damagableScript != null) unitInstance.GetComponent<Damagable>().OwnerClientId = PlayerController.OwnerClientId;
+        unitScript.OwnerClientId = PlayerController.OwnerClientId;
         unitScript.ChangeMaterial(PlayerController.playerMaterial, true);
 
         if (unitMovePoint != null)

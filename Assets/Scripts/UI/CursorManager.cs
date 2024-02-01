@@ -44,7 +44,7 @@ public class CursorManager : MonoBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            return damagable != null && !damagable.isDead && damagable.playerId != PlayerController.playerId;
+            return damagable != null && !damagable.isDead && damagable.OwnerClientId != PlayerController.OwnerClientId;
         }
         else
         {
@@ -92,7 +92,7 @@ public class CursorManager : MonoBehaviour
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.playerId == PlayerController.playerId && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
+            if (damagable != null && !damagable.isDead && damagable.OwnerClientId == PlayerController.OwnerClientId && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {
                 return true;
             }

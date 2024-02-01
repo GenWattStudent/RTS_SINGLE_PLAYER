@@ -165,10 +165,10 @@ public class BuildingSystem : MonoBehaviour
         var stats = newBuilding.GetComponent<Stats>();
 
         stats.AddStat(StatType.Health, 1);
-        damagableScript.playerId = PlayerController.playerId;
+        damagableScript.OwnerClientId = PlayerController.OwnerClientId;
 
         var unitScript = newBuilding.GetComponent<Unit>();
-        unitScript.playerId = PlayerController.playerId;
+        unitScript.OwnerClientId = PlayerController.OwnerClientId;
         PlayerController.AddBuilding(newBuilding.GetComponent<Building>());
     }
 

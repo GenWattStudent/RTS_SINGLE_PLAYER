@@ -6,7 +6,7 @@ public class Damagable : MonoBehaviour
     [SerializeField] private RectTransform healthBar;
     public DamagableSo damagableSo;
     private ProgresBar progressBarScript;
-    public Guid playerId;
+    public ulong OwnerClientId;
     public Levelable levelable;
     public GameObject targetPoint;
     public bool isDead = false;

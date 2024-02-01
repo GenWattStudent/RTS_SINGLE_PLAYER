@@ -84,7 +84,7 @@
             <ui:VisualElement name="Minimap" class="btn-rounded-small border-medium border-secondary" style="flex-grow: 0; width: 400px; background-image: url(&apos;project://database/Assets/Textures/MinimapTexture.renderTexture?fileID=8400000&amp;guid=9a82a27deeae96e478a349f3546e8b28&amp;type=2#MinimapTexture&apos;); border-top-right-radius: 10px; border-top-width: 2px; border-right-width: 0; border-bottom-width: 0; border-left-width: 3px; border-top-left-radius: 0; border-bottom-left-radius: 0;" />
         </ui:VisualElement>
         <ui:VisualElement name="Details" class="border-secondary" style="flex-grow: 1; position: absolute; top: 0; right: 0; background-color: rgba(55, 55, 55, 0.95); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-bottom-left-radius: 20px; flex-direction: row; width: auto; align-items: center; justify-content: flex-end; align-self: auto; flex-wrap: nowrap; border-bottom-width: 5px; border-left-width: 5px; border-right-width: 0;">
-            <ui:VisualElement name="FPS" class="border-secondary" style="flex-grow: 1; border-top-width: 0; border-right-width: 10px; border-bottom-width: 0; border-left-width: 0; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; width: auto; min-width: 200px; justify-content: center; align-items: center; height: 68px;">
+            <ui:VisualElement name="FPS" class="border-secondary" style="flex-grow: 1; border-top-width: 0; border-right-width: 10px; border-bottom-width: 0; border-left-width: 0; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; width: auto; min-width: 200px; justify-content: center; align-items: center; height: 100%;">
                 <ui:Label tabindex="-1" text="200FPS" display-tooltip-when-elided="true" name="FPSLabel" class="text-bold text-primary text-large" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-grow: 0; -unity-text-align: upper-center;" />
             </ui:VisualElement>
             <ui:VisualElement name="UnitCount" class="border-secondary" style="flex-grow: 0; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; align-items: center; border-top-width: 0; border-right-width: 10px; border-bottom-width: 0; border-left-width: 0; width: auto; -unity-text-align: upper-center; flex-direction: row; justify-content: flex-start; min-width: 200px;">
@@ -186,6 +186,11 @@
                 </ui:VisualElement>
                 <ui:Button text="Go to main menu" display-tooltip-when-elided="true" name="MainMenuButtonResult" class="btn-primary" style="margin-right: 2px;" />
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="MultiplayerTools" class="border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 50%; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; background-color: rgba(39, 39, 39, 0.9); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; translate: -50% -50%; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; display: none;">
+            <ui:Label tabindex="-1" text="Multiplayer Tools" display-tooltip-when-elided="true" class="text-bold text-large text-primary" />
+            <ui:Button text="Start Client" display-tooltip-when-elided="true" name="StartClient" class="btn-primary" />
+            <ui:Button text="Start Host" display-tooltip-when-elided="true" name="StartHost" class="btn-primary" style="margin-top: 10px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
