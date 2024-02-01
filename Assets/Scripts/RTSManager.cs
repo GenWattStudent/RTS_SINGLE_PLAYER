@@ -164,14 +164,14 @@ public class RTSManager : MonoBehaviour
                 if (damagableScript != null && selectableScript != null)
                 {
                     // Attack
-                    if (damagableScript.OwnerClientId != PlayerController.OwnerClientId)
+                    if (damagableScript.OwnerClientId != PlayerController.Instance.OwnerClientId)
                     {
                         AttackCommand(damagableScript);
                         isAction = true;
                         return;
                     }
                     // ------------------------------------------------
-                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == PlayerController.OwnerClientId && constructionScript != null)
+                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == PlayerController.Instance.OwnerClientId && constructionScript != null)
                     {
                         // Build
                         BuildCommand(constructionScript);
@@ -180,7 +180,7 @@ public class RTSManager : MonoBehaviour
                     }
 
                     // Heal 
-                    if (damagableScript.OwnerClientId == PlayerController.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
+                    if (damagableScript.OwnerClientId == PlayerController.Instance.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
                     {
                         var healers = SelectionManager.GetHealers();
 

@@ -41,9 +41,9 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         var unitScript = unitInstance.GetComponent<Unit>();
         var damagableScript = unitInstance.GetComponent<Damagable>();
 
-        if (damagableScript != null) unitInstance.GetComponent<Damagable>().OwnerClientId = PlayerController.OwnerClientId;
-        unitScript.OwnerClientId = PlayerController.OwnerClientId;
-        unitScript.ChangeMaterial(PlayerController.playerMaterial, true);
+        if (damagableScript != null) unitInstance.GetComponent<Damagable>().OwnerClientId = PlayerController.Instance.OwnerClientId;
+        unitScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
+        unitScript.ChangeMaterial(PlayerController.Instance.playerData.playerMaterial, true);
 
         if (unitMovePoint != null)
         {
@@ -51,7 +51,7 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
             if (unitMovement != null) unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
         }
 
-        PlayerController.AddUnit(unitScript);
+        PlayerController.Instance.AddUnit(unitScript);
         return unitScript;
     }
 

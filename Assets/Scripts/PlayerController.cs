@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
-    public static Color playerColor;
-    public static Material playerMaterial;
-    public static List<Unit> units = new();
-    public static List<Building> buildings = new();
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
-    public Vector3 spawnPosition = new Vector3(1.5f, 0, 2f);
-    public static ulong OwnerClientId = 0;
-    public int playerLevel = 1;
-    public int playerExpierence = 0;
+    [SerializeField] private GameObject toolbarPrefab;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
+    public PlayerData playerData;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -24,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private void SpawnHero()
     {
-        var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
+        var heroInstance = Instantiate(hero, playerData.spawnPosition, Quaternion.identity);
         var damagableScript = heroInstance.GetComponent<Damagable>();
         var unitScript = heroInstance.GetComponent<Unit>();
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
@@ -33,78 +27,78 @@ public class PlayerController : MonoBehaviour
 
         damagableScript.OwnerClientId = OwnerClientId;
         unitScript.OwnerClientId = OwnerClientId;
-        unitScript.ChangeMaterial(playerMaterial, true);
-        units.Add(unitScript);
+        unitScript.ChangeMaterial(playerData.playerMaterial, true);
+        playerData.units.Add(unitScript);
 
-        spawnPosition += new Vector3(2, 0, 0);
+        playerData.spawnPosition += new Vector3(2, 0, 0);
     }
 
-    public static void AddUnit(Unit unit)
+    public void AddUnit(Unit unit)
     {
         var damagableScript = unit.GetComponent<Damagable>();
-        units.Add(unit);
+        playerData.units.Add(unit);
         damagableScript.OnDead += () =>
         {
             RemoveUnit(unit);
         };
 
-        OnUnitChange?.Invoke(unit, units);
+        OnUnitChange?.Invoke(unit, playerData.units);
     }
 
     public void AddExpiernce(int amount)
     {
-        if (playerLevel == playerLevelSo.levelsData.Count) return;
+        if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
 
-        playerExpierence += amount;
-        var nextLevelData = playerLevelSo.levelsData[playerLevel];
-        var diffrence = playerExpierence - nextLevelData.expToNextLevel;
+        playerData.playerExpierence += amount;
+        var nextLevelData = playerLevelSo.levelsData[playerData.playerLevel];
+        var diffrence = playerData.playerExpierence - nextLevelData.expToNextLevel;
 
-        if (playerLevel < playerLevelSo.levelsData.Count && playerExpierence >= nextLevelData.expToNextLevel)
+        if (playerData.playerLevel < playerLevelSo.levelsData.Count && playerData.playerExpierence >= nextLevelData.expToNextLevel)
         {
-            playerLevel++;
-            playerExpierence = diffrence;
+            playerData.playerLevel++;
+            playerData.playerExpierence = diffrence;
             SkillTreeManager.Instance.AddSkillPoints(1);
         }
 
-        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence, playerLevel, playerLevelSo.levelsData.Count);
+        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerData.playerExpierence, playerData.playerLevel, playerLevelSo.levelsData.Count);
     }
 
-    public static void RemoveUnit(Unit unit)
+    public void RemoveUnit(Unit unit)
     {
-        units.Remove(unit);
-        OnUnitChange?.Invoke(unit, units);
+        playerData.units.Remove(unit);
+        OnUnitChange?.Invoke(unit, playerData.units);
     }
 
-    public static void AddBuilding(Building building)
+    public void AddBuilding(Building building)
     {
         var damagableScript = building.GetComponent<Damagable>();
-        buildings.Add(building);
+        playerData.buildings.Add(building);
 
         damagableScript.OnDead += () =>
         {
             RemoveBuilding(building);
         };
 
-        OnBuildingChange?.Invoke(building, buildings);
+        OnBuildingChange?.Invoke(building, playerData.buildings);
     }
 
-    public static void RemoveBuilding(Building building)
+    public void RemoveBuilding(Building building)
     {
-        buildings.Remove(building);
-        OnBuildingChange?.Invoke(building, buildings);
+        playerData.buildings.Remove(building);
+        OnBuildingChange?.Invoke(building, playerData.buildings);
     }
 
-    public static bool IsMaxBuildingOfType(BuildingSo buildingSo)
+    public bool IsMaxBuildingOfType(BuildingSo buildingSo)
     {
         int count = GetBuildingCountOfType(buildingSo);
         return count >= buildingSo.maxBuildingCount;
     }
 
-    public static int GetBuildingCountOfType(BuildingSo buildingSo)
+    public int GetBuildingCountOfType(BuildingSo buildingSo)
     {
         int count = 0;
 
-        foreach (var building in buildings)
+        foreach (var building in playerData.buildings)
         {
             if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
         }
@@ -112,40 +106,53 @@ public class PlayerController : MonoBehaviour
         return count;
     }
 
-    private void SpawnUnits()
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnUnitsServerRpc()
     {
 
-        SpawnHero();
+        // SpawnHero();
         foreach (var unitPrefab in unitPrefabs)
         {
             for (int i = 0; i < 2; i++)
             {
-                var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
+                var unit = Instantiate(unitPrefab, playerData.spawnPosition, Quaternion.identity);
                 var damagableScript = unit.GetComponent<Damagable>();
                 var unitScript = unit.GetComponent<Unit>();
                 var unitMovement = unit.GetComponent<UnitMovement>();
+                var no = unit.GetComponent<NetworkObject>();
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 damagableScript.OwnerClientId = OwnerClientId;
                 unitScript.OwnerClientId = OwnerClientId;
-                unitScript.ChangeMaterial(playerMaterial, true);
+                unitScript.ChangeMaterial(playerData.playerMaterial, true);
                 AddUnit(unitScript);
 
-                spawnPosition += new Vector3(2, 0, 0);
+                playerData.spawnPosition += new Vector3(2, 0, 0);
+                no.SpawnWithOwnership(OwnerClientId);
             }
         }
     }
 
-    void Awake()
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnToolbarServerRpc()
+    {
+        var toolbar = Instantiate(toolbarPrefab, playerData.spawnPosition, Quaternion.identity);
+        var no = toolbar.GetComponent<NetworkObject>();
+        no.SpawnWithOwnership(OwnerClientId);
+    }
+
+    private void Awake()
     {
         Instance = this;
     }
 
-    void Start()
+    private void Start()
     {
-        SpawnUnits();
+        playerData = MultiplayerController.Instance.Get(OwnerClientId);
+        SpawnToolbarServerRpc();
+        SpawnUnitsServerRpc();
         AddExpiernce(0);
     }
 }

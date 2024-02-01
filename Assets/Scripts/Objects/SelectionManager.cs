@@ -33,7 +33,7 @@ public class SelectionManager : MonoBehaviour
         if (selectable == null) return true;
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
-        return unitScript.OwnerClientId != PlayerController.OwnerClientId;
+        return unitScript.OwnerClientId != PlayerController.Instance.OwnerClientId;
     }
 
     public static bool IsCanAttack()
@@ -184,7 +184,7 @@ public class SelectionManager : MonoBehaviour
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
-        foreach (Unit unit in PlayerController.units)
+        foreach (Unit unit in PlayerController.Instance.playerData.units)
         {
             var selectable = unit.GetComponent<Selectable>();
             if (IsEnemy(selectable) || IsBuilding(selectable)) continue;

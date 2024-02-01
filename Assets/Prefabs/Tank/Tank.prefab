@@ -480,11 +480,10 @@ GameObject:
   - component: {fileID: 170826199209899036}
   - component: {fileID: -4316555872021215905}
   - component: {fileID: 8772359734305070889}
-  - component: {fileID: 808691146724461793}
-  - component: {fileID: -6072173990684141395}
   - component: {fileID: 2395872987072282882}
   - component: {fileID: 1498658269702412893}
   - component: {fileID: -1620508549549775272}
+  - component: {fileID: 8944558563427370344}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -597,6 +596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   attackableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
+  OwnerClientId: 0
   unitMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
   originalMaterial: {fileID: 0}
   shouldChangeMaterial: 1
@@ -646,6 +646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 6503492149020050981}
   damagableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
+  OwnerClientId: 0
   levelable: {fileID: 0}
   targetPoint: {fileID: 5020726765372733000}
   isDead: 0
@@ -693,53 +694,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInDebt: 0
---- !u!54 &808691146724461793
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994407462191697491}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &-6072173990684141395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994407462191697491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &2395872987072282882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,6 +748,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8944558563427370344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994407462191697491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &1825093940579101902
 PrefabInstance:
   m_ObjectHideFlags: 0

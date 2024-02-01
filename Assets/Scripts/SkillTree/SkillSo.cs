@@ -18,7 +18,7 @@ public class SkillSo : ScriptableObject
 
     private void AddDamageToUnits(string unitName, int value)
     {
-        foreach (var unit in PlayerController.units)
+        foreach (var unit in PlayerController.Instance.playerData.units)
         {
             var damagable = unit.GetComponent<Damagable>();
             var unitScript = unit.GetComponent<Unit>();
@@ -32,7 +32,7 @@ public class SkillSo : ScriptableObject
 
     private void AddHealthToUnits(string unitName, int value)
     {
-        foreach (var unit in PlayerController.units)
+        foreach (var unit in PlayerController.Instance.playerData.units)
         {
             var damagable = unit.GetComponent<Damagable>();
             var unitScript = unit.GetComponent<Unit>();

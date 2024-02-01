@@ -45,7 +45,7 @@ public class Bullet : MonoBehaviour
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.OwnerClientId == PlayerController.OwnerClientId)
+                if (unitsBullet.OwnerClientId == PlayerController.Instance.OwnerClientId)
                 {
                     PlayerController.Instance.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }

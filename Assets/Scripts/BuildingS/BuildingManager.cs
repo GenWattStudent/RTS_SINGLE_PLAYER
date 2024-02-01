@@ -109,7 +109,7 @@ public class BuildingSystem : MonoBehaviour
 
     private void SetPopup()
     {
-        var message = $"{SelectedBuilding.name} ({PlayerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+        var message = $"{SelectedBuilding.name} ({PlayerController.Instance.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
         MousePopup.Instance.SetText(message);
         MousePopup.Instance.Show();
     }
@@ -165,11 +165,11 @@ public class BuildingSystem : MonoBehaviour
         var stats = newBuilding.GetComponent<Stats>();
 
         stats.AddStat(StatType.Health, 1);
-        damagableScript.OwnerClientId = PlayerController.OwnerClientId;
+        damagableScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
 
         var unitScript = newBuilding.GetComponent<Unit>();
-        unitScript.OwnerClientId = PlayerController.OwnerClientId;
-        PlayerController.AddBuilding(newBuilding.GetComponent<Building>());
+        unitScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
+        PlayerController.Instance.AddBuilding(newBuilding.GetComponent<Building>());
     }
 
     private void PlaceBuilding()
@@ -190,7 +190,7 @@ public class BuildingSystem : MonoBehaviour
     private bool IsValidPosition()
     {
         return !IsBuildingColliding() &&
-        !PlayerController.IsMaxBuildingOfType(SelectedBuilding) &&
+        !PlayerController.Instance.IsMaxBuildingOfType(SelectedBuilding) &&
         IsFlatTerrain();
     }
 

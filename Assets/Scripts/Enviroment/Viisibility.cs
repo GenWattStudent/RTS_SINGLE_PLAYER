@@ -26,7 +26,7 @@ public class Viisibility : MonoBehaviour
 
     private void MakeUnitVisible(Damagable damagable)
     {
-        if (damagable != null && damagable.OwnerClientId != PlayerController.OwnerClientId)
+        if (damagable != null && damagable.OwnerClientId != PlayerController.Instance.OwnerClientId)
         {
             var unitScript = damagable.GetComponent<Unit>();
             unitScript.bushes.Remove(gameObject);
@@ -35,7 +35,7 @@ public class Viisibility : MonoBehaviour
 
     private void HideUnit(Damagable damagable)
     {
-        if (damagable != null && damagable.OwnerClientId != PlayerController.OwnerClientId)
+        if (damagable != null && damagable.OwnerClientId != PlayerController.Instance.OwnerClientId)
         {
             var unitScript = damagable.GetComponent<Unit>();
             unitScript.bushes.Add(gameObject);
