@@ -1,12 +1,12 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Damagable : MonoBehaviour
+public class Damagable : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
     public DamagableSo damagableSo;
     private ProgresBar progressBarScript;
-    public ulong OwnerClientId;
     public Levelable levelable;
     public GameObject targetPoint;
     public bool isDead = false;
@@ -33,8 +33,6 @@ public class Damagable : MonoBehaviour
 
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
-
-        // TakeDamage(40);
     }
 
     private void InstantiateExplosion()
@@ -61,6 +59,21 @@ public class Damagable : MonoBehaviour
         levelable.AddExpirence(exp);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void DeathServerRpc()
+    {
+        var no = GetComponent<NetworkObject>();
+        no.Despawn(true);
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        isDead = true;
+        InstantiateExplosion();
+        InstantiateDestroyedObject();
+        OnDead?.Invoke();
+    }
+
     public bool TakeDamage(float damage)
     {
         var newHealth = stats.SubstractFromStat(StatType.Health, damage);
@@ -76,11 +89,7 @@ public class Damagable : MonoBehaviour
 
         if (newHealth <= 0f)
         {
-            isDead = true;
-            InstantiateExplosion();
-            InstantiateDestroyedObject();
-            OnDead?.Invoke();
-            Destroy(gameObject);
+            DeathServerRpc();
             return true;
         }
 

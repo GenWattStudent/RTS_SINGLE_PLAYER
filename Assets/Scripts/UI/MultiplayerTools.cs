@@ -27,15 +27,19 @@ public class MultiplayerTools : NetworkBehaviour
     private void Start()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
     }
 
     private void OnClientConnected(ulong clientId)
     {
-        if (IsServer)
-        {
-            playerCount++;
-            playerCountLabel.text = $"Player count: {playerCount}";
-        }
+        playerCount++;
+        playerCountLabel.text = $"Player count: {playerCount}";
+    }
+
+    private void OnClientDisconnect(ulong clientId)
+    {
+        playerCount--;
+        playerCountLabel.text = $"Player count: {playerCount}";
     }
 
     private void OnDisable()
@@ -44,7 +48,7 @@ public class MultiplayerTools : NetworkBehaviour
         startClientButton.clicked -= ToogleClient;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }

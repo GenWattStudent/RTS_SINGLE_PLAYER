@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 
 // This class is used to identify objects that can be selected by the player. It can be building or units.
-public class Selectable : MonoBehaviour
+public class Selectable : NetworkBehaviour
 {
     public enum SelectableType
     {
@@ -15,19 +16,29 @@ public class Selectable : MonoBehaviour
     private Damagable damagable;
     private Camera unitCamera;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner) enabled = false;
+    }
+
     // when unit killed should be diselected
-    private void Awake() {
+    private void Awake()
+    {
         damagable = GetComponent<Damagable>();
         unitCamera = GetComponentInChildren<Camera>(true);
     }
 
-    private void OnDead() {
+    private void OnDead()
+    {
+        if (!IsOwner) return;
         SelectionManager.Deselect(this);
         Deselect();
     }
 
     public void Select()
     {
+        if (!IsOwner) return;
         isSelected = true;
         damagable.OnDead += OnDead;
         if (selectionCircle == null) return;
@@ -36,10 +47,11 @@ public class Selectable : MonoBehaviour
 
     public void Deselect()
     {
+        if (!IsOwner) return;
         isSelected = false;
         if (unitCamera != null) unitCamera.gameObject.SetActive(false);
         damagable.OnDead -= OnDead;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(false);
-    } 
+    }
 }

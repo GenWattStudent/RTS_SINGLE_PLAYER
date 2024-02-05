@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : NetworkBehaviour
 {
     public UnitSo unitSo;
     public AttackableSo attackableSo;
-    public ulong OwnerClientId;
     public Material unitMaterial;
     public Material originalMaterial;
     public bool shouldChangeMaterial = true;
@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
     private Damagable damagable;
     private Attack attack;
     public bool isVisibile = true;
-    private float visibleTimer = 0f;
+    // private float visibleTimer = 0f;
     private float visibleInterval = 5f;
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
@@ -39,6 +39,12 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public override void OnNetworkSpawn()
+    {
+        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
+        ChangeMaterial(playerColorData.playerMaterial, true);
+    }
+
     public void HideUiPrefabs()
     {
         foreach (var unitUiPrefab in unitUiPrefabs)
@@ -59,7 +65,7 @@ public class Unit : MonoBehaviour
     {
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
-        visibleTimer = visibleInterval;
+        // visibleTimer = visibleInterval;
 
         if (damagable != null)
         {
@@ -95,12 +101,12 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        visibleTimer += Time.deltaTime;
+        // visibleTimer += Time.deltaTime;
 
         if (attack != null && bushes.Count > 0 && attack.targetPosition != Vector3.zero)
         {
             ShowUnit();
-            visibleTimer = 0f;
+            // visibleTimer = 0f;
             return;
         }
 

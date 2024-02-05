@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 4059386439679749394}
   - component: {fileID: 8303126831551006182}
   - component: {fileID: 1291491987463388300}
-  - component: {fileID: 1267446573215030224}
   - component: {fileID: 266746449671327837}
   - component: {fileID: 8975554890819548970}
   m_Layer: 0
@@ -311,19 +310,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2edca1abcdde53a449588d030e90c747, type: 2}
   - {fileID: 11400000, guid: fc29b08a9c596a742b64115c53d58563, type: 2}
   unlockedSkills: []
---- !u!114 &1267446573215030224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3566358833013920736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 879427bef94d1554cb12c58efe6b2753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIDocument: {fileID: 0}
 --- !u!114 &266746449671327837
 MonoBehaviour:
   m_ObjectHideFlags: 0

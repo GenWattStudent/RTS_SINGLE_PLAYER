@@ -35,8 +35,8 @@ public class EnemyController : MonoBehaviour
                     unitMovement.agent.enabled = true;
                 }
 
-                damagableScript.OwnerClientId = enemyId;
-                unitScript.OwnerClientId = enemyId;
+                // damagableScript.OwnerClientId = enemyId;
+                // unitScript.OwnerClientId = enemyId;
                 unitScript.ChangeMaterial(enemyMaterial, true);
                 units.Add(unitScript);
 
@@ -70,8 +70,8 @@ public class EnemyController : MonoBehaviour
             unitScript.AddComponent<EnemyUnitMovement>();
         }
 
-        damagableScript.OwnerClientId = enemyId;
-        unitScript.OwnerClientId = enemyId;
+        // damagableScript.OwnerClientId = enemyId;
+        // unitScript.OwnerClientId = enemyId;
         unitScript.ChangeMaterial(enemyMaterial, true);
         units.Add(unitScript);
     }

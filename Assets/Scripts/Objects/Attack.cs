@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
-public class Attack : MonoBehaviour
+public class Attack : NetworkBehaviour
 {
     public Damagable target;
     [SerializeField] private float checkTargetTimer = 0.2f;
@@ -134,7 +135,14 @@ public class Attack : MonoBehaviour
         return Vector3.Distance(transform.position, targetPosition) <= currentUnit.attackableSo.attackRange;
     }
 
-    private void ShootBullet()
+    [ServerRpc(RequireOwnership = false)]
+    private void ShootBulletServerRpc()
+    {
+        ShootBulletClientRpc();
+    }
+
+    [ClientRpc]
+    private void ShootBulletClientRpc()
     {
         Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
         var bulletSpawnPoint = this.bulletSpawnPoint;
@@ -167,11 +175,11 @@ public class Attack : MonoBehaviour
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
         bullet.motion.target = targetPosition;
-        bullet.OwnerClientId = currentUnit.OwnerClientId;
 
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
+        bullet.OwnerClientId = OwnerClientId;
         bullet.Setup();
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
@@ -227,12 +235,13 @@ public class Attack : MonoBehaviour
         return vehicleGun.IsFinisehdRotation();
     }
 
-    private void PerformAttack()
+    [ServerRpc(RequireOwnership = false)]
+    private void PerformAttackServerRpc()
     {
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle() && IsInGunAngle())
         {
             OnAttack?.Invoke();
-            ShootBullet();
+            ShootBulletServerRpc();
             lastAttackTime = Time.time;
             if (currentAmmo <= 0)
             {
@@ -245,7 +254,7 @@ public class Attack : MonoBehaviour
     {
         if (IsInRange() && currentUnit.attackableSo.canAttack)
         {
-            PerformAttack();
+            PerformAttackServerRpc();
         }
         else
         {
@@ -254,7 +263,8 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private void RotateToTarget()
+    [ServerRpc(RequireOwnership = false)]
+    private void RotateToTargetServerRpc()
     {
         if (currentUnit.attackableSo.hasTurret)
         {
@@ -281,7 +291,7 @@ public class Attack : MonoBehaviour
         if (target != null)
         {
             PerformTargetAiming();
-            RotateToTarget();
+            RotateToTargetServerRpc();
             return;
         }
 
@@ -289,8 +299,8 @@ public class Attack : MonoBehaviour
         {
             if (IsInRange(targetPosition) && currentUnit.attackableSo.canAttack)
             {
-                PerformAttack();
-                RotateToTarget();
+                PerformAttackServerRpc();
+                RotateToTargetServerRpc();
             }
             else
             {

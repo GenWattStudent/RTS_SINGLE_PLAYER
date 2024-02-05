@@ -1508,90 +1508,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143521701}
   m_CullTransparentMesh: 1
---- !u!1 &1156251023
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1156251026}
-  - component: {fileID: 1156251025}
-  - component: {fileID: 1156251024}
-  - component: {fileID: 1156251027}
-  m_Layer: 0
-  m_Name: MultiplayerTools
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1156251024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156251023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 434120662
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &1156251025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156251023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f51f72455f8fd47429e9720da0d9e13d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCount: 0
---- !u!4 &1156251026
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156251023}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1156251027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156251023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: ea5d6ce65b1fa0c46b2c7a45fe4dd5e4, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 8a679db2caf70714ab9fc7195f72835e,
-    type: 3}
-  m_SortingOrder: 0
 --- !u!1 &1164903744
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,6 +1974,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 49369406}
+--- !u!1 &1318644568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
+    type: 3}
+  m_PrefabInstance: {fileID: 5683862563901861622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1318644589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318644568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51f72455f8fd47429e9720da0d9e13d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCount: 0
 --- !u!1 &1414740402
 GameObject:
   m_ObjectHideFlags: 3
@@ -3128,11 +3063,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Toolbar2
       objectReference: {fileID: 0}
-    - target: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5795796074291358839, guid: fd1b3b54da07ef74296c67c0cb422592,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3191,7 +3121,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1318644589}
   m_SourcePrefab: {fileID: 100100000, guid: fd1b3b54da07ef74296c67c0cb422592, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -3217,4 +3151,3 @@ SceneRoots:
   - {fileID: 1678167677}
   - {fileID: 5683862563901861622}
   - {fileID: 2139235358}
-  - {fileID: 1156251026}

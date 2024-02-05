@@ -1,20 +1,25 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerLevelUI : ToolkitHelper
+public class PlayerLevelUI : NetworkToolkitHelper
 {
+    public GameResult gameResult;
     private Label playerLevelText;
     private VisualElement playerLevelFill;
     private VisualElement levelBox;
 
     private void OnDisable()
     {
+        if (!IsOwner) return;
         PlayerController.Instance.OnPlayerLevelChange -= UpdateUI;
     }
 
     private void UpdateUI(int expToNextLevel, int playerExpierence, int level, int maxLevel)
     {
-        if (level == maxLevel) {
+        if (!IsOwner) return;
+
+        if (level == maxLevel)
+        {
             playerLevelText.text = $"{level} Max LVL";
             playerLevelFill.style.height = new Length(100, LengthUnit.Percent);
             levelBox.tooltip = $"{playerExpierence}/{expToNextLevel} EXP";
@@ -29,7 +34,11 @@ public class PlayerLevelUI : ToolkitHelper
 
     protected override void OnEnable()
     {
+        if (!IsOwner) return;
         base.OnEnable();
+        UIDocument = gameResult.GetComponent<UIDocument>();
+        root = UIDocument.rootVisualElement;
+
         Debug.Log("PlayerLevelUI enabled");
         playerLevelText = GetLabel("PlayerLevel");
         playerLevelFill = GetVisualElement("LevelFill");

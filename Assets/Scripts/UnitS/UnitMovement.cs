@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class UnitMovement : MonoBehaviour
+public class UnitMovement : NetworkBehaviour
 {
     public NavMeshAgent agent;
     private Unit unit;
@@ -30,7 +31,8 @@ public class UnitMovement : MonoBehaviour
         SetNavMeshValues();
     }
 
-    public void MoveTo(Vector3 destination)
+    [ServerRpc(RequireOwnership = false)]
+    private void MoveToServerRpc(Vector3 destination)
     {
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
         {
@@ -38,6 +40,11 @@ public class UnitMovement : MonoBehaviour
             agent.isStopped = false;
             agent.avoidancePriority = Random.Range(1, 100);
         }
+    }
+
+    public void MoveTo(Vector3 destination)
+    {
+        MoveToServerRpc(destination);
     }
 
     public void SetDestinationAfterSpawn(Vector3 destination)
@@ -67,7 +74,8 @@ public class UnitMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!isReachedDestinationAfterSpawn) {
+        if (!isReachedDestinationAfterSpawn)
+        {
             MoveToWithoutNavMesh(destinationAfterSpawn);
             isMoving = true;
         }
@@ -77,7 +85,9 @@ public class UnitMovement : MonoBehaviour
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
             isMoving = false;
-        } else {
+        }
+        else
+        {
             isMoving = true;
         }
     }

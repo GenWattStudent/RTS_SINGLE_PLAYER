@@ -7,7 +7,6 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
-    [SerializeField] private GameObject toolbarPrefab;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
@@ -16,21 +15,28 @@ public class PlayerController : NetworkBehaviour
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
 
-    private void SpawnHero()
+    private void SpawnHero(ulong clientId)
     {
         var heroInstance = Instantiate(hero, playerData.spawnPosition, Quaternion.identity);
-        var damagableScript = heroInstance.GetComponent<Damagable>();
-        var unitScript = heroInstance.GetComponent<Unit>();
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
+        var no = heroInstance.GetComponent<NetworkObject>();
 
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
-        damagableScript.OwnerClientId = OwnerClientId;
-        unitScript.OwnerClientId = OwnerClientId;
-        unitScript.ChangeMaterial(playerData.playerMaterial, true);
-        playerData.units.Add(unitScript);
-
         playerData.spawnPosition += new Vector3(2, 0, 0);
+
+        no.SpawnWithOwnership(clientId);
+        SpawnHeroClientRpc(no, clientId);
+    }
+
+    [ClientRpc]
+    private void SpawnHeroClientRpc(NetworkObjectReference no, ulong clientId)
+    {
+        if (no.TryGet(out NetworkObject unit))
+        {
+            var unitScript = unit.GetComponent<Unit>();
+            if (clientId == OwnerClientId) AddUnit(unitScript);
+        }
     }
 
     public void AddUnit(Unit unit)
@@ -107,52 +113,79 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnUnitsServerRpc()
+    private void SpawnUnitServerRpc(ServerRpcParams rpcParams = default)
     {
-
-        // SpawnHero();
+        SpawnHero(rpcParams.Receive.SenderClientId);
+        Debug.Log("SpawnUnitServerRpc server " + rpcParams.Receive.SenderClientId);
         foreach (var unitPrefab in unitPrefabs)
         {
             for (int i = 0; i < 2; i++)
             {
                 var unit = Instantiate(unitPrefab, playerData.spawnPosition, Quaternion.identity);
-                var damagableScript = unit.GetComponent<Damagable>();
-                var unitScript = unit.GetComponent<Unit>();
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
-                damagableScript.OwnerClientId = OwnerClientId;
-                unitScript.OwnerClientId = OwnerClientId;
-                unitScript.ChangeMaterial(playerData.playerMaterial, true);
-                AddUnit(unitScript);
-
                 playerData.spawnPosition += new Vector3(2, 0, 0);
-                no.SpawnWithOwnership(OwnerClientId);
+                no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+                SpawnUnitClientRpc(no, rpcParams.Receive.SenderClientId);
             }
+        }
+
+        playerData.spawnPosition = new Vector3(1.5f, 0, 7.5f);
+    }
+
+    [ClientRpc]
+    private void SpawnUnitClientRpc(NetworkObjectReference no, ulong clientId)
+    {
+        if (no.TryGet(out NetworkObject unit))
+        {
+            var unitScript = unit.GetComponent<Unit>();
+
+            if (clientId == OwnerClientId) AddUnit(unitScript);
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnToolbarServerRpc()
+    public override void OnNetworkSpawn()
     {
-        var toolbar = Instantiate(toolbarPrefab, playerData.spawnPosition, Quaternion.identity);
-        var no = toolbar.GetComponent<NetworkObject>();
-        no.SpawnWithOwnership(OwnerClientId);
+        base.OnNetworkSpawn();
+        if (!IsOwner) enabled = false;
+        var buildingManager = GetComponent<BuildingManager>();
+        buildingManager.ClientId = OwnerClientId;
+    }
+
+    public PlayerController GetPlayerControllerWithClientId(ulong clientId)
+    {
+        var playerControllers = FindObjectsOfType<PlayerController>();
+
+        foreach (var playerController in playerControllers)
+        {
+            if (playerController.OwnerClientId == clientId) return playerController;
+        }
+
+        return null;
     }
 
     private void Awake()
     {
         Instance = this;
+        playerData = new PlayerData
+        {
+            playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor,
+            playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial
+        };
+
+        var playerLevelUI = GetComponent<PlayerLevelUI>();
+        playerLevelUI.gameResult = FindObjectOfType<GameResult>();
     }
 
     private void Start()
     {
-        playerData = MultiplayerController.Instance.Get(OwnerClientId);
-        SpawnToolbarServerRpc();
-        SpawnUnitsServerRpc();
+        if (!IsOwner) return;
+        Debug.Log("SpawnUnitServerRpc client");
+        SpawnUnitServerRpc();
         AddExpiernce(0);
     }
 }

@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class BuildingSystem : MonoBehaviour
+public class BuildingManager : NetworkBehaviour
 {
     [SerializeField] private LayerMask terrainLayer;
     [SerializeField] private Material validMaterial;
@@ -10,6 +11,7 @@ public class BuildingSystem : MonoBehaviour
     public float diffranceBetweenMaxAndMinHeight = 1f;
     public int heightRaysCount = 15;
     private Vector3[] hightPoints;
+    public ulong ClientId;
 
     private void Awake()
     {
@@ -155,21 +157,33 @@ public class BuildingSystem : MonoBehaviour
         if (mousePosition != null && previewPrefab != null) previewPrefab.transform.position = (Vector3)mousePosition;
     }
 
-    private void PlaceBuilding(Vector3 position)
+    [ServerRpc(RequireOwnership = false)]
+    private void PlaceBuildingServerRpc(Vector3 position)
     {
+        Debug.Log("PlaceBuildingServerRpc " + SelectedBuilding);
         if (!UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
         UIStorage.Instance.DecreaseResource(SelectedBuilding.costResource, SelectedBuilding.cost);
 
         var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, SelectedBuilding.constructionManagerPrefab.transform.rotation);
-        var damagableScript = newBuilding.GetComponent<Damagable>();
         var stats = newBuilding.GetComponent<Stats>();
 
         stats.AddStat(StatType.Health, 1);
-        damagableScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
 
-        var unitScript = newBuilding.GetComponent<Unit>();
-        unitScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
-        PlayerController.Instance.AddBuilding(newBuilding.GetComponent<Building>());
+        var no = newBuilding.GetComponent<NetworkObject>();
+        no.SpawnWithOwnership(ClientId);
+        PlaceBuildingClientRpc(no, ClientId);
+    }
+
+    [ClientRpc]
+    private void PlaceBuildingClientRpc(NetworkObjectReference no, ulong ClientId)
+    {
+        if (no.TryGet(out NetworkObject networkObject))
+        {
+            if (networkObject.OwnerClientId != ClientId) return;
+            var building = networkObject.GetComponent<Building>();
+            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(ClientId);
+            playerController.AddBuilding(building);
+        }
     }
 
     private void PlaceBuilding()
@@ -182,7 +196,7 @@ public class BuildingSystem : MonoBehaviour
                 return;
             };
 
-            if (previewPrefab != null) PlaceBuilding(previewPrefab.transform.position);
+            if (previewPrefab != null) PlaceBuildingServerRpc(previewPrefab.transform.position);
             CancelBuilding();
         }
     }

@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class VehicleGun : MonoBehaviour
+public class VehicleGun : NetworkBehaviour
 {
     private Attack attack;
     public float rotationSpeed = 8f;
@@ -12,7 +13,8 @@ public class VehicleGun : MonoBehaviour
         attack = GetComponentInParent<Attack>();
     }
 
-    private void SlerpRotation(float angle)
+    [ServerRpc(RequireOwnership = false)]
+    private void SlerpRotationServerRpc(float angle)
     {
         var targetRotation = Quaternion.Euler(angle, transform.eulerAngles.y, transform.eulerAngles.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
@@ -27,10 +29,10 @@ public class VehicleGun : MonoBehaviour
     {
         if (attack.targetPosition == Vector3.zero)
         {
-            SlerpRotation(0);
+            SlerpRotationServerRpc(0);
             return;
         };
 
-        SlerpRotation(rotationAngle);
+        SlerpRotationServerRpc(rotationAngle);
     }
 }
