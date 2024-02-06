@@ -1,16 +1,18 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Construction : MonoBehaviour
+public class Construction : NetworkBehaviour
 {
-    public BuildingSo buildingSo;
-    private float constructionTimer = 0f;
-    private bool isCurrentlyConstructing = false;
-    private float buildingSpeed = 0f;
-    public List<Unit> buildingUnits = new();
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
+    public List<Unit> buildingUnits = new();
+    public BuildingSo buildingSo;
+
+    private float constructionTimer = 0f;
+    private bool isCurrentlyConstructing = false;
+    private float buildingSpeed = 0f;
     private ProgresBar progresBar;
     private Stats stats;
 
@@ -38,13 +40,13 @@ public class Construction : MonoBehaviour
     {
         isCurrentlyConstructing = true;
         Debug.Log("Start construction - building");
-        ActivateBuildInProgress();
+        ActivateBuildInProgressServerRpc();
     }
 
     public void StopConstruction()
     {
         isCurrentlyConstructing = false;
-        ActivateConstructionBuilding();
+        ActivateConstructionBuildingClientRpc();
         StopWorkersConstruction();
     }
 
@@ -76,35 +78,65 @@ public class Construction : MonoBehaviour
         return false;
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void InstantiateBuildingServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
+        var no = building.GetComponent<NetworkObject>();
+        var constructionNo = GetComponent<NetworkObject>();
+
+        no.SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        InstantiateBuildingClientRpc(no);
+        constructionNo.Despawn(true);
+    }
+
     private void InstantiateBuilding()
     {
         // Finished building
-        StopWorkersConstruction();
-        var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
-        var isRemoved = RemoveConstructionIfSelected();
-        var selectable = building.GetComponent<Selectable>();
-
-        // building.GetComponent<Unit>().OwnerClientId = GetComponent<Unit>().OwnerClientId;
-        // building.GetComponent<Damagable>().OwnerClientId = GetComponent<Unit>().OwnerClientId;
-        if (isRemoved) SelectionManager.SelectBuilding(selectable);
-        Destroy(gameObject);
+        InstantiateBuildingServerRpc();
     }
 
-    private void ActivateBuildInProgress()
+    [ClientRpc]
+    private void InstantiateBuildingClientRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject networkObject))
+        {
+            var isRemoved = RemoveConstructionIfSelected();
+            var selectable = networkObject.GetComponent<Selectable>();
+
+            if (isRemoved) SelectionManager.SelectBuilding(selectable);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ActivateBuildInProgressServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        ActivateBuildInProgressClientRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ActivateConstructionBuildingServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        ActivateConstructionBuildingClientRpc();
+    }
+
+    [ClientRpc]
+    private void ActivateBuildInProgressClientRpc()
     {
         // Building with shader effect while someone is building it
         buildingInProgressPrefab.SetActive(true);
         constructionPrefab.SetActive(false);
     }
 
-    private void ActivateConstructionBuilding()
+    [ClientRpc]
+    private void ActivateConstructionBuildingClientRpc()
     {
         // Building with shader effect while someone is building it
         buildingInProgressPrefab.SetActive(false);
         constructionPrefab.SetActive(true);
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         StopWorkersConstruction();
     }
@@ -121,7 +153,7 @@ public class Construction : MonoBehaviour
 
     void Update()
     {
-        if (isCurrentlyConstructing)
+        if (isCurrentlyConstructing && IsOwner)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
             stats.SetStat(StatType.Health, Mathf.Floor(constructionTimer));

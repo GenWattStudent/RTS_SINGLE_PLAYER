@@ -278,6 +278,7 @@ public class Attack : NetworkBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
         attackSpeedTimer -= Time.deltaTime;
         attackCooldownTimer -= Time.deltaTime;
         checkTargetTimerTimer -= Time.deltaTime;

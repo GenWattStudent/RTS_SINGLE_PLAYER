@@ -1,12 +1,14 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class CursorManager : MonoBehaviour
+public class CursorManager : NetworkBehaviour
 {
     [SerializeField] private Texture2D defaultCursor;
     [SerializeField] private Texture2D attackCursor;
     [SerializeField] private Texture2D buildCursor;
     [SerializeField] private Texture2D healCursor;
     [SerializeField] private Vector2 cursorOffset = new(10, 4);
+    public ulong clientId;
 
     private void Start()
     {
@@ -44,7 +46,8 @@ public class CursorManager : MonoBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            return damagable != null && !damagable.isDead && damagable.OwnerClientId != PlayerController.Instance.OwnerClientId;
+            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
+            return damagable != null && !damagable.isDead && damagable.OwnerClientId != playerController.OwnerClientId;
         }
         else
         {
@@ -85,6 +88,7 @@ public class CursorManager : MonoBehaviour
         }
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 100f);
+        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
 
         foreach (var hit in hits)
         {
@@ -92,7 +96,7 @@ public class CursorManager : MonoBehaviour
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.OwnerClientId == PlayerController.Instance.OwnerClientId && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
+            if (damagable != null && !damagable.isDead && damagable.OwnerClientId == playerController.OwnerClientId && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {
                 return true;
             }

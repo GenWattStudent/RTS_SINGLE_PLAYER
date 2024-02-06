@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,12 +7,12 @@ public class BuildingManager : NetworkBehaviour
     [SerializeField] private LayerMask terrainLayer;
     [SerializeField] private Material validMaterial;
     [SerializeField] private Material invalidMaterial;
+    [SerializeField] private List<BuildingSo> networkConstructionsPrefabs;
     public BuildingSo SelectedBuilding { get; private set; }
     private GameObject previewPrefab;
     public float diffranceBetweenMaxAndMinHeight = 1f;
     public int heightRaysCount = 15;
     private Vector3[] hightPoints;
-    public ulong ClientId;
 
     private void Awake()
     {
@@ -158,20 +159,22 @@ public class BuildingManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void PlaceBuildingServerRpc(Vector3 position)
+    private void PlaceBuildingServerRpc(Vector3 position, ushort buildingIndex, ulong clientId)
     {
-        Debug.Log("PlaceBuildingServerRpc " + SelectedBuilding);
-        if (!UIStorage.Instance.HasEnoughResource(SelectedBuilding.costResource, SelectedBuilding.cost)) return;
-        UIStorage.Instance.DecreaseResource(SelectedBuilding.costResource, SelectedBuilding.cost);
+        Debug.Log("PlaceBuildingServerRpc " + position + " " + buildingIndex + " ID =" + clientId);
+        var buildingSo = networkConstructionsPrefabs[buildingIndex];
+        Debug.Log("PlaceBuildingServerRpc " + buildingSo);
+        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
+        UIStorage.Instance.DecreaseResource(buildingSo.costResource, buildingSo.cost);
 
-        var newBuilding = Instantiate(SelectedBuilding.constructionManagerPrefab, position, SelectedBuilding.constructionManagerPrefab.transform.rotation);
+        var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
         var stats = newBuilding.GetComponent<Stats>();
 
         stats.AddStat(StatType.Health, 1);
 
         var no = newBuilding.GetComponent<NetworkObject>();
-        no.SpawnWithOwnership(ClientId);
-        PlaceBuildingClientRpc(no, ClientId);
+        no.SpawnWithOwnership(clientId);
+        PlaceBuildingClientRpc(no, clientId);
     }
 
     [ClientRpc]
@@ -195,8 +198,9 @@ public class BuildingManager : NetworkBehaviour
                 InfoBox.Instance.AddError("You cant place building here!");
                 return;
             };
-
-            if (previewPrefab != null) PlaceBuildingServerRpc(previewPrefab.transform.position);
+            var buildingIndex = (ushort)networkConstructionsPrefabs.IndexOf(SelectedBuilding);
+            Debug.Log("PlaceBuilding " + buildingIndex + " " + SelectedBuilding + " " + previewPrefab);
+            if (previewPrefab != null) PlaceBuildingServerRpc(previewPrefab.transform.position, buildingIndex, OwnerClientId);
             CancelBuilding();
         }
     }

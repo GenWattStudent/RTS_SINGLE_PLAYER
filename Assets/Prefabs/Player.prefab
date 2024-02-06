@@ -50,7 +50,13 @@ MonoBehaviour:
   unitPrefabs:
   - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
+  toolbarPrefab: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
+    type: 3}
+  managersPrefab: {fileID: 3533921138156073987, guid: 4fdc57df5925cf442a477cbe41b6c715,
+    type: 3}
   playerLevelSo: {fileID: 11400000, guid: 5ebbb1ff371dbf8458c816a299c3ecee, type: 2}
+  playerExpierence:
+    m_InternalValue: 0
 --- !u!114 &3710898475097951197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,4 +90,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 0}
-  playerLevelUI: {fileID: 0}
+  gameResult: {fileID: 0}

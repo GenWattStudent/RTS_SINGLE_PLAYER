@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Worker : MonoBehaviour
+public class Worker : NetworkBehaviour
 {
     public Construction construction;
     public Unit unit;
@@ -8,13 +9,27 @@ public class Worker : MonoBehaviour
     private UnitMovement unitMovement;
     private Laser laser;
 
-    private void ActivateLaser()
+    [ServerRpc(RequireOwnership = false)]
+    private void ActivateLaserServerRpc()
+    {
+        ActivateLaserClientRpc();
+    }
+
+    [ClientRpc]
+    private void ActivateLaserClientRpc()
     {
         laser.isAttacking = false;
         laser.SetTarget(construction.GetComponent<Damagable>());
     }
 
-    private void DeactivateLaser()
+    [ServerRpc(RequireOwnership = false)]
+    private void DeactivateLaserServerRpc()
+    {
+        DeactivateLaserClientRpc();
+    }
+
+    [ClientRpc]
+    private void DeactivateLaserClientRpc()
     {
         laser.SetTarget(null);
     }
@@ -28,7 +43,7 @@ public class Worker : MonoBehaviour
     {
         construction.AddWorker(unit);
         isBuilding = true;
-        ActivateLaser();
+        ActivateLaserServerRpc();
     }
 
     public void StopConstruction(bool removeFromList = true)
@@ -37,7 +52,7 @@ public class Worker : MonoBehaviour
         if (removeFromList) construction.RemoveWorker(unit);
         isBuilding = false;
         construction = null;
-        DeactivateLaser();
+        DeactivateLaserServerRpc();
     }
 
     public void MoveToConstruction(Construction construction)
@@ -57,13 +72,15 @@ public class Worker : MonoBehaviour
         laser = GetComponent<Laser>();
     }
 
-    void OnDestroy()
+    public override void OnDestroy()
     {
         StopConstruction();
     }
 
     void Update()
     {
+        if (!IsOwner) return;
+
         if (construction == null) return;
         var distance = DistanceToConstruction();
         unitMovement.RotateToTarget(construction.transform.position);

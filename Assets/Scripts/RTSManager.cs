@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RTSManager : MonoBehaviour
+public class RTSManager : NetworkBehaviour
 {
     [SerializeField] private GameObject moveIndicatorPrefab;
     public float unitSpacing = 0.2f;
+    public ulong clientId;
 
     private void CancelBuildingCommand(Selectable selectable)
     {
@@ -160,18 +162,19 @@ public class RTSManager : MonoBehaviour
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
-
+                var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
+                Debug.Log(OwnerClientId + "RTS MANAGER");
                 if (damagableScript != null && selectableScript != null)
                 {
                     // Attack
-                    if (damagableScript.OwnerClientId != PlayerController.Instance.OwnerClientId)
+                    if (damagableScript.OwnerClientId != playerController.OwnerClientId)
                     {
                         AttackCommand(damagableScript);
                         isAction = true;
                         return;
                     }
                     // ------------------------------------------------
-                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == PlayerController.Instance.OwnerClientId && constructionScript != null)
+                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == playerController.OwnerClientId && constructionScript != null)
                     {
                         // Build
                         BuildCommand(constructionScript);
@@ -180,7 +183,7 @@ public class RTSManager : MonoBehaviour
                     }
 
                     // Heal 
-                    if (damagableScript.OwnerClientId == PlayerController.Instance.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
+                    if (damagableScript.OwnerClientId == playerController.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
                     {
                         var healers = SelectionManager.GetHealers();
 

@@ -39,15 +39,16 @@ public class Bullet : MonoBehaviour
     private void DealDamage(Collider collider)
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
+        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(OwnerClientId);
 
         if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
         {
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.OwnerClientId == PlayerController.Instance.OwnerClientId)
+                if (unitsBullet.OwnerClientId == playerController.OwnerClientId)
                 {
-                    PlayerController.Instance.AddExpiernce(damageableScript.damagableSo.deathExpirence);
+                    playerController.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }
             }
         }

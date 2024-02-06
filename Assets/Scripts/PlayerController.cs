@@ -7,9 +7,12 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
+    [SerializeField] private GameObject toolbarPrefab;
+    [SerializeField] private GameObject managersPrefab;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
+    public NetworkVariable<int> playerExpierence = new(0);
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -55,18 +58,18 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
 
-        playerData.playerExpierence += amount;
+        playerExpierence.Value += amount;
         var nextLevelData = playerLevelSo.levelsData[playerData.playerLevel];
-        var diffrence = playerData.playerExpierence - nextLevelData.expToNextLevel;
+        var diffrence = playerExpierence.Value - nextLevelData.expToNextLevel;
 
         if (playerData.playerLevel < playerLevelSo.levelsData.Count && playerData.playerExpierence >= nextLevelData.expToNextLevel)
         {
             playerData.playerLevel++;
-            playerData.playerExpierence = diffrence;
+            playerExpierence.Value = diffrence;
             SkillTreeManager.Instance.AddSkillPoints(1);
         }
 
-        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerData.playerExpierence, playerData.playerLevel, playerLevelSo.levelsData.Count);
+        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence.Value, playerData.playerLevel, playerLevelSo.levelsData.Count);
     }
 
     public void RemoveUnit(Unit unit)
@@ -148,14 +151,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        if (!IsOwner) enabled = false;
-        var buildingManager = GetComponent<BuildingManager>();
-        buildingManager.ClientId = OwnerClientId;
-    }
-
     public PlayerController GetPlayerControllerWithClientId(ulong clientId)
     {
         var playerControllers = FindObjectsOfType<PlayerController>();
@@ -166,6 +161,28 @@ public class PlayerController : NetworkBehaviour
         }
 
         return null;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayerUiServerRpc(ServerRpcParams rpcParams = default)
+    {
+        var managers = Instantiate(managersPrefab, Vector3.zero, Quaternion.identity);
+        var noManagers = managers.GetComponent<NetworkObject>();
+        noManagers.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+
+        var playerUi = Instantiate(toolbarPrefab, Vector3.zero, Quaternion.identity);
+        var no = playerUi.GetComponent<NetworkObject>();
+        no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            SpawnPlayerUiServerRpc();
+        }
     }
 
     private void Awake()

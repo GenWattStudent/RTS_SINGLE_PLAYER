@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Healer : MonoBehaviour
+public class Healer : NetworkBehaviour
 {
     public Damagable target;
     public DamagableSo damagableSo;
@@ -69,7 +70,8 @@ public class Healer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target == null) return; ;
+        if (!IsOwner) return;
+        if (target == null) return;
 
         if (IsInRange() == false)
         {

@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 2615484739504457805}
   - component: {fileID: 3803859760849162341}
   - component: {fileID: 4059386439679749394}
-  - component: {fileID: 8303126831551006182}
   - component: {fileID: 1291491987463388300}
   - component: {fileID: 266746449671327837}
   - component: {fileID: 8975554890819548970}
@@ -278,19 +277,6 @@ MonoBehaviour:
   maxMessages: 4
   timeToHide: 5
   IsOpen: 0
---- !u!114 &8303126831551006182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3566358833013920736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85e05ad67393f474bb332c02cbaf2a1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIDocument: {fileID: 0}
 --- !u!114 &1291491987463388300
 MonoBehaviour:
   m_ObjectHideFlags: 0
