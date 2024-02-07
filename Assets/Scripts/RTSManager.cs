@@ -6,7 +6,6 @@ public class RTSManager : NetworkBehaviour
 {
     [SerializeField] private GameObject moveIndicatorPrefab;
     public float unitSpacing = 0.2f;
-    public ulong clientId;
 
     private void CancelBuildingCommand(Selectable selectable)
     {
@@ -28,9 +27,9 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    private void MoveCommand(Vector3 position)
+    private void MoveCommand(Vector3 position, PlayerData playerData)
     {
-        int unitsCount = SelectionManager.selectedObjects.Count;
+        int unitsCount = playerData.selectableObjects.Count;
         int rows = Mathf.CeilToInt(Mathf.Sqrt(unitsCount));
         int cols = Mathf.CeilToInt((float)unitsCount / rows);
 
@@ -40,12 +39,12 @@ public class RTSManager : NetworkBehaviour
             {
                 var index = row * cols + col;
                 if (index >= unitsCount) continue;
-                var unit = SelectionManager.selectedObjects[index];
+                var unit = playerData.selectableObjects[index];
                 if (unit.selectableType == Selectable.SelectableType.Unit)
                 {
                     Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
                     Vector3 finalPosition = position + offset;
-                    var unitMovement = SelectionManager.selectedObjects[index].GetComponent<UnitMovement>();
+                    var unitMovement = playerData.selectableObjects[index].GetComponent<UnitMovement>();
 
                     finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
                     finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
@@ -72,9 +71,9 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    private void AttackCommand(Damagable target)
+    private void AttackCommand(Damagable target, PlayerData playerData)
     {
-        foreach (Selectable selectable in SelectionManager.selectedObjects)
+        foreach (Selectable selectable in playerData.selectableObjects)
         {
             var unitScript = selectable.GetComponent<Unit>();
             var distance = Vector3.Distance(target.transform.position, selectable.transform.position);
@@ -98,9 +97,10 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    private void BuildCommand(Construction construction)
+
+    private void BuildCommand(Construction construction, ulong clientId)
     {
-        var workers = SelectionManager.GetWorkers();
+        var workers = SelectionManager.GetWorkers(clientId);
 
         foreach (var worker in workers)
         {
@@ -143,64 +143,73 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void ProccedCommandServerRpc(Vector3 position, ServerRpcParams serverRpcParams = default)
+    {
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        var playerData = MultiplayerController.Instance.Get(clientId);
+        if (playerData.selectableObjects.Count == 0) return;
+
+        RaycastHit[] raycastHits = Physics.RaycastAll(Camera.main.ScreenPointToRay(position), Mathf.Infinity);
+        bool isAction = false;
+
+        foreach (var raycastHit in raycastHits)
+        {
+            if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
+            Debug.Log(raycastHit.transform.gameObject.name);
+            var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
+            var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
+            var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
+
+            Debug.Log(OwnerClientId + "RTS MANAGER");
+            if (damagableScript != null && selectableScript != null)
+            {
+                // Attack
+                if (damagableScript.OwnerClientId != clientId)
+                {
+                    AttackCommand(damagableScript, playerData);
+                    isAction = true;
+                    return;
+                }
+                // ------------------------------------------------
+                if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == clientId && constructionScript != null)
+                {
+                    // Build
+                    BuildCommand(constructionScript, clientId);
+                    isAction = true;
+                    return;
+                }
+
+                // Heal 
+                if (damagableScript.OwnerClientId == clientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
+                {
+                    var healers = SelectionManager.GetHealers(clientId);
+
+                    HealCommand(healers, damagableScript);
+                    isAction = true;
+                    return;
+                }
+            }
+        }
+        // Move
+        if (!isAction)
+        {
+            if (raycastHits.Length > 0)
+            {
+                MoveCommand(raycastHits[0].point, playerData);
+            }
+        }
+    }
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && SelectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
+        if (!IsOwner) return;
+
+        if (Input.GetMouseButtonDown(1) && !UIHelper.Instance.IsPointerOverUIElement())
         {
-            if (UIRTSActions.Instance.isSetTargetMode)
-            {
-                return;
-            }
+            if (UIRTSActions.Instance.isSetTargetMode) return;
 
-            RaycastHit[] raycastHits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
-            bool isAction = false;
-
-            foreach (var raycastHit in raycastHits)
-            {
-                if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
-                Debug.Log(raycastHit.transform.gameObject.name);
-                var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
-                var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
-                var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
-                var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
-                Debug.Log(OwnerClientId + "RTS MANAGER");
-                if (damagableScript != null && selectableScript != null)
-                {
-                    // Attack
-                    if (damagableScript.OwnerClientId != playerController.OwnerClientId)
-                    {
-                        AttackCommand(damagableScript);
-                        isAction = true;
-                        return;
-                    }
-                    // ------------------------------------------------
-                    if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == playerController.OwnerClientId && constructionScript != null)
-                    {
-                        // Build
-                        BuildCommand(constructionScript);
-                        isAction = true;
-                        return;
-                    }
-
-                    // Heal 
-                    if (damagableScript.OwnerClientId == playerController.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
-                    {
-                        var healers = SelectionManager.GetHealers();
-
-                        HealCommand(healers, damagableScript);
-                        isAction = true;
-                        return;
-                    }
-                }
-            }
-            // Move
-            if (!isAction)
-            {
-                if (raycastHits.Length > 0)
-                {
-                    MoveCommand(raycastHits[0].point);
-                }
-            }
+            ProccedCommandServerRpc(Input.mousePosition);
         }
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,11 +10,10 @@ public class SlotData
     public BuildingSo buildingSo;
 }
 
-public class UIBuildingManager : MonoBehaviour
+public class UIBuildingManager : NetworkBehaviour
 {
     [SerializeField] private BuildingSo[] buildings;
     private UIDocument UIDocument;
-    private BuildingSo selectedBuilding;
 
     private VisualElement root;
     private VisualElement slotContainer;
@@ -20,8 +21,15 @@ public class UIBuildingManager : MonoBehaviour
     private List<SlotData> slots = new();
     public static UIBuildingManager Instance { get; private set; }
 
+    public event Action<BuildingSo> OnBuildingSelected;
+
     private void Awake()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
         Instance = this;
     }
 
@@ -49,14 +57,29 @@ public class UIBuildingManager : MonoBehaviour
         slots.Clear();
     }
 
-    public BuildingSo GetSelectedBuilding()
+    [ServerRpc(RequireOwnership = false)]
+    public BuildingSo GetSelectedBuilding(ulong clientId)
     {
-        return selectedBuilding;
+        return MultiplayerController.Instance.Get(clientId).selectedBuilding;
     }
 
-    public void SetSelectedBuilding(BuildingSo building)
+    [ServerRpc(RequireOwnership = false)]
+    private void SetSelectedBuildingServerRpc(byte? buildingIndex, ulong clientId)
     {
-        selectedBuilding = building;
+        var playerData = MultiplayerController.Instance.Get(clientId);
+
+        if (buildingIndex == null)
+        {
+            playerData.selectedBuilding = null;
+            return;
+        }
+
+        playerData.selectedBuilding = buildings[(int)buildingIndex];
+    }
+
+    public void SetSelectedBuilding(BuildingSo buildingSo, ulong clientId)
+    {
+        SetSelectedBuildingServerRpc(null, clientId);
     }
 
     public void CreateBuildingTabs(BuildingSo.BuildingType buildingType)
@@ -78,7 +101,9 @@ public class UIBuildingManager : MonoBehaviour
     {
         Debug.Log("Clicked on " + buildingSo.buildingName);
         if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
-        selectedBuilding = buildingSo;
+        var buildingIndex = (byte)Array.IndexOf(buildings, buildingSo);
+        SetSelectedBuildingServerRpc(buildingIndex, NetworkManager.Singleton.LocalClientId);
+        OnBuildingSelected?.Invoke(buildingSo);
     }
 
     private void SetBuildingData(TemplateContainer buildingTab, BuildingSo buildingSo)

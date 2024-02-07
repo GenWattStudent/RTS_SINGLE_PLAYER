@@ -11,14 +11,13 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject managersPrefab;
     public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
-    public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
 
-    private void SpawnHero(ulong clientId)
+    private void SpawnHero(ulong clientId, PlayerData playerData)
     {
         var heroInstance = Instantiate(hero, playerData.spawnPosition, Quaternion.identity);
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
@@ -29,26 +28,16 @@ public class PlayerController : NetworkBehaviour
         playerData.spawnPosition += new Vector3(2, 0, 0);
 
         no.SpawnWithOwnership(clientId);
-        SpawnHeroClientRpc(no, clientId);
     }
 
-    [ClientRpc]
-    private void SpawnHeroClientRpc(NetworkObjectReference no, ulong clientId)
+    public void AddUnit(Unit unit, ulong clientId)
     {
-        if (no.TryGet(out NetworkObject unit))
-        {
-            var unitScript = unit.GetComponent<Unit>();
-            if (clientId == OwnerClientId) AddUnit(unitScript);
-        }
-    }
-
-    public void AddUnit(Unit unit)
-    {
+        PlayerData playerData = MultiplayerController.Instance.Get(OwnerClientId);
         var damagableScript = unit.GetComponent<Damagable>();
         playerData.units.Add(unit);
         damagableScript.OnDead += () =>
         {
-            RemoveUnit(unit);
+            RemoveUnit(unit, clientId);
         };
 
         OnUnitChange?.Invoke(unit, playerData.units);
@@ -56,6 +45,7 @@ public class PlayerController : NetworkBehaviour
 
     public void AddExpiernce(int amount)
     {
+        PlayerData playerData = MultiplayerController.Instance.Get(OwnerClientId);
         if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
 
         playerExpierence.Value += amount;
@@ -72,39 +62,43 @@ public class PlayerController : NetworkBehaviour
         OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence.Value, playerData.playerLevel, playerLevelSo.levelsData.Count);
     }
 
-    public void RemoveUnit(Unit unit)
+    public void RemoveUnit(Unit unit, ulong clientId)
     {
+        PlayerData playerData = MultiplayerController.Instance.Get(clientId);
         playerData.units.Remove(unit);
         OnUnitChange?.Invoke(unit, playerData.units);
     }
 
-    public void AddBuilding(Building building)
+    public void AddBuilding(Building building, ulong clientId)
     {
+        PlayerData playerData = MultiplayerController.Instance.Get(clientId);
         var damagableScript = building.GetComponent<Damagable>();
         playerData.buildings.Add(building);
 
         damagableScript.OnDead += () =>
         {
-            RemoveBuilding(building);
+            RemoveBuilding(building, clientId);
         };
 
         OnBuildingChange?.Invoke(building, playerData.buildings);
     }
 
-    public void RemoveBuilding(Building building)
+    public void RemoveBuilding(Building building, ulong clientId)
     {
+        PlayerData playerData = MultiplayerController.Instance.Get(clientId);
         playerData.buildings.Remove(building);
         OnBuildingChange?.Invoke(building, playerData.buildings);
     }
 
-    public bool IsMaxBuildingOfType(BuildingSo buildingSo)
+    public bool IsMaxBuildingOfType(BuildingSo buildingSo, ulong clientId)
     {
-        int count = GetBuildingCountOfType(buildingSo);
+        int count = GetBuildingCountOfType(buildingSo, clientId);
         return count >= buildingSo.maxBuildingCount;
     }
 
-    public int GetBuildingCountOfType(BuildingSo buildingSo)
+    public int GetBuildingCountOfType(BuildingSo buildingSo, ulong clientId)
     {
+        PlayerData playerData = MultiplayerController.Instance.Get(clientId);
         int count = 0;
 
         foreach (var building in playerData.buildings)
@@ -116,14 +110,16 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnUnitServerRpc(ServerRpcParams rpcParams = default)
+    private void SpawnUnitServerRpc(ulong clientId)
     {
-        SpawnHero(rpcParams.Receive.SenderClientId);
-        Debug.Log("SpawnUnitServerRpc server " + rpcParams.Receive.SenderClientId);
+        PlayerData playerData = MultiplayerController.Instance.Get(clientId);
+        SpawnHero(clientId, playerData);
+        Debug.Log("SpawnUnitServerRpc server " + clientId);
         foreach (var unitPrefab in unitPrefabs)
         {
             for (int i = 0; i < 2; i++)
             {
+
                 var unit = Instantiate(unitPrefab, playerData.spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
@@ -132,77 +128,68 @@ public class PlayerController : NetworkBehaviour
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 playerData.spawnPosition += new Vector3(2, 0, 0);
-                no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-                SpawnUnitClientRpc(no, rpcParams.Receive.SenderClientId);
+                no.SpawnWithOwnership(clientId);
             }
         }
-
-        playerData.spawnPosition = new Vector3(1.5f, 0, 7.5f);
     }
 
-    [ClientRpc]
-    private void SpawnUnitClientRpc(NetworkObjectReference no, ulong clientId)
-    {
-        if (no.TryGet(out NetworkObject unit))
-        {
-            var unitScript = unit.GetComponent<Unit>();
+    // public PlayerController GetPlayerControllerWithClientId(ulong clientId)
+    // {
+    //     var playerControllers = FindObjectsOfType<PlayerController>();
 
-            if (clientId == OwnerClientId) AddUnit(unitScript);
-        }
-    }
+    //     foreach (var playerController in playerControllers)
+    //     {
+    //         if (playerController.OwnerClientId == clientId) return playerController;
+    //     }
 
-    public PlayerController GetPlayerControllerWithClientId(ulong clientId)
-    {
-        var playerControllers = FindObjectsOfType<PlayerController>();
-
-        foreach (var playerController in playerControllers)
-        {
-            if (playerController.OwnerClientId == clientId) return playerController;
-        }
-
-        return null;
-    }
+    //     return null;
+    // }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerUiServerRpc(ServerRpcParams rpcParams = default)
+    private void SpawnPlayerUiServerRpc(ulong clientId)
     {
         var managers = Instantiate(managersPrefab, Vector3.zero, Quaternion.identity);
         var noManagers = managers.GetComponent<NetworkObject>();
-        noManagers.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+        noManagers.SpawnWithOwnership(clientId);
 
         var playerUi = Instantiate(toolbarPrefab, Vector3.zero, Quaternion.identity);
         var no = playerUi.GetComponent<NetworkObject>();
-        no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+        no.SpawnWithOwnership(clientId);
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (IsServer)
+        {
+            Debug.Log("SpawnUnitServerRpc server");
+            SpawnUnitServerRpc(clientId);
+            SpawnPlayerUiServerRpc(clientId);
+        }
+    }
+
+    private void OnClientDisconnect(ulong clientId)
+    {
+        if (IsServer)
+        {
+            Debug.Log("OnClientDisconnect server");
+        }
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        if (IsOwner)
-        {
-            SpawnPlayerUiServerRpc();
-        }
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
     }
 
     private void Awake()
     {
         Instance = this;
-        playerData = new PlayerData
-        {
-            playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor,
-            playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial
-        };
-
-        var playerLevelUI = GetComponent<PlayerLevelUI>();
-        playerLevelUI.gameResult = FindObjectOfType<GameResult>();
     }
 
     private void Start()
     {
-        if (!IsOwner) return;
-        Debug.Log("SpawnUnitServerRpc client");
-        SpawnUnitServerRpc();
-        AddExpiernce(0);
+
     }
 }

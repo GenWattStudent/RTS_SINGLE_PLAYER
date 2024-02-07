@@ -8,7 +8,6 @@ public class CursorManager : NetworkBehaviour
     [SerializeField] private Texture2D buildCursor;
     [SerializeField] private Texture2D healCursor;
     [SerializeField] private Vector2 cursorOffset = new(10, 4);
-    public ulong clientId;
 
     private void Start()
     {
@@ -46,7 +45,7 @@ public class CursorManager : NetworkBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
+            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(OwnerClientId);
             return damagable != null && !damagable.isDead && damagable.OwnerClientId != playerController.OwnerClientId;
         }
         else
@@ -88,7 +87,7 @@ public class CursorManager : NetworkBehaviour
         }
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 100f);
-        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
+        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(OwnerClientId);
 
         foreach (var hit in hits)
         {

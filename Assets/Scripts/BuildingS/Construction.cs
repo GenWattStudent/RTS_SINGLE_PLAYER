@@ -46,7 +46,7 @@ public class Construction : NetworkBehaviour
     public void StopConstruction()
     {
         isCurrentlyConstructing = false;
-        ActivateConstructionBuildingClientRpc();
+        ActivateConstructionBuildingServerRpc();
         StopWorkersConstruction();
     }
 
@@ -86,26 +86,14 @@ public class Construction : NetworkBehaviour
         var constructionNo = GetComponent<NetworkObject>();
 
         no.SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
-        InstantiateBuildingClientRpc(no);
         constructionNo.Despawn(true);
     }
 
     private void InstantiateBuilding()
     {
         // Finished building
+        RemoveConstructionIfSelected();
         InstantiateBuildingServerRpc();
-    }
-
-    [ClientRpc]
-    private void InstantiateBuildingClientRpc(NetworkObjectReference nor)
-    {
-        if (nor.TryGet(out NetworkObject networkObject))
-        {
-            var isRemoved = RemoveConstructionIfSelected();
-            var selectable = networkObject.GetComponent<Selectable>();
-
-            if (isRemoved) SelectionManager.SelectBuilding(selectable);
-        }
     }
 
     [ServerRpc(RequireOwnership = false)]

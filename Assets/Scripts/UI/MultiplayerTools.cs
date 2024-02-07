@@ -32,13 +32,13 @@ public class MultiplayerTools : NetworkBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        playerCount++;
+        playerCount = NetworkManager.Singleton.ConnectedClients.Count;
         playerCountLabel.text = $"Player count: {playerCount}";
     }
 
     private void OnClientDisconnect(ulong clientId)
     {
-        playerCount--;
+        playerCount = NetworkManager.Singleton.ConnectedClients.Count;
         playerCountLabel.text = $"Player count: {playerCount}";
     }
 
