@@ -1,49 +1,54 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TankBuilding : MonoBehaviour, ISpawnerBuilding
+public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
 {
     [SerializeField] private UnitSo unitToSpawn;
     [SerializeField] private Transform unitSpawnPoint;
     public Transform unitMovePoint;
     private List<UnitSo> unitsQueue = new();
-    private float spawnTimer;
+    private NetworkVariable<float> spawnTimer = new NetworkVariable<float>(0);
+    public NetworkVariable<float> totalSpawnTime = new NetworkVariable<float>(0);
     private bool isUnitSpawning = false;
     private UnitSo currentSpawningUnit;
     private Building buildingScript;
-    public float totalSpawnTime { get; set; } = 0;
 
     private ResourceUsage resourceUsage;
+    private PlayerController playerController;
+    private UIUnitManager UIUnitManager;
+    private UnitCountManager unitCountManager;
+    private UIStorage uIStorage;
     public event Action<UnitSo, Unit> OnSpawnUnit;
 
     private void Awake()
     {
         buildingScript = GetComponent<Building>();
         resourceUsage = GetComponent<ResourceUsage>();
+        playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        UIUnitManager = playerController.toolbar.GetComponent<UIUnitManager>();
+        unitCountManager = playerController.toolbar.GetComponent<UnitCountManager>();
     }
 
     private Unit InstantiateUnit()
     {
-        if (!UnitCountManager.Instance.CanSpawnUnit())
+        if (!unitCountManager.CanSpawnUnit())
         {
             InfoBox.Instance.AddError("You have reached unit limit");
             return null;
         };
 
-        UIStorage.Instance.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
+        uIStorage.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
 
         var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
         agent.enabled = false;
 
         GameObject unitInstance = Instantiate(unitToSpawn.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
-        var damagableScript = unitInstance.GetComponent<Damagable>();
 
-        // if (damagableScript != null) unitInstance.GetComponent<Damagable>().OwnerClientId = PlayerController.Instance.OwnerClientId;
-        // unitScript.OwnerClientId = PlayerController.Instance.OwnerClientId;
-        unitScript.ChangeMaterial(PlayerController.Instance.playerData.playerMaterial, true);
+        unitScript.ChangeMaterial(playerController.playerData.playerMaterial, true);
 
         if (unitMovePoint != null)
         {
@@ -51,7 +56,6 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
             if (unitMovement != null) unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
         }
 
-        PlayerController.Instance.AddUnit(unitScript);
         return unitScript;
     }
 
@@ -65,24 +69,41 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
-            spawnTimer = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
+            spawnTimer.Value = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
             totalSpawnTime = spawnTimer;
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }
     }
 
-    private void SpawnUnit()
+    [ServerRpc]
+    private void SpawnUnitServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (unitsQueue.Count > 0 && spawnTimer < 0)
+        if (unitsQueue.Count > 0 && spawnTimer.Value < 0)
         {
             unitToSpawn = unitsQueue[0];
             var unit = InstantiateUnit();
-            OnSpawnUnit?.Invoke(unitToSpawn, unit);
+            var no = unit.GetComponent<NetworkObject>();
+
+            no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
             currentSpawningUnit = null;
+
             StartQueue();
+            SpawnUnitClientRpc(no);
+        }
+    }
+
+    [ClientRpc]
+    private void SpawnUnitClientRpc(NetworkObjectReference networkObjectReference)
+    {
+        if (networkObjectReference.TryGet(out NetworkObject no))
+        {
+            if (no.OwnerClientId != OwnerClientId) return;
+            var unit = no.GetComponent<Unit>();
+            playerController.AddUnit(unit);
+            OnSpawnUnit?.Invoke(unitToSpawn, unit);
         }
     }
 
@@ -94,7 +115,7 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
         if (currentSpawningUnit != null)
         {
-            screenController.SetProgresBar(spawnTimer, totalSpawnTime);
+            screenController.SetProgresBar(spawnTimer.Value, totalSpawnTime.Value);
         }
         else
         {
@@ -104,18 +125,19 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
 
     private void Update()
     {
+        if (!IsServer) return;
         if (currentSpawningUnit == null
-            || !UIStorage.Instance.HasEnoughResource(currentSpawningUnit.costResource, currentSpawningUnit.cost)
+            || !uIStorage.HasEnoughResource(currentSpawningUnit.costResource, currentSpawningUnit.cost)
             || resourceUsage.isInDebt) return;
 
-        spawnTimer -= Time.deltaTime;
+        spawnTimer.Value -= Time.deltaTime;
         UpdateScreen();
-        SpawnUnit();
+        SpawnUnitServerRpc();
     }
 
     public float GetSpawnTimer()
     {
-        return spawnTimer < 0 ? 0 : spawnTimer;
+        return spawnTimer.Value < 0 ? 0 : spawnTimer.Value;
     }
 
     public UnitSo GetCurrentSpawningUnit()
@@ -128,9 +150,9 @@ public class TankBuilding : MonoBehaviour, ISpawnerBuilding
         return unitsQueue.FindAll(unit => unit.unitName == unitName).Count;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
-        if (UIUnitManager.Instance.currentBuilding != this) return;
-        UIUnitManager.Instance.ClearTabs();
+        if (UIUnitManager.currentBuilding != this) return;
+        UIUnitManager.ClearTabs();
     }
 }

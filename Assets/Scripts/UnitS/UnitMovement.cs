@@ -32,7 +32,7 @@ public class UnitMovement : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void MoveToServerRpc(Vector3 destination)
+    public void MoveToServerRpc(Vector3 destination)
     {
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
         {
@@ -40,11 +40,6 @@ public class UnitMovement : NetworkBehaviour
             agent.isStopped = false;
             agent.avoidancePriority = Random.Range(1, 100);
         }
-    }
-
-    public void MoveTo(Vector3 destination)
-    {
-        MoveToServerRpc(destination);
     }
 
     public void SetDestinationAfterSpawn(Vector3 destination)
@@ -74,6 +69,8 @@ public class UnitMovement : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsServer) return;
+
         if (!isReachedDestinationAfterSpawn)
         {
             MoveToWithoutNavMesh(destinationAfterSpawn);

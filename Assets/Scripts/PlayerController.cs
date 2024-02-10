@@ -9,10 +9,10 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private List<GameObject> unitPrefabs = new();
     [SerializeField] private GameObject toolbarPrefab;
     [SerializeField] private GameObject managersPrefab;
-    public static PlayerController Instance;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
+    public GameObject toolbar;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -151,43 +151,20 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public PlayerController GetPlayerControllerWithClientId(ulong clientId)
-    {
-        var playerControllers = FindObjectsOfType<PlayerController>();
+    // public PlayerController GetPlayerControllerWithClientId(ulong clientId)
+    // {
+    //     var playerControllers = FindObjectsOfType<PlayerController>();
 
-        foreach (var playerController in playerControllers)
-        {
-            if (playerController.OwnerClientId == clientId) return playerController;
-        }
+    //     foreach (var playerController in playerControllers)
+    //     {
+    //         if (playerController.OwnerClientId == clientId) return playerController;
+    //     }
 
-        return null;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerUiServerRpc(ServerRpcParams rpcParams = default)
-    {
-        var managers = Instantiate(managersPrefab, Vector3.zero, Quaternion.identity);
-        var noManagers = managers.GetComponent<NetworkObject>();
-        noManagers.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-
-        var playerUi = Instantiate(toolbarPrefab, Vector3.zero, Quaternion.identity);
-        var no = playerUi.GetComponent<NetworkObject>();
-        no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-
-        if (IsOwner)
-        {
-            SpawnPlayerUiServerRpc();
-        }
-    }
+    //     return null;
+    // }
 
     private void Awake()
     {
-        Instance = this;
         playerData = new PlayerData
         {
             playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor,
@@ -195,14 +172,21 @@ public class PlayerController : NetworkBehaviour
         };
 
         var playerLevelUI = GetComponent<PlayerLevelUI>();
+        toolbar = GetComponentInChildren<UIBuildingManager>().gameObject;
         playerLevelUI.gameResult = FindObjectOfType<GameResult>();
     }
 
     private void Start()
     {
-        if (!IsOwner) return;
-        Debug.Log("SpawnUnitServerRpc client");
-        SpawnUnitServerRpc();
-        AddExpiernce(0);
+        if (IsOwner)
+        {
+            Debug.Log("SpawnUnitServerRpc client");
+            SpawnUnitServerRpc();
+        }
+
+        if (IsServer)
+        {
+            AddExpiernce(0);
+        }
     }
 }

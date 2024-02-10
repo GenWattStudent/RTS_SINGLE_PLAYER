@@ -61,7 +61,7 @@ public class Worker : NetworkBehaviour
 
         if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance)
         {
-            unitMovement.MoveTo(construction.transform.position);
+            unitMovement.MoveToServerRpc(construction.transform.position);
         }
     }
 
@@ -79,7 +79,7 @@ public class Worker : NetworkBehaviour
 
     void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         if (construction == null) return;
         var distance = DistanceToConstruction();

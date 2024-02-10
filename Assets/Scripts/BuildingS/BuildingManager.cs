@@ -13,10 +13,30 @@ public class BuildingManager : NetworkBehaviour
     public float diffranceBetweenMaxAndMinHeight = 1f;
     public int heightRaysCount = 15;
     private Vector3[] hightPoints;
+    private PlayerController playerController;
+    private UIBuildingManager uIBuildingManager;
+    private UIStorage uIStorage;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+    }
 
     private void Awake()
     {
+        playerController = GetComponent<PlayerController>();
         hightPoints = new Vector3[heightRaysCount * heightRaysCount];
+    }
+
+    private void Start()
+    {
+        uIBuildingManager = playerController.toolbar.GetComponent<UIBuildingManager>();
+        uIStorage = playerController.toolbar.GetComponent<UIStorage>();
     }
 
     private void GetHightPoints()
@@ -112,7 +132,7 @@ public class BuildingManager : NetworkBehaviour
 
     private void SetPopup()
     {
-        var message = $"{SelectedBuilding.name} ({PlayerController.Instance.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+        var message = $"{SelectedBuilding.name} ({playerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
         MousePopup.Instance.SetText(message);
         MousePopup.Instance.Show();
     }
@@ -164,8 +184,8 @@ public class BuildingManager : NetworkBehaviour
         Debug.Log("PlaceBuildingServerRpc " + position + " " + buildingIndex + " ID =" + clientId);
         var buildingSo = networkConstructionsPrefabs[buildingIndex];
         Debug.Log("PlaceBuildingServerRpc " + buildingSo);
-        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
-        UIStorage.Instance.DecreaseResource(buildingSo.costResource, buildingSo.cost);
+        if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
+        uIStorage.DecreaseResource(buildingSo.costResource, buildingSo.cost);
 
         var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
         var stats = newBuilding.GetComponent<Stats>();
@@ -184,7 +204,6 @@ public class BuildingManager : NetworkBehaviour
         {
             if (networkObject.OwnerClientId != ClientId) return;
             var building = networkObject.GetComponent<Building>();
-            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(ClientId);
             playerController.AddBuilding(building);
         }
     }
@@ -208,7 +227,7 @@ public class BuildingManager : NetworkBehaviour
     private bool IsValidPosition()
     {
         return !IsBuildingColliding() &&
-        !PlayerController.Instance.IsMaxBuildingOfType(SelectedBuilding) &&
+        !playerController.IsMaxBuildingOfType(SelectedBuilding) &&
         IsFlatTerrain();
     }
 
@@ -216,13 +235,13 @@ public class BuildingManager : NetworkBehaviour
     {
         if (previewPrefab != null) Destroy(previewPrefab);
         SelectedBuilding = null;
-        UIBuildingManager.Instance.SetSelectedBuilding(null);
+        uIBuildingManager.SetSelectedBuilding(null);
         MousePopup.Instance.Hide();
     }
 
     private void CheckSelectedBuilding()
     {
-        var selectedBuilding = UIBuildingManager.Instance.GetSelectedBuilding();
+        var selectedBuilding = uIBuildingManager.GetSelectedBuilding();
 
         if (selectedBuilding != null && selectedBuilding != SelectedBuilding)
         {

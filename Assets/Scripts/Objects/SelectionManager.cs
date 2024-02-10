@@ -2,18 +2,20 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 [DefaultExecutionOrder(-1)]
-public class SelectionManager : MonoBehaviour
+public class SelectionManager : NetworkBehaviour
 {
-    [HideInInspector] public static List<Selectable> selectedObjects;
+    [SerializeField] private RectTransform selectionBox;
     private bool isDragging = false;
     private Vector3 mouseStartPosition;
     private Vector3 mouseThreshold = new Vector3(0.1f, 0.1f, 0.1f);
-    [SerializeField] private RectTransform selectionBox;
+    [HideInInspector] public List<Selectable> selectedObjects;
+    private PlayerController playerController;
+    private UIUnitManager UIUnitManager;
     // select event
     public delegate void SelectAction();
     public static event SelectAction OnSelect;
 
-    public static void DeselectAll()
+    public void DeselectAll()
     {
         foreach (Selectable selectable in selectedObjects)
         {
@@ -26,6 +28,14 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
+        playerController = GetComponent<PlayerController>();
+        UIUnitManager = playerController.toolbar.GetComponent<UIUnitManager>();
         selectedObjects = new();
     }
 
@@ -34,12 +44,12 @@ public class SelectionManager : MonoBehaviour
         if (selectable == null) return true;
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
-        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(NetworkManager.Singleton.LocalClientId);
+
         Debug.Log($"unitScript.OwnerClientId: {unitScript.OwnerClientId}, PlayerController.Instance.OwnerClientId: {playerController.OwnerClientId}");
         return unitScript.OwnerClientId != playerController.OwnerClientId;
     }
 
-    public static bool IsCanAttack()
+    public bool IsCanAttack()
     {
         if (selectedObjects.Count == 0) return false;
         foreach (Selectable selectable in selectedObjects)
@@ -54,7 +64,7 @@ public class SelectionManager : MonoBehaviour
         return false;
     }
 
-    public static List<Selectable> GetWorkers()
+    public List<Selectable> GetWorkers()
     {
         var workers = new List<Selectable>();
 
@@ -70,7 +80,7 @@ public class SelectionManager : MonoBehaviour
         return workers;
     }
 
-    public static List<Selectable> GetHealers()
+    public List<Selectable> GetHealers()
     {
         var healers = new List<Selectable>();
 
@@ -88,7 +98,7 @@ public class SelectionManager : MonoBehaviour
         return healers;
     }
 
-    public static bool IsBuilding(Selectable selectable)
+    public bool IsBuilding(Selectable selectable)
     {
         if (selectable == null) return false;
         var buildingScript = selectable.GetComponent<Building>();
@@ -96,21 +106,21 @@ public class SelectionManager : MonoBehaviour
         return true;
     }
 
-    public static void Select(Selectable selectable)
+    public void Select(Selectable selectable)
     {
         selectable.Select();
         selectedObjects.Add(selectable);
         OnSelect?.Invoke();
     }
 
-    public static void Deselect(Selectable selectable)
+    public void Deselect(Selectable selectable)
     {
         selectable.Deselect();
         selectedObjects.Remove(selectable);
         OnSelect?.Invoke();
     }
 
-    public static void SelectBuilding(Selectable selectable)
+    public void SelectBuilding(Selectable selectable)
     {
         DeselectAll();
         var buildingScript = selectable.GetComponent<Building>();
@@ -124,7 +134,7 @@ public class SelectionManager : MonoBehaviour
             return;
         }
 
-        if (tankBuildingScript != null) UIUnitManager.Instance.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        if (tankBuildingScript != null) UIUnitManager.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
         selectable.Select();
         selectedObjects.Add(selectable);
     }
@@ -186,8 +196,6 @@ public class SelectionManager : MonoBehaviour
 
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
-
-        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(NetworkManager.Singleton.LocalClientId);
 
         foreach (Unit unit in playerController.playerData.units)
         {

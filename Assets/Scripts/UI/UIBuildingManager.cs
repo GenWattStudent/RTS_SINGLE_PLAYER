@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,7 +9,8 @@ public class SlotData
     public BuildingSo buildingSo;
 }
 
-public class UIBuildingManager : MonoBehaviour
+[DefaultExecutionOrder(-1)]
+public class UIBuildingManager : NetworkBehaviour
 {
     [SerializeField] private BuildingSo[] buildings;
     private UIDocument UIDocument;
@@ -18,18 +20,34 @@ public class UIBuildingManager : MonoBehaviour
     private VisualElement slotContainer;
     public VisualTreeAsset visualTree;
     private List<SlotData> slots = new();
-    public static UIBuildingManager Instance { get; private set; }
+    private UIUnitManager uIUnitManager;
+    private UIStorage uIStorage;
+    private PlayerController playerController;
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
-        Instance = this;
+        base.OnNetworkSpawn();
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+    }
+
+    private void Start()
+    {
+        playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        uIStorage = playerController.toolbar.GetComponent<UIStorage>();
+        Debug.Log("UIBuildingManager Start " + uIStorage);
     }
 
     private void OnEnable()
     {
         UIDocument = GetComponent<UIDocument>();
+
         root = UIDocument.rootVisualElement;
         slotContainer = root.Q<VisualElement>("TabContent");
+        uIUnitManager = GetComponent<UIUnitManager>();
     }
 
     public void ClearTabs()
@@ -62,8 +80,8 @@ public class UIBuildingManager : MonoBehaviour
     public void CreateBuildingTabs(BuildingSo.BuildingType buildingType)
     {
         ClearTabs();
-        UIUnitManager.Instance.IsUnitUIOpen = false;
-        UIUnitManager.Instance.IsUnitSelectionTabOpen = false;
+        uIUnitManager.IsUnitUIOpen = false;
+        uIUnitManager.IsUnitSelectionTabOpen = false;
 
         foreach (var building in buildings)
         {
@@ -77,7 +95,7 @@ public class UIBuildingManager : MonoBehaviour
     private void OnSlotClick(BuildingSo buildingSo)
     {
         Debug.Log("Clicked on " + buildingSo.buildingName);
-        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
+        if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
         selectedBuilding = buildingSo;
     }
 
@@ -124,7 +142,7 @@ public class UIBuildingManager : MonoBehaviour
 
     private void UpdateSlot(BuildingSo buildingSo, TemplateContainer container)
     {
-        if (!UIStorage.Instance.HasEnoughResource(buildingSo.costResource, buildingSo.cost))
+        if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost))
         {
             container.SetEnabled(false);
         }

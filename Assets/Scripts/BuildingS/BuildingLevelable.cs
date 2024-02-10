@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class BuildingLevelable : MonoBehaviour
+public class BuildingLevelable : NetworkBehaviour
 {
     public BuildingLevelableSo buildingLevelableSo;
     public int level = 1;
@@ -10,6 +11,7 @@ public class BuildingLevelable : MonoBehaviour
     public int reduceSpawnTime = 0;
     private ScreenController screenController;
     private Stats stats;
+    private UIStorage uIStorage;
 
     private void Start()
     {
@@ -17,6 +19,7 @@ public class BuildingLevelable : MonoBehaviour
         damagable = GetComponent<Damagable>();
         stats = GetComponent<Stats>();
         screenController = GetComponentInChildren<ScreenController>();
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
     }
 
     public void UpdateScreen()
@@ -69,11 +72,11 @@ public class BuildingLevelable : MonoBehaviour
 
     public void LevelUp()
     {
-        if (level >= maxLevel || !UIStorage.Instance.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
+        if (level >= maxLevel || !uIStorage.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
 
         level++;
         var levelData = buildingLevelableSo.levels[level - 1];
-        UIStorage.Instance.DecreaseResource(building.buildingSo.costResource, levelData.cost);
+        uIStorage.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
         UpdateHealth(levelData);
         UpdateAttack(levelData);

@@ -8,10 +8,14 @@ public class CursorManager : NetworkBehaviour
     [SerializeField] private Texture2D buildCursor;
     [SerializeField] private Texture2D healCursor;
     [SerializeField] private Vector2 cursorOffset = new(10, 4);
-    public ulong clientId;
+    private PlayerController playerController;
+    private SelectionManager selectionManager;
 
     private void Start()
     {
+        if (!IsOwner) enabled = false;
+        playerController = GetComponent<PlayerController>();
+        selectionManager = GetComponent<SelectionManager>();
         SetDefaultCursor();
     }
 
@@ -37,7 +41,7 @@ public class CursorManager : NetworkBehaviour
 
     public bool IsEnemyHovering()
     {
-        if (SelectionManager.selectedObjects.Count == 0 && !SelectionManager.IsCanAttack()) return false;
+        if (selectionManager.selectedObjects.Count == 0 && !selectionManager.IsCanAttack()) return false;
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -46,7 +50,6 @@ public class CursorManager : NetworkBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
             return damagable != null && !damagable.isDead && damagable.OwnerClientId != playerController.OwnerClientId;
         }
         else
@@ -57,7 +60,7 @@ public class CursorManager : NetworkBehaviour
 
     public bool IsConstructionHovering()
     {
-        if (SelectionManager.selectedObjects.Count == 0 && SelectionManager.GetWorkers().Count == 0) return false;
+        if (selectionManager.selectedObjects.Count == 0 && selectionManager.GetWorkers().Count == 0) return false;
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -76,11 +79,11 @@ public class CursorManager : NetworkBehaviour
 
     public bool IsHealHovering()
     {
-        if (SelectionManager.GetHealers().Count == 0) return false;
+        if (selectionManager.GetHealers().Count == 0) return false;
 
-        if (SelectionManager.selectedObjects.Count == 1)
+        if (selectionManager.selectedObjects.Count == 1)
         {
-            var healer = SelectionManager.selectedObjects[0].GetComponent<Healer>();
+            var healer = selectionManager.selectedObjects[0].GetComponent<Healer>();
             if (healer != null)
             {
                 return false;
@@ -88,7 +91,6 @@ public class CursorManager : NetworkBehaviour
         }
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 100f);
-        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
 
         foreach (var hit in hits)
         {

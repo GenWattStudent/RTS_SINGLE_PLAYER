@@ -87,7 +87,17 @@ public class Attack : NetworkBehaviour
         }
     }
 
-    public void SetTarget(Damagable target)
+    [ServerRpc(RequireOwnership = false)]
+    public void SetTargetServerRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject networkObject))
+        {
+            var damagable = networkObject.GetComponent<Damagable>();
+            SetTarget(damagable);
+        }
+    }
+
+    private void SetTarget(Damagable target)
     {
         this.target = target;
 
@@ -135,16 +145,24 @@ public class Attack : NetworkBehaviour
         return Vector3.Distance(transform.position, targetPosition) <= currentUnit.attackableSo.attackRange;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void ShootBulletServerRpc()
+    [ClientRpc]
+    private void ShootBulletClientRpc(Vector3 direction)
     {
-        ShootBulletClientRpc();
+        if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
+        {
+            var rotation = Quaternion.LookRotation(direction);
+            rotation *= Quaternion.Euler(0, -90, 0);
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, rotation);
+            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, bulletSpawnPoint.transform.position);
+        }
     }
 
-    [ClientRpc]
-    private void ShootBulletClientRpc()
+    [ServerRpc(RequireOwnership = false)]
+    private void ShootBulletServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        Bullet bullet = BulletPool.Instance.GetPool(currentUnit.attackableSo.bulletSo.bulletName).Get();
+        var bulletObjcet = Instantiate(currentUnit.attackableSo.bulletSo.prefab);
+        var bullet = bulletObjcet.GetComponent<Bullet>();
+        var no = bulletObjcet.GetComponent<NetworkObject>();
         var bulletSpawnPoint = this.bulletSpawnPoint;
 
         if (currentUnit.attackableSo.CanSalve)
@@ -179,19 +197,13 @@ public class Attack : NetworkBehaviour
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = GetComponent<Damagable>();
         bullet.motion.Setup();
-        bullet.OwnerClientId = OwnerClientId;
         bullet.Setup();
 
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
-        {
-            var rotation = Quaternion.LookRotation(bullet.motion.direction);
-            rotation *= Quaternion.Euler(0, -90, 0);
-            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, rotation);
-            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, bulletSpawnPoint.transform.position);
-        }
+        no.SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        ShootBulletClientRpc(bullet.motion.direction);
     }
 
     private bool IsInAngle()

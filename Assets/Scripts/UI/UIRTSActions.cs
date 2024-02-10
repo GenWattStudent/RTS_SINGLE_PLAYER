@@ -1,36 +1,46 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class UIRTSActions : ToolkitHelper
+public class UIRTSActions : NetworkToolkitHelper
 {
     private Button targetButton;
     private Button cancelButton;
     public bool isSetTargetMode = false;
-    public static UIRTSActions Instance { get; private set; }
+    private SelectionManager selectionManager;
 
-    private void Awake() {
-        Instance = this;
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
     }
 
     void Start()
     {
+        selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         targetButton = GetButton("Target");
         cancelButton = GetButton("Cancel");
         targetButton.RegisterCallback<ClickEvent>(OnTargetButtonClick);
         cancelButton.RegisterCallback<ClickEvent>(ev => CancelTargetCommand());
     }
 
-    private void OnTargetButtonClick(ClickEvent ev) {
+    private void OnTargetButtonClick(ClickEvent ev)
+    {
         isSetTargetMode = !isSetTargetMode;
         Debug.Log("Target button click");
     }
 
-    private void CancelTargeting() {
+    private void CancelTargeting()
+    {
         isSetTargetMode = false;
     }
 
-    private void CancelTargetCommand() {
-        var selectedUnits = SelectionManager.selectedObjects;
+    private void CancelTargetCommand()
+    {
+        var selectedUnits = selectionManager.selectedObjects;
 
         foreach (var unit in selectedUnits)
         {
@@ -41,12 +51,14 @@ public class UIRTSActions : ToolkitHelper
         isSetTargetMode = false;
     }
 
-    private void SelectTarget() {
+    private void SelectTarget()
+    {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit)) {
-            var selectedUnits = SelectionManager.selectedObjects;
+        if (Physics.Raycast(ray, out hit))
+        {
+            var selectedUnits = selectionManager.selectedObjects;
             foreach (var unit in selectedUnits)
             {
                 var attackScript = unit.GetComponent<Attack>();
@@ -61,12 +73,15 @@ public class UIRTSActions : ToolkitHelper
     // Update is called once per frame
     void Update()
     {
-        if (isSetTargetMode) {
-            if (Input.GetMouseButtonDown(0)) {
+        if (isSetTargetMode)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
                 SelectTarget();
             }
 
-            if (Input.GetMouseButtonDown(1)) {
+            if (Input.GetMouseButtonDown(1))
+            {
                 CancelTargeting();
             }
         }

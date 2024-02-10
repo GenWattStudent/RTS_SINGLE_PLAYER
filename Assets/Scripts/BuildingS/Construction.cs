@@ -15,6 +15,7 @@ public class Construction : NetworkBehaviour
     private float buildingSpeed = 0f;
     private ProgresBar progresBar;
     private Stats stats;
+    private SelectionManager selectionManager;
 
     public void AddWorker(Unit unit)
     {
@@ -61,14 +62,14 @@ public class Construction : NetworkBehaviour
 
     private bool RemoveConstructionIfSelected()
     {
-        if (SelectionManager.selectedObjects.Count == 1)
+        if (selectionManager.selectedObjects.Count == 1)
         {
-            var selectedConstruction = SelectionManager.selectedObjects[0].GetComponent<Construction>();
+            var selectedConstruction = selectionManager.selectedObjects[0].GetComponent<Construction>();
 
             if (selectedConstruction == this)
             {
-                var selectable = SelectionManager.selectedObjects[0].GetComponent<Selectable>();
-                SelectionManager.Deselect(selectable);
+                var selectable = selectionManager.selectedObjects[0].GetComponent<Selectable>();
+                selectionManager.Deselect(selectable);
                 return true;
             }
 
@@ -104,7 +105,7 @@ public class Construction : NetworkBehaviour
             var isRemoved = RemoveConstructionIfSelected();
             var selectable = networkObject.GetComponent<Selectable>();
 
-            if (isRemoved) SelectionManager.SelectBuilding(selectable);
+            if (isRemoved) selectionManager.SelectBuilding(selectable);
         }
     }
 
@@ -144,6 +145,7 @@ public class Construction : NetworkBehaviour
     void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
+        selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         stats = GetComponent<Stats>();
         var health = stats.GetStat(StatType.Health);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
@@ -153,7 +155,7 @@ public class Construction : NetworkBehaviour
 
     void Update()
     {
-        if (isCurrentlyConstructing && IsOwner)
+        if (isCurrentlyConstructing && IsServer)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
             stats.SetStat(StatType.Health, Mathf.Floor(constructionTimer));

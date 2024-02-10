@@ -1,14 +1,14 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class UIUnitManager : MonoBehaviour
+public class UIUnitManager : NetworkBehaviour
 {
     private List<VisualElement> unitSlotTabs = new();
     private List<UnitSo> unitsAttachedToTab = new();
-    public static UIUnitManager Instance { get; private set; }
     private BuildingSo selectedBuilding;
-    private ISpawnerBuilding spawnerBuilding;
+    private TankBuilding spawnerBuilding;
     public GameObject currentBuilding;
     public bool IsUnitUIOpen { get; set; } = false;
     public bool IsUnitSelectionTabOpen { get; set; } = false;
@@ -18,14 +18,21 @@ public class UIUnitManager : MonoBehaviour
     private VisualElement root;
     public VisualTreeAsset slot;
     private VisualElement unitSlotContainer;
+    private SelectionManager selectionManager;
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
-        Instance = this;
+        base.OnNetworkSpawn();
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
     }
 
     private void Start()
     {
+        selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         unitSlotContainer = root.Q<VisualElement>("TabContent");
@@ -82,12 +89,12 @@ public class UIUnitManager : MonoBehaviour
 
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name)
                 {
-                    SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                    SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime.Value);
                 }
 
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName != unitTab.name && unitQueueCount > 0)
                 {
-                    SetSpawnData(unitTab, unitQueueCount, 0, spawnerBuilding.totalSpawnTime);
+                    SetSpawnData(unitTab, unitQueueCount, 0, spawnerBuilding.totalSpawnTime.Value);
                 }
 
                 if (unitQueueCount <= 0)
@@ -120,17 +127,17 @@ public class UIUnitManager : MonoBehaviour
 
     public void CreateSelectionUnitTab()
     {
-        if (unitCountPrev == 0 && SelectionManager.selectedObjects.Count == 0) return;
-        if (SelectionManager.selectedObjects.Count == 1 && SelectionManager.IsBuilding(SelectionManager.selectedObjects[0])) return;
+        if (unitCountPrev == 0 && selectionManager.selectedObjects.Count == 0) return;
+        if (selectionManager.selectedObjects.Count == 1 && selectionManager.IsBuilding(selectionManager.selectedObjects[0])) return;
 
-        unitCountPrev = SelectionManager.selectedObjects.Count;
+        unitCountPrev = selectionManager.selectedObjects.Count;
         ClearTabs();
         unitSlotTabs.Clear();
         unitsAttachedToTab.Clear();
         unitQueue.Clear();
 
         Debug.Log("CreateSelectionUnitTab");
-        foreach (var selectable in SelectionManager.selectedObjects)
+        foreach (var selectable in selectionManager.selectedObjects)
         {
             if (selectable.selectableType == Selectable.SelectableType.Unit)
             {
@@ -223,7 +230,7 @@ public class UIUnitManager : MonoBehaviour
         }
     }
 
-    public void CreateUnitTabs(BuildingSo BuildingSo, ISpawnerBuilding spawnerBuilding, GameObject building)
+    public void CreateUnitTabs(BuildingSo BuildingSo, TankBuilding spawnerBuilding, GameObject building)
     {
         ClearTabs();
         unitSlotTabs.Clear();
@@ -245,11 +252,11 @@ public class UIUnitManager : MonoBehaviour
 
             if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName)
             {
-                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime.Value);
             }
             else if (unitQueueCount > 0)
             {
-                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime);
+                SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime.Value);
             }
 
             // HideSpawnInfo(unitTab);

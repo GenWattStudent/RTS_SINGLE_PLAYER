@@ -15,6 +15,7 @@ public class Selectable : NetworkBehaviour
     [HideInInspector] public bool isSelected = false;
     private Damagable damagable;
     private Camera unitCamera;
+    private SelectionManager selectionManager;
 
     public override void OnNetworkSpawn()
     {
@@ -29,10 +30,15 @@ public class Selectable : NetworkBehaviour
         unitCamera = GetComponentInChildren<Camera>(true);
     }
 
+    private void Start()
+    {
+        selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
+    }
+
     private void OnDead()
     {
         if (!IsOwner) return;
-        SelectionManager.Deselect(this);
+        selectionManager.Deselect(this);
         Deselect();
     }
 

@@ -45,27 +45,27 @@ public class EnemyUnitMovement : MonoBehaviour
 
     private void FindClosestPlayerTarget()
     {
-        var players = PlayerController.Instance.playerData.units;
-        if (players.Count == 0) return;
+        // var players = PlayerController.Instance.playerData.units;
+        // if (players.Count == 0) return;
 
-        var closestPlayer = players[0];
-        if (closestPlayer == null) return;
+        // var closestPlayer = players[0];
+        // if (closestPlayer == null) return;
 
-        var closestDistance = Vector3.Distance(transform.position, closestPlayer.transform.position);
+        // var closestDistance = Vector3.Distance(transform.position, closestPlayer.transform.position);
 
-        foreach (var player in players)
-        {
-            var distance = Vector3.Distance(transform.position, player.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestPlayer = player;
-            }
-        }
-        if (closestPlayer == null) return;
+        // foreach (var player in players)
+        // {
+        //     var distance = Vector3.Distance(transform.position, player.transform.position);
+        //     if (distance < closestDistance)
+        //     {
+        //         closestDistance = distance;
+        //         closestPlayer = player;
+        //     }
+        // }
+        // if (closestPlayer == null) return;
 
-        targetDamagable = closestPlayer.GetComponent<Damagable>();
-        MoveTo(GetPositionInRange(closestPlayer.transform.position, offset));
+        // targetDamagable = closestPlayer.GetComponent<Damagable>();
+        // MoveTo(GetPositionInRange(closestPlayer.transform.position, offset));
     }
 
     private void Awake()

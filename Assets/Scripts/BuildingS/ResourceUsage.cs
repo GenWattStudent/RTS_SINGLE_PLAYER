@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class UsageData
@@ -6,7 +7,7 @@ public class UsageData
     public float usage;
 }
 
-public class ResourceUsage : MonoBehaviour
+public class ResourceUsage : NetworkBehaviour
 {
     private float usageTimer = 0;
     private float usageInterval = 0;
@@ -14,6 +15,7 @@ public class ResourceUsage : MonoBehaviour
     private Stats stats;
     private Building building;
     private Unit unit;
+    private UIStorage uIStorage;
 
     private void Start()
     {
@@ -21,6 +23,7 @@ public class ResourceUsage : MonoBehaviour
         unit = GetComponent<Unit>();
         stats = GetComponent<Stats>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
     }
 
     private UsageData GetUsageDataFromStats()
@@ -39,10 +42,10 @@ public class ResourceUsage : MonoBehaviour
     {
         var usageData = GetUsageDataFromStats();
 
-        if (UIStorage.Instance.HasEnoughResource(usageData.resourceSO, usageData.usage))
+        if (uIStorage.HasEnoughResource(usageData.resourceSO, usageData.usage))
         {
             isInDebt = false;
-            UIStorage.Instance.DecreaseResource(usageData.resourceSO, usageData.usage);
+            uIStorage.DecreaseResource(usageData.resourceSO, usageData.usage);
         }
         else
         {

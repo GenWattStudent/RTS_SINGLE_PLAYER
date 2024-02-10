@@ -16,44 +16,44 @@ public class SkillSo : ScriptableObject
     public int value;
     public string unitName;
 
-    private void AddDamageToUnits(string unitName, int value)
-    {
-        foreach (var unit in PlayerController.Instance.playerData.units)
-        {
-            var damagable = unit.GetComponent<Damagable>();
-            var unitScript = unit.GetComponent<Unit>();
+    // private void AddDamageToUnits(string unitName, int value)
+    // {
+    //     foreach (var unit in PlayerController.Instance.playerData.units)
+    //     {
+    //         var damagable = unit.GetComponent<Damagable>();
+    //         var unitScript = unit.GetComponent<Unit>();
 
-            if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
-            {
-                damagable.AddDamageBoost(value);
-            }
-        }
-    }
+    //         if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
+    //         {
+    //             damagable.AddDamageBoost(value);
+    //         }
+    //     }
+    // }
 
-    private void AddHealthToUnits(string unitName, int value)
-    {
-        foreach (var unit in PlayerController.Instance.playerData.units)
-        {
-            var damagable = unit.GetComponent<Damagable>();
-            var unitScript = unit.GetComponent<Unit>();
+    // private void AddHealthToUnits(string unitName, int value)
+    // {
+    //     foreach (var unit in PlayerController.Instance.playerData.units)
+    //     {
+    //         var damagable = unit.GetComponent<Damagable>();
+    //         var unitScript = unit.GetComponent<Unit>();
 
-            if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
-            {
-                var newHealth = damagable.stats.GetStat(StatType.MaxHealth) * value / 100;
+    //         if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
+    //         {
+    //             var newHealth = damagable.stats.GetStat(StatType.MaxHealth) * value / 100;
 
-                damagable.stats.AddToStat(StatType.MaxHealth, newHealth);
-                damagable.TakeDamage(-newHealth);
-            }
-        }
-    }
+    //             damagable.stats.AddToStat(StatType.MaxHealth, newHealth);
+    //             damagable.TakeDamage(-newHealth);
+    //         }
+    //     }
+    // }
 
     public bool Unlock(List<SkillSo> unlockedSkills, int skillPoints)
     {
         if (CanBePurchased(unlockedSkills, skillPoints))
         {
-            OnSkillUnlocked?.Invoke(this);
-            if (valueName == "damage") AddDamageToUnits(unitName, value);
-            else if (valueName == "health") AddHealthToUnits(unitName, value);
+            // OnSkillUnlocked?.Invoke(this);
+            // if (valueName == "damage") AddDamageToUnits(unitName, value);
+            // else if (valueName == "health") AddHealthToUnits(unitName, value);
             return true;
         }
 

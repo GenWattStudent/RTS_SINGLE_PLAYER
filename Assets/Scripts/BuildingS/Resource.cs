@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public class Resource : NetworkBehaviour
 {
     public BuildingSo buildingSo;
     public ResourceSO resourceSo;
@@ -9,6 +10,7 @@ public class Resource : MonoBehaviour
     public float currentIncome = 0;
     public float totalIncome = 0;
     private Stats stats;
+    private UIStorage uIStorage;
 
     private void Income()
     {
@@ -17,7 +19,8 @@ public class Resource : MonoBehaviour
         currentIncome += income;
         incomeTimer = incomeInterval;
         totalIncome += income;
-        UIStorage.Instance.IncreaseResource(resourceSo, income);
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
+        uIStorage.IncreaseResource(resourceSo, income);
     }
 
     void Start()

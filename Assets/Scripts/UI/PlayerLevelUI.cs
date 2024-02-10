@@ -7,11 +7,12 @@ public class PlayerLevelUI : NetworkToolkitHelper
     private Label playerLevelText;
     private VisualElement playerLevelFill;
     private VisualElement levelBox;
+    private PlayerController playerController;
 
     private void OnDisable()
     {
         if (!IsOwner) return;
-        PlayerController.Instance.OnPlayerLevelChange -= UpdateUI;
+        playerController.OnPlayerLevelChange -= UpdateUI;
     }
 
     private void UpdateUI(int expToNextLevel, int playerExpierence, int level, int maxLevel)
@@ -36,6 +37,7 @@ public class PlayerLevelUI : NetworkToolkitHelper
     {
         if (!IsOwner) return;
         base.OnEnable();
+        playerController = GetComponent<PlayerController>();
         UIDocument = gameResult.GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
 
@@ -43,6 +45,6 @@ public class PlayerLevelUI : NetworkToolkitHelper
         playerLevelText = GetLabel("PlayerLevel");
         playerLevelFill = GetVisualElement("LevelFill");
         levelBox = GetVisualElement("Level");
-        PlayerController.Instance.OnPlayerLevelChange += UpdateUI;
+        playerController.OnPlayerLevelChange += UpdateUI;
     }
 }

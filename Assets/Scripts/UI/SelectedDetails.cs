@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static Selectable;
 
-public class SelectedDetails : ToolkitHelper
+public class SelectedDetails : NetworkToolkitHelper
 {
     private Building building;
     private Button levelUpButton;
@@ -15,9 +15,18 @@ public class SelectedDetails : ToolkitHelper
     private VisualElement selectionInfo;
     private VisualElement actions;
     private bool isGoToTab = true;
+    private SelectionManager selectionManager;
+    private UIStorage uIStorage;
+    private UITabManagement uITabManagement;
 
     private void Start()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         selectionInfo = root.Q<VisualElement>("SelectionInfo");
         levelUpButton = root.Q<Button>("LevelUp");
         sellButton = root.Q<Button>("Sell");
@@ -27,6 +36,11 @@ public class SelectedDetails : ToolkitHelper
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
         actions = GetVisualElement("Actions");
 
+        selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
+        var playerController = selectionManager.GetComponent<PlayerController>();
+        uIStorage = playerController.toolbar.GetComponent<UIStorage>();
+        uITabManagement = playerController.toolbar.GetComponent<UITabManagement>();
+
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
 
@@ -35,8 +49,8 @@ public class SelectedDetails : ToolkitHelper
 
     private void OnDisable()
     {
-        levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
-        sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
+        // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
 
     private void ActivateButtons(bool isActive)
@@ -223,7 +237,7 @@ public class SelectedDetails : ToolkitHelper
             {
                 var nextBuildingLevel = building.buildingLevelable.GetNextBuildingLevel();
 
-                if (nextBuildingLevel != null && UIStorage.Instance.HasEnoughResource(nextBuildingLevel.resourceSO, nextBuildingLevel.cost))
+                if (nextBuildingLevel != null && uIStorage.HasEnoughResource(nextBuildingLevel.resourceSO, nextBuildingLevel.cost))
                 {
                     levelUpButton.SetEnabled(true);
                 }
@@ -249,7 +263,7 @@ public class SelectedDetails : ToolkitHelper
     {
         Show();
         actions.style.display = DisplayStyle.None;
-        CreateStat("Selected", $"{SelectionManager.selectedObjects.Count} units");
+        CreateStat("Selected", $"{selectionManager.selectedObjects.Count} units");
         ActivateButtons(false);
     }
 
@@ -257,14 +271,14 @@ public class SelectedDetails : ToolkitHelper
     {
         ClearStats();
 
-        if (SelectionManager.selectedObjects.Count == 0)
+        if (selectionManager.selectedObjects.Count == 0)
         {
             Hide();
             if (!isGoToTab)
             {
                 var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
                 var tabName = tabs.GetValue(0).ToString();
-                UITabManagement.Instance.HandleTabClick(UITabManagement.Instance.GetTab(tabName));
+                uITabManagement.HandleTabClick(uITabManagement.GetTab(tabName));
                 isGoToTab = true;
             }
 
@@ -273,10 +287,10 @@ public class SelectedDetails : ToolkitHelper
 
         isGoToTab = false;
 
-        if (SelectionManager.selectedObjects.Count == 1)
+        if (selectionManager.selectedObjects.Count == 1)
         {
             Show();
-            var selectable = SelectionManager.selectedObjects[0];
+            var selectable = selectionManager.selectedObjects[0];
             var unit = selectable.GetComponent<Unit>();
             var stats = selectable.GetComponent<Stats>();
 

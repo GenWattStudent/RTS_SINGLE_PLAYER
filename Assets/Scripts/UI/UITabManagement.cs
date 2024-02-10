@@ -2,19 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[DefaultExecutionOrder(1)]
 public class UITabManagement : MonoBehaviour
 {
-    private List<Button> tabs = new ();
+    private List<Button> tabs = new();
     public string CurrentTab { get; private set; }
     private UIDocument UIDocument;
     private VisualElement root;
     private VisualElement tabContainer;
-    public static UITabManagement Instance { get; private set; }
+    private UIBuildingManager uIBuildingManager;
 
     public void CreateTabs(string tabName)
     {
         CurrentTab = tabName;
-        UIBuildingManager.Instance.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tabName));
+        uIBuildingManager.CreateBuildingTabs((BuildingSo.BuildingType)System.Enum.Parse(typeof(BuildingSo.BuildingType), tabName));
     }
 
     public void HandleTabClick(Button tab)
@@ -58,7 +59,7 @@ public class UITabManagement : MonoBehaviour
 
     private void ClearButtons()
     {
-        List<Button> buttons = new ();
+        List<Button> buttons = new();
 
         foreach (var tab in tabContainer.Children())
         {
@@ -73,8 +74,8 @@ public class UITabManagement : MonoBehaviour
 
     void Start()
     {
-        Instance = this;
         UIDocument = GetComponent<UIDocument>();
+        uIBuildingManager = GetComponent<UIBuildingManager>();
         root = UIDocument.rootVisualElement;
         tabContainer = root.Q<VisualElement>("BuildingTabs");
 

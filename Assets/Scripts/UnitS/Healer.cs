@@ -21,7 +21,23 @@ public class Healer : NetworkBehaviour
         target.TakeDamage(healPoints * Time.deltaTime * -1);
     }
 
-    public void SetTarget(Damagable target)
+    [ServerRpc(RequireOwnership = false)]
+    public void SetTargetServerRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject networkObject))
+        {
+            var damagable = networkObject.GetComponent<Damagable>();
+            SetTarget(damagable);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetTargetToNullServerRpc()
+    {
+        SetTarget(null);
+    }
+
+    private void SetTarget(Damagable target)
     {
         this.target = target;
         laser.SetTarget(target);
@@ -55,10 +71,9 @@ public class Healer : NetworkBehaviour
         var direction = (target.transform.position - transform.position).normalized;
         var destination = transform.position + direction * distanceToMove;
 
-        unitMovement.MoveTo(destination);
+        unitMovement.MoveToServerRpc(destination);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         unitMovement = GetComponent<UnitMovement>();
@@ -70,7 +85,7 @@ public class Healer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
         if (target == null) return;
 
         if (IsInRange() == false)

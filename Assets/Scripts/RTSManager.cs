@@ -5,8 +5,23 @@ using UnityEngine;
 public class RTSManager : NetworkBehaviour
 {
     [SerializeField] private GameObject moveIndicatorPrefab;
+    private PlayerController playerController;
+    private SelectionManager selectionManager;
+    private UIRTSActions uiRTSActions;
     public float unitSpacing = 0.2f;
-    public ulong clientId;
+
+    private void Start()
+    {
+        if (!IsLocalPlayer)
+        {
+            enabled = false;
+            return;
+        }
+
+        playerController = GetComponent<PlayerController>();
+        selectionManager = GetComponent<SelectionManager>();
+        uiRTSActions = playerController.toolbar.GetComponent<UIRTSActions>();
+    }
 
     private void CancelBuildingCommand(Selectable selectable)
     {
@@ -24,13 +39,14 @@ public class RTSManager : NetworkBehaviour
 
         if (healerScript != null)
         {
-            healerScript.SetTarget(null);
+            healerScript.SetTargetToNullServerRpc();
         }
     }
 
     private void MoveCommand(Vector3 position)
     {
-        int unitsCount = SelectionManager.selectedObjects.Count;
+        int unitsCount = selectionManager.selectedObjects.Count;
+        Debug.Log($"unitsCount: {unitsCount}");
         int rows = Mathf.CeilToInt(Mathf.Sqrt(unitsCount));
         int cols = Mathf.CeilToInt((float)unitsCount / rows);
 
@@ -40,17 +56,17 @@ public class RTSManager : NetworkBehaviour
             {
                 var index = row * cols + col;
                 if (index >= unitsCount) continue;
-                var unit = SelectionManager.selectedObjects[index];
+                var unit = selectionManager.selectedObjects[index];
                 if (unit.selectableType == Selectable.SelectableType.Unit)
                 {
                     Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
                     Vector3 finalPosition = position + offset;
-                    var unitMovement = SelectionManager.selectedObjects[index].GetComponent<UnitMovement>();
+                    var unitMovement = selectionManager.selectedObjects[index].GetComponent<UnitMovement>();
 
                     finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
                     finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
 
-                    unitMovement.MoveTo(finalPosition);
+                    unitMovement.MoveToServerRpc(finalPosition);
                     CancelBuildingCommand(unit);
                     CancelHealingCommand(unit);
                 }
@@ -67,14 +83,15 @@ public class RTSManager : NetworkBehaviour
 
         if (attackScript != null)
         {
-            attackScript.SetTarget(target);
+            var no = target.GetComponent<NetworkObject>();
+            attackScript.SetTargetServerRpc(no);
             CancelBuildingCommand(selectable);
         }
     }
 
     private void AttackCommand(Damagable target)
     {
-        foreach (Selectable selectable in SelectionManager.selectedObjects)
+        foreach (Selectable selectable in selectionManager.selectedObjects)
         {
             var unitScript = selectable.GetComponent<Unit>();
             var distance = Vector3.Distance(target.transform.position, selectable.transform.position);
@@ -89,7 +106,7 @@ public class RTSManager : NetworkBehaviour
                 // Calculate the closest point to be in range with the specified offset
                 var closestPointToBeInRange = target.transform.position - directionToTarget * (unitScript.attackableSo.attackRange - offsetPoint);
 
-                unitMovement.MoveTo(closestPointToBeInRange);
+                unitMovement.MoveToServerRpc(closestPointToBeInRange);
                 SetTarget(target, selectable);
                 continue;
             }
@@ -100,7 +117,7 @@ public class RTSManager : NetworkBehaviour
 
     private void BuildCommand(Construction construction)
     {
-        var workers = SelectionManager.GetWorkers();
+        var workers = selectionManager.GetWorkers();
 
         foreach (var worker in workers)
         {
@@ -138,16 +155,18 @@ public class RTSManager : NetworkBehaviour
 
             if (healerScript != null)
             {
-                healerScript.SetTarget(target);
+                var no = target.GetComponent<NetworkObject>();
+                healerScript.SetTargetServerRpc(no);
             }
         }
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && SelectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
+        Debug.Log($"RTS MANAGER {selectionManager.selectedObjects.Count}");
+        if (Input.GetMouseButtonDown(1) && selectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
-            if (UIRTSActions.Instance.isSetTargetMode)
+            if (uiRTSActions.isSetTargetMode)
             {
                 return;
             }
@@ -162,7 +181,7 @@ public class RTSManager : NetworkBehaviour
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
-                var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(clientId);
+
                 Debug.Log(OwnerClientId + "RTS MANAGER");
                 if (damagableScript != null && selectableScript != null)
                 {
@@ -185,7 +204,7 @@ public class RTSManager : NetworkBehaviour
                     // Heal 
                     if (damagableScript.OwnerClientId == playerController.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
                     {
-                        var healers = SelectionManager.GetHealers();
+                        var healers = selectionManager.GetHealers();
 
                         HealCommand(healers, damagableScript);
                         isAction = true;

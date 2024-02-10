@@ -1,22 +1,31 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Motion))]
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
     public float damage;
-    public ulong OwnerClientId;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
     private float lifeTimeTimer = 0f;
     private TrailRenderer trailRenderer;
+    private PlayerController playerController;
+    private NetworkObject networkObject;
     public Motion motion;
 
     private void Awake()
     {
+        if (!IsServer)
+        {
+            enabled = false;
+            return;
+        }
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
+        networkObject = GetComponent<NetworkObject>();
+        playerController = NetworkManager.Singleton.ConnectedClients[networkObject.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
     }
 
     private void Explode()
@@ -39,7 +48,6 @@ public class Bullet : MonoBehaviour
     private void DealDamage(Collider collider)
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
-        var playerController = PlayerController.Instance.GetPlayerControllerWithClientId(OwnerClientId);
 
         if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
         {
@@ -120,6 +128,8 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
+
         lifeTimeTimer += Time.deltaTime;
         CheckHit();
         motion.Move();

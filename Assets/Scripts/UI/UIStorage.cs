@@ -6,7 +6,6 @@ public class Storage
 {
     public ResourceSO recourceSO;
     public float currentValue = 0;
-    public StorageData storageData;
 }
 
 [System.Serializable]
@@ -21,11 +20,9 @@ public class UIStorage : MonoBehaviour
     private List<Storage> storages = new();
     private UIDocument UIDocument;
     private VisualElement root;
-    public static UIStorage Instance { get; private set; }
 
     private void Awake()
     {
-        Instance = this;
     }
 
     public Storage GetStorageByResource(ResourceSO resource)
@@ -115,7 +112,6 @@ public class UIStorage : MonoBehaviour
             {
                 recourceSO = resource.resourceSO,
                 currentValue = resource.resourceSO.startValue,
-                storageData = resource
             };
 
             storages.Add(storage);

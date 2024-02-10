@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class MiniMapRectangle : MonoBehaviour
+public class MiniMapRectangle : NetworkBehaviour
 {
     public Material cameraBoxMaterial;
     public VisualElement minimapImage;
@@ -24,6 +25,15 @@ public class MiniMapRectangle : MonoBehaviour
         RenderPipelineManager.endCameraRendering += OnPostRenderr;
     }
 
+    void Start()
+    {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+    }
+
     private void HandleMinimapClick(PointerDownEvent ev)
     {
         isPressed = true;
@@ -35,7 +45,7 @@ public class MiniMapRectangle : MonoBehaviour
         {
             isPressed = false;
         }
-        
+
         if (isPressed)
         {
             MoveCameraToMousePosition(Input.mousePosition);
@@ -59,7 +69,8 @@ public class MiniMapRectangle : MonoBehaviour
 
     void OnPostRenderr(ScriptableRenderContext context, Camera camera)
     {
-        if (camera.name == "MinimapCamera") {
+        if (camera.name == "MinimapCamera")
+        {
 
         }
     }
