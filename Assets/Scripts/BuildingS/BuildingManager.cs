@@ -30,12 +30,12 @@ public class BuildingManager : NetworkBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        uIBuildingManager = playerController.GetComponent<UIBuildingManager>();
         hightPoints = new Vector3[heightRaysCount * heightRaysCount];
     }
 
     private void Start()
     {
-        uIBuildingManager = playerController.toolbar.GetComponent<UIBuildingManager>();
         uIStorage = playerController.toolbar.GetComponent<UIStorage>();
     }
 

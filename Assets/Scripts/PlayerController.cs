@@ -184,9 +184,6 @@ public class PlayerController : NetworkBehaviour
             SpawnUnitServerRpc();
         }
 
-        if (IsServer)
-        {
-            AddExpiernce(0);
-        }
+        AddExpiernce(0);
     }
 }
