@@ -23,7 +23,7 @@ public class ResourceUsage : NetworkBehaviour
         unit = GetComponent<Unit>();
         stats = GetComponent<Stats>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
-        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
     private UsageData GetUsageDataFromStats()

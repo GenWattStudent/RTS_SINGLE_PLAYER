@@ -38,8 +38,8 @@ public class SelectedDetails : NetworkToolkitHelper
 
         selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         var playerController = selectionManager.GetComponent<PlayerController>();
-        uIStorage = playerController.toolbar.GetComponent<UIStorage>();
-        uITabManagement = playerController.toolbar.GetComponent<UITabManagement>();
+        uIStorage = playerController.GetComponentInChildren<UIStorage>();
+        uITabManagement = playerController.GetComponentInChildren<UITabManagement>();
 
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);

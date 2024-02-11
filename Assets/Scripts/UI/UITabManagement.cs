@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[DefaultExecutionOrder(1)]
 public class UITabManagement : MonoBehaviour
 {
     private List<Button> tabs = new();

@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: -3413407138139128331}
   - component: {fileID: 3935365758164698151}
   - component: {fileID: -5616619733085501964}
-  - component: {fileID: -1736885679720875547}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -183,23 +182,6 @@ MonoBehaviour:
   UILayer:
     serializedVersion: 2
     m_Bits: 32
---- !u!114 &-1736885679720875547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3502280097689162745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f25322f0fd7aa0640a84c7faf3bb0896, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerMaterials:
-  - playerColor: {r: 0, g: 0.033422947, b: 1, a: 1}
-    playerMaterial: {fileID: 2100000, guid: d697aa8eca9a6074e932a13fe7d7f5c1, type: 2}
-  - playerColor: {r: 0.108977415, g: 0.7924528, b: 0, a: 1}
-    playerMaterial: {fileID: 2100000, guid: 466c52d1edcd56d4b95e88152cfc7345, type: 2}
 --- !u!1001 &1441355943550433658
 PrefabInstance:
   m_ObjectHideFlags: 0

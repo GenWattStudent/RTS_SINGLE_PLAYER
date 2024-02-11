@@ -7,8 +7,6 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
-    [SerializeField] private GameObject toolbarPrefab;
-    [SerializeField] private GameObject managersPrefab;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
@@ -151,18 +149,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    // public PlayerController GetPlayerControllerWithClientId(ulong clientId)
-    // {
-    //     var playerControllers = FindObjectsOfType<PlayerController>();
-
-    //     foreach (var playerController in playerControllers)
-    //     {
-    //         if (playerController.OwnerClientId == clientId) return playerController;
-    //     }
-
-    //     return null;
-    // }
-
     private void Awake()
     {
         playerData = new PlayerData
@@ -170,10 +156,6 @@ public class PlayerController : NetworkBehaviour
             playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor,
             playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial
         };
-
-        var playerLevelUI = GetComponent<PlayerLevelUI>();
-        toolbar = GetComponentInChildren<UIBuildingManager>().gameObject;
-        playerLevelUI.gameResult = FindObjectOfType<GameResult>();
     }
 
     private void Start()
@@ -184,6 +166,6 @@ public class PlayerController : NetworkBehaviour
             SpawnUnitServerRpc();
         }
 
-        AddExpiernce(0);
+        if (IsServer) AddExpiernce(0);
     }
 }

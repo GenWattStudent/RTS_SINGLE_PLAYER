@@ -72,11 +72,6 @@ public class MultiplayerController : NetworkBehaviour
 
     private void Start()
     {
-        if (!IsServer)
-        {
-            enabled = false;
-            return;
-        }
         Instance = this;
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
@@ -84,11 +79,6 @@ public class MultiplayerController : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if (!IsServer)
-        {
-            enabled = false;
-            return;
-        }
         NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
     }

@@ -17,6 +17,7 @@ public class Motion : MonoBehaviour
 
     virtual public void Move()
     {
+        Debug.Log("Move " + transform.position + " " + target + " " + direction + " " + speed + " " + Time.deltaTime);
         previousPosition = transform.position;
         transform.rotation = Quaternion.LookRotation(direction);
         transform.position += direction * speed * Time.deltaTime;

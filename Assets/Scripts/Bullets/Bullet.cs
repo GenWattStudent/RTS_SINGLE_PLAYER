@@ -17,31 +17,39 @@ public class Bullet : NetworkBehaviour
 
     private void Awake()
     {
-        if (!IsServer)
-        {
-            enabled = false;
-            return;
-        }
+        if (!IsServer) return;
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
         networkObject = GetComponent<NetworkObject>();
+    }
+
+    private void Start()
+    {
+        if (!IsServer) return;
         playerController = NetworkManager.Singleton.ConnectedClients[networkObject.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
     }
 
     private void Explode()
     {
-        if (bulletSo.explosionPrefab != null)
-        {
-            var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
-            MusicManager.Instance.PlayMusic(bulletSo.explosionSound, motion.previousPosition);
-            Destroy(explosion, 2f);
-        }
-
         Collider[] colliders = Physics.OverlapSphere(motion.previousPosition, bulletSo.radius);
         foreach (var collider in colliders)
         {
             if (IsOwnUnit(collider)) continue;
             DealDamage(collider);
+        }
+
+        ExplodeClientRpc();
+    }
+
+    [ClientRpc]
+    private void ExplodeClientRpc()
+    {
+
+        if (bulletSo.explosionPrefab != null)
+        {
+            var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
+            MusicManager.Instance.PlayMusic(bulletSo.explosionSound, motion.previousPosition);
+            Destroy(explosion, 2f);
         }
     }
 
@@ -106,13 +114,14 @@ public class Bullet : NetworkBehaviour
 
     private void HideBullet()
     {
-        pool.Release(this);
         lifeTimeTimer = 0f;
         motion.Hide();
         if (trailRenderer != null)
         {
             trailRenderer.Clear();
         }
+
+        networkObject.Despawn(true);
     }
 
     public void Setup()
@@ -123,13 +132,13 @@ public class Bullet : NetworkBehaviour
 
     public void Reset()
     {
-        motion.previousPosition = transform.position;
+        // motion.previousPosition = transform.position;
     }
 
     void Update()
     {
         if (!IsServer) return;
-
+        Debug.Log("Bullet Update");
         lifeTimeTimer += Time.deltaTime;
         CheckHit();
         motion.Move();

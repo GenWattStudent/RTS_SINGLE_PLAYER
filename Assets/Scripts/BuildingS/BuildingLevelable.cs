@@ -19,7 +19,7 @@ public class BuildingLevelable : NetworkBehaviour
         damagable = GetComponent<Damagable>();
         stats = GetComponent<Stats>();
         screenController = GetComponentInChildren<ScreenController>();
-        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
     public void UpdateScreen()

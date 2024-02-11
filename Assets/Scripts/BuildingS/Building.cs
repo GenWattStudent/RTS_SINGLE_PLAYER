@@ -11,7 +11,7 @@ public class Building : NetworkBehaviour
     private void Start()
     {
         buildingLevelable = GetComponent<BuildingLevelable>();
-        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().toolbar.GetComponent<UIStorage>();
+        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
     public void Sell()

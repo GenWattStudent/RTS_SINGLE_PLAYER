@@ -27,9 +27,11 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
     {
         buildingScript = GetComponent<Building>();
         resourceUsage = GetComponent<ResourceUsage>();
+
         playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        UIUnitManager = playerController.toolbar.GetComponent<UIUnitManager>();
-        unitCountManager = playerController.toolbar.GetComponent<UnitCountManager>();
+        UIUnitManager = playerController.GetComponentInChildren<UIUnitManager>();
+        unitCountManager = playerController.GetComponentInChildren<UnitCountManager>();
+        uIStorage = playerController.GetComponentInChildren<UIStorage>();
     }
 
     private Unit InstantiateUnit()

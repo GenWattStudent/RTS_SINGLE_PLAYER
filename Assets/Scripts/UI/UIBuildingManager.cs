@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,7 +22,6 @@ public class UIBuildingManager : NetworkBehaviour
     private List<SlotData> slots = new();
     private UIUnitManager uIUnitManager;
     private UIStorage uIStorage;
-    private PlayerController playerController;
 
     public override void OnNetworkSpawn()
     {
@@ -36,11 +33,10 @@ public class UIBuildingManager : NetworkBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
-        playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        uIStorage = playerController.toolbar.GetComponent<UIStorage>();
-        Debug.Log("UIBuildingManager Start " + uIStorage);
+        uIStorage = GetComponent<UIStorage>();
+        uIUnitManager = GetComponent<UIUnitManager>();
     }
 
     private void OnEnable()
@@ -49,7 +45,6 @@ public class UIBuildingManager : NetworkBehaviour
 
         root = UIDocument.rootVisualElement;
         slotContainer = root.Q<VisualElement>("TabContent");
-        uIUnitManager = GetComponent<UIUnitManager>();
     }
 
     public void ClearTabs()

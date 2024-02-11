@@ -20,7 +20,7 @@ public class RTSManager : NetworkBehaviour
 
         playerController = GetComponent<PlayerController>();
         selectionManager = GetComponent<SelectionManager>();
-        uiRTSActions = playerController.toolbar.GetComponent<UIRTSActions>();
+        uiRTSActions = GetComponentInChildren<UIRTSActions>();
     }
 
     private void CancelBuildingCommand(Selectable selectable)
