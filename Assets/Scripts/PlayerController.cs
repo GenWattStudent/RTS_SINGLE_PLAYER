@@ -56,18 +56,19 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
 
-        playerExpierence.Value += amount;
+        var playerExp = playerExpierence.Value;
+        playerExp += amount;
         var nextLevelData = playerLevelSo.levelsData[playerData.playerLevel];
-        var diffrence = playerExpierence.Value - nextLevelData.expToNextLevel;
+        var diffrence = playerExp - nextLevelData.expToNextLevel;
 
-        if (playerData.playerLevel < playerLevelSo.levelsData.Count && playerData.playerExpierence >= nextLevelData.expToNextLevel)
+        if (playerData.playerLevel < playerLevelSo.levelsData.Count && playerExp >= nextLevelData.expToNextLevel)
         {
             playerData.playerLevel++;
-            playerExpierence.Value = diffrence;
+            playerExp = diffrence;
             SkillTreeManager.Instance.AddSkillPoints(1);
         }
-
-        OnPlayerLevelChange?.Invoke(nextLevelData.expToNextLevel, playerExpierence.Value, playerData.playerLevel, playerLevelSo.levelsData.Count);
+        Debug.Log("AddExpiernce " + playerExp);
+        playerExpierence.Value = playerExp;
     }
 
     public void RemoveUnit(Unit unit)
@@ -149,6 +150,17 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        playerExpierence.OnValueChanged += (previous, current) =>
+         {
+             if (!IsOwner) return;
+             Debug.Log("OnNetworkSpawn " + current);
+             OnPlayerLevelChange?.Invoke(playerLevelSo.levelsData[playerData.playerLevel].expToNextLevel, current, playerData.playerLevel, playerLevelSo.levelsData.Count);
+         };
+    }
+
     private void Awake()
     {
         playerData = new PlayerData
@@ -166,6 +178,6 @@ public class PlayerController : NetworkBehaviour
             SpawnUnitServerRpc();
         }
 
-        if (IsServer) AddExpiernce(0);
+        if (IsServer) AddExpiernce(1);
     }
 }

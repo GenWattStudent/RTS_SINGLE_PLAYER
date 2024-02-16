@@ -11,6 +11,7 @@ public class ParabolicMotion : Motion
     {
         base.Setup();
         startPosition = transform.position;
+        previousPosition = startPosition;
         target = new Vector3(target.x, 0, target.z);
         direction = (target - startPosition).normalized;
         time = 0f;
@@ -41,7 +42,7 @@ public class ParabolicMotion : Motion
         time += Time.deltaTime * speedDependingOnDistance * speed;
         var position = EvaluateCurve(time);
         var nextPos = EvaluateCurve(time + 0.01f) - position;
-
+        Debug.Log(transform.position + " " + previousPosition);
         previousPosition = transform.position;
         transform.rotation = Quaternion.LookRotation(nextPos);
         transform.position = position;

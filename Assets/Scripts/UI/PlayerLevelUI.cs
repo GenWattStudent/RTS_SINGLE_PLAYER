@@ -11,7 +11,10 @@ public class PlayerLevelUI : NetworkToolkitHelper
 
     private void UpdateUI(int expToNextLevel, int playerExpierence, int level, int maxLevel)
     {
-        Debug.Log("UpdateUI");
+        Debug.Log("UpdateUI " + playerExpierence + " " + expToNextLevel + " " + level + " " + maxLevel);
+        if (!IsOwner) return;
+
+        Debug.Log("UpdateUI " + playerExpierence + " " + expToNextLevel + " " + level + " " + maxLevel);
         if (level == maxLevel)
         {
             playerLevelText.text = $"{level} Max LVL";
@@ -28,7 +31,6 @@ public class PlayerLevelUI : NetworkToolkitHelper
 
     protected override void OnEnable()
     {
-        if (!IsOwner) return;
         base.OnEnable();
 
         gameResult = GetComponent<GameResult>();
@@ -41,6 +43,12 @@ public class PlayerLevelUI : NetworkToolkitHelper
         levelBox = GetVisualElement("Level");
     }
 
+    private void Awake()
+    {
+        playerController = GetComponentInParent<PlayerController>();
+        playerController.OnPlayerLevelChange += UpdateUI;
+    }
+
     private void Start()
     {
         if (!IsOwner)
@@ -48,8 +56,5 @@ public class PlayerLevelUI : NetworkToolkitHelper
             enabled = false;
             return;
         }
-
-        playerController = GetComponent<PlayerController>();
-        playerController.OnPlayerLevelChange += UpdateUI;
     }
 }

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class UnitCountManager : MonoBehaviour
+public class UnitCountManager : NetworkBehaviour
 {
     private UIDocument UIDocument;
     private VisualElement root;
@@ -10,9 +11,13 @@ public class UnitCountManager : MonoBehaviour
     [SerializeField] private int maxUnitCount = 20;
     [SerializeField] private int currentUnitCount = 0;
 
-    private void Awake()
+    private void Start()
     {
-
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
     }
 
     private void OnEnable()
@@ -25,6 +30,7 @@ public class UnitCountManager : MonoBehaviour
 
     private void OnDisable()
     {
+        if (!IsOwner) return;
         PlayerController.OnUnitChange -= OnUnitChange;
     }
 
@@ -41,7 +47,6 @@ public class UnitCountManager : MonoBehaviour
 
     private void UpdateText()
     {
-        Debug.Log($"Current unit count: {currentUnitCount}");
         unitCountText.text = $"{currentUnitCount}/{maxUnitCount}";
     }
 }

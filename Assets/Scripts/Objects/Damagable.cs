@@ -2,6 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
+[DefaultExecutionOrder(1)]
 public class Damagable : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
@@ -29,6 +30,7 @@ public class Damagable : NetworkBehaviour
         stats = GetComponent<Stats>();
 
         if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
+        Debug.Log("Damagable Start " + stats.GetStat(StatType.MaxHealth));
         stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
 
         progressBarScript = healthBar.GetComponent<ProgresBar>();

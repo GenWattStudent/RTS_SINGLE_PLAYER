@@ -45,7 +45,6 @@ public class SelectionManager : NetworkBehaviour
         var unitScript = selectable.GetComponent<Unit>();
         if (unitScript == null) return true;
 
-        Debug.Log($"unitScript.OwnerClientId: {unitScript.OwnerClientId}, PlayerController.Instance.OwnerClientId: {playerController.OwnerClientId}");
         return unitScript.OwnerClientId != playerController.OwnerClientId;
     }
 

@@ -10,6 +10,11 @@ public class VehicleGun : NetworkBehaviour
 
     void Start()
     {
+        if (!IsServer)
+        {
+            enabled = false;
+            return;
+        }
         attack = GetComponentInParent<Attack>();
     }
 
@@ -27,6 +32,8 @@ public class VehicleGun : NetworkBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
+
         if (attack.targetPosition == Vector3.zero)
         {
             SlerpRotationServerRpc(0);

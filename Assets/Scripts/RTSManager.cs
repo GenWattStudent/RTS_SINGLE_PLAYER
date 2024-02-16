@@ -163,7 +163,6 @@ public class RTSManager : NetworkBehaviour
 
     void Update()
     {
-        Debug.Log($"RTS MANAGER {selectionManager.selectedObjects.Count}");
         if (Input.GetMouseButtonDown(1) && selectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
             if (uiRTSActions.isSetTargetMode)
@@ -182,7 +181,6 @@ public class RTSManager : NetworkBehaviour
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
 
-                Debug.Log(OwnerClientId + "RTS MANAGER");
                 if (damagableScript != null && selectableScript != null)
                 {
                     // Attack

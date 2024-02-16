@@ -49,6 +49,7 @@ public class SelectedDetails : NetworkToolkitHelper
 
     private void OnDisable()
     {
+
         // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
         // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }

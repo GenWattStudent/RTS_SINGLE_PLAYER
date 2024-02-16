@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Motion : MonoBehaviour
+public class Motion : NetworkBehaviour
 {
     public float speed;
     public Vector3 target;
@@ -11,13 +12,13 @@ public class Motion : MonoBehaviour
 
     virtual public void Setup()
     {
+        previousPosition = transform.position;
         direction = (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(direction);
     }
 
     virtual public void Move()
     {
-        Debug.Log("Move " + transform.position + " " + target + " " + direction + " " + speed + " " + Time.deltaTime);
         previousPosition = transform.position;
         transform.rotation = Quaternion.LookRotation(direction);
         transform.position += direction * speed * Time.deltaTime;

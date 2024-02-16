@@ -7,6 +7,7 @@ public class UsageData
     public float usage;
 }
 
+[DefaultExecutionOrder(1)]
 public class ResourceUsage : NetworkBehaviour
 {
     private float usageTimer = 0;

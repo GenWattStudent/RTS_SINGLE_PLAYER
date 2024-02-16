@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 
 public enum StatType
 {
@@ -23,8 +24,21 @@ public enum StatType
 }
 
 [Serializable]
-public class Stat
+public struct Stat : INetworkSerializable, IEquatable<Stat>
 {
     public StatType Type;
     public float Value;
+
+    public bool Equals(Stat other)
+    {
+        return Type == other.Type;
+    }
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref Type);
+        serializer.SerializeValue(ref Value);
+    }
 }
+
+

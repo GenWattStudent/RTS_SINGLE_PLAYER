@@ -158,11 +158,16 @@ public class Attack : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ShootBulletServerRpc(ServerRpcParams serverRpcParams = default)
+    private void ShootBulletServerRpc()
     {
         var bulletObjcet = Instantiate(currentUnit.attackableSo.bulletSo.prefab);
         var bullet = bulletObjcet.GetComponent<Bullet>();
+        var motionScript = bullet.GetComponent<Motion>();
         var no = bulletObjcet.GetComponent<NetworkObject>();
+
+        bullet.motion = motionScript;
+        bullet.networkObject = no;
+
         var bulletSpawnPoint = this.bulletSpawnPoint;
 
         if (currentUnit.attackableSo.CanSalve)
@@ -192,6 +197,7 @@ public class Attack : NetworkBehaviour
         targetPosition += new Vector3(randomX, 0, randomZ);
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
+        Debug.Log("bullet.bulletSo: " + OwnerClientId);
         bullet.motion.target = targetPosition;
 
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
@@ -202,7 +208,7 @@ public class Attack : NetworkBehaviour
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        no.SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        no.SpawnWithOwnership(OwnerClientId);
         ShootBulletClientRpc(bullet.motion.direction);
     }
 
@@ -250,8 +256,10 @@ public class Attack : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void PerformAttackServerRpc()
     {
+        Debug.Log(IsInGunAngle());
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle() && IsInGunAngle())
         {
+            Debug.Log("PerformAttackServerRpc");
             OnAttack?.Invoke();
             ShootBulletServerRpc();
             lastAttackTime = Time.time;

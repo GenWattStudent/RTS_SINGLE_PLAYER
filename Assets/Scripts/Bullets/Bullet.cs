@@ -12,20 +12,20 @@ public class Bullet : NetworkBehaviour
     private float lifeTimeTimer = 0f;
     private TrailRenderer trailRenderer;
     private PlayerController playerController;
-    private NetworkObject networkObject;
+    public NetworkObject networkObject;
     public Motion motion;
 
     private void Awake()
     {
         if (!IsServer) return;
         trailRenderer = GetComponentInChildren<TrailRenderer>();
-        motion = GetComponent<Motion>();
-        networkObject = GetComponent<NetworkObject>();
+        // motion = GetComponent<Motion>();
     }
 
     private void Start()
     {
         if (!IsServer) return;
+        // networkObject = GetComponent<NetworkObject>();
         playerController = NetworkManager.Singleton.ConnectedClients[networkObject.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
     }
 
@@ -38,17 +38,17 @@ public class Bullet : NetworkBehaviour
             DealDamage(collider);
         }
 
-        ExplodeClientRpc();
+        ExplodeClientRpc(motion.previousPosition);
     }
 
     [ClientRpc]
-    private void ExplodeClientRpc()
+    private void ExplodeClientRpc(Vector3 postion)
     {
 
         if (bulletSo.explosionPrefab != null)
         {
-            var explosion = Instantiate(bulletSo.explosionPrefab, motion.previousPosition, Quaternion.identity);
-            MusicManager.Instance.PlayMusic(bulletSo.explosionSound, motion.previousPosition);
+            var explosion = Instantiate(bulletSo.explosionPrefab, postion, Quaternion.identity);
+            MusicManager.Instance.PlayMusic(bulletSo.explosionSound, postion);
             Destroy(explosion, 2f);
         }
     }
@@ -57,12 +57,18 @@ public class Bullet : NetworkBehaviour
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
 
+        if (damageableScript != null)
+        {
+            Debug.Log("Deal Damage to: " + OwnerClientId + " " + damageableScript.OwnerClientId + " " + damageableScript.isDead + " " + damageableScript.gameObject.name + " " + damageableScript.gameObject.layer + " " + LayerMask.LayerToName(damageableScript.gameObject.layer));
+        }
+
         if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
         {
+            Debug.Log("2. Deal Damage to: " + OwnerClientId + " " + damageableScript.OwnerClientId + " " + damageableScript.isDead + " " + damageableScript.gameObject.name + " " + damageableScript.gameObject.layer + " " + LayerMask.LayerToName(damageableScript.gameObject.layer));
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.OwnerClientId == playerController.OwnerClientId)
+                if (unitsBullet.OwnerClientId == OwnerClientId)
                 {
                     playerController.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 }
@@ -84,14 +90,11 @@ public class Bullet : NetworkBehaviour
 
     private void CheckHit()
     {
-        RaycastHit hit;
-
         var direction = transform.position - motion.previousPosition;
         // Debug.DrawRay(motion.previousPosition, direction.normalized * direction.magnitude, Color.red, 1f);
-        if (Physics.Raycast(motion.previousPosition, direction.normalized, out hit, direction.magnitude))
+        if (Physics.Raycast(motion.previousPosition, direction.normalized, out var hit, direction.magnitude))
         {
             // Draw long ray from this postion to forward of the bullet
-
             if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Bush" || LayerMask.LayerToName(hit.collider.gameObject.layer) == "Ghost")
             {
                 return;
@@ -138,7 +141,7 @@ public class Bullet : NetworkBehaviour
     void Update()
     {
         if (!IsServer) return;
-        Debug.Log("Bullet Update");
+
         lifeTimeTimer += Time.deltaTime;
         CheckHit();
         motion.Move();

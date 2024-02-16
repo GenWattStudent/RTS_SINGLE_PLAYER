@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6147144558642713454}
   - component: {fileID: 6658737344311043898}
   - component: {fileID: 3710898475097951197}
-  - component: {fileID: 6842611030029812148}
   - component: {fileID: -6640201509390759280}
   - component: {fileID: 7260419064711618807}
   - component: {fileID: -3413407138139128331}
@@ -57,10 +56,6 @@ MonoBehaviour:
   unitPrefabs:
   - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
-  toolbarPrefab: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
-    type: 3}
-  managersPrefab: {fileID: 3533921138156073987, guid: 4fdc57df5925cf442a477cbe41b6c715,
-    type: 3}
   playerLevelSo: {fileID: 11400000, guid: 5ebbb1ff371dbf8458c816a299c3ecee, type: 2}
   playerExpierence:
     m_InternalValue: 0
@@ -85,20 +80,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &6842611030029812148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3502280097689162745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 879427bef94d1554cb12c58efe6b2753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIDocument: {fileID: 0}
-  gameResult: {fileID: 0}
 --- !u!114 &-6640201509390759280
 MonoBehaviour:
   m_ObjectHideFlags: 0
