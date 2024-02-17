@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -64,6 +65,7 @@ public class UIUnitManager : NetworkBehaviour
 
         progressTime.title = timeRounded.ToString() + "s";
         spawnUnitCountText.text = unitQueueCount.ToString() + "x";
+        Debug.Log("SetSpawnData: " + currentTime + "Total: " + totalSpawnTime);
         UpdateProgressBar(progressTime, currentTime, totalSpawnTime);
     }
 
@@ -89,6 +91,7 @@ public class UIUnitManager : NetworkBehaviour
 
                 if (currentSpawningUnit is not null && currentSpawningUnit.unitName == unitTab.name)
                 {
+                    // if current spawning unit is the same as the unit tab, update the progress bar
                     SetSpawnData(unitTab, unitQueueCount, currentTime, spawnerBuilding.totalSpawnTime.Value);
                 }
 
@@ -195,7 +198,14 @@ public class UIUnitManager : NetworkBehaviour
 
             button.RegisterCallback((ClickEvent ev) =>
             {
-                spawnerBuilding.AddUnitToQueue(soUnit);
+                var unitsToSpawn = currentBuilding.GetComponent<Building>().buildingSo.unitsToSpawn;
+                for (int i = 0; i < unitsToSpawn.Count(); i++)
+                {
+                    if (unitsToSpawn[i].unitName == soUnit.unitName)
+                    {
+                        spawnerBuilding.AddUnitToQueueServerRpc(i);
+                    }
+                }
             });
         }
         else

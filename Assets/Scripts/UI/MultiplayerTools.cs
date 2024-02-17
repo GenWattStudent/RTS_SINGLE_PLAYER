@@ -50,7 +50,7 @@ public class MultiplayerTools : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        // NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
 
     private void StartHost()

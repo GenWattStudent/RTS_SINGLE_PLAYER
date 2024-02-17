@@ -35,6 +35,7 @@ public class Damagable : NetworkBehaviour
 
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
+        if (IsServer) SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
     }
 
     private void InstantiateExplosion()
@@ -76,8 +77,15 @@ public class Damagable : NetworkBehaviour
         OnDead?.Invoke();
     }
 
+    [ClientRpc]
+    public void SetHealthClientRpc(float health, float maxHealth)
+    {
+        progressBarScript.UpdateProgresBar(health, maxHealth);
+    }
+
     public bool TakeDamage(float damage)
     {
+        Debug.Log("TakeDamage " + damage);
         var newHealth = stats.SubstractFromStat(StatType.Health, damage);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
 
@@ -86,7 +94,7 @@ public class Damagable : NetworkBehaviour
             newHealth = maxHealth;
         }
 
-        progressBarScript.UpdateProgresBar(newHealth, maxHealth);
+        SetHealthClientRpc(newHealth, maxHealth);
         OnTakeDamage?.Invoke();
 
         if (newHealth <= 0f)

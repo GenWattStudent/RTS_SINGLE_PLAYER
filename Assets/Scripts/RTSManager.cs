@@ -29,7 +29,7 @@ public class RTSManager : NetworkBehaviour
 
         if (workerScript != null)
         {
-            workerScript.StopConstruction();
+            workerScript.StopConstructionServerRpc();
         }
     }
 
@@ -122,21 +122,12 @@ public class RTSManager : NetworkBehaviour
         foreach (var worker in workers)
         {
             var workerScript = worker.GetComponent<Worker>();
+            var no = construction.GetComponent<NetworkObject>();
 
             if (workerScript != null)
             {
-                // if is clicked on building that worker currently building
-                if (workerScript.construction == construction)
-                {
-                    return;
-                }
-                // if worker is building something else
-                if (workerScript.construction != null)
-                {
-                    workerScript.StopConstruction();
-                }
                 // move to construction
-                workerScript.MoveToConstruction(construction);
+                workerScript.MoveToConstructionServerRpc(no);
             }
         }
     }
@@ -186,6 +177,7 @@ public class RTSManager : NetworkBehaviour
                     // Attack
                     if (damagableScript.OwnerClientId != playerController.OwnerClientId)
                     {
+                        Debug.Log("AttackCommand " + damagableScript.OwnerClientId + " " + playerController.OwnerClientId);
                         AttackCommand(damagableScript);
                         isAction = true;
                         return;
@@ -194,6 +186,7 @@ public class RTSManager : NetworkBehaviour
                     if (selectableScript.selectableType == Selectable.SelectableType.Building && damagableScript.OwnerClientId == playerController.OwnerClientId && constructionScript != null)
                     {
                         // Build
+                        Debug.Log("BuildCommand");
                         BuildCommand(constructionScript);
                         isAction = true;
                         return;
@@ -203,7 +196,7 @@ public class RTSManager : NetworkBehaviour
                     if (damagableScript.OwnerClientId == playerController.OwnerClientId && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
                     {
                         var healers = selectionManager.GetHealers();
-
+                        Debug.Log("HealCommand " + damagableScript.OwnerClientId + " " + playerController.OwnerClientId);
                         HealCommand(healers, damagableScript);
                         isAction = true;
                         return;

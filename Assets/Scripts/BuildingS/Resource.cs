@@ -31,6 +31,7 @@ public class Resource : NetworkBehaviour
 
     void FixedUpdate()
     {
+        if (!IsServer) return;
         incomeTimer -= Time.fixedDeltaTime;
 
         if (incomeTimer <= 0)

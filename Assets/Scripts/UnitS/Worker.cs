@@ -12,14 +12,19 @@ public class Worker : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ActivateLaserServerRpc()
     {
-        ActivateLaserClientRpc();
+        var targetNo = construction.GetComponent<NetworkObject>();
+        ActivateLaserClientRpc(targetNo);
     }
 
     [ClientRpc]
-    private void ActivateLaserClientRpc()
+    private void ActivateLaserClientRpc(NetworkObjectReference nor)
     {
-        laser.isAttacking = false;
-        laser.SetTarget(construction.GetComponent<Damagable>());
+        if (nor.TryGet(out NetworkObject no))
+        {
+            var construction = no.GetComponent<Construction>();
+            laser.isAttacking = false;
+            laser.SetTarget(construction.GetComponent<Damagable>());
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -46,7 +51,8 @@ public class Worker : NetworkBehaviour
         ActivateLaserServerRpc();
     }
 
-    public void StopConstruction(bool removeFromList = true)
+    [ServerRpc(RequireOwnership = false)]
+    public void StopConstructionServerRpc(bool removeFromList = true)
     {
         if (construction == null) return;
         if (removeFromList) construction.RemoveWorker(unit);
@@ -55,13 +61,34 @@ public class Worker : NetworkBehaviour
         DeactivateLaserServerRpc();
     }
 
-    public void MoveToConstruction(Construction construction)
+    private void MoveToConstruction(Construction construction)
     {
         this.construction = construction;
 
         if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance)
         {
             unitMovement.MoveToServerRpc(construction.transform.position);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void MoveToConstructionServerRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject no))
+        {
+            var construction = no.GetComponent<Construction>();
+            // if worker is building something else
+            if (this.construction != null)
+            {
+                StopConstructionServerRpc();
+            }
+            // if is clicked on building that worker currently building
+            if (this.construction == construction)
+            {
+                return;
+            }
+
+            MoveToConstruction(construction);
         }
     }
 
@@ -74,7 +101,7 @@ public class Worker : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        StopConstruction();
+        StopConstructionServerRpc();
     }
 
     void Update()

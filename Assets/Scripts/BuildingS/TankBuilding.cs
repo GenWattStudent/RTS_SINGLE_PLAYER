@@ -6,7 +6,6 @@ using UnityEngine.AI;
 
 public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
 {
-    [SerializeField] private UnitSo unitToSpawn;
     [SerializeField] private Transform unitSpawnPoint;
     public Transform unitMovePoint;
     private List<UnitSo> unitsQueue = new();
@@ -23,7 +22,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
     private UIStorage uIStorage;
     public event Action<UnitSo, Unit> OnSpawnUnit;
 
-    private void Awake()
+    private void Start()
     {
         buildingScript = GetComponent<Building>();
         resourceUsage = GetComponent<ResourceUsage>();
@@ -42,12 +41,12 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             return null;
         };
 
-        uIStorage.DecreaseResource(unitToSpawn.costResource, unitToSpawn.cost);
+        uIStorage.DecreaseResource(currentSpawningUnit.costResource, currentSpawningUnit.cost);
 
-        var agent = unitToSpawn.prefab.GetComponent<NavMeshAgent>();
+        var agent = currentSpawningUnit.prefab.GetComponent<NavMeshAgent>();
         agent.enabled = false;
 
-        GameObject unitInstance = Instantiate(unitToSpawn.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
+        GameObject unitInstance = Instantiate(currentSpawningUnit.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
 
         unitScript.ChangeMaterial(playerController.playerData.playerMaterial, true);
@@ -61,10 +60,15 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         return unitScript;
     }
 
-    public void AddUnitToQueue(UnitSo unit)
+    [ServerRpc(RequireOwnership = false)]
+    public void AddUnitToQueueServerRpc(int index, ServerRpcParams rpcParams = default)
     {
-        unitsQueue.Add(unit);
+        var unitSo = buildingScript.buildingSo.unitsToSpawn[index];
+        unitsQueue.Add(unitSo);
         StartQueue();
+        ClientRpcParams clientRpcParams = default;
+        clientRpcParams.Send.TargetClientIds = new ulong[] { rpcParams.Receive.SenderClientId };
+        AddUnitToQueueClientRpc(index, clientRpcParams);
     }
 
     private void StartQueue()
@@ -72,24 +76,34 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
             spawnTimer.Value = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
-            totalSpawnTime = spawnTimer;
+            totalSpawnTime.Value = spawnTimer.Value;
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
         }
     }
 
-    [ServerRpc]
-    private void SpawnUnitServerRpc(ServerRpcParams rpcParams = default)
+    [ClientRpc]
+    public void AddUnitToQueueClientRpc(int index, ClientRpcParams clientRpcParams = default)
+    {
+        if (IsServer) return;
+
+        var unitSo = buildingScript.buildingSo.unitsToSpawn[index];
+        unitsQueue.Add(unitSo);
+        currentSpawningUnit = unitsQueue[0];
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnUnitServerRpc()
     {
         if (unitsQueue.Count > 0 && spawnTimer.Value < 0)
         {
-            unitToSpawn = unitsQueue[0];
             var unit = InstantiateUnit();
             var no = unit.GetComponent<NetworkObject>();
 
-            no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+            no.SpawnWithOwnership(OwnerClientId);
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
+            OnSpawnUnit?.Invoke(currentSpawningUnit, unit);
             currentSpawningUnit = null;
 
             StartQueue();
@@ -105,7 +119,18 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             if (no.OwnerClientId != OwnerClientId) return;
             var unit = no.GetComponent<Unit>();
             playerController.AddUnit(unit);
-            OnSpawnUnit?.Invoke(unitToSpawn, unit);
+
+            if (!IsServer)
+            {
+                if (unitsQueue.Count > 0)
+                {
+                    currentSpawningUnit = unitsQueue[0];
+                }
+                else
+                {
+                    currentSpawningUnit = null;
+                }
+            }
         }
     }
 

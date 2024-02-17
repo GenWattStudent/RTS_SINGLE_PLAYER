@@ -1,18 +1,23 @@
 using Unity.Netcode;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class Stats : NetworkBehaviour
 {
     private Unit unit;
     private Building building;
-    private NetworkList<Stat> stats = new NetworkList<Stat>();
+    private NetworkList<Stat> stats;
+
+    private void Awake()
+    {
+        stats = new NetworkList<Stat>();
+    }
 
     private void Start()
     {
         unit = GetComponent<Unit>();
         building = GetComponent<Building>();
 
-        Debug.Log("Stats Start");
         if (building != null)
         {
             foreach (var stat in building.buildingSo.stats)
@@ -24,21 +29,16 @@ public class Stats : NetworkBehaviour
         {
             foreach (var stat in unit.unitSo.stats)
             {
-                Debug.Log("Stats Start " + stat.Type + " " + stat.Value);
                 stats.Add(new Stat { Type = stat.Type, Value = stat.Value });
             }
         }
-
-        Debug.Log("Stats Start " + stats.Count);
     }
 
     public float GetStat(StatType type)
     {
 
-        Debug.Log("GetStat " + type + " " + stats.Count);
         for (int i = 0; i < stats.Count; i++)
         {
-            Debug.Log("GetStat " + stats[i].Type + " " + stats[i].Value);
             if (stats[i].Type == type)
             {
                 return stats[i].Value;
@@ -99,12 +99,20 @@ public class Stats : NetworkBehaviour
     public void AddStat(StatType type, float value)
     {
         if (!IsServer) return;
-        Debug.Log("AddStat " + type + " " + value);
+
+        for (int i = 0; i < stats.Count; i++)
+        {
+            if (stats[i].Type == type)
+            {
+                return;
+            }
+        }
+
         stats.Add(new Stat { Type = type, Value = value });
     }
 
-    public override void OnNetworkDespawn()
+    public override void OnDestroy()
     {
-        base.OnNetworkDespawn();
+        stats.Dispose();
     }
 }

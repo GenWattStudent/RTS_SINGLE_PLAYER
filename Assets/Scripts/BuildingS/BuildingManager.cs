@@ -20,6 +20,7 @@ public class BuildingManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        Debug.Log("Building OnNetworkSpawn " + IsOwner);
         if (!IsOwner)
         {
             enabled = false;
@@ -184,16 +185,15 @@ public class BuildingManager : NetworkBehaviour
     {
         Debug.Log("PlaceBuildingServerRpc " + position + " " + buildingIndex + " ID =" + clientId);
         var buildingSo = networkConstructionsPrefabs[buildingIndex];
-        Debug.Log("PlaceBuildingServerRpc " + buildingSo);
+
         if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
         uIStorage.DecreaseResource(buildingSo.costResource, buildingSo.cost);
 
         var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
-        var stats = newBuilding.GetComponent<Stats>();
-
-        stats.AddStat(StatType.Health, 1);
-
         var no = newBuilding.GetComponent<NetworkObject>();
+        var stats = newBuilding.GetComponent<Stats>();
+        Debug.Log("PlaceBuildingServerRpc  health");
+        stats.AddStat(StatType.Health, 1);
         no.SpawnWithOwnership(clientId);
         PlaceBuildingClientRpc(no, clientId);
     }
@@ -205,6 +205,9 @@ public class BuildingManager : NetworkBehaviour
         {
             if (networkObject.OwnerClientId != ClientId) return;
             var building = networkObject.GetComponent<Building>();
+            var stats = building.GetComponent<Stats>();
+
+            stats.AddStat(StatType.Health, 1);
             playerController.AddBuilding(building);
         }
     }

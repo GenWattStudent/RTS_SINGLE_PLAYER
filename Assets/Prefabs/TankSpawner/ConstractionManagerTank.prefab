@@ -188,11 +188,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d69f1024707d4c81488d5f06e96f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
-  buildingUnits: []
   healthBar: {fileID: 1728324892412086157}
   buildingInProgressPrefab: {fileID: 1127020598052249788}
   constructionPrefab: {fileID: 583100300255767749}
+  buildingUnits: []
+  buildingSo: {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
 --- !u!114 &5807540428542867514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,8 +907,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494298419494808799, guid: efe5f26600a48a44eba1a8567a71717e,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494298419494808799, guid: efe5f26600a48a44eba1a8567a71717e,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8464723974514835906, guid: efe5f26600a48a44eba1a8567a71717e,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7163232982638283826, guid: efe5f26600a48a44eba1a8567a71717e, type: 3}

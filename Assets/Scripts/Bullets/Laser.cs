@@ -104,7 +104,7 @@ public class Laser : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         currentDamageInterval -= Time.deltaTime;
 

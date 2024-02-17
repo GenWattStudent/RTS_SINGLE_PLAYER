@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+[DefaultExecutionOrder(2)]
 public class Construction : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
@@ -47,7 +48,7 @@ public class Construction : NetworkBehaviour
     public void StopConstruction()
     {
         isCurrentlyConstructing = false;
-        ActivateConstructionBuildingClientRpc();
+        ActivateConstructionBuildingServerRpc();
         StopWorkersConstruction();
     }
 
@@ -56,7 +57,7 @@ public class Construction : NetworkBehaviour
         foreach (var unit in buildingUnits)
         {
             var worker = unit.GetComponent<Worker>();
-            worker.StopConstruction(false);
+            worker.StopConstructionServerRpc(false);
         }
     }
 
@@ -80,13 +81,13 @@ public class Construction : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void InstantiateBuildingServerRpc(ServerRpcParams serverRpcParams = default)
+    private void InstantiateBuildingServerRpc()
     {
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
 
-        no.SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        no.SpawnWithOwnership(OwnerClientId);
         InstantiateBuildingClientRpc(no);
         constructionNo.Despawn(true);
     }
@@ -142,15 +143,28 @@ public class Construction : NetworkBehaviour
         StopWorkersConstruction();
     }
 
+    [ClientRpc]
+    public void SetHealthClientRpc(float health, float maxHealth)
+    {
+        progresBar.UpdateProgresBar(health, maxHealth);
+    }
+
     void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
         selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         stats = GetComponent<Stats>();
-        var health = stats.GetStat(StatType.Health);
-        var maxHealth = stats.GetStat(StatType.MaxHealth);
 
-        progresBar.UpdateProgresBar(health, maxHealth);
+        Debug.Log("Construction Start " + OwnerClientId);
+
+        if (IsServer)
+        {
+            var health = stats.GetStat(StatType.Health);
+            var maxHealth = stats.GetStat(StatType.MaxHealth);
+            constructionTimer = health;
+            Debug.Log("Construction Start " + health + " " + maxHealth);
+            SetHealthClientRpc(health, maxHealth);
+        }
     }
 
     void Update()
@@ -158,11 +172,12 @@ public class Construction : NetworkBehaviour
         if (isCurrentlyConstructing && IsServer)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
+            Debug.Log("Construction " + constructionTimer);
             stats.SetStat(StatType.Health, Mathf.Floor(constructionTimer));
 
             var maxHealth = stats.GetStat(StatType.MaxHealth);
 
-            progresBar.UpdateProgresBar(constructionTimer, maxHealth);
+            SetHealthClientRpc(constructionTimer, maxHealth);
 
             if (constructionTimer >= maxHealth)
             {
