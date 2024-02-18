@@ -19,7 +19,10 @@ public class Resource : NetworkBehaviour
         currentIncome += income;
         incomeTimer = incomeInterval;
         totalIncome += income;
-        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+        uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+
+        Debug.Log("Income: " + uIStorage.OwnerClientId);
+
         uIStorage.IncreaseResource(resourceSo, income);
     }
 

@@ -1,14 +1,18 @@
+using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameTime : MonoBehaviour
+public class GameTime : NetworkToolkitHelper
 {
-    private UIDocument UIDocument;
     private Label timeText;
     private VisualElement dayIcon;
-    private VisualElement root;
     [SerializeField] private Texture2D dayIconTexture;
     [SerializeField] private Texture2D nightIconTexture;
+    [SerializeField] private float updateTimer = .7f;
+    private float timer;
+    public NetworkVariable<float> timeOfDay = new(0);
+    public NetworkVariable<bool> isNight = new(false);
 
     void Start()
     {
@@ -16,11 +20,20 @@ public class GameTime : MonoBehaviour
         root = UIDocument.rootVisualElement;
         timeText = root.Q<Label>("ClockLabel");
         dayIcon = root.Q<VisualElement>("DayNightIcon");
+
+        timeOfDay.OnValueChanged += OnTimeOfDayChanged;
+        isNight.OnValueChanged += OnIsNightChanged;
     }
 
-    void FixedUpdate()
+    private void OnTimeOfDayChanged(float oldValue, float newValue)
     {
-        if (LightManager.IsNight)
+        TimeSpan time = TimeSpan.FromSeconds(newValue);
+        timeText.text = time.ToString("hh':'mm");
+    }
+
+    private void OnIsNightChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
         {
             dayIcon.style.backgroundImage = nightIconTexture;
         }
@@ -28,7 +41,27 @@ public class GameTime : MonoBehaviour
         {
             dayIcon.style.backgroundImage = dayIconTexture;
         }
+    }
 
-        timeText.text = LightManager.Instance.GetTimeOfDay().ToString("hh\\:mm");
+    void FixedUpdate()
+    {
+        if (!IsServer) return;
+
+        timer -= Time.fixedDeltaTime;
+
+        if (timer > 0) return;
+        TimeSpan time = LightManager.Instance.GetTimeOfDay();
+        // convert to float seconds
+        timeOfDay.Value = (float)time.TotalSeconds;
+        timer = updateTimer;
+
+        if (LightManager.IsNight)
+        {
+            isNight.Value = true;
+        }
+        else
+        {
+            isNight.Value = false;
+        }
     }
 }

@@ -193,8 +193,8 @@ public class BuildingManager : NetworkBehaviour
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
         Debug.Log("PlaceBuildingServerRpc  health");
-        stats.AddStat(StatType.Health, 1);
         no.SpawnWithOwnership(clientId);
+        stats.AddStat(StatType.Health, 1);
         PlaceBuildingClientRpc(no, clientId);
     }
 
@@ -205,9 +205,7 @@ public class BuildingManager : NetworkBehaviour
         {
             if (networkObject.OwnerClientId != ClientId) return;
             var building = networkObject.GetComponent<Building>();
-            var stats = building.GetComponent<Stats>();
 
-            stats.AddStat(StatType.Health, 1);
             playerController.AddBuilding(building);
         }
     }

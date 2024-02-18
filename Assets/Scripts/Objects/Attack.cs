@@ -113,7 +113,8 @@ public class Attack : NetworkBehaviour
         OnTarget?.Invoke(target, currentUnit);
     }
 
-    public void SetTargetPosition(Vector3 position)
+    [ServerRpc(RequireOwnership = false)]
+    public void SetTargetPositionServerRpc(Vector3 position)
     {
         targetPosition = position;
         target = null;

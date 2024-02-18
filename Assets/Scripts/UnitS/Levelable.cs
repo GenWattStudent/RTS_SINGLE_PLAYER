@@ -1,14 +1,15 @@
+using Unity.Netcode;
 using UnityEngine;
 using static LevelableSo;
 
-public class Levelable : MonoBehaviour
+public class Levelable : NetworkBehaviour
 {
     public LevelableSo levelableSo;
-    public int level = 1;
-    public int expirence = 0;
+    public NetworkVariable<int> level = new(1);
+    public NetworkVariable<int> expirence = new(0);
     public int maxLevel => levelableSo.levels.Count;
     public int expirenceToNextLevel;
-    public Level curentLevel => levelableSo.levels[level];
+    public Level curentLevel => levelableSo.levels[level.Value];
     private Damagable damagable;
 
     private void Start()
@@ -17,16 +18,17 @@ public class Levelable : MonoBehaviour
 
         if (levelableSo.levels.Count > 0)
         {
-            expirenceToNextLevel = levelableSo.levels[level].expirence;
+            expirenceToNextLevel = levelableSo.levels[level.Value].expirence;
         }
     }
 
-    public void AddExpirence(int amount)
+    [ServerRpc(RequireOwnership = false)]
+    public void AddExpirenceServerRpc(int amount)
     {
-        expirence += amount;
-        if (level >= maxLevel) return;
+        expirence.Value += amount;
+        if (level.Value >= maxLevel) return;
 
-        if (expirence >= levelableSo.levels[level].expirence)
+        if (expirence.Value >= levelableSo.levels[level.Value].expirence)
         {
             LevelUp();
         }
@@ -34,9 +36,9 @@ public class Levelable : MonoBehaviour
 
     public void LevelUp()
     {
-        level++;
-        expirence = 0;
-        var levelData = levelableSo.levels[level - 1];
+        level.Value++;
+        expirence.Value = 0;
+        var levelData = levelableSo.levels[level.Value - 1];
 
         damagable.stats.AddToStat(StatType.MaxHealth, levelData.health);
         damagable.stats.AddToStat(StatType.Health, levelData.health);

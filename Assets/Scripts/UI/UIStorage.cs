@@ -27,7 +27,7 @@ public struct Storage : IEquatable<Storage>, INetworkSerializable
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class StorageData
 {
     public ResourceSO resourceSO;
@@ -43,6 +43,16 @@ public class UIStorage : NetworkBehaviour
     private void Awake()
     {
         storages = new NetworkList<Storage>();
+        storages.OnListChanged += OnStoragesChanged;
+    }
+
+    private void OnStoragesChanged(NetworkListEvent<Storage> changeEvent)
+    {
+        if (changeEvent.Type == NetworkListEvent<Storage>.EventType.Add)
+        {
+            Debug.Log("OnStoragesChanged " + changeEvent.Index);
+            UpdateResourceData(changeEvent.Value);
+        }
     }
 
     public Storage GetStorageByResource(ResourceSO resource)
@@ -130,10 +140,18 @@ public class UIStorage : NetworkBehaviour
 
     public bool HasEnoughResource(ResourceSO resourceSO, float amount)
     {
-        if (!IsOwner) return false;
         var storage = GetStorageByResource(resourceSO);
 
         return storage.currentValue >= amount;
+    }
+
+    [ClientRpc]
+    private void CreateStorageClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        foreach (var storage in storages)
+        {
+            UpdateResourceData(storage);
+        }
     }
 
     private void CreateStorageForResources()
@@ -143,11 +161,12 @@ public class UIStorage : NetworkBehaviour
             var storage = new Storage(resources.IndexOf(resource), resource.resourceSO.startValue);
 
             storages.Add(storage);
-            SendUpdateToClient(storage);
             Debug.Log("CreateStorageForResources " + storage.currentValue + " - " + resource.resourceSO.resourceName);
         }
 
-        Debug.Log("Storage created " + storages.Count);
+        ClientRpcParams clientRpcParams = default;
+        clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
+        CreateStorageClientRpc(clientRpcParams);
     }
 
     private void OnEnable()

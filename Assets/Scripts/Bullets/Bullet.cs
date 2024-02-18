@@ -70,7 +70,7 @@ public class Bullet : NetworkBehaviour
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
                 if (unitsBullet.OwnerClientId == OwnerClientId)
                 {
-                    playerController.AddExpiernce(damageableScript.damagableSo.deathExpirence);
+                    playerController.AddExpiernceServerRpc(damageableScript.damagableSo.deathExpirence);
                 }
             }
         }

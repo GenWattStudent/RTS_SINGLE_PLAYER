@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-[DefaultExecutionOrder(1)]
+[DefaultExecutionOrder(2)]
 public class Damagable : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
@@ -28,14 +28,16 @@ public class Damagable : NetworkBehaviour
     void Start()
     {
         stats = GetComponent<Stats>();
-
-        if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
-        Debug.Log("Damagable Start " + stats.GetStat(StatType.MaxHealth));
-        stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
-
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
-        if (IsServer) SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
+        Debug.Log("Damagable Start " + stats.GetStat(StatType.MaxHealth));
+
+        if (IsServer)
+        {
+            stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
+            if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
+            SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
+        }
     }
 
     private void InstantiateExplosion()
@@ -59,7 +61,7 @@ public class Damagable : NetworkBehaviour
     public void AddExpiernce(int exp)
     {
         if (levelable == null) return;
-        levelable.AddExpirence(exp);
+        levelable.AddExpirenceServerRpc(exp);
     }
 
     [ServerRpc(RequireOwnership = false)]

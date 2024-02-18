@@ -4,14 +4,14 @@ using UnityEngine;
 public class BuildingLevelable : NetworkBehaviour
 {
     public BuildingLevelableSo buildingLevelableSo;
-    public int level = 1;
+    public NetworkVariable<int> level = new(1);
+    public NetworkVariable<int> reduceSpawnTime = new(0);
     public int maxLevel => buildingLevelableSo.levels.Count;
     public Building building;
     public Damagable damagable;
-    public int reduceSpawnTime = 0;
+
     private ScreenController screenController;
     private Stats stats;
-    private UIStorage uIStorage;
 
     private void Start()
     {
@@ -19,7 +19,6 @@ public class BuildingLevelable : NetworkBehaviour
         damagable = GetComponent<Damagable>();
         stats = GetComponent<Stats>();
         screenController = GetComponentInChildren<ScreenController>();
-        uIStorage = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
     public void UpdateScreen()
@@ -31,11 +30,12 @@ public class BuildingLevelable : NetworkBehaviour
 
     public BuildingLevelableSo.BuildingLevel GetNextBuildingLevel()
     {
-        if (level >= maxLevel) return null;
-        return buildingLevelableSo.levels[level];
+        if (level.Value >= maxLevel) return null;
+        return buildingLevelableSo.levels[level.Value];
     }
 
-    private void InstantiateLevelUpEffects()
+    [ClientRpc]
+    private void InstantiateLevelUpEffectsClientRpc()
     {
         for (int i = 0; i < 5; i++)
         {
@@ -48,7 +48,7 @@ public class BuildingLevelable : NetworkBehaviour
     private void UpdateSpawner(BuildingLevelableSo.BuildingLevel buildingLevel)
     {
         var spawner = GetComponent<ISpawnerBuilding>();
-        if (spawner != null) reduceSpawnTime += buildingLevel.reduceSpawnTime;
+        if (spawner != null) reduceSpawnTime.Value += buildingLevel.reduceSpawnTime;
     }
 
     private void UpdateMiner(BuildingLevelableSo.BuildingLevel buildingLevel)
@@ -70,12 +70,14 @@ public class BuildingLevelable : NetworkBehaviour
         if (building.attackableSo != null) damagable.stats.AddToStat(StatType.Damage, buildingLevel.attackDamage);
     }
 
-    public void LevelUp()
+    [ServerRpc(RequireOwnership = false)]
+    public void LevelUpServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        if (level >= maxLevel || !uIStorage.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level].cost)) return;
+        var uIStorage = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+        if (level.Value >= maxLevel || !uIStorage.HasEnoughResource(building.buildingSo.costResource, buildingLevelableSo.levels[level.Value].cost)) return;
 
-        level++;
-        var levelData = buildingLevelableSo.levels[level - 1];
+        level.Value++;
+        var levelData = buildingLevelableSo.levels[level.Value - 1];
         uIStorage.DecreaseResource(building.buildingSo.costResource, levelData.cost);
 
         UpdateHealth(levelData);
@@ -84,6 +86,6 @@ public class BuildingLevelable : NetworkBehaviour
         UpdateSpawner(levelData);
 
         UpdateScreen();
-        InstantiateLevelUpEffects();
+        InstantiateLevelUpEffectsClientRpc();
     }
 }

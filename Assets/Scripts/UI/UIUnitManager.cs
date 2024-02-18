@@ -115,7 +115,7 @@ public class UIUnitManager : NetworkBehaviour
     private void ToogleTabEnableBasedOnLevel(BuildingLevelable buildingLevelable, UnitSo unitSo, VisualElement unitTab)
     {
         var quantityText = unitTab.Q<Label>("Quantity");
-        if (buildingLevelable != null && buildingLevelable.level < unitSo.spawnerLevelToUnlock)
+        if (buildingLevelable != null && buildingLevelable.level.Value < unitSo.spawnerLevelToUnlock)
         {
             unitTab.SetEnabled(false);
 

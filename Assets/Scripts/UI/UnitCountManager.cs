@@ -3,10 +3,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class UnitCountManager : NetworkBehaviour
+public class UnitCountManager : NetworkToolkitHelper
 {
-    private UIDocument UIDocument;
-    private VisualElement root;
     private Label unitCountText;
     [SerializeField] private int maxUnitCount = 20;
     [SerializeField] private int currentUnitCount = 0;
@@ -20,8 +18,9 @@ public class UnitCountManager : NetworkBehaviour
         }
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         unitCountText = root.Q<Label>("UnitCountLabel");
@@ -41,6 +40,7 @@ public class UnitCountManager : NetworkBehaviour
 
     private void OnUnitChange(Unit unit, List<Unit> units)
     {
+        if (!IsOwner) return;
         currentUnitCount = units.Count;
         UpdateText();
     }

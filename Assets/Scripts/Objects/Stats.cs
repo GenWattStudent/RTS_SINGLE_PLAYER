@@ -18,6 +18,8 @@ public class Stats : NetworkBehaviour
         unit = GetComponent<Unit>();
         building = GetComponent<Building>();
 
+        if (!IsServer) return;
+
         if (building != null)
         {
             foreach (var stat in building.buildingSo.stats)
