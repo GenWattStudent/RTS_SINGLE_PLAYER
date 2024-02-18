@@ -9,7 +9,7 @@ public class MultiplayerTools : NetworkBehaviour
     private VisualElement multiplayerModal;
     private bool isHostRunning = false;
     private bool isClientRunning = false;
-    public int playerCount = 0;
+    public NetworkVariable<int> playerCount = new(0);
 
     private void OnEnable()
     {
@@ -32,14 +32,17 @@ public class MultiplayerTools : NetworkBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        playerCount = NetworkManager.Singleton.ConnectedClients.Count;
-        playerCountLabel.text = $"Player count: {playerCount}";
+        if (!IsServer) return;
+
+        playerCount.Value += 1;
+        playerCountLabel.text = $"Player count: {playerCount.Value}";
     }
 
     private void OnClientDisconnect(ulong clientId)
     {
-        playerCount = NetworkManager.Singleton.ConnectedClients.Count;
-        playerCountLabel.text = $"Player count: {playerCount}";
+        if (!IsServer) return;
+        playerCount.Value -= 1;
+        playerCountLabel.text = $"Player count: {playerCount.Value}";
     }
 
     private void OnDisable()

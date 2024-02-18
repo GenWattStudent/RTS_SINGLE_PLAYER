@@ -75,7 +75,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
-            spawnTimer.Value = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime;
+            spawnTimer.Value = unitsQueue[0].spawnTime - buildingScript.buildingLevelable.reduceSpawnTime.Value;
             totalSpawnTime.Value = spawnTimer.Value;
             currentSpawningUnit = unitsQueue[0];
             isUnitSpawning = true;
@@ -124,6 +124,8 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             {
                 if (unitsQueue.Count > 0)
                 {
+                    unitsQueue.RemoveAt(0);
+                    isUnitSpawning = false;
                     currentSpawningUnit = unitsQueue[0];
                 }
                 else

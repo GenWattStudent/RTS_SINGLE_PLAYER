@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class FPSCounter : ToolkitHelper
+public class FPSCounter : NetworkToolkitHelper
 {
     private int currentFPS;
     private Label fpsLabel;
@@ -12,25 +12,36 @@ public class FPSCounter : ToolkitHelper
 
     void Start()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         fpsLabel = GetLabel("FPSLabel");
     }
 
-    private void UpdateFPS() {
+    private void UpdateFPS()
+    {
         currentFPS = (int)(1f / Time.unscaledDeltaTime);
         fpsLabel.text = $"{currentFPS}FPS";
 
-        if (currentFPS < lowFPS) {
+        if (currentFPS < lowFPS)
+        {
             SetDanger(fpsLabel);
-        } else if (currentFPS > highFPS) {
+        }
+        else if (currentFPS > highFPS)
+        {
             SetSuccess(fpsLabel);
-        } 
+        }
     }
 
     void Update()
     {
         updateTimer += Time.unscaledDeltaTime;
 
-        if (updateTimer > updateInterval) {
+        if (updateTimer > updateInterval)
+        {
             UpdateFPS();
             updateTimer = 0;
             return;

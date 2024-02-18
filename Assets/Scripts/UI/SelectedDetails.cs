@@ -64,13 +64,13 @@ public class SelectedDetails : NetworkToolkitHelper
     {
         if (building.buildingLevelable != null)
         {
-            building.buildingLevelable.LevelUp();
+            building.buildingLevelable.LevelUpServerRpc();
         }
     }
 
     private void OnSellButtonClick(ClickEvent ev)
     {
-        building.Sell();
+        building.SellServerRpc();
     }
 
     private void CreateStat(string name, string value)
@@ -103,7 +103,7 @@ public class SelectedDetails : NetworkToolkitHelper
     private void CreateExpirenceStat(Damagable damagable)
     {
         UpdateExpirenceBar(damagable);
-        levelText.text = $"{damagable.levelable.level} LVL";
+        levelText.text = $"{damagable.levelable.level.Value} LVL";
     }
 
     private void ShowHideAttackActions(bool isActive)
@@ -130,9 +130,9 @@ public class SelectedDetails : NetworkToolkitHelper
     private void UpdateExpirenceBar(Damagable damagable)
     {
         expirenceBar.lowValue = 0;
-        expirenceBar.value = damagable.levelable.expirence;
+        expirenceBar.value = damagable.levelable.expirence.Value;
         expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
-        expirenceBar.title = $"EXP: {damagable.levelable.expirence}/{damagable.levelable.expirenceToNextLevel}";
+        expirenceBar.title = $"EXP: {damagable.levelable.expirence.Value}/{damagable.levelable.expirenceToNextLevel}";
     }
 
     private void UpdateHealthBar(float health, float maxHealth)
@@ -190,7 +190,8 @@ public class SelectedDetails : NetworkToolkitHelper
 
         if (building.buildingLevelable != null && building.buildingSo.unitsToSpawn.GetLength(0) > 0)
         {
-            CreateStat("Spawn time reduction", $"{building.buildingLevelable.reduceSpawnTime}");
+            // spawn time reduction 
+            CreateStat("Spawn time reduction", $"{building.buildingLevelable.reduceSpawnTime.Value}");
         }
 
         if (building != null)
@@ -199,15 +200,17 @@ public class SelectedDetails : NetworkToolkitHelper
 
             if (building.attackableSo != null)
             {
+                // damage
                 var damage = damagable.stats.GetStat(StatType.Damage);
                 CreateDamageStat(damage);
                 ShowHideAttackActions(true);
             }
             else
             {
+                // no damage
                 ShowHideAttackActions(false);
             }
-
+            // health
             UpdateHealthBar(health, maxHealth);
             expirenceBar.style.display = DisplayStyle.None;
 
@@ -215,27 +218,31 @@ public class SelectedDetails : NetworkToolkitHelper
 
             if (construction != null)
             {
+                // construction (hide level up button)
                 this.building = building;
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
                 return;
             }
 
-            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level)
+            if (building.buildingLevelable != null && building.buildingLevelable.maxLevel > building.buildingLevelable.level.Value)
             {
-                levelText.text = $"{building.buildingLevelable.level} LVL";
+                // show level and activate buttons
+                levelText.text = $"{building.buildingLevelable.level.Value} LVL";
                 this.building = building;
                 ActivateButtons(true);
             }
             else
             {
-                levelText.text = $"MAX {building.buildingLevelable.level} LVL";
+                // max level
+                levelText.text = $"MAX {building.buildingLevelable.level.Value} LVL";
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
             }
 
             if (building.buildingLevelable != null)
             {
+                // check if enugh resources to level up
                 var nextBuildingLevel = building.buildingLevelable.GetNextBuildingLevel();
 
                 if (nextBuildingLevel != null && uIStorage.HasEnoughResource(nextBuildingLevel.resourceSO, nextBuildingLevel.cost))

@@ -7,6 +7,7 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
+    private SkillTreeManager skillTreeManager;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
@@ -52,7 +53,8 @@ public class PlayerController : NetworkBehaviour
         OnUnitChange?.Invoke(unit, playerData.units);
     }
 
-    public void AddExpiernce(int amount)
+    [ServerRpc(RequireOwnership = false)]
+    public void AddExpiernceServerRpc(int amount)
     {
         if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
 
@@ -65,7 +67,7 @@ public class PlayerController : NetworkBehaviour
         {
             playerData.playerLevel++;
             playerExp = diffrence;
-            SkillTreeManager.Instance.AddSkillPoints(1);
+            skillTreeManager.AddSkillPointsServerRpc(1);
         }
         Debug.Log("AddExpiernce " + playerExp);
         playerExpierence.Value = playerExp;
@@ -175,9 +177,10 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             Debug.Log("SpawnUnitServerRpc client");
+            skillTreeManager = GetComponentInChildren<SkillTreeManager>();
             SpawnUnitServerRpc();
         }
 
-        if (IsServer) AddExpiernce(1);
+        if (IsServer) AddExpiernceServerRpc(1);
     }
 }

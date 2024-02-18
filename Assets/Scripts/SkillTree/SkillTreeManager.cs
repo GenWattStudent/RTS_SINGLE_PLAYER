@@ -1,44 +1,53 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SkillTreeManager : ToolkitHelper
+public class SkillTreeManager : NetworkToolkitHelper
 {
-    [SerializeField] private List<SkillSo> skills = new ();
-    private int skillPoints = 0;
-    public List<SkillSo> unlockedSkills = new ();
+    public List<SkillSo> skills = new();
+    private NetworkVariable<int> skillPoints = new(0);
     private Label skillPointsText;
     private Button skillTreeClose;
     private VisualElement skillTree;
-    public static SkillTreeManager Instance;
+    private PowerUp powerUp;
 
-    private void PurchaseSkill(SkillSo skillSo)
+    [ServerRpc(RequireOwnership = false)]
+    private void PurchaseSkillServerRpc(int skillIndex, ServerRpcParams serverRpcParams = default)
     {
-        if (skillSo.Unlock(unlockedSkills, skillPoints))
+        var skillSo = skills[skillIndex];
+
+        Debug.Log($"PurchaseSkillServerRpc {skillSo.skillName} {skillSo.requiredSkillPoints} {skillPoints.Value}");
+        if (powerUp.Unlock(skillSo, skillIndex, skillPoints.Value, serverRpcParams))
         {
-            unlockedSkills.Add(skillSo);
             RemoveSkillPoints(skillSo.requiredSkillPoints);
-            UpdateUI();
+
+            ClientRpcParams clientRpcParams = default;
+            Debug.Log("PurchaseSkillServerRpc " + OwnerClientId + " " + serverRpcParams.Receive.SenderClientId);
+            clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
+            UnlockSkillClientRpc(clientRpcParams);
         }
     }
 
-    public bool IsPurchased(SkillSo skillSo)
+    [ClientRpc]
+    private void UnlockSkillClientRpc(ClientRpcParams clientRpcParams = default)
     {
-        return skillSo.IsUnlocked(unlockedSkills);
+        UpdateUI();
     }
 
-    private void UpdateSkillUIData(SkillSo skillSo) {
+    private void UpdateSkillUIData(SkillSo skillSo)
+    {
         var skill = GetVisualElement(skillSo.skillTag);
         var title = skill.Q<Label>("Title");
         var description = skill.Q<Label>("Value");
         var cost = skill.Q<Label>("Points");
         var alreadyPurchased = skill.Q<VisualElement>("AlreadyPurchased");
 
-        if (skillSo.CanBePurchased(unlockedSkills, skillPoints))
+        if (powerUp.CanBePurchased(skillSo, skillPoints.Value))
         {
             skill.SetEnabled(true);
         }
-        else if (IsPurchased(skillSo))
+        else if (powerUp.IsUnlocked(skillSo))
         {
             skill.SetEnabled(false);
             alreadyPurchased.style.display = DisplayStyle.Flex;
@@ -53,59 +62,102 @@ public class SkillTreeManager : ToolkitHelper
         cost.text = skillSo.requiredSkillPoints.ToString();
     }
 
-    private void UpdateUI() {
+    private void UpdateUI()
+    {
         foreach (var skill in skills)
         {
             UpdateSkillUIData(skill);
         }
     }
 
-    private void AddSkillEvent() {
+    private void AddSkillEvent()
+    {
         foreach (var skill in skills)
         {
             var skillEl = GetVisualElement(skill.skillTag);
-            skillEl.RegisterCallback((ClickEvent ev) => PurchaseSkill(skill));
+
+            skillEl.RegisterCallback((ClickEvent ev) =>
+            {
+                var skillIndex = skills.IndexOf(skill);
+                Debug.Log("AddSkillEvent " + skillIndex + " skillPoints " + skillPoints.Value);
+                PurchaseSkillServerRpc(skillIndex);
+            });
         }
     }
 
-    private void UpdateSkillPoints() {
-        skillPointsText.text = $"Skill points: {skillPoints}";
+    private void UpdateSkillPoints()
+    {
+        skillPointsText.text = $"Skill points: {skillPoints.Value}";
     }
 
-    public void AddSkillPoints(int amount) {
-        skillPoints += amount;
+    [ServerRpc(RequireOwnership = false)]
+    public void AddSkillPointsServerRpc(int amount, ServerRpcParams serverRpcParams = default)
+    {
+        skillPoints.Value += amount;
+        ClientRpcParams clientRpcParams = default;
+        Debug.Log("AddSkillPointsServerRpc " + OwnerClientId + " " + serverRpcParams.Receive.SenderClientId);
+        clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
+    }
+
+    [ClientRpc]
+    public void AddSkillPointsClientRpc(ClientRpcParams clientRpc = default)
+    {
+        UpdateUI();
+    }
+
+    public void RemoveSkillPoints(int amount)
+    {
+        skillPoints.Value -= amount;
+    }
+
+    public void Show()
+    {
+        skillTree.style.display = DisplayStyle.Flex;
+    }
+
+    public void Hide()
+    {
+        skillTree.style.display = DisplayStyle.None;
+    }
+
+    private void OnSkillPointsChange(int oldValue, int newValue)
+    {
         UpdateSkillPoints();
         UpdateUI();
     }
 
-    public void RemoveSkillPoints(int amount) {
-        skillPoints -= amount;
-        UpdateSkillPoints();
+    private void OnSkillListChanged(NetworkListEvent<int> changeEvent)
+    {
+        UpdateUI();
     }
 
-    public void Show() {
-        skillTree.style.display = DisplayStyle.Flex;
+    private void Awake()
+    {
+        powerUp = GetComponent<PowerUp>();
     }
 
-    public void Hide() {
-        skillTree.style.display = DisplayStyle.None;
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
-        Instance = this;
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         skillPointsText = GetLabel("SkillPoints");
         skillTreeClose = GetButton("SkillTreeClose");
         skillTree = GetVisualElement("SkillTree");
 
         skillTreeClose.RegisterCallback((ClickEvent ev) => Hide());
+        skillPoints.OnValueChanged += OnSkillPointsChange;
+        powerUp.unlockedSkillsIndex.OnListChanged += OnSkillListChanged;
+
+        Hide();
         AddSkillEvent();
         UpdateUI();
         UpdateSkillPoints();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
@@ -120,9 +172,9 @@ public class SkillTreeManager : ToolkitHelper
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) && IsOwner)
         {
-            AddSkillPoints(1);
+            AddSkillPointsServerRpc(1);
         }
     }
 }

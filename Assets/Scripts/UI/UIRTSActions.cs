@@ -45,7 +45,7 @@ public class UIRTSActions : NetworkToolkitHelper
         foreach (var unit in selectedUnits)
         {
             var attackScript = unit.GetComponent<Attack>();
-            if (attackScript != null) attackScript.SetTargetPosition(Vector3.zero);
+            if (attackScript != null) attackScript.SetTargetPositionServerRpc(Vector3.zero);
         }
 
         isSetTargetMode = false;
@@ -63,7 +63,7 @@ public class UIRTSActions : NetworkToolkitHelper
             {
                 var attackScript = unit.GetComponent<Attack>();
 
-                if (attackScript != null) attackScript.SetTargetPosition(hit.point);
+                if (attackScript != null) attackScript.SetTargetPositionServerRpc(hit.point);
             }
 
             isSetTargetMode = false;

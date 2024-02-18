@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class Settings : ToolkitHelper
+public class Settings : NetworkToolkitHelper
 {
     private Button settingsButton;
     private Button mainMenuButton;
@@ -15,6 +15,12 @@ public class Settings : ToolkitHelper
 
     void Start()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         settingsButton = GetButton("SettingsButton");
         mainMenuButton = GetButton("MainMenuButton");
         backButton = GetButton("BackButton");
@@ -30,46 +36,58 @@ public class Settings : ToolkitHelper
         closeSettingsButton.RegisterCallback<ClickEvent>(OnCloseSettingsButtonClick);
     }
 
-    private void OnSettingsButtonClick(ClickEvent ev) {
+    private void OnSettingsButtonClick(ClickEvent ev)
+    {
         OpenSettings();
     }
 
-    private void OnMainMenuButtonClick(ClickEvent ev) {
+    private void OnMainMenuButtonClick(ClickEvent ev)
+    {
         LoadMainMenu();
     }
 
-    private void OnSoundButtonClick(ClickEvent ev) {
+    private void OnSoundButtonClick(ClickEvent ev)
+    {
         settingsBox.style.display = DisplayStyle.Flex;
     }
 
-    private void OnCloseSettingsButtonClick(ClickEvent ev) {
+    private void OnCloseSettingsButtonClick(ClickEvent ev)
+    {
         settingsBox.style.display = DisplayStyle.None;
     }
 
-    private void OpenSettings() {
+    private void OpenSettings()
+    {
         settingsContainer.style.display = DisplayStyle.Flex;
         isSettingsOpen = true;
     }
 
-    private void OnBackButtonClick(ClickEvent ev) {
+    private void OnBackButtonClick(ClickEvent ev)
+    {
         CloseSettings();
     }
 
-    private void CloseSettings() {
+    private void CloseSettings()
+    {
         settingsContainer.style.display = DisplayStyle.None;
         isSettingsOpen = false;
     }
 
-    private void LoadMainMenu() {
+    private void LoadMainMenu()
+    {
         SceneManager.LoadScene(0);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (isSettingsOpen) {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isSettingsOpen)
+            {
                 CloseSettings();
-            } else {
+            }
+            else
+            {
                 OpenSettings();
             }
         }

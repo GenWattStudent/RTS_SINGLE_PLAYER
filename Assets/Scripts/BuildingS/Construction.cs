@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[DefaultExecutionOrder(2)]
+[DefaultExecutionOrder(1)]
 public class Construction : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
