@@ -87,7 +87,7 @@ public class SkillTreeManager : NetworkToolkitHelper
 
     private void UpdateSkillPoints()
     {
-        skillPointsText.text = $"Skill points: {skillPoints.Value}";
+        skillPointsText.text = $"Skill points: {skillPoints.Value} ";
     }
 
     [ServerRpc(RequireOwnership = false)]
