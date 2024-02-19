@@ -16,12 +16,6 @@ public class ParabolicMotion : Motion
         direction = (target - startPosition).normalized;
         time = 0f;
 
-        if (Physics.Raycast(startPosition, direction, out RaycastHit hit, Mathf.Infinity))
-        {
-            // If the ray intersects with the terrain, the point of intersection is where the projectile will end up
-            Vector3 target = hit.point;
-        }
-
         // calulate ControlPointInBetweenStartAndTarget based on angle in between start and target
         var distance = Vector3.Distance(startPosition, target);
         var height = distance / 2f;
@@ -42,7 +36,7 @@ public class ParabolicMotion : Motion
         time += Time.deltaTime * speedDependingOnDistance * speed;
         var position = EvaluateCurve(time);
         var nextPos = EvaluateCurve(time + 0.01f) - position;
-        Debug.Log(transform.position + " " + previousPosition);
+
         previousPosition = transform.position;
         transform.rotation = Quaternion.LookRotation(nextPos);
         transform.position = position;

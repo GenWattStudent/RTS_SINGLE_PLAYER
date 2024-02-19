@@ -30,7 +30,7 @@ MonoBehaviour:
   accuracy: 0.1
   attackSound: 4
   health: 200
-  deathExpirence: 10
+  deathExpirence: 200
   deathEffect: {fileID: 5849282407134596234, guid: c66bd4aadaca5554c99947dce4b7b7b1,
     type: 3}
   deathEffectTime: 2

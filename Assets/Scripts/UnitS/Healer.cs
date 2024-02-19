@@ -40,10 +40,31 @@ public class Healer : NetworkBehaviour
     private void SetTarget(Damagable target)
     {
         this.target = target;
-        laser.SetTarget(target);
 
-        if (target == null) return;
+        if (target == null)
+        {
+            SetLaserTargetToNullClientRpc();
+            return;
+        }
+
         target.OnDead += () => SetTarget(null);
+
+        SetLaserTargetClientRpc(target.GetComponent<NetworkObject>());
+    }
+
+    [ClientRpc]
+    private void SetLaserTargetClientRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject networkObject))
+        {
+            laser.SetTarget(networkObject.GetComponent<Damagable>());
+        }
+    }
+
+    [ClientRpc]
+    private void SetLaserTargetToNullClientRpc()
+    {
+        laser.SetTarget(null);
     }
 
     private bool IsInRange()
@@ -82,18 +103,20 @@ public class Healer : NetworkBehaviour
         healPoints = damagableSo.attackDamage / healRate;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!IsServer) return;
         if (target == null) return;
 
-        if (IsInRange() == false)
+        if (!IsInRange())
         {
             MoveToTarget();
         }
+        else
+        {
+            Heal(target);
+        }
 
         if (unitMovement != null) unitMovement.RotateToTarget(target.transform.position);
-        Heal(target);
     }
 }

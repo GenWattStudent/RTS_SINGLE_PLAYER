@@ -7,25 +7,22 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
-    private SkillTreeManager skillTreeManager;
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
-    public GameObject toolbar;
+    public NetworkVariable<int> playerLevel = new(1);
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
 
-    private void SpawnHero(ulong clientId)
+    private void SpawnHero(ulong clientId, Vector3 spawnPosition)
     {
-        var heroInstance = Instantiate(hero, playerData.spawnPosition, Quaternion.identity);
+        var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
         var no = heroInstance.GetComponent<NetworkObject>();
 
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
-
-        playerData.spawnPosition += new Vector3(2, 0, 0);
 
         no.SpawnWithOwnership(clientId);
         SpawnHeroClientRpc(no, clientId);
@@ -56,18 +53,21 @@ public class PlayerController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void AddExpiernceServerRpc(int amount)
     {
-        if (playerData.playerLevel == playerLevelSo.levelsData.Count) return;
+        if (playerLevel.Value == playerLevelSo.levelsData.Count) return;
 
         var playerExp = playerExpierence.Value;
         playerExp += amount;
-        var nextLevelData = playerLevelSo.levelsData[playerData.playerLevel];
+        Debug.Log("AddExpiernceServerRpc " + playerExp + " " + playerLevel.Value + " " + amount);
+        var nextLevelData = playerLevelSo.levelsData[playerLevel.Value];
         var diffrence = playerExp - nextLevelData.expToNextLevel;
 
-        if (playerData.playerLevel < playerLevelSo.levelsData.Count && playerExp >= nextLevelData.expToNextLevel)
+        if (playerLevel.Value < playerLevelSo.levelsData.Count && playerExp >= nextLevelData.expToNextLevel)
         {
-            playerData.playerLevel++;
+            playerLevel.Value++;
             playerExp = diffrence;
-            skillTreeManager.AddSkillPointsServerRpc(1);
+            var playerSkillTree = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<SkillTreeManager>();
+            Debug.Log("AddExpiernceServerRpc " + playerSkillTree.OwnerClientId);
+            playerSkillTree.AddSkillPointsServerRpc(1);
         }
         Debug.Log("AddExpiernce " + playerExp);
         playerExpierence.Value = playerExp;
@@ -117,28 +117,27 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnUnitServerRpc(ServerRpcParams rpcParams = default)
+    private void SpawnUnitServerRpc(Vector3 spawnPosition, ServerRpcParams rpcParams = default)
     {
-        SpawnHero(rpcParams.Receive.SenderClientId);
-        Debug.Log("SpawnUnitServerRpc server " + rpcParams.Receive.SenderClientId);
+        SpawnHero(rpcParams.Receive.SenderClientId, spawnPosition);
+        spawnPosition += new Vector3(2, 0, 0);
+
         foreach (var unitPrefab in unitPrefabs)
         {
             for (int i = 0; i < 2; i++)
             {
-                var unit = Instantiate(unitPrefab, playerData.spawnPosition, Quaternion.identity);
+                var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
-                playerData.spawnPosition += new Vector3(2, 0, 0);
+                spawnPosition += new Vector3(2, 0, 0);
                 no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
                 SpawnUnitClientRpc(no, rpcParams.Receive.SenderClientId);
             }
         }
-
-        playerData.spawnPosition = new Vector3(1.5f, 0, 7.5f);
     }
 
     [ClientRpc]
@@ -152,33 +151,56 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    private void OnPlayerLevelChangeHandler(int prev, int current)
+    {
+        if (!IsOwner) return;
+        Debug.Log("OnPlayerLevelChangeHandler" + playerExpierence.Value + " " + current + " " + playerLevelSo.levelsData.Count);
+        var expToNextLevel = -1;
+
+        if (current < playerLevelSo.levelsData.Count)
+        {
+            expToNextLevel = playerLevelSo.levelsData[current].expToNextLevel;
+        }
+
+        Debug.Log("OnPlayerLevelChangeHandler" + playerExpierence.Value + " " + current + " " + playerLevelSo.levelsData.Count);
+        OnPlayerLevelChange?.Invoke(expToNextLevel, playerExpierence.Value, current, playerLevelSo.levelsData.Count);
+    }
+
+    private void OnPlayerExpierenceChangeHandler(int prev, int current)
+    {
+        if (!IsOwner) return;
+
+        var expToNextLevel = -1;
+
+        if (playerLevel.Value < playerLevelSo.levelsData.Count)
+        {
+            expToNextLevel = playerLevelSo.levelsData[playerLevel.Value].expToNextLevel;
+        }
+        Debug.Log("OnPlayerExpierenceChangeHandler " + current + " " + playerLevel.Value + " " + playerLevelSo.levelsData.Count);
+        OnPlayerLevelChange?.Invoke(playerLevelSo.levelsData[playerLevel.Value].expToNextLevel, current, playerLevel.Value, playerLevelSo.levelsData.Count);
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        playerExpierence.OnValueChanged += (previous, current) =>
-         {
-             if (!IsOwner) return;
-             Debug.Log("OnNetworkSpawn " + current);
-             OnPlayerLevelChange?.Invoke(playerLevelSo.levelsData[playerData.playerLevel].expToNextLevel, current, playerData.playerLevel, playerLevelSo.levelsData.Count);
-         };
+        playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
+        playerExpierence.OnValueChanged += OnPlayerExpierenceChangeHandler;
     }
 
     private void Awake()
     {
-        playerData = new PlayerData
-        {
-            playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor,
-            playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial
-        };
+        playerData = new PlayerData();
     }
 
     private void Start()
     {
+        playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
+        playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
+        playerData.spawnPosition = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].spawnPosition.position;
+
         if (IsOwner)
         {
-            Debug.Log("SpawnUnitServerRpc client");
-            skillTreeManager = GetComponentInChildren<SkillTreeManager>();
-            SpawnUnitServerRpc();
+            SpawnUnitServerRpc(playerData.spawnPosition);
         }
 
         if (IsServer) AddExpiernceServerRpc(1);

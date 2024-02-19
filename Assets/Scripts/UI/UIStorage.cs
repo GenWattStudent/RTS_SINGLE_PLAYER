@@ -50,7 +50,6 @@ public class UIStorage : NetworkBehaviour
     {
         if (changeEvent.Type == NetworkListEvent<Storage>.EventType.Add)
         {
-            Debug.Log("OnStoragesChanged " + changeEvent.Index);
             UpdateResourceData(changeEvent.Value);
         }
     }
@@ -98,7 +97,6 @@ public class UIStorage : NetworkBehaviour
         ClientRpcParams clientRpcParams = default;
         clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
         var storageIndex = storages.IndexOf(storage);
-        Debug.Log("SendUpdateToClient " + storageIndex);
         UpdateResourceDataClientRpc(storageIndex, clientRpcParams);
     }
 
@@ -134,7 +132,6 @@ public class UIStorage : NetworkBehaviour
 
         storage.currentValue += amountCanFit;
         UpdateStorage(storage);
-        Debug.Log("DecreaseResource " + storage.currentValue);
         SendUpdateToClient(storage);
     }
 
@@ -161,7 +158,6 @@ public class UIStorage : NetworkBehaviour
             var storage = new Storage(resources.IndexOf(resource), resource.resourceSO.startValue);
 
             storages.Add(storage);
-            Debug.Log("CreateStorageForResources " + storage.currentValue + " - " + resource.resourceSO.resourceName);
         }
 
         ClientRpcParams clientRpcParams = default;

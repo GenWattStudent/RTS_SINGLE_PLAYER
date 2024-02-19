@@ -57,14 +57,8 @@ public class Bullet : NetworkBehaviour
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
 
-        if (damageableScript != null)
-        {
-            Debug.Log("Deal Damage to: " + OwnerClientId + " " + damageableScript.OwnerClientId + " " + damageableScript.isDead + " " + damageableScript.gameObject.name + " " + damageableScript.gameObject.layer + " " + LayerMask.LayerToName(damageableScript.gameObject.layer));
-        }
-
         if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
         {
-            Debug.Log("2. Deal Damage to: " + OwnerClientId + " " + damageableScript.OwnerClientId + " " + damageableScript.isDead + " " + damageableScript.gameObject.name + " " + damageableScript.gameObject.layer + " " + LayerMask.LayerToName(damageableScript.gameObject.layer));
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);

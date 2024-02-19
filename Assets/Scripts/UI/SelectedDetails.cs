@@ -70,6 +70,7 @@ public class SelectedDetails : NetworkToolkitHelper
 
     private void OnSellButtonClick(ClickEvent ev)
     {
+        Debug.Log("SellButtonClick " + building.buildingSo.buildingName + " " + building.buildingSo.cost);
         building.SellServerRpc();
     }
 
@@ -131,8 +132,8 @@ public class SelectedDetails : NetworkToolkitHelper
     {
         expirenceBar.lowValue = 0;
         expirenceBar.value = damagable.levelable.expirence.Value;
-        expirenceBar.highValue = damagable.levelable.expirenceToNextLevel;
-        expirenceBar.title = $"EXP: {damagable.levelable.expirence.Value}/{damagable.levelable.expirenceToNextLevel}";
+        expirenceBar.highValue = damagable.levelable.expirenceToNextLevel.Value;
+        expirenceBar.title = $"EXP: {damagable.levelable.expirence.Value}/{damagable.levelable.expirenceToNextLevel.Value}";
     }
 
     private void UpdateHealthBar(float health, float maxHealth)
@@ -185,6 +186,7 @@ public class SelectedDetails : NetworkToolkitHelper
         var building = selectable.GetComponent<Building>();
         var health = damagable.stats.GetStat(StatType.Health);
         var maxHealth = damagable.stats.GetStat(StatType.MaxHealth);
+        this.building = building;
 
         CreateHealthStat(health, maxHealth);
 
@@ -219,7 +221,6 @@ public class SelectedDetails : NetworkToolkitHelper
             if (construction != null)
             {
                 // construction (hide level up button)
-                this.building = building;
                 levelUpButton.style.display = DisplayStyle.None;
                 sellButton.style.display = DisplayStyle.Flex;
                 return;
@@ -229,7 +230,6 @@ public class SelectedDetails : NetworkToolkitHelper
             {
                 // show level and activate buttons
                 levelText.text = $"{building.buildingLevelable.level.Value} LVL";
-                this.building = building;
                 ActivateButtons(true);
             }
             else

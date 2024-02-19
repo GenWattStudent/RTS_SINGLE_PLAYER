@@ -129,6 +129,12 @@ MonoBehaviour:
   networkConstructionsPrefabs:
   - {fileID: 11400000, guid: bae21e45d509c4a43baf5f85664c7119, type: 2}
   - {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
+  - {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
+  - {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
+  - {fileID: 11400000, guid: cdacdcd8334f71e4faf58e784f8a9e90, type: 2}
+  - {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
+  - {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
+  - {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
   diffranceBetweenMaxAndMinHeight: 1
   heightRaysCount: 15
 --- !u!114 &3935365758164698151
