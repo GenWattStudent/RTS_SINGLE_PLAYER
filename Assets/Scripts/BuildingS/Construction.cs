@@ -172,7 +172,6 @@ public class Construction : NetworkBehaviour
         if (isCurrentlyConstructing && IsServer)
         {
             constructionTimer += buildingSpeed * Time.deltaTime;
-            Debug.Log("Construction " + constructionTimer);
             stats.SetStat(StatType.Health, Mathf.Floor(constructionTimer));
 
             var maxHealth = stats.GetStat(StatType.MaxHealth);

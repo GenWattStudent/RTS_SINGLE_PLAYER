@@ -25,11 +25,15 @@ public class Damagable : NetworkBehaviour
         stats.AddToStat(StatType.Damage, damageToAdd);
     }
 
-    void Start()
+    private void Awake()
     {
         stats = GetComponent<Stats>();
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
+    }
+
+    void Start()
+    {
         Debug.Log("Damagable Start " + stats.GetStat(StatType.MaxHealth));
 
         if (IsServer)
@@ -69,14 +73,20 @@ public class Damagable : NetworkBehaviour
     {
         var no = GetComponent<NetworkObject>();
         no.Despawn(true);
+        DeathClientRpc();
     }
 
     public override void OnNetworkDespawn()
     {
+        OnDead?.Invoke();
+    }
+
+    [ClientRpc]
+    private void DeathClientRpc()
+    {
         isDead = true;
         InstantiateExplosion();
         InstantiateDestroyedObject();
-        OnDead?.Invoke();
     }
 
     [ClientRpc]
@@ -93,10 +103,9 @@ public class Damagable : NetworkBehaviour
 
         if (newHealth > maxHealth)
         {
-            newHealth = maxHealth;
+            stats.SetStat(StatType.Health, maxHealth);
         }
 
-        SetHealthClientRpc(newHealth, maxHealth);
         OnTakeDamage?.Invoke();
 
         if (newHealth <= 0f)
@@ -104,6 +113,8 @@ public class Damagable : NetworkBehaviour
             DeathServerRpc();
             return true;
         }
+
+        SetHealthClientRpc(newHealth, maxHealth);
 
         return false;
     }

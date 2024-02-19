@@ -27,7 +27,7 @@ MonoBehaviour:
   rotateSpeed: 10
   bulletSo: {fileID: 11400000, guid: ccaad882467b8cc49bb312a93e64231d, type: 2}
   CanSalve: 0
-  accuracy: 0.3
+  accuracy: 0.1
   attackSound: 6
   health: 500
   deathExpirence: 10

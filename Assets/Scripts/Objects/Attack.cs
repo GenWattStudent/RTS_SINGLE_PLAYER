@@ -257,10 +257,8 @@ public class Attack : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void PerformAttackServerRpc()
     {
-        Debug.Log(IsInGunAngle());
         if (attackSpeedTimer <= 0 && attackCooldownTimer <= 0 && IsInAngle() && IsInGunAngle())
         {
-            Debug.Log("PerformAttackServerRpc");
             OnAttack?.Invoke();
             ShootBulletServerRpc();
             lastAttackTime = Time.time;

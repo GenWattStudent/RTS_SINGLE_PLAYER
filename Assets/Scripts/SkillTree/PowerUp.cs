@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -49,7 +47,6 @@ public class PowerUp : NetworkBehaviour
 
     public bool Unlock(SkillSo skill, int skillIndex, int skillPoints, ServerRpcParams serverRpcParams = default)
     {
-        Debug.Log($"Unlock {skill.skillName} {skillPoints} {skill.requiredSkillPoints} {CanBePurchased(skill, skillPoints)} ID: {OwnerClientId}");
         if (CanBePurchased(skill, skillPoints))
         {
             var playerController = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject.GetComponent<PlayerController>();
@@ -71,7 +68,6 @@ public class PowerUp : NetworkBehaviour
 
     public bool CanBePurchased(SkillSo skillSo, int skillPoints)
     {
-        Debug.Log($"CanBePurchased {skillSo.skillName} {unlockedSkillsIndex.Count}");
         if (skillPoints >= skillSo.requiredSkillPoints)
         {
             foreach (var skill in skillSo.requiredSkills)

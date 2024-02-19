@@ -15,7 +15,7 @@ public class Building : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SellServerRpc()
     {
-        var uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+        var uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<UIStorage>();
         Debug.Log("SellServerRpc " + uIStorage.OwnerClientId);
         uIStorage.IncreaseResource(buildingSo.costResource, buildingSo.cost / 2);
         var damagableScript = GetComponent<Damagable>();

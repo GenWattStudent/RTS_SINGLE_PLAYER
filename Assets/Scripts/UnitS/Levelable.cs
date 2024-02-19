@@ -8,7 +8,7 @@ public class Levelable : NetworkBehaviour
     public NetworkVariable<int> level = new(1);
     public NetworkVariable<int> expirence = new(0);
     public int maxLevel => levelableSo.levels.Count;
-    public int expirenceToNextLevel;
+    public NetworkVariable<int> expirenceToNextLevel = new(0);
     public Level curentLevel => levelableSo.levels[level.Value];
     private Damagable damagable;
 
@@ -18,16 +18,16 @@ public class Levelable : NetworkBehaviour
 
         if (levelableSo.levels.Count > 0)
         {
-            expirenceToNextLevel = levelableSo.levels[level.Value].expirence;
+            expirenceToNextLevel.Value = levelableSo.levels[level.Value].expirence;
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void AddExpirenceServerRpc(int amount)
     {
-        expirence.Value += amount;
+        Debug.Log("AddExpirenceServerRpc " + amount + " " + level.Value + " " + maxLevel + " " + levelableSo.levels[level.Value].expirence + " " + expirence.Value + " " + expirenceToNextLevel.Value);
         if (level.Value >= maxLevel) return;
-
+        expirence.Value += amount;
         if (expirence.Value >= levelableSo.levels[level.Value].expirence)
         {
             LevelUp();
@@ -44,6 +44,6 @@ public class Levelable : NetworkBehaviour
         damagable.stats.AddToStat(StatType.Health, levelData.health);
         damagable.stats.AddToStat(StatType.Damage, levelData.attackDamage);
 
-        expirenceToNextLevel = levelData.expirence;
+        expirenceToNextLevel.Value = levelData.expirence;
     }
 }

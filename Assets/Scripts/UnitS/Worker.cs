@@ -101,6 +101,7 @@ public class Worker : NetworkBehaviour
 
     public override void OnDestroy()
     {
+        if (!IsServer) return;
         StopConstructionServerRpc();
     }
 

@@ -17,13 +17,11 @@ public class SkillTreeManager : NetworkToolkitHelper
     {
         var skillSo = skills[skillIndex];
 
-        Debug.Log($"PurchaseSkillServerRpc {skillSo.skillName} {skillSo.requiredSkillPoints} {skillPoints.Value}");
         if (powerUp.Unlock(skillSo, skillIndex, skillPoints.Value, serverRpcParams))
         {
             RemoveSkillPoints(skillSo.requiredSkillPoints);
 
             ClientRpcParams clientRpcParams = default;
-            Debug.Log("PurchaseSkillServerRpc " + OwnerClientId + " " + serverRpcParams.Receive.SenderClientId);
             clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
             UnlockSkillClientRpc(clientRpcParams);
         }
@@ -79,7 +77,6 @@ public class SkillTreeManager : NetworkToolkitHelper
             skillEl.RegisterCallback((ClickEvent ev) =>
             {
                 var skillIndex = skills.IndexOf(skill);
-                Debug.Log("AddSkillEvent " + skillIndex + " skillPoints " + skillPoints.Value);
                 PurchaseSkillServerRpc(skillIndex);
             });
         }
@@ -95,7 +92,6 @@ public class SkillTreeManager : NetworkToolkitHelper
     {
         skillPoints.Value += amount;
         ClientRpcParams clientRpcParams = default;
-        Debug.Log("AddSkillPointsServerRpc " + OwnerClientId + " " + serverRpcParams.Receive.SenderClientId);
         clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
     }
 
