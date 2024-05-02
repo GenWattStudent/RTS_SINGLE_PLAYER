@@ -34,8 +34,6 @@ public class Damagable : NetworkBehaviour
 
     void Start()
     {
-        Debug.Log("Damagable Start " + stats.GetStat(StatType.MaxHealth));
-
         if (IsServer)
         {
             stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
@@ -78,6 +76,8 @@ public class Damagable : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
+        Console.WriteLine("OnNetworkDespawn");
         OnDead?.Invoke();
     }
 
@@ -97,7 +97,6 @@ public class Damagable : NetworkBehaviour
 
     public bool TakeDamage(float damage)
     {
-        Debug.Log("TakeDamage " + damage);
         var newHealth = stats.SubstractFromStat(StatType.Health, damage);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
 

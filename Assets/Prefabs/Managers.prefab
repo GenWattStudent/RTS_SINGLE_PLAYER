@@ -49,7 +49,6 @@ MonoBehaviour:
   buildCursor: {fileID: 2800000, guid: f2e59480af813ad42af2eba175095158, type: 3}
   healCursor: {fileID: 2800000, guid: 86d67df840a2fea4885e6d8c9b7b6e33, type: 3}
   cursorOffset: {x: 10, y: 4}
-  clientId: 0
 --- !u!1 &2208116436647543343
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +201,6 @@ MonoBehaviour:
   moveIndicatorPrefab: {fileID: 8465652735642422970, guid: 71ed33c253b22a642bd21210b37db7f7,
     type: 3}
   unitSpacing: 1
-  clientId: 0
 --- !u!1 &7826660975654156876
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 8732806402114460703}
+  selectedObjects: []
 --- !u!1 &8224349078030794132
 GameObject:
   m_ObjectHideFlags: 0

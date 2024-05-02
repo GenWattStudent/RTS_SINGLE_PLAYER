@@ -154,7 +154,7 @@ public class PlayerController : NetworkBehaviour
     private void OnPlayerLevelChangeHandler(int prev, int current)
     {
         if (!IsOwner) return;
-        Debug.Log("OnPlayerLevelChangeHandler" + playerExpierence.Value + " " + current + " " + playerLevelSo.levelsData.Count);
+
         var expToNextLevel = -1;
 
         if (current < playerLevelSo.levelsData.Count)
@@ -162,7 +162,6 @@ public class PlayerController : NetworkBehaviour
             expToNextLevel = playerLevelSo.levelsData[current].expToNextLevel;
         }
 
-        Debug.Log("OnPlayerLevelChangeHandler" + playerExpierence.Value + " " + current + " " + playerLevelSo.levelsData.Count);
         OnPlayerLevelChange?.Invoke(expToNextLevel, playerExpierence.Value, current, playerLevelSo.levelsData.Count);
     }
 
@@ -176,7 +175,7 @@ public class PlayerController : NetworkBehaviour
         {
             expToNextLevel = playerLevelSo.levelsData[playerLevel.Value].expToNextLevel;
         }
-        Debug.Log("OnPlayerExpierenceChangeHandler " + current + " " + playerLevel.Value + " " + playerLevelSo.levelsData.Count);
+
         OnPlayerLevelChange?.Invoke(playerLevelSo.levelsData[playerLevel.Value].expToNextLevel, current, playerLevel.Value, playerLevelSo.levelsData.Count);
     }
 
@@ -190,6 +189,7 @@ public class PlayerController : NetworkBehaviour
     private void Awake()
     {
         playerData = new PlayerData();
+
     }
 
     private void Start()
@@ -203,6 +203,10 @@ public class PlayerController : NetworkBehaviour
             SpawnUnitServerRpc(playerData.spawnPosition);
         }
 
-        if (IsServer) AddExpiernceServerRpc(1);
+        if (IsServer)
+        {
+            AddExpiernceServerRpc(1);
+            playerData.teamId = NetworkManager.Singleton.ConnectedClients.Count;
+        }
     }
 }
