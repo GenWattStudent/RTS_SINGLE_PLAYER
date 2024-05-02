@@ -996,7 +996,6 @@ GameObject:
   - component: {fileID: 3372196632889626661}
   - component: {fileID: -2642368696131063431}
   - component: {fileID: 7294596467931841221}
-  - component: {fileID: 1367622868622926560}
   - component: {fileID: 9136693582231763078}
   - component: {fileID: -5003866982530741651}
   - component: {fileID: -7780357263314455515}
@@ -1198,9 +1197,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelableSo: {fileID: 11400000, guid: e8ebdc3953b31384d888bcdf51573de3, type: 2}
-  level: 1
-  expirence: 0
-  expirenceToNextLevel: 0
+  level:
+    m_InternalValue: 1
+  expirence:
+    m_InternalValue: 0
+  expirenceToNextLevel:
+    m_InternalValue: 0
 --- !u!114 &-2642368696131063431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1225,33 +1227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c16dfeed133594a8057f84dde5291b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &1367622868622926560
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3912865232768828701}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &9136693582231763078
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,8 +21,6 @@ public class Resource : NetworkBehaviour
         totalIncome += income;
         uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
 
-        Debug.Log("Income: " + uIStorage.OwnerClientId);
-
         uIStorage.IncreaseResource(resourceSo, income);
     }
 

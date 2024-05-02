@@ -99,7 +99,7 @@ public class Worker : NetworkBehaviour
         laser = GetComponent<Laser>();
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
         if (!IsServer) return;
         StopConstructionServerRpc();

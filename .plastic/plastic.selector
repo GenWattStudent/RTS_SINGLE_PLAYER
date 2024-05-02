@@ -1,4 +1,0 @@
-repository "Fantasy_Single_Player@GenWatt@cloud"
-  path "/"
-    br "/main"
-    co "/main"

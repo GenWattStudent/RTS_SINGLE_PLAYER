@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using UnityEngine;
 using static LevelableSo;
 
 public class Levelable : NetworkBehaviour
@@ -25,7 +24,6 @@ public class Levelable : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void AddExpirenceServerRpc(int amount)
     {
-        Debug.Log("AddExpirenceServerRpc " + amount + " " + level.Value + " " + maxLevel + " " + levelableSo.levels[level.Value].expirence + " " + expirence.Value + " " + expirenceToNextLevel.Value);
         if (level.Value >= maxLevel) return;
         expirence.Value += amount;
         if (expirence.Value >= levelableSo.levels[level.Value].expirence)
