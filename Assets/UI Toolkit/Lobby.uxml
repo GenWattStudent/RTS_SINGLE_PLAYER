@@ -23,7 +23,7 @@
                         </ui:VisualElement>
                         <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
                             <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-items: center;">
-                                <ui:Label tabindex="-1" text="4" display-tooltip-when-elided="true" name="LobbyMaxPlayers" class="text-primary" style="margin-right: 0; padding-right: 0;" />
+                                <ui:Label tabindex="-1" text="1/2" display-tooltip-when-elided="true" name="LobbyMaxPlayers" class="text-primary" style="margin-right: 0; padding-right: 0;" />
                                 <ui:VisualElement style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons8-user-50.png?fileID=2800000&amp;guid=0d372afbcd67aa441bb936cab510723f&amp;type=3#icons8-user-50&apos;); width: 24px; height: 24px;" />
                             </ui:VisualElement>
                             <ui:Label tabindex="-1" text="2303434503045" display-tooltip-when-elided="true" name="LobbyId" class="text-primary" style="font-size: 14px; color: rgb(188, 188, 188);" />

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -55,7 +56,7 @@ public class LobbyUi : ToolkitHelper
 
         lobbyItem.Q<Label>("LobbyName").text = lobby.Name;
         lobbyItem.Q<Label>("LobbyId").text = lobby.Id;
-        lobbyItem.Q<Label>("LobbyMaxPlayers").text = lobby.MaxPlayers.ToString();
+        lobbyItem.Q<Label>("LobbyMaxPlayers").text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
         lobbyItem.AddManipulator(new Clickable(() => Debug.Log("Clicked on lobby: " + lobby.Id)));
 
         lobbiesContainer.Add(lobbyItem);
@@ -77,9 +78,10 @@ public class LobbyUi : ToolkitHelper
         try
         {
             var lobbies = await LobbyManager.Instance.GetAll();
+            var avaliableLobbies = lobbies.FindAll(lobby => lobby.Players.Count < lobby.MaxPlayers);
 
             lobbiesContainer.Clear();
-            foreach (var lobby in lobbies)
+            foreach (var lobby in avaliableLobbies)
             {
                 CreateLobbyItem(lobby);
             }
