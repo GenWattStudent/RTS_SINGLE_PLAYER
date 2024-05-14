@@ -1,14 +1,19 @@
-using UnityEngine; 
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MainMenuManager : MonoBehaviour
 {
+    [SerializeField] private int minUsernameLength = 3;
+    [SerializeField] private int maxUsernameLength = 10;
+    [SerializeField] private float fpsInterval = 0.5f;
+
     private UIDocument uIDocument;
     private VisualElement root;
     private VisualElement userModal;
     private Button submitUsernameButton;
     private Button singlePlayerButton;
+    private Button multiplayerButton;
     private Button settingsButton;
     private TextField usernameInput;
     private Label usernameLabel;
@@ -17,9 +22,6 @@ public class MainMenuManager : MonoBehaviour
     private Button closeSettingsButton;
     private Label fps;
     private Button quitButton;
-    [SerializeField] private int minUsernameLength = 3;
-    [SerializeField] private int maxUsernameLength = 10;
-    [SerializeField] private float fpsInterval = 0.5f;
     private float fpsTimer;
 
     private void OnEnable()
@@ -29,6 +31,7 @@ public class MainMenuManager : MonoBehaviour
         userModal = root.Q<VisualElement>("UserModalBox");
         submitUsernameButton = root.Q<Button>("AcceptUsername");
         singlePlayerButton = root.Q<Button>("SinglePlayer");
+        multiplayerButton = root.Q<Button>("Multiplayer");
         settingsButton = root.Q<Button>("SettingsButton");
         usernameInput = root.Q<TextField>("UserInput");
         usernameLabel = root.Q<Label>("Username");
@@ -43,6 +46,7 @@ public class MainMenuManager : MonoBehaviour
         singlePlayerButton.clicked += StartSinglePlayerGame;
         settingsButton.clicked += ShowSettings;
         usernameLabel.RegisterCallback<ClickEvent>(HandleShowUserModal);
+        multiplayerButton.clicked += StartMultiplayerGame;
         submitUsernameButton.clicked += SubmitUsername;
         closeSettingsButton.clicked += CloseSettings;
         quitButton.clicked += Application.Quit;
@@ -56,6 +60,11 @@ public class MainMenuManager : MonoBehaviour
     private void StartSinglePlayerGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    private void StartMultiplayerGame()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 
     private void CloseSettings()
@@ -80,13 +89,15 @@ public class MainMenuManager : MonoBehaviour
 
     private void SubmitUsername()
     {
-        if (usernameInput.text.Length < minUsernameLength) {
+        if (usernameInput.text.Length < minUsernameLength)
+        {
             errorLabel.style.display = DisplayStyle.Flex;
             errorLabel.text = $"Username must be at least {minUsernameLength} characters long";
             return;
         };
 
-        if (usernameInput.text.Length > maxUsernameLength) {
+        if (usernameInput.text.Length > maxUsernameLength)
+        {
             errorLabel.style.display = DisplayStyle.Flex;
             errorLabel.text = $"Username must be less than {maxUsernameLength} characters long";
             return;
@@ -103,7 +114,8 @@ public class MainMenuManager : MonoBehaviour
         var username = PlayerPrefs.GetString("username", "");
         usernameLabel.text = username;
 
-        if (username == "") {
+        if (username == "")
+        {
             userModal.style.display = DisplayStyle.Flex;
         }
     }
@@ -112,7 +124,8 @@ public class MainMenuManager : MonoBehaviour
     {
         fpsTimer += Time.deltaTime;
 
-        if (fpsTimer >= fpsInterval) {
+        if (fpsTimer >= fpsInterval)
+        {
             var roundFps = Mathf.Round(1 / Time.deltaTime);
             fps.text = $"{roundFps}FPS";
             fpsTimer = 0;

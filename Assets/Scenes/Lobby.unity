@@ -851,8 +851,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hearbeatInterval: 25
-  maxPlayers: 2
   isSingInCompleted: 0
+  playerId: 
+  maxPlayers: 2
 --- !u!114 &1940510940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,7 +867,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 0}
-  roomItemTemplate: {fileID: 0}
+  roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
+    type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
