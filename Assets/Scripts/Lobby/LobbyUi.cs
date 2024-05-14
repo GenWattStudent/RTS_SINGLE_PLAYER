@@ -1,7 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class LobbyUi : ToolkitHelper
@@ -12,16 +13,22 @@ public class LobbyUi : ToolkitHelper
     private VisualElement lobbiesContainer;
     private TextField lobbyName;
     private Label errorLabel;
+    private LobbyManager lobbyManager;
+    private Button closeLobbyButton;
 
     private void Start()
     {
+        lobbyManager = GetComponent<LobbyManager>();
+
         createLobbyButton = GetButton("CreateLobby");
         lobbiesContainer = GetVisualElement("LobbiesContainer");
         lobbyName = root.Q<TextField>("LobbyName");
         errorLabel = root.Q<Label>("ErrorLabel");
+        closeLobbyButton = GetButton("CloseLobby");
 
         HideError();
         createLobbyButton.clicked += CreateLobby;
+        closeLobbyButton.clicked += CloseLobby;
         CreateLobbiesUI();
         StartCoroutine(RefreshLobbies());
     }
@@ -30,10 +37,16 @@ public class LobbyUi : ToolkitHelper
     {
         while (true)
         {
-            if (!LobbyManager.Instance.isSingInCompleted) yield return new WaitForSeconds(1);
+            if (!lobbyManager.isSingInCompleted) yield return new WaitForSeconds(1);
             CreateLobbiesUI();
             yield return new WaitForSeconds(3);
         }
+    }
+
+    private void CloseLobby()
+    {
+        Debug.Log("Close lobby");
+        SceneManager.LoadScene("MainMenu");
     }
 
     private async void CreateLobby()
@@ -42,7 +55,7 @@ public class LobbyUi : ToolkitHelper
 
         try
         {
-            await LobbyManager.Instance.CreateLobby(lobbyName, LobbyManager.Instance.maxPlayers);
+            await lobbyManager.CreateLobby(lobbyName, lobbyManager.maxPlayers);
         }
         catch (System.Exception)
         {
@@ -57,9 +70,22 @@ public class LobbyUi : ToolkitHelper
         lobbyItem.Q<Label>("LobbyName").text = lobby.Name;
         lobbyItem.Q<Label>("LobbyId").text = lobby.Id;
         lobbyItem.Q<Label>("LobbyMaxPlayers").text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
-        lobbyItem.AddManipulator(new Clickable(() => Debug.Log("Clicked on lobby: " + lobby.Id)));
+        lobbyItem.Q<Button>("LobbyItem").clicked += async () => await JoinLobby(lobby.Id);
 
         lobbiesContainer.Add(lobbyItem);
+    }
+
+    private async Task JoinLobby(string lobbyId)
+    {
+        try
+        {
+            await lobbyManager.JoinLobby(lobbyId);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to join lobby " + e.Message);
+            ShowError("Failed to join lobby");
+        }
     }
 
     private void ShowError(string message)
@@ -77,7 +103,7 @@ public class LobbyUi : ToolkitHelper
     {
         try
         {
-            var lobbies = await LobbyManager.Instance.GetAll();
+            var lobbies = await lobbyManager.GetAll();
             var avaliableLobbies = lobbies.FindAll(lobby => lobby.Players.Count < lobby.MaxPlayers);
 
             lobbiesContainer.Clear();

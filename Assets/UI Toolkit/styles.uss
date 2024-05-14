@@ -325,11 +325,15 @@
     opacity: 0.4;
 }
 
+.text-input {
+    --unity-cursor-color: rgb(255, 255, 255);
+}
+
 .text-input .unity-base-field__input {
-    border-left-color: rgba(202, 202, 202, 0.91);
-    border-right-color: rgba(202, 202, 202, 0.91);
-    border-top-color: rgba(202, 202, 202, 0.91);
-    border-bottom-color: rgba(202, 202, 202, 0.91);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
     border-top-width: 3px;
     border-right-width: 3px;
     border-bottom-width: 3px;
@@ -384,4 +388,12 @@
 
 .slider .unity-base-slider__label:foucused {
     color: rgb(236, 136, 1);
+}
+
+.bg-success {
+    background-color: rgb(0, 106, 0);
+}
+
+.bg-danger {
+    background-color: rgb(161, 0, 0);
 }

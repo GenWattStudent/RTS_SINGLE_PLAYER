@@ -5,9 +5,10 @@
         <ui:VisualElement name="Menu" class="border-medium border-secondary" style="flex-grow: 1; background-color: rgba(39, 39, 39, 0.79); position: absolute; width: 400px; height: 500px; bottom: 100px; left: 100px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgb(212, 212, 212); border-right-color: rgb(212, 212, 212); border-top-color: rgb(212, 212, 212); border-bottom-color: rgb(212, 212, 212); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
             <ui:Label tabindex="-1" text="Main Menu" display-tooltip-when-elided="true" class="text-large text-primary text-bold" style="-unity-text-align: upper-center;" />
             <ui:VisualElement style="flex-grow: 1; margin-top: 20px; justify-content: flex-start;">
-                <ui:Button text="Single Player" display-tooltip-when-elided="true" name="SinglePlayer" class="btn-primary" />
-                <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="btn-primary" style="margin-top: 10px;" />
-                <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" class="btn-primary" style="margin-top: 10px;" />
+                <ui:Button text="Single Player" display-tooltip-when-elided="true" name="SinglePlayer" class="btn-primary" style="align-self: auto; width: auto;" />
+                <ui:Button text="Multiplayer" display-tooltip-when-elided="true" name="Multiplayer" class="btn-primary" style="align-self: auto; width: auto;" />
+                <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="btn-primary" style="margin-top: 10px; width: auto;" />
+                <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" class="btn-primary" style="margin-top: 10px; width: auto;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="GameName" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 150px; translate: -50% 0; background-color: rgba(39, 39, 39, 0.79); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
