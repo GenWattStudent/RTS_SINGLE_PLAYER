@@ -52,6 +52,31 @@ public class LobbyManager : ToolkitHelper
         await LobbyService.Instance.UpdatePlayerAsync(CurrentLobby.Id, playerId, options);
     }
 
+    private async Task UpdatePlayerData(string playerId, Dictionary<string, PlayerDataObject> playerData, string allocationId = default, string connectionData = default)
+    {
+        UpdatePlayerOptions options = new UpdatePlayerOptions
+        {
+            Data = playerData,
+            AllocationId = allocationId,
+            ConnectionInfo = connectionData
+        };
+
+        await LobbyService.Instance.UpdatePlayerAsync(CurrentLobby.Id, playerId, options);
+    }
+
+    private async Task UpdateLobbyData(string lobbyId, string code)
+    {
+        UpdateLobbyOptions options = new UpdateLobbyOptions
+        {
+            Data = new Dictionary<string, DataObject>
+            {
+                { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, code) }
+            }
+        };
+
+        await LobbyService.Instance.UpdateLobbyAsync(lobbyId, options);
+    }
+
     public async Task JoinLobby(string lobbyId)
     {
         CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
@@ -111,6 +136,21 @@ public class LobbyManager : ToolkitHelper
 
         heartbeatTimer = 0.0f;
         await LobbyService.Instance.SendHeartbeatPingAsync(CurrentLobby.Id);
+    }
+
+    public async Task StartGame()
+    {
+        if (CurrentLobby == null) return;
+        string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
+
+        await UpdateLobbyData(CurrentLobby.Id, code);
+        await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
+    }
+
+    public async Task JoinRelayServer(string code)
+    {
+        await RelayManager.Instance.JoinRelay(code);
+        await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
     }
 }
 

@@ -2459,6 +2459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1859679414}
+  - component: {fileID: 1859679415}
   m_Layer: 0
   m_Name: Envarioment
   m_TagString: Untagged
@@ -2486,6 +2487,18 @@ Transform:
   - {fileID: 114956879}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1859679415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859679413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb82950ac18b27f47bac0c932a18f895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1914240997 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4151135140323060571, guid: 81e1c720071a5b0468b348682c698d43,
@@ -3062,7 +3075,7 @@ PrefabInstance:
     - target: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5795796074291358839, guid: fd1b3b54da07ef74296c67c0cb422592,
         type: 3}
