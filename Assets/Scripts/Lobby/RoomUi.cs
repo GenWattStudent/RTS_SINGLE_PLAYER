@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class RoomUi : ToolkitHelper
@@ -33,11 +34,13 @@ public class RoomUi : ToolkitHelper
         exitButton = GetButton("Exit");
         lobby = GetVisualElement("Lobby");
         room = GetVisualElement("Room");
-        // HideStartGameButton();
+
         readyButton.clicked += async () => await Ready();
         exitButton.clicked += async () => await Exit();
-        // StartCoroutine(RefreshPlayers());
+
+        startGameButton.clicked += async () => await StartGame();
         startGameButton.SetEnabled(false);
+
     }
 
     private async Task Ready()
@@ -68,7 +71,6 @@ public class RoomUi : ToolkitHelper
                 }
             }
         }
-        // HideStartGameButton();
     }
 
     private async Task Exit()
@@ -90,8 +92,17 @@ public class RoomUi : ToolkitHelper
     {
         var playerItem = roomItemTemplate.CloneTree();
         playerItem.Q<Label>("PlayerName").text = playerName;
-        playerItem.Q<Button>("Kick").style.display = shouldShowKickButton(playerName) ? DisplayStyle.Flex : DisplayStyle.None;
-        playerItem.Q<Button>("Kick").clicked += async () => await KickPlayer(playerName);
+
+        if (shouldShowKickButton(playerName))
+        {
+            playerItem.Q<Button>("Kick").style.display = DisplayStyle.Flex;
+            playerItem.Q<Button>("Kick").clicked += async () => await KickPlayer(playerName);
+        }
+        else
+        {
+            playerItem.Q<Button>("Kick").style.display = DisplayStyle.None;
+        }
+
         playerList.Add(playerItem);
         playerItems.Add(playerName, playerItem);
     }
@@ -142,7 +153,7 @@ public class RoomUi : ToolkitHelper
 
     private void CheckIfAllPlayersReady()
     {
-        if (lobbyManager.CurrentLobby.Players.Count < 2) return;
+        // if (lobbyManager.CurrentLobby.Players.Count < 2) return;
         foreach (var player in lobbyManager.CurrentLobby.Players)
         {
             if (player.Data.ContainsKey("IsReady") && player.Data["IsReady"] != null && player.Data["IsReady"].Value == "False")
@@ -174,6 +185,25 @@ public class RoomUi : ToolkitHelper
         CreatePlayerItems(lobbyManager.CurrentLobby.Players);
         ReadyUi();
         CheckIfAllPlayersReady();
+        await JoinGameScene();
+    }
+
+    private async Task JoinGameScene()
+    {
+        if (lobbyManager.CurrentLobby == null) return;
+        if (lobbyManager.CurrentLobby.Data.ContainsKey("RelayCode") && lobbyManager.CurrentLobby.Data["RelayCode"] != null && !isGameStarted)
+        {
+            isGameStarted = true;
+            if (lobbyManager.CurrentLobby.HostId == AuthenticationService.Instance.PlayerId)
+            {
+                await SceneManager.LoadSceneAsync("Game");
+            }
+            else
+            {
+                await lobbyManager.JoinRelayServer(lobbyManager.CurrentLobby.Data["RelayCode"].Value);
+                await SceneManager.LoadSceneAsync("Game");
+            }
+        }
     }
 
     public void JoinRoom(Lobby lobby)
@@ -181,6 +211,18 @@ public class RoomUi : ToolkitHelper
         HideLobbyAndShowRoom();
         isInRoom = true;
         CreatePlayerItems(lobby.Players);
+    }
+
+    private async Task StartGame()
+    {
+        try
+        {
+            await lobbyManager.StartGame();
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Failed to start game");
+        }
     }
 
     // Update is called once per frame
