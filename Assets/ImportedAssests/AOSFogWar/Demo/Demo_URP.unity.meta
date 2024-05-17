@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1b6f4d1e4e7b3b84ab3f257c88aaeca9
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Demo/Demo_URP.unity
+  uploadId: 582775

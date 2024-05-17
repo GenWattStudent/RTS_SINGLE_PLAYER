@@ -92,6 +92,7 @@ public class RoomUi : ToolkitHelper
     {
         var playerItem = roomItemTemplate.CloneTree();
         playerItem.Q<Label>("PlayerName").text = playerName;
+        playerItem.Q<Label>("PlayerType").text = shouldShowKickButton(playerName) ? "Host" : "Member";
 
         if (shouldShowKickButton(playerName))
         {

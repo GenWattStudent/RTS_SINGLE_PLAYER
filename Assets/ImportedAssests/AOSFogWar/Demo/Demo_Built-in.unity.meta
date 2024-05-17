@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: db10292247ae3c846ae1ef60449cf9a0
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Demo/Demo_Built-in.unity
+  uploadId: 582775

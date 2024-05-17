@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FischlWorks_FogWar;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ public class Unit : NetworkBehaviour
     public bool isVisibile = true;
     // private float visibleTimer = 0f;
     private float visibleInterval = 5f;
+
+
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
     {
@@ -71,6 +74,8 @@ public class Unit : NetworkBehaviour
         {
             damagable.OnDead += HideUiPrefabs;
         }
+        var fogWar = GameObject.Find("FogWar").GetComponent<csFogWar>();
+        fogWar.AddFogRevealer(new csFogWar.FogRevealer(transform, 3, false));
     }
 
     private void HideUnit()
