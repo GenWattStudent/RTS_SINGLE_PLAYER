@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 935a090892a6f4f4ba3a2e867877fb75
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Shadowcaster.cs
+  uploadId: 582775

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2c2c5e6f2cb30284ba651abb88266636
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Demo/Materials/Built-in/Revealer.mat
+  uploadId: 582775

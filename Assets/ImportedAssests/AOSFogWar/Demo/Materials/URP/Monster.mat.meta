@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 45265ab711efe484289d543853391cf7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Demo/Materials/URP/Monster.mat
+  uploadId: 582775

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 50d80fdebd9ee864c9f976cefc3af07d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 249249
+  packageName: AOS Fog of War
+  packageVersion: 1.2
+  assetPath: Assets/AOSFogWar/Demo/Eye_Built-in.prefab
+  uploadId: 582775
