@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -68,6 +69,16 @@ public class Unit : NetworkBehaviour
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
         // visibleTimer = visibleInterval;
+        var fogOfWar = FindFirstObjectByType<FOVManager>();
+        if (fogOfWar != null)
+        {
+            var fovAgent = GetComponent<FOVAgent>();
+            if (fovAgent == null)
+            {
+                fovAgent = gameObject.AddComponent<FOVAgent>();
+            }
+            fogOfWar.AddFOVAgent(fovAgent);
+        }
 
         if (damagable != null)
         {

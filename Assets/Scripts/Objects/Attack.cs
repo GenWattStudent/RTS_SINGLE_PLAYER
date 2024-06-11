@@ -295,12 +295,12 @@ public class Attack : NetworkBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!IsServer) return;
-        attackSpeedTimer -= Time.deltaTime;
-        attackCooldownTimer -= Time.deltaTime;
-        checkTargetTimerTimer -= Time.deltaTime;
+        attackSpeedTimer -= Time.fixedDeltaTime;
+        attackCooldownTimer -= Time.fixedDeltaTime;
+        checkTargetTimerTimer -= Time.fixedDeltaTime;
 
         if (checkTargetTimerTimer <= 0 && autoAttack && target == null && targetPosition == Vector3.zero)
         {
