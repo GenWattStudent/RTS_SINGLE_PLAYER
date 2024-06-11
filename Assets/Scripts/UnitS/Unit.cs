@@ -20,7 +20,6 @@ public class Unit : NetworkBehaviour
     private float visibleInterval = 5f;
 
 
-
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
     {
         if (!shouldChangeMaterial) return;
@@ -69,16 +68,23 @@ public class Unit : NetworkBehaviour
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
         // visibleTimer = visibleInterval;
+
+        var fovAgent = GetComponent<FOVAgent>();
+
+        if (fovAgent == null)
+        {
+            fovAgent = gameObject.AddComponent<FOVAgent>();
+        }
+
+        fovAgent.disappearInFOW = !IsOwner;
+        fovAgent.contributeToFOV = IsOwner;
+
         var fogOfWar = FindFirstObjectByType<FOVManager>();
         if (fogOfWar != null)
         {
-            var fovAgent = GetComponent<FOVAgent>();
-            if (fovAgent == null)
-            {
-                fovAgent = gameObject.AddComponent<FOVAgent>();
-            }
             fogOfWar.AddFOVAgent(fovAgent);
         }
+
 
         if (damagable != null)
         {
@@ -86,7 +92,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    private void HideUnit()
+    public void HideUnit()
     {
         isVisibile = false;
 
@@ -99,7 +105,7 @@ public class Unit : NetworkBehaviour
         HideUiPrefabs();
     }
 
-    private void ShowUnit()
+    public void ShowUnit()
     {
         isVisibile = true;
 
@@ -116,20 +122,20 @@ public class Unit : NetworkBehaviour
     {
         // visibleTimer += Time.deltaTime;
 
-        if (attack != null && bushes.Count > 0 && attack.targetPosition != Vector3.zero)
-        {
-            ShowUnit();
-            // visibleTimer = 0f;
-            return;
-        }
+        // if (attack != null && bushes.Count > 0 && attack.targetPosition != Vector3.zero)
+        // {
+        //     ShowUnit();
+        //     // visibleTimer = 0f;
+        //     return;
+        // }
 
-        if (bushes.Count > 0)
-        {
-            HideUnit();
-        }
-        else
-        {
-            ShowUnit();
-        }
+        // if (bushes.Count > 0)
+        // {
+        //     HideUnit();
+        // }
+        // else
+        // {
+        //     ShowUnit();
+        // }
     }
 }
