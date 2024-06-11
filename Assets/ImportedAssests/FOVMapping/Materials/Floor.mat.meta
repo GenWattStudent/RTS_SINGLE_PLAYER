@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7ddf07d264ee9884e866c5bd8c62a259
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 269976
+  packageName: Fog of War & Field of View
+  packageVersion: 1.1.2
+  assetPath: Assets/FOVMapping/Materials/Floor.mat
+  uploadId: 642786

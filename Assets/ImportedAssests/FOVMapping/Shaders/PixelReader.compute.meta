@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7d6282cc36e40724b8bac6618b5f663d
+ComputeShaderImporter:
+  externalObjects: {}
+  currentAPIMask: 4
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 269976
+  packageName: Fog of War & Field of View
+  packageVersion: 1.1.2
+  assetPath: Assets/ImportedAssests/FOVMapping/Shaders/PixelReader.compute
+  uploadId: 642786

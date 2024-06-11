@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6aee6c7442d9c204e9c320310b133f0b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 269976
+  packageName: Fog of War & Field of View
+  packageVersion: 1.1.2
+  assetPath: Assets/ImportedAssests/FOVMapping/Scripts/PlayerController.cs
+  uploadId: 642786

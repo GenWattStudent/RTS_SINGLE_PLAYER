@@ -989,6 +989,7 @@ GameObject:
   - component: {fileID: 184206568410972868}
   - component: {fileID: 2088433923275926304}
   - component: {fileID: 6920305801718263893}
+  - component: {fileID: -1471744200378852231}
   - component: {fileID: 1361897205793647017}
   - component: {fileID: 7673169960702776933}
   - component: {fileID: 6451795301113717441}
@@ -1103,6 +1104,23 @@ MonoBehaviour:
   - {fileID: 8199242462070866894}
   bushes: []
   isVisibile: 1
+--- !u!114 &-1471744200378852231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3912865232768828701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704de5c65e51a8f4f9a8a99760de4892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _contributeToFOV: 1
+  _sightRange: 50
+  _sightAngle: 240
+  _disappearInFOW: 0
+  _disappearAlphaThreshold: 0.1
 --- !u!114 &1361897205793647017
 MonoBehaviour:
   m_ObjectHideFlags: 0

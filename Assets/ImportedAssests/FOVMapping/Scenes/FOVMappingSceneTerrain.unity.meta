@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4f81eb2e904d2014da5272afc8272575
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 269976
+  packageName: Fog of War & Field of View
+  packageVersion: 1.1.2
+  assetPath: Assets/ImportedAssests/FOVMapping/Scenes/FOVMappingSceneTerrain.unity
+  uploadId: 642786
