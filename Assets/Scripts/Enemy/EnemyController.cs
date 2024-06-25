@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -28,19 +28,19 @@ public class EnemyController : MonoBehaviour
                 var unitScript = unit.GetComponent<Unit>();
                 var unitMovement = unit.GetComponent<UnitMovement>();
 
-
                 if (unitMovement != null)
                 {
                     unitMovement.isReachedDestinationAfterSpawn = true;
                     unitMovement.agent.enabled = true;
                 }
 
-                // damagableScript.OwnerClientId = enemyId;
-                // unitScript.OwnerClientId = enemyId;
+                damagableScript.IsBot = true;
+                unitScript.IsBot = true;
                 unitScript.ChangeMaterial(enemyMaterial, true);
                 units.Add(unitScript);
 
                 spawnPosition += new Vector3(2f, 0, 0);
+                unit.GetComponent<NetworkObject>().Spawn();
             }
         }
     }
@@ -100,22 +100,22 @@ public class EnemyController : MonoBehaviour
     {
         enemyId = 1;
         Instance = this;
-        // SpawnUnits();
+        SpawnUnits();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isSpawning) return;
-        timeToSpawnEnemyTimer += Time.deltaTime;
-        UpdateTimeToSpawnEnemyText();
+        // if (isSpawning) return;
+        // timeToSpawnEnemyTimer += Time.deltaTime;
+        // // UpdateTimeToSpawnEnemyText();
 
-        if (timeToSpawnEnemyTimer >= timeToSpawnEnemy)
-        {
-            timeToSpawnEnemyTimer = 0f;
-            StartSpawners();
-            isSpawning = true;
-            MiddleMessage.Instance.HideTimerPanel();
-        }
+        // if (timeToSpawnEnemyTimer >= timeToSpawnEnemy)
+        // {
+        //     timeToSpawnEnemyTimer = 0f;
+        //     StartSpawners();
+        //     isSpawning = true;
+        //     MiddleMessage.Instance.HideTimerPanel();
+        // }
     }
 }

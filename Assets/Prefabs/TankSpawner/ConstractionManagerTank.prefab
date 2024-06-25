@@ -205,12 +205,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  IsBot: 0
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
   shouldChangeMaterial: 0
-  unitPrefabs: []
-  unitUiPrefabs: []
+  unitPrefabs:
+  - {fileID: 1438916550352242118}
+  - {fileID: 4191276300387218387}
+  - {fileID: 1127020598052249788}
+  unitUiPrefabs:
+  - {fileID: 2414445563141664857}
   bushes: []
   isVisibile: 1
 --- !u!114 &2943060365431914200
@@ -231,6 +236,7 @@ MonoBehaviour:
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
+  IsBot: 0
   damage: 0
   stats: {fileID: 0}
 --- !u!114 &433998347203920011
@@ -630,6 +636,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2932298467370659691}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4191276300387218387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1340940730110778552, guid: 2025a74160a97be44adca8f6939d95cf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2932298467370659691}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8936134721421192124 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6102969880537253079, guid: 2025a74160a97be44adca8f6939d95cf,
@@ -782,6 +794,12 @@ PrefabInstance:
 --- !u!224 &1728324892412086157 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2494718034336087024, guid: c6528704abe87a54ab03b7642f06dcc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3846982830549433469}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2414445563141664857 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1505029048282074148, guid: c6528704abe87a54ab03b7642f06dcc8,
     type: 3}
   m_PrefabInstance: {fileID: 3846982830549433469}
   m_PrefabAsset: {fileID: 0}

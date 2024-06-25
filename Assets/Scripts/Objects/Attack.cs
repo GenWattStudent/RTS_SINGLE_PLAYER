@@ -78,7 +78,7 @@ public class Attack : NetworkBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (damagableScript != null && damagableScript.OwnerClientId != currentUnit.OwnerClientId && !damagableScript.isDead && unitScript.isVisibile)
+            if (damagableScript != null && (damagableScript.IsBot || damagableScript.OwnerClientId != currentUnit.OwnerClientId) && !damagableScript.isDead && unitScript.isVisibile)
             {
                 if (IsTargetHideInTerrain(damagableScript)) continue;
                 SetTarget(damagableScript);
@@ -198,7 +198,6 @@ public class Attack : NetworkBehaviour
         targetPosition += new Vector3(randomX, 0, randomZ);
 
         bullet.bulletSo = currentUnit.attackableSo.bulletSo;
-        Debug.Log("bullet.bulletSo: " + OwnerClientId);
         bullet.motion.target = targetPosition;
 
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;

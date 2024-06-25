@@ -297,7 +297,6 @@ namespace FOVMapping
 						Vector3 viewportPosition = Camera.main.WorldToViewportPoint(agentPosition);
 						if (viewportPosition.x < 0.0f || viewportPosition.x > 1.0f && viewportPosition.y < 0.0f || viewportPosition.y > 1.0f || viewportPosition.z <= 0.0f)
 						{
-							Debug.Log("Agent is not in the camera viewport");
 							continue;
 						}
 

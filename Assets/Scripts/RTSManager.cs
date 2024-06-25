@@ -172,7 +172,7 @@ public class RTSManager : NetworkBehaviour
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
 
-                if (damagableScript != null && selectableScript != null)
+                if (damagableScript != null && !damagableScript.IsBot && selectableScript != null)
                 {
                     // Attack
                     if (damagableScript.OwnerClientId != playerController.OwnerClientId)

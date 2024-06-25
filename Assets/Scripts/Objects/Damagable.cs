@@ -12,6 +12,7 @@ public class Damagable : NetworkBehaviour
     public GameObject targetPoint;
     public bool isDead = false;
     public float damageBoost = 0;
+    public bool IsBot = false;
     public float damage = 0f;
     public Stats stats;
 
