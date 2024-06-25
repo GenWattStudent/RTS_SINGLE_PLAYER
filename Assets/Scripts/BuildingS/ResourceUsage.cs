@@ -30,18 +30,19 @@ public class ResourceUsage : NetworkBehaviour
     private UsageData GetUsageDataFromStats()
     {
         var resourceSo = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
-
         var usageData = new UsageData
         {
             resourceSO = resourceSo,
             usage = stats.GetStat(StatType.Usage),
         };
+
         return usageData;
     }
 
     public void UseResources()
     {
         var usageData = GetUsageDataFromStats();
+        if (usageData.resourceSO == null) return;
 
         if (uIStorage.HasEnoughResource(usageData.resourceSO, usageData.usage))
         {

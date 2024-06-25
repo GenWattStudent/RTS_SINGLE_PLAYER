@@ -6,6 +6,7 @@ using UnityEngine;
 public class Unit : NetworkBehaviour
 {
     public UnitSo unitSo;
+    public bool IsBot = false;
     public AttackableSo attackableSo;
     public Material unitMaterial;
     public Material originalMaterial;
@@ -43,7 +44,9 @@ public class Unit : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
+        var id = IsBot ? 2 : OwnerClientId;
+        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
+
         ChangeMaterial(playerColorData.playerMaterial, true);
     }
 
@@ -75,16 +78,15 @@ public class Unit : NetworkBehaviour
         {
             fovAgent = gameObject.AddComponent<FOVAgent>();
         }
-
-        fovAgent.disappearInFOW = !IsOwner;
-        fovAgent.contributeToFOV = IsOwner;
+        Debug.Log("IsOwner: " + IsBot);
+        fovAgent.disappearInFOW = !IsOwner || IsBot;
+        fovAgent.contributeToFOV = IsOwner && !IsBot;
 
         var fogOfWar = FindFirstObjectByType<FOVManager>();
         if (fogOfWar != null)
         {
             fogOfWar.AddFOVAgent(fovAgent);
         }
-
 
         if (damagable != null)
         {

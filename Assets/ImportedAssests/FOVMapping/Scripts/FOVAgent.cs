@@ -51,7 +51,6 @@ namespace FOVMapping
 			isUnderFOW = isUnder;
 			if (disappearInFOW && unit != null)
 			{
-				Debug.Log("isUnderFOW: " + isUnderFOW);
 				if (isUnderFOW)
 				{
 					unit.ShowUnit();
