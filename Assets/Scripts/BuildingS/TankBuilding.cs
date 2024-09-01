@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;

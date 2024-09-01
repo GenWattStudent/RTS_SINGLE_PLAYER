@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class PlayerController : NetworkBehaviour
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
     public NetworkVariable<int> playerLevel = new(1);
+    private FOVManager fovManager;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -42,6 +44,9 @@ public class PlayerController : NetworkBehaviour
     {
         var damagableScript = unit.GetComponent<Damagable>();
         playerData.units.Add(unit);
+
+        if (unit.TryGetComponent(out FOVAgent fovAgent)) fovManager.AddFOVAgent(fovAgent);
+
         damagableScript.OnDead += () =>
         {
             RemoveUnit(unit);
@@ -75,6 +80,7 @@ public class PlayerController : NetworkBehaviour
 
     public void RemoveUnit(Unit unit)
     {
+        if (unit.TryGetComponent(out FOVAgent fovAgent)) fovManager.RemoveFOVAgent(fovAgent);
         playerData.units.Remove(unit);
         OnUnitChange?.Invoke(unit, playerData.units);
     }
@@ -83,6 +89,8 @@ public class PlayerController : NetworkBehaviour
     {
         var damagableScript = building.GetComponent<Damagable>();
         playerData.buildings.Add(building);
+
+        if (building.TryGetComponent(out FOVAgent fovAgent)) fovManager.AddFOVAgent(fovAgent);
 
         damagableScript.OnDead += () =>
         {
@@ -94,6 +102,7 @@ public class PlayerController : NetworkBehaviour
 
     public void RemoveBuilding(Building building)
     {
+        if (building.TryGetComponent(out FOVAgent fovAgent)) fovManager.RemoveFOVAgent(fovAgent);
         playerData.buildings.Remove(building);
         OnBuildingChange?.Invoke(building, playerData.buildings);
     }
@@ -189,7 +198,7 @@ public class PlayerController : NetworkBehaviour
     private void Awake()
     {
         playerData = new PlayerData();
-
+        fovManager = FindFirstObjectByType<FOVManager>();
     }
 
     private void Start()

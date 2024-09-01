@@ -198,6 +198,13 @@ namespace FOVMapping
 				for (int i = 0; i < FOVAgents.Count; i++)
 				{
 					FOVAgent agent = FOVAgents[i];
+
+					if (agent == null)
+					{
+						FOVAgents.RemoveAt(i);
+						continue;
+					}
+
 					if (agent.enabled && agent.contributeToFOV)
 					{
 						Vector3 relativePos = Vector3.Scale(transform.InverseTransformPoint(agent.transform.position), transform.lossyScale); // Position of the agent relative to the FOW plane
@@ -343,11 +350,13 @@ namespace FOVMapping
 
 		public void AddFOVAgent(FOVAgent agent)
 		{
+			Debug.Log("AddFOVAgent");
 			FOVAgents.Add(agent);
 		}
 
 		public void RemoveFOVAgent(FOVAgent agent)
 		{
+			Debug.Log("RemoveFOVAgent");
 			FOVAgents.Remove(agent);
 		}
 
@@ -363,6 +372,7 @@ namespace FOVMapping
 
 		public void ClearFOVAgents()
 		{
+			Debug.Log("ClearFOVAgents");
 			FOVAgents.Clear();
 		}
 	}
