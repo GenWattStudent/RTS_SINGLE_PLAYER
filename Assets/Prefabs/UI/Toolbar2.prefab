@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 266746449671327837}
   - component: {fileID: 4758893122976756844}
   - component: {fileID: 3966727251677234128}
+  - component: {fileID: 1409154741019695620}
   m_Layer: 0
   m_Name: Toolbar2
   m_TagString: Untagged
@@ -159,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28453f30984a60441b22ffbcb9f30606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
   maxUnitCount: 20
   currentUnitCount: 0
 --- !u!114 &2445851974357121181
@@ -173,8 +175,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f71c1b2f4535f4893e7ba33f47cc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
   dayIconTexture: {fileID: 2800000, guid: 16be60bfdf0541441affffdb95c4807a, type: 3}
   nightIconTexture: {fileID: 2800000, guid: c4b3f7e1d2c992c4084fa3e81cdc7a94, type: 3}
+  updateTimer: 0.7
+  timeOfDay:
+    m_InternalValue: 0
+  isNight:
+    m_InternalValue: 0
 --- !u!114 &1809148412506744877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +277,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3566358833013920736}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b762be11a3c14ff40857dbb838407dae, type: 3}
   m_Name: 
@@ -296,7 +304,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 801d55a6c98246249b4bdee44c16fdb4, type: 2}
   - {fileID: 11400000, guid: 2edca1abcdde53a449588d030e90c747, type: 2}
   - {fileID: 11400000, guid: fc29b08a9c596a742b64115c53d58563, type: 2}
-  unlockedSkills: []
 --- !u!114 &266746449671327837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,3 +343,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 0}
+--- !u!114 &1409154741019695620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566358833013920736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
