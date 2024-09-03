@@ -11,6 +11,7 @@ public class SelectionManager : NetworkBehaviour
     [HideInInspector] public List<Selectable> selectedObjects;
     private PlayerController playerController;
     private UIUnitManager UIUnitManager;
+    private RTSObjectsManager RTSObjectsManager;
     // select event
     public delegate void SelectAction();
     public static event SelectAction OnSelect;
@@ -35,6 +36,7 @@ public class SelectionManager : NetworkBehaviour
         }
 
         playerController = GetComponent<PlayerController>();
+        RTSObjectsManager = GetComponent<RTSObjectsManager>();
         UIUnitManager = GetComponentInChildren<UIUnitManager>();
         selectedObjects = new();
     }
@@ -196,7 +198,7 @@ public class SelectionManager : NetworkBehaviour
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
-        foreach (Unit unit in playerController.playerData.units)
+        foreach (Unit unit in RTSObjectsManager.LocalPlayerUnits)
         {
             var selectable = unit.GetComponent<Selectable>();
             if (IsEnemy(selectable) || IsBuilding(selectable)) continue;

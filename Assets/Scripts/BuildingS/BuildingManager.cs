@@ -14,6 +14,7 @@ public class BuildingManager : NetworkBehaviour
     public int heightRaysCount = 15;
     private Vector3[] hightPoints;
     private PlayerController playerController;
+    private RTSObjectsManager RTSObjectsManager;
     private UIBuildingManager uIBuildingManager;
     private UIStorage uIStorage;
 
@@ -31,6 +32,7 @@ public class BuildingManager : NetworkBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        RTSObjectsManager = GetComponent<RTSObjectsManager>();
         uIBuildingManager = GetComponentInChildren<UIBuildingManager>();
         uIStorage = GetComponentInChildren<UIStorage>();
         hightPoints = new Vector3[heightRaysCount * heightRaysCount];
@@ -195,20 +197,20 @@ public class BuildingManager : NetworkBehaviour
         Debug.Log("PlaceBuildingServerRpc  health");
         no.SpawnWithOwnership(clientId);
         stats.AddStat(StatType.Health, 1);
-        PlaceBuildingClientRpc(no, clientId);
+        RTSObjectsManager.AddBuildingServerRpc(no);
     }
 
-    [ClientRpc]
-    private void PlaceBuildingClientRpc(NetworkObjectReference no, ulong ClientId)
-    {
-        if (no.TryGet(out NetworkObject networkObject))
-        {
-            if (networkObject.OwnerClientId != ClientId) return;
-            var building = networkObject.GetComponent<Building>();
+    // [ClientRpc]
+    // private void PlaceBuildingClientRpc(NetworkObjectReference no, ulong ClientId)
+    // {
+    //     if (no.TryGet(out NetworkObject networkObject))
+    //     {
+    //         if (networkObject.OwnerClientId != ClientId) return;
+    //         // var building = networkObject.GetComponent<Building>();
 
-            playerController.AddBuilding(building);
-        }
-    }
+    //         RTSObjectsManager.AddBuildingServerRpc(building);
+    //     }
+    // }
 
     private void PlaceBuilding()
     {

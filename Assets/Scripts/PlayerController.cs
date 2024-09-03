@@ -13,6 +13,7 @@ public class PlayerController : NetworkBehaviour
     public NetworkVariable<int> playerExpierence = new(0);
     public NetworkVariable<int> playerLevel = new(1);
     private FOVManager fovManager;
+    private RTSObjectsManager RTSObjectsManager;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -27,18 +28,18 @@ public class PlayerController : NetworkBehaviour
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
         no.SpawnWithOwnership(clientId);
-        SpawnHeroClientRpc(no, clientId);
+        RTSObjectsManager.AddUnitServerRpc(no);
     }
 
-    [ClientRpc]
-    private void SpawnHeroClientRpc(NetworkObjectReference no, ulong clientId)
-    {
-        if (no.TryGet(out NetworkObject unit))
-        {
-            var unitScript = unit.GetComponent<Unit>();
-            if (clientId == OwnerClientId) AddUnit(unitScript);
-        }
-    }
+    // [ClientRpc]
+    // private void SpawnHeroClientRpc(NetworkObjectReference no, ulong clientId)
+    // {
+    //     if (no.TryGet(out NetworkObject unit))
+    //     {
+    //         var unitScript = unit.GetComponent<Unit>();
+    //         if (clientId == OwnerClientId) RTSObjectsManager.AddUnitServerRpc(unitScript);
+    //     }
+    // }
 
     public void AddUnit(Unit unit)
     {
@@ -144,21 +145,21 @@ public class PlayerController : NetworkBehaviour
 
                 spawnPosition += new Vector3(2, 0, 0);
                 no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-                SpawnUnitClientRpc(no, rpcParams.Receive.SenderClientId);
+                RTSObjectsManager.AddUnitServerRpc(no);
             }
         }
     }
 
-    [ClientRpc]
-    private void SpawnUnitClientRpc(NetworkObjectReference no, ulong clientId)
-    {
-        if (no.TryGet(out NetworkObject unit))
-        {
-            var unitScript = unit.GetComponent<Unit>();
+    // [ClientRpc]
+    // private void SpawnUnitClientRpc(NetworkObjectReference no, ulong clientId)
+    // {
+    //     if (no.TryGet(out NetworkObject unit))
+    //     {
+    //         var unitScript = unit.GetComponent<Unit>();
 
-            if (clientId == OwnerClientId) AddUnit(unitScript);
-        }
-    }
+    //         if (clientId == OwnerClientId) RTSObjectsManager.AddUnitServerRpc(unitScript);
+    //     }
+    // }
 
     private void OnPlayerLevelChangeHandler(int prev, int current)
     {
@@ -199,6 +200,7 @@ public class PlayerController : NetworkBehaviour
     {
         playerData = new PlayerData();
         fovManager = FindFirstObjectByType<FOVManager>();
+        RTSObjectsManager = GetComponent<RTSObjectsManager>();
     }
 
     private void Start()

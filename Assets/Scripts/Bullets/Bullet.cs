@@ -19,13 +19,13 @@ public class Bullet : NetworkBehaviour
     {
         if (!IsServer) return;
         trailRenderer = GetComponentInChildren<TrailRenderer>();
-        // motion = GetComponent<Motion>();
+        motion = GetComponent<Motion>();
     }
 
     private void Start()
     {
         if (!IsServer) return;
-        // networkObject = GetComponent<NetworkObject>();
+        networkObject = GetComponent<NetworkObject>();
         playerController = NetworkManager.Singleton.ConnectedClients[networkObject.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
     }
 

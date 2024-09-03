@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,6 +17,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
 
     private ResourceUsage resourceUsage;
     private PlayerController playerController;
+    private RTSObjectsManager RTSObjectsManager;
     private UIUnitManager UIUnitManager;
     private UnitCountManager unitCountManager;
     private UIStorage uIStorage;
@@ -29,6 +29,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         resourceUsage = GetComponent<ResourceUsage>();
 
         playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        RTSObjectsManager = playerController.GetComponent<RTSObjectsManager>();
         UIUnitManager = playerController.GetComponentInChildren<UIUnitManager>();
         unitCountManager = playerController.GetComponentInChildren<UnitCountManager>();
         uIStorage = playerController.GetComponentInChildren<UIStorage>();
@@ -108,6 +109,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             currentSpawningUnit = null;
 
             StartQueue();
+            RTSObjectsManager.Units.Add(unit);
             SpawnUnitClientRpc(no);
         }
     }
@@ -119,7 +121,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         {
             if (no.OwnerClientId != OwnerClientId) return;
             var unit = no.GetComponent<Unit>();
-            playerController.AddUnit(unit);
+            RTSObjectsManager.LocalPlayerUnits.Add(unit);
 
             if (!IsServer)
             {
