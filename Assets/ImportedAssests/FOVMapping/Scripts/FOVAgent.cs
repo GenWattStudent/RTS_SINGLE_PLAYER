@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using FOVMapping;
-using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 
 namespace FOVMapping
@@ -39,16 +36,86 @@ namespace FOVMapping
 		public float disappearAlphaThreshold { get => _disappearAlphaThreshold; set => _disappearAlphaThreshold = value; }
 		private bool isUnderFOW = false;
 		private Unit unit;
+		private NetworkObject networkObject;
 
-		private void Awake()
+		private bool CheckVisibility(ulong clientId)
+		{
+			// If not spawned, then always return false
+			if (!IsSpawned)
+			{
+				return false;
+			}
+
+			// We can do a simple distance check between the NetworkObject instance position and the client
+			return !isUnderFOW || clientId == OwnerClientId;
+		}
+
+		public override void OnNetworkSpawn()
 		{
 			unit = GetComponent<Unit>();
+			networkObject = GetComponent<NetworkObject>();
+			if (!IsServer) return;
+
+			if (NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client))
+			{
+				var playerController = client.PlayerObject.GetComponent<PlayerController>();
+				Debug.Log(playerController);
+
+				if (playerController != null)
+				{
+					contributeToFOV = playerController.GetComponent<NetworkObject>().OwnerClientId == OwnerClientId;
+					disappearInFOW = !contributeToFOV;
+				}
+				else
+				{
+					Debug.LogError("PlayerController component not found on PlayerObject.");
+				}
+			}
+			else
+			{
+				Debug.LogError("Client not found in ConnectedClients.");
+			}
+
+			if (IsServer)
+			{
+				// The server handles visibility checks and should subscribe when spawned locally on the server-side.
+				networkObject.CheckObjectVisibility += CheckVisibility;
+				// If we want to continually update, we don't need to check every frame but should check at least once per tick
+				NetworkManager.NetworkTickSystem.Tick += OnNetworkTick;
+			}
+
+			base.OnNetworkSpawn();
+		}
+
+		private void OnNetworkTick()
+		{
+			if (!IsServer) return;
+			// If CheckObjectVisibility is enabled, check the distance to clients
+			// once per network tick.
+			foreach (var clientId in NetworkManager.ConnectedClientsIds)
+			{
+				var shouldBeVisibile = CheckVisibility(clientId);
+				var isVisibile = networkObject.IsNetworkVisibleTo(clientId);
+				var isClientServer = clientId == NetworkManager.ServerClientId;
+
+				if (shouldBeVisibile && !isVisibile && !isClientServer)
+				{
+					// Note: This will invoke the CheckVisibility check again
+					networkObject.NetworkShow(clientId);
+				}
+				else if (!shouldBeVisibile && isVisibile && !isClientServer)
+				{
+					Debug.Log("NetworkHide");
+					networkObject.NetworkHide(clientId);
+				}
+			}
 		}
 
 		[HideInInspector]
 		public void SetUnderFOW(bool isUnder)
 		{
 			isUnderFOW = isUnder;
+
 			if (disappearInFOW && unit != null)
 			{
 				if (isUnderFOW)
@@ -65,6 +132,16 @@ namespace FOVMapping
 		public bool IsUnderFOW()
 		{
 			return isUnderFOW;
+		}
+
+		public override void OnNetworkDespawn()
+		{
+			if (IsServer)
+			{
+				networkObject.CheckObjectVisibility -= CheckVisibility;
+				NetworkManager.NetworkTickSystem.Tick -= OnNetworkTick;
+			}
+			base.OnNetworkDespawn();
 		}
 	}
 }

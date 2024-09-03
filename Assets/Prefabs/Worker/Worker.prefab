@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 1224504472327331454}
   - component: {fileID: 1198563386776979904}
   - component: {fileID: 176015537264305431}
+  - component: {fileID: 1879154002984769851}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -296,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
+  IsBot: 0
   attackableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
@@ -380,6 +382,7 @@ MonoBehaviour:
   targetPoint: {fileID: 5575477033357697071}
   isDead: 0
   damageBoost: 0
+  IsBot: 0
   damage: 0
   stats: {fileID: 0}
 --- !u!114 &6084159726790955623
@@ -530,6 +533,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1879154002984769851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321514005527918770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704de5c65e51a8f4f9a8a99760de4892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _contributeToFOV: 1
+  _sightRange: 50
+  _sightAngle: 240
+  _disappearInFOW: 0
+  _disappearAlphaThreshold: 0.1
 --- !u!1 &4827132899826213293
 GameObject:
   m_ObjectHideFlags: 0
