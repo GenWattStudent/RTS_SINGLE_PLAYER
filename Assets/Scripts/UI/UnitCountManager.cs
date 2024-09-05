@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,13 +23,13 @@ public class UnitCountManager : NetworkToolkitHelper
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
         unitCountText = root.Q<Label>("UnitCountLabel");
-        PlayerController.OnUnitChange += OnUnitChange;
+        RTSObjectsManager.OnUnitChange += OnUnitChange;
     }
 
     private void OnDisable()
     {
         if (!IsOwner) return;
-        PlayerController.OnUnitChange -= OnUnitChange;
+        RTSObjectsManager.OnUnitChange -= OnUnitChange;
     }
 
     public bool CanSpawnUnit()

@@ -94,6 +94,8 @@ namespace FOVMapping
 		[Tooltip("(Do not modify) Pixel reader computer shader")]
 		private ComputeShader pixelReader;
 
+		private Dictionary<ulong, List<FOVAgent>> clientVisibleAgents = new Dictionary<ulong, List<FOVAgent>>();
+
 		private void Awake()
 		{
 			FOVMaterial = new Material(FOVShader);

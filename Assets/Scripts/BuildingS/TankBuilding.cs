@@ -109,7 +109,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             currentSpawningUnit = null;
 
             StartQueue();
-            RTSObjectsManager.Units.Add(unit);
+            RTSObjectsManager.AddUnitServerRpc(no);
             SpawnUnitClientRpc(no);
         }
     }
