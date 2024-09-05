@@ -4,6 +4,8 @@ using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 
+// i want this script to execute first
+[DefaultExecutionOrder(-100)]
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private GameObject hero;
