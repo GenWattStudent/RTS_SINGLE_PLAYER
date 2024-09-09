@@ -200,6 +200,7 @@ public class SelectionManager : NetworkBehaviour
 
         foreach (Unit unit in RTSObjectsManager.LocalPlayerUnits)
         {
+            if (unit == null) continue; // Check if the unit is null
             var selectable = unit.GetComponent<Selectable>();
             if (IsEnemy(selectable) || IsBuilding(selectable)) continue;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(selectable.transform.position);

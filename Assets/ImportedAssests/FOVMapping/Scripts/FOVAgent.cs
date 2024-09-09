@@ -51,6 +51,23 @@ namespace FOVMapping
 			return !isUnderFOW || clientId == OwnerClientId;
 		}
 
+		private void Awake()
+		{
+			var unit = GetComponent<Unit>();
+			var building = GetComponent<Building>();
+
+			if (building != null)
+			{
+				sightAngle = building.buildingSo.sightAngle;
+				sightRange = building.buildingSo.sightRange;
+			}
+			else if (unit != null)
+			{
+				sightAngle = unit.unitSo.sightAngle;
+				sightRange = unit.unitSo.sightRange;
+			}
+		}
+
 		private void Start()
 		{
 			unit = GetComponent<Unit>();

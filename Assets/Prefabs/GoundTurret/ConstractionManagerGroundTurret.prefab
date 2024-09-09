@@ -57,11 +57,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d69f1024707d4c81488d5f06e96f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
-  buildingUnits: []
   healthBar: {fileID: 5749275408073883805}
   buildingInProgressPrefab: {fileID: 4694778672414493333}
   constructionPrefab: {fileID: 6834594170321367030}
+  buildingUnits: []
+  buildingSo: {fileID: 11400000, guid: 806cd1a73b3fe5e40be96db56dd14885, type: 2}
 --- !u!114 &5807540428542867514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  IsBot: 0
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
@@ -101,6 +102,7 @@ MonoBehaviour:
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
+  IsBot: 0
   damage: 0
   stats: {fileID: 0}
 --- !u!114 &433998347203920011
@@ -184,10 +186,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingLevelableSo: {fileID: 11400000, guid: 3cc9ea0089f961246afafa063bfa4dc2,
     type: 2}
-  level: 1
+  level:
+    m_InternalValue: 1
+  reduceSpawnTime:
+    m_InternalValue: 0
   building: {fileID: 0}
   damagable: {fileID: 0}
-  reduceSpawnTime: 0
 --- !u!114 &879523128158356216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +369,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: -7861027870873860596, guid: e4458267a6237274285ea35df8b62ba2,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 4742284195946579420, guid: e4458267a6237274285ea35df8b62ba2,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -435,7 +444,9 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -7861027870873860596, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
+    - {fileID: 5507317521260695193, guid: e4458267a6237274285ea35df8b62ba2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -460,6 +471,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 686972331546150805, guid: da90186066a1ad2428c4903673e6bba1,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 884223108550053241, guid: da90186066a1ad2428c4903673e6bba1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -640,6 +656,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8418543292980964833}
     m_Modifications:
+    - target: {fileID: 3205677601047688072, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718237856851946017, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3927660489607591011, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -720,7 +746,11 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 32a76832b79e84347ad9df08b12709c3, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3205677601047688072, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
+    - {fileID: 3718237856851946017, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
+    - {fileID: 5274868833598084267, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
+    - {fileID: -7845219290297878131, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

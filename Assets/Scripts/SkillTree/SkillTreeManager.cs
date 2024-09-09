@@ -77,6 +77,7 @@ public class SkillTreeManager : NetworkToolkitHelper
             skillEl.RegisterCallback((ClickEvent ev) =>
             {
                 var skillIndex = skills.IndexOf(skill);
+                Debug.Log($"Purchasing skill {skill.skillName} at index {skillIndex}");
                 PurchaseSkillServerRpc(skillIndex);
             });
         }

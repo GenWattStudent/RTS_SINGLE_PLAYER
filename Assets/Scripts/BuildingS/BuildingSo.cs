@@ -27,4 +27,6 @@ public class BuildingSo : DamagableSo
    public int cost;
 
    public List<Stat> stats = new();
+   public float sightAngle = 360f;
+   public float sightRange = 4f;
 }

@@ -129,7 +129,7 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
                 {
                     unitsQueue.RemoveAt(0);
                     isUnitSpawning = false;
-                    currentSpawningUnit = unitsQueue[0];
+                    if (unitsQueue.Count > 0) currentSpawningUnit = unitsQueue[0];
                 }
                 else
                 {

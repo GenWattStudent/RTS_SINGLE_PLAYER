@@ -86,7 +86,7 @@ public class UIStorage : NetworkBehaviour
 
         if (storage.currentValue + amount < 0)
         {
-            return 0;
+            return -storage.currentValue;
         }
 
         return amount;
@@ -128,9 +128,12 @@ public class UIStorage : NetworkBehaviour
     {
         if (!IsServer) return;
         var storage = GetStorageByResource(resourceSO);
+        Debug.Log($"Decreasing {resourceSO.resourceName} by {amount} {OwnerClientId}");
         var amountCanFit = AmountCanFit(storage, -amount);
+        Debug.Log($"Amount can fit: {amountCanFit}");
 
         storage.currentValue += amountCanFit;
+        Debug.Log($"New value: {storage.currentValue}");
         UpdateStorage(storage);
         SendUpdateToClient(storage);
     }

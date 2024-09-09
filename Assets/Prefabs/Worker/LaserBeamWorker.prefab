@@ -54,6 +54,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561277566838248707, guid: 806f97d0d1e40c840a5915bad75aab7f,
+        type: 3}
       propertyPath: m_CastShadows
       value: 2
       objectReference: {fileID: 0}

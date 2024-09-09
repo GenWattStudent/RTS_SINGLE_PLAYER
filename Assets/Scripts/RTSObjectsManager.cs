@@ -9,14 +9,14 @@ public class RTSObjectsManager : NetworkBehaviour
     public List<Building> Buildings { get; private set; } = new();
     public List<Unit> LocalPlayerUnits { get; private set; } = new();
     public List<Building> LocalPlayerBuildings { get; private set; } = new();
-    private PlayerController playerController;
+    // private PlayerController playerController;
 
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
 
     private void Start()
     {
-        playerController = GetComponent<PlayerController>();
+        // playerController = GetComponent<PlayerController>();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -36,6 +36,7 @@ public class RTSObjectsManager : NetworkBehaviour
             var damagableScript = unit.GetComponent<Damagable>();
             damagableScript.OnDead += () =>
             {
+                Debug.Log("Unit dead");
                 RemoveUnitServerRpc(no);
             };
 
@@ -57,8 +58,9 @@ public class RTSObjectsManager : NetworkBehaviour
         if (nor.TryGet(out NetworkObject no))
         {
             var unit = no.GetComponent<Unit>();
+            var damagableScript = unit.GetComponent<Damagable>();
             LocalPlayerUnits.Add(unit);
-            Debug.Log($"Client({unit.OwnerClientId}) have {LocalPlayerUnits.Count} units,");
+            Debug.Log($"Client({unit.OwnerClientId}) have {LocalPlayerUnits.Count} units.");
             // playerController.AddUnit(unit);
             OnUnitChange?.Invoke(unit, LocalPlayerUnits);
         }
@@ -94,6 +96,7 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             var unit = no.GetComponent<Unit>();
             LocalPlayerUnits.Remove(unit);
+            Debug.Log($"Client({unit.OwnerClientId}) have {LocalPlayerUnits.Count} units.");
             // playerController.RemoveUnit(unit);
             OnUnitChange?.Invoke(unit, LocalPlayerUnits);
         }

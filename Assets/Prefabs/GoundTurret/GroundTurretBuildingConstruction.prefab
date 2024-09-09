@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6036516917040061338}
   - component: {fileID: 5507317521260695193}
+  - component: {fileID: -7861027870873860596}
   m_Layer: 0
   m_Name: GroundTurretBuildingConstruction
   m_TagString: Untagged
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  IsBot: 0
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
@@ -54,6 +56,26 @@ MonoBehaviour:
   unitUiPrefabs: []
   bushes: []
   isVisibile: 1
+--- !u!114 &-7861027870873860596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6494298419494808799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &868413912282892951
 PrefabInstance:
   m_ObjectHideFlags: 0

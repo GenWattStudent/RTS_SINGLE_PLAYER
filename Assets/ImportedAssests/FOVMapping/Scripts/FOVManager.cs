@@ -297,6 +297,12 @@ namespace FOVMapping
 				for (int i = 0; i < FOVAgents.Count; i++)
 				{
 					FOVAgent agent = FOVAgents[i];
+					if (agent == null)
+					{
+						FOVAgents.RemoveAt(i);
+						continue;
+					}
+
 					if (agent.disappearInFOW)
 					{
 						Vector3 agentPosition = agent.transform.position;

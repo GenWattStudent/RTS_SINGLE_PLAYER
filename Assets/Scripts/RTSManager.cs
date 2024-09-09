@@ -73,7 +73,7 @@ public class RTSManager : NetworkBehaviour
             }
         }
 
-        var go = Instantiate(moveIndicatorPrefab, position, Quaternion.identity);
+        var go = Instantiate(moveIndicatorPrefab, new Vector3(position.x, position.y + 0.01f, position.z), moveIndicatorPrefab.transform.rotation);
         Destroy(go, 2f);
     }
 
