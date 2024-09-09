@@ -194,7 +194,7 @@ public class BuildingManager : NetworkBehaviour
         var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
-        Debug.Log("PlaceBuildingServerRpc  health");
+        Debug.Log("PlaceBuildingServerRpc health " + no + " " + stats);
         no.SpawnWithOwnership(clientId);
         stats.AddStat(StatType.Health, 1);
         RTSObjectsManager.AddBuildingServerRpc(no);
@@ -214,7 +214,7 @@ public class BuildingManager : NetworkBehaviour
 
     private void PlaceBuilding()
     {
-        if (Input.GetMouseButtonDown(0) && SelectedBuilding != null)
+        if (Input.GetMouseButtonDown(0) && SelectedBuilding != null && !UIHelper.Instance.IsPointerOverUIElement())
         {
             if (!IsValidPosition())
             {

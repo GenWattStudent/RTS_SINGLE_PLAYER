@@ -44,6 +44,7 @@ public class Unit : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (!IsOwner) HideUnit();
         var id = IsBot ? 2 : OwnerClientId;
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
 
@@ -52,17 +53,27 @@ public class Unit : NetworkBehaviour
 
     public void HideUiPrefabs()
     {
-        foreach (var unitUiPrefab in unitUiPrefabs)
+        // foreach (var unitUiPrefab in unitUiPrefabs)
+        // {
+        //     unitUiPrefab.SetActive(false);
+        // }
+        var canvases = GetComponentsInChildren<Canvas>();
+        foreach (var canvas in canvases)
         {
-            unitUiPrefab.SetActive(false);
+            canvas.enabled = false;
         }
     }
 
     public void ShowUiPrefabs()
     {
-        foreach (var unitUiPrefab in unitUiPrefabs)
+        // foreach (var unitUiPrefab in unitUiPrefabs)
+        // {
+        //     unitUiPrefab.SetActive(true);
+        // }
+        var canvases = GetComponentsInChildren<Canvas>();
+        foreach (var canvas in canvases)
         {
-            unitUiPrefab.SetActive(true);
+            canvas.enabled = true;
         }
     }
 
@@ -78,9 +89,11 @@ public class Unit : NetworkBehaviour
         {
             fovAgent = gameObject.AddComponent<FOVAgent>();
         }
-        Debug.Log("IsOwner: " + IsBot);
+
+        var construction = GetComponent<Construction>();
+
         fovAgent.disappearInFOW = !IsOwner || IsBot;
-        fovAgent.contributeToFOV = IsOwner && !IsBot;
+        fovAgent.contributeToFOV = IsOwner && !IsBot && construction == null;
 
         var fogOfWar = FindFirstObjectByType<FOVManager>();
         if (fogOfWar != null)
@@ -88,20 +101,35 @@ public class Unit : NetworkBehaviour
             fogOfWar.AddFOVAgent(fovAgent);
         }
 
-        if (damagable != null)
-        {
-            damagable.OnDead += HideUiPrefabs;
-        }
+        // if (damagable != null)
+        // {
+        //     damagable.OnDead += HideUiPrefabs;
+        // }
     }
 
     public void HideUnit()
     {
         isVisibile = false;
 
-        foreach (var unitPrefab in unitPrefabs)
+        // get all renderers in children and from compoenent and disable them
+        var renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (var renderer in renderers)
         {
-            var renderer = unitPrefab.GetComponent<Renderer>();
             renderer.enabled = false;
+        }
+
+        // ligths 
+        var lights = GetComponentsInChildren<Light>(true);
+        foreach (var light in lights)
+        {
+            light.enabled = false;
+        }
+
+        // line renderers
+        var lineRenderers = GetComponentsInChildren<LineRenderer>(true);
+        foreach (var lineRenderer in lineRenderers)
+        {
+            lineRenderer.enabled = false;
         }
 
         HideUiPrefabs();
@@ -111,10 +139,25 @@ public class Unit : NetworkBehaviour
     {
         isVisibile = true;
 
-        foreach (var unitPrefab in unitPrefabs)
+        // get all renderers in children and from compoenent and enable them
+        var renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (var renderer in renderers)
         {
-            var renderer = unitPrefab.GetComponent<Renderer>();
             renderer.enabled = true;
+        }
+
+        // ligths
+        var lights = GetComponentsInChildren<Light>(true);
+        foreach (var light in lights)
+        {
+            light.enabled = true;
+        }
+
+        // line renderers
+        var lineRenderers = GetComponentsInChildren<LineRenderer>(true);
+        foreach (var lineRenderer in lineRenderers)
+        {
+            lineRenderer.enabled = true;
         }
 
         ShowUiPrefabs();

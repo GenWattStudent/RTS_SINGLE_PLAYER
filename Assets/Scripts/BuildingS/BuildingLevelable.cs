@@ -6,7 +6,7 @@ public class BuildingLevelable : NetworkBehaviour
     public BuildingLevelableSo buildingLevelableSo;
     public NetworkVariable<int> level = new(1);
     public NetworkVariable<int> reduceSpawnTime = new(0);
-    public int maxLevel => buildingLevelableSo.levels.Count;
+    public int maxLevel => buildingLevelableSo == null ? 1 : buildingLevelableSo.levels.Count;
     public Building building;
     public Damagable damagable;
 

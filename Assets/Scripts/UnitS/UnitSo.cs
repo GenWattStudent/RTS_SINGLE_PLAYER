@@ -26,4 +26,6 @@ public class UnitSo : DamagableSo
     public ResourceSO resourceUsage;
     public int usage;
     public float usageInterval;
+    public float sightAngle = 360f;
+    public float sightRange = 8f;
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class PowerUp : NetworkBehaviour
 {
     public NetworkList<int> unlockedSkillsIndex;
+
     private SkillTreeManager skillTreeManager;
     public event Action<SkillSo> OnSkillUnlocked;
 
@@ -14,9 +15,9 @@ public class PowerUp : NetworkBehaviour
         skillTreeManager = GetComponent<SkillTreeManager>();
     }
 
-    private void AddDamageToUnits(PlayerController player, string unitName, int value)
+    private void AddDamageToUnits(RTSObjectsManager player, string unitName, int value)
     {
-        foreach (var unit in player.playerData.units)
+        foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
         {
             var damagable = unit.GetComponent<Damagable>();
             var unitScript = unit.GetComponent<Unit>();
@@ -28,9 +29,9 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
-    private void AddHealthToUnits(PlayerController player, string unitName, int value)
+    private void AddHealthToUnits(RTSObjectsManager player, string unitName, int value)
     {
-        foreach (var unit in player.playerData.units)
+        foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
         {
             var damagable = unit.GetComponent<Damagable>();
             var unitScript = unit.GetComponent<Unit>();
@@ -45,13 +46,41 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
+    public SkillSo GetBoughtSkillByUnitName(string unitName)
+    {
+        foreach (var skill in skillTreeManager.skills)
+        {
+            if (skill.unitName == unitName && IsUnlocked(skill))
+            {
+                return skill;
+            }
+        }
+
+        return null;
+    }
+
+    public float GetPercentAmountOfByUnitName(string unitName, string valueName)
+    {
+        var value = 0f;
+        foreach (var skill in skillTreeManager.skills)
+        {
+            if (skill.unitName == unitName && IsUnlocked(skill) && skill.valueName == valueName)
+            {
+                value += skill.value;
+            }
+        }
+        Debug.Log($"GetAmountOfByUnitName {unitName} {valueName} {value}");
+        return value;
+    }
+
     public bool Unlock(SkillSo skill, int skillIndex, int skillPoints, ServerRpcParams serverRpcParams = default)
     {
         if (CanBePurchased(skill, skillPoints))
         {
-            var playerController = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject.GetComponent<PlayerController>();
-            if (skill.valueName == "damage") AddDamageToUnits(playerController, skill.unitName, skill.value);
-            else if (skill.valueName == "health") AddHealthToUnits(playerController, skill.unitName, skill.value);
+            var rtsObjectManager = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject.GetComponent<RTSObjectsManager>();
+            Debug.Log($"Unlocking skill {skill.skillName} for player {rtsObjectManager.OwnerClientId}");
+            if (skill.valueName == "damage") AddDamageToUnits(rtsObjectManager, skill.unitName, skill.value);
+            else if (skill.valueName == "health") AddHealthToUnits(rtsObjectManager, skill.unitName, skill.value);
             unlockedSkillsIndex.Add(skillIndex);
             OnSkillUnlocked?.Invoke(skill);
             return true;

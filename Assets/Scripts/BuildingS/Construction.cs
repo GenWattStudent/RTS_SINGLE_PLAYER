@@ -146,7 +146,7 @@ public class Construction : NetworkBehaviour
     [ClientRpc]
     public void SetHealthClientRpc(float health, float maxHealth)
     {
-        progresBar.UpdateProgresBar(health, maxHealth);
+        progresBar?.UpdateProgresBar(health, maxHealth);
     }
 
     void Start()

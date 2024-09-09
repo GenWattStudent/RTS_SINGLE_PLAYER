@@ -48,7 +48,7 @@ MonoBehaviour:
   - Type: 9
     Value: 10
   - Type: 10
-    Value: 5
+    Value: 4
   - Type: 8
     Value: 50
   - Type: 7
@@ -64,5 +64,7 @@ MonoBehaviour:
   prefab: {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   spawnerLevelToUnlock: 1
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
-  usage: 10
-  usageInterval: 3
+  usage: 40
+  usageInterval: 1
+  sightAngle: 360
+  sightRange: 8

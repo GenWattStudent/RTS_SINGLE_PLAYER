@@ -26,6 +26,13 @@ public class Damagable : NetworkBehaviour
         stats.AddToStat(StatType.Damage, damageToAdd);
     }
 
+    public void AddHealthBoost(float boost)
+    {
+        var newHealth = stats.GetStat(StatType.MaxHealth) * boost / 100;
+        stats.AddToStat(StatType.MaxHealth, newHealth);
+        stats.AddToStat(StatType.Health, newHealth);
+    }
+
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -39,6 +46,21 @@ public class Damagable : NetworkBehaviour
         {
             stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
             if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
+            var powerUp = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<PowerUp>();
+
+            // add damage boost and helth boost
+            if (powerUp != null)
+            {
+                var unit = GetComponent<Unit>();
+                if (unit.GetComponent<Building>() != null) return;
+
+                var damagePercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "damage");
+                var healthPercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "health");
+
+                AddDamageBoost(damagePercent);
+                AddHealthBoost(healthPercent);
+            }
+
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
         }
     }
@@ -54,6 +76,7 @@ public class Damagable : NetworkBehaviour
 
     private void InstantiateDestroyedObject()
     {
+        Debug.Log("InstantiateDestroyedObject: " + damagableSo.deathEffect);
         if (damagableSo.deathEffect != null)
         {
             var destroyedObject = Instantiate(damagableSo.deathEffect, transform.position, transform.rotation);
@@ -71,14 +94,19 @@ public class Damagable : NetworkBehaviour
     private void DeathServerRpc()
     {
         var no = GetComponent<NetworkObject>();
+        DeathClientRpc();
         no.Despawn(true);
+    }
+
+    public override void OnDestroy()
+    {
         DeathClientRpc();
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        Console.WriteLine("OnNetworkDespawn");
+        Debug.Log("OnNetworkDespawn");
         OnDead?.Invoke();
     }
 

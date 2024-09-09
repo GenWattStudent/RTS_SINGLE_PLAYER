@@ -6,8 +6,9 @@ public class Levelable : NetworkBehaviour
     public LevelableSo levelableSo;
     public NetworkVariable<int> level = new(1);
     public NetworkVariable<int> expirence = new(0);
-    public int maxLevel => levelableSo.levels.Count;
     public NetworkVariable<int> expirenceToNextLevel = new(0);
+
+    public int maxLevel => levelableSo.levels.Count;
     public Level curentLevel => levelableSo.levels[level.Value];
     private Damagable damagable;
 
@@ -15,7 +16,7 @@ public class Levelable : NetworkBehaviour
     {
         damagable = GetComponent<Damagable>();
 
-        if (levelableSo.levels.Count > 0)
+        if (levelableSo.levels.Count > 0 && IsServer)
         {
             expirenceToNextLevel.Value = levelableSo.levels[level.Value].expirence;
         }

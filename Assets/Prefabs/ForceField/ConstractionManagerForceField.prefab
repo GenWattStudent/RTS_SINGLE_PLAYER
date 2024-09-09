@@ -57,11 +57,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d69f1024707d4c81488d5f06e96f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
-  buildingUnits: []
   healthBar: {fileID: 8521102515514173841}
   buildingInProgressPrefab: {fileID: 3261315199320783877}
   constructionPrefab: {fileID: 4331978935220324178}
+  buildingUnits: []
+  buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
 --- !u!114 &5807540428542867514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
+  IsBot: 0
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
@@ -101,6 +102,7 @@ MonoBehaviour:
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
+  IsBot: 0
   damage: 0
   stats: {fileID: 0}
 --- !u!114 &433998347203920011
@@ -210,10 +212,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingLevelableSo: {fileID: 0}
-  level: 1
+  level:
+    m_InternalValue: 1
+  reduceSpawnTime:
+    m_InternalValue: 0
   building: {fileID: 0}
   damagable: {fileID: 0}
-  reduceSpawnTime: 0
 --- !u!114 &1907013346050808813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +333,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 326025491214339538, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 1825685268220437108, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 3017917382580695044, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 1812492046459913763, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

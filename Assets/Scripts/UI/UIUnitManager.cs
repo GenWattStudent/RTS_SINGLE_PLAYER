@@ -65,7 +65,7 @@ public class UIUnitManager : NetworkBehaviour
 
         progressTime.title = timeRounded.ToString() + "s";
         spawnUnitCountText.text = unitQueueCount.ToString() + "x";
-        Debug.Log("SetSpawnData: " + currentTime + "Total: " + totalSpawnTime);
+        // Debug.Log("SetSpawnData: " + currentTime + "Total: " + totalSpawnTime);
         UpdateProgressBar(progressTime, currentTime, totalSpawnTime);
     }
 
