@@ -27,5 +27,5 @@ public class UnitSo : DamagableSo
     public int usage;
     public float usageInterval;
     public float sightAngle = 360f;
-    public float sightRange = 8f;
+    public float sightRange = 16f;
 }
