@@ -33,6 +33,7 @@ public class UITabManagement : MonoBehaviour
     {
         // Make tabs from enum BuildingSo
         var unitTypes = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
+        var index = 0;
 
         foreach (var unitType in unitTypes)
         {
@@ -46,13 +47,14 @@ public class UITabManagement : MonoBehaviour
             tab.AddToClassList("btn-primary");
             tab.AddToClassList("btn-rounded-small");
             tab.AddToClassList("btn-medium");
-            tab.AddToClassList("margin-left-md");
+            if (index > 0) tab.AddToClassList("margin-left-md");
 
             tab.clicked += () => HandleTabClick(tab);
 
             // Add tab to list
             tabs.Add(tab);
             tabContainer.Add(tab);
+            index++;
         }
     }
 

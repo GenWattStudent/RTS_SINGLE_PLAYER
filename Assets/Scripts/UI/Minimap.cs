@@ -117,7 +117,7 @@ public class MiniMapRectangle : NetworkBehaviour
         RenderTexture.active = null;
 
         // Clean up
-        Destroy(tempTexture);
+        DestroyImmediate(tempTexture);
     }
 
     private Vector3[] GetCameraViewCorners(Camera camera)

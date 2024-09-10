@@ -319,14 +319,14 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 70
   field of view: 94
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 671
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: ddc110a189a88164ebe1b68d5534392f, type: 2}
   m_TargetDisplay: 0
@@ -650,6 +650,7 @@ PrefabInstance:
     - {fileID: 5776599522645334268, guid: 45cca964f1f26ae48ac191e5621373ec, type: 3}
     - {fileID: -2914960921143579207, guid: 45cca964f1f26ae48ac191e5621373ec, type: 3}
     - {fileID: 4386753864046641479, guid: 45cca964f1f26ae48ac191e5621373ec, type: 3}
+    - {fileID: -3912957877441696166, guid: 45cca964f1f26ae48ac191e5621373ec, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

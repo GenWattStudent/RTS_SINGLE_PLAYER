@@ -103,6 +103,7 @@ public class BuildingManager : NetworkBehaviour
             {
                 if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Terrain")
                     && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ghost")
+                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("FlatMap")
                     && !hit.collider.gameObject.CompareTag("ForceField"))
                 {
                     isCollidingWithOtherUnits = true;
