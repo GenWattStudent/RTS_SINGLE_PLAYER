@@ -61,7 +61,7 @@ namespace FOVMapping
 				sightAngle = building.buildingSo.sightAngle;
 				sightRange = building.buildingSo.sightRange;
 			}
-			else if (unit != null)
+			else if (unit.unitSo != null)
 			{
 				sightAngle = unit.unitSo.sightAngle;
 				sightRange = unit.unitSo.sightRange;
