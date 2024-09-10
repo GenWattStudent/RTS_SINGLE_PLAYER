@@ -141,6 +141,8 @@
     padding-left: 0;
     padding-top: 0;
     padding-bottom: 0;
+    font-size: 10px;
+    -unity-font-style: bold;
 }
 
 .border-small {
@@ -225,12 +227,12 @@
 }
 
 .mass .unity-progress-bar__background {
-    height: 50px;
+    height: 30px;
     background-color: rgb(255, 255, 255);
 }
 
 .mass .unity-progress-bar__progress {
-    height: 47px;
+    height: 30px;
     background-color: rgba(58, 159, 0, 0.84);
     flex-direction: column;
     align-self: auto;
@@ -250,11 +252,11 @@
 
 .mass .unity-progress-bar__title {
     -unity-font-style: bold;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .energy .unity-progress-bar__progress {
-    height: 47px;
+    height: 30px;
     background-color: rgb(255, 198, 0);
     flex-direction: column;
 }
@@ -396,4 +398,7 @@
 
 .bg-danger {
     background-color: rgb(161, 0, 0);
+}
+
+.mass {
 }
