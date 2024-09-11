@@ -20,15 +20,17 @@ public class Attack : NetworkBehaviour
     [SerializeField] private bool autoAttack = true;
     public bool isRealoading = false;
 
-    public event Action OnAttack;
-    public event Action<Damagable, Unit> OnTarget;
     public Vector3 targetPosition;
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
     public float lastAttackTime;
     public float rot = 0;
 
-    void Start()
+    public event Action OnAttack;
+    public event Action<Damagable, Unit> OnTarget;
+    public event Action<int> OnAmmoChange;
+
+    private void Start()
     {
         currentUnit = GetComponent<Unit>();
         currentAmmo = currentUnit.attackableSo.ammo;
@@ -147,8 +149,10 @@ public class Attack : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void ShootBulletClientRpc(Vector3 direction)
+    private void ShootBulletClientRpc(Vector3 direction, int ammo)
     {
+        currentAmmo = ammo;
+        OnAmmoChange?.Invoke(currentAmmo);
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
         {
             var rotation = Quaternion.LookRotation(direction);
@@ -161,6 +165,8 @@ public class Attack : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ShootBulletServerRpc()
     {
+        if (currentAmmo <= 0) return;
+
         var bulletObjcet = Instantiate(currentUnit.attackableSo.bulletSo.prefab);
         var bullet = bulletObjcet.GetComponent<Bullet>();
         var motionScript = bullet.GetComponent<Motion>();
@@ -209,7 +215,7 @@ public class Attack : NetworkBehaviour
         currentAmmo--;
 
         no.SpawnWithOwnership(OwnerClientId);
-        ShootBulletClientRpc(bullet.motion.direction);
+        ShootBulletClientRpc(bullet.motion.direction, currentAmmo);
     }
 
     private bool IsInAngle()
@@ -234,6 +240,12 @@ public class Attack : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void ReloadClientRpc(int ammo)
+    {
+        OnAmmoChange?.Invoke(ammo);
+    }
+
     private void Realod()
     {
         if (!isRealoading) attackCooldownTimer = currentUnit.attackableSo.attackCooldown;
@@ -243,6 +255,7 @@ public class Attack : NetworkBehaviour
         {
             currentAmmo = currentUnit.attackableSo.ammo;
             isRealoading = false;
+            ReloadClientRpc(currentAmmo);
         }
     }
 

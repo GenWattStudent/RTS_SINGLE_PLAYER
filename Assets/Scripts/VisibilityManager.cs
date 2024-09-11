@@ -53,6 +53,7 @@ public class VisibilityManager : NetworkBehaviour
         {
             foreach (var unit in kvp.Value)
             {
+                if (unit == null) continue;
                 var networkObject = unit.GetComponent<NetworkObject>();
                 if (networkObject != null)
                 {
