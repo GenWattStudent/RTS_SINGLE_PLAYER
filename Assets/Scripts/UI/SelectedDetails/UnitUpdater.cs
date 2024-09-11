@@ -8,20 +8,36 @@ public class UnitDetailsUpdater
     private ProgressBar expirenceBar;
     private Label levelText;
     private VisualElement actions;
+    private Button levelUpButton;
+    private Button sellButton;
+    private VisualElement attackActions;
 
-    public UnitDetailsUpdater(VisualElement statsContainer, ProgressBar healthBar, ProgressBar expirenceBar, Label levelText, VisualElement actions)
+    public UnitDetailsUpdater(
+        VisualElement statsContainer,
+        ProgressBar healthBar,
+        ProgressBar expirenceBar,
+        Label levelText,
+        VisualElement actions,
+        Button levelUpButton,
+        Button sellButton,
+        VisualElement attackActions)
     {
         this.statsContainer = statsContainer;
         this.healthBar = healthBar;
         this.expirenceBar = expirenceBar;
         this.levelText = levelText;
         this.actions = actions;
+        this.levelUpButton = levelUpButton;
+        this.sellButton = sellButton;
+        this.attackActions = attackActions;
     }
 
     public void UpdateUnitDetails(Stats stats)
     {
         actions.style.display = DisplayStyle.Flex;
         expirenceBar.style.display = DisplayStyle.Flex;
+        levelUpButton.style.display = DisplayStyle.None;
+        sellButton.style.display = DisplayStyle.None;
 
         var health = stats.GetStat(StatType.Health);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
@@ -30,9 +46,24 @@ public class UnitDetailsUpdater
 
         StatCreator.CreateHealthStat(statsContainer, health, maxHealth);
         StatCreator.CreateDamageStat(statsContainer, damage);
+
+        if (damagable.damagableSo.canAttack)
+        {
+            ShowHideAttackActions(true);
+        }
+        else
+        {
+            ShowHideAttackActions(false);
+        }
+
         UpdateExpirenceStat(damagable);
         UpdateHealthBar(health, maxHealth);
         ActivateUnitCamera(damagable);
+    }
+
+    private void ShowHideAttackActions(bool show)
+    {
+        attackActions.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     private void UpdateExpirenceStat(Damagable damagable)

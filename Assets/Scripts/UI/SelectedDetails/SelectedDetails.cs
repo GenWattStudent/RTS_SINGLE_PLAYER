@@ -6,6 +6,13 @@ using static Selectable;
 public class SelectedDetails : NetworkToolkitHelper
 {
     private Building building;
+    private SelectionManager selectionManager;
+    private UIStorage uIStorage;
+    private UITabManagement uITabManagement;
+    private UnitDetailsUpdater unitDetailsUpdater;
+    private BuildingDetailsUpdater buildingDetailsUpdater;
+    private bool isGoToTab = true;
+    // UI Elements
     private Button levelUpButton;
     private Button sellButton;
     private VisualElement statsContainer;
@@ -14,12 +21,7 @@ public class SelectedDetails : NetworkToolkitHelper
     private ProgressBar expirenceBar;
     private VisualElement selectionInfo;
     private VisualElement actions;
-    private bool isGoToTab = true;
-    private SelectionManager selectionManager;
-    private UIStorage uIStorage;
-    private UITabManagement uITabManagement;
-    private UnitDetailsUpdater unitDetailsUpdater;
-    private BuildingDetailsUpdater buildingDetailsUpdater;
+    private VisualElement attackActions;
 
     private void Start()
     {
@@ -32,8 +34,25 @@ public class SelectedDetails : NetworkToolkitHelper
         InitializeUIElements();
         SetupManagers();
 
-        unitDetailsUpdater = new UnitDetailsUpdater(statsContainer, healthBar, expirenceBar, levelText, actions);
-        buildingDetailsUpdater = new BuildingDetailsUpdater(statsContainer, healthBar, expirenceBar, levelText, actions, uIStorage);
+        unitDetailsUpdater = new UnitDetailsUpdater(
+            statsContainer,
+            healthBar,
+            expirenceBar,
+            levelText,
+            actions,
+            levelUpButton,
+            sellButton,
+            attackActions);
+        buildingDetailsUpdater = new BuildingDetailsUpdater(
+            statsContainer,
+            healthBar,
+            expirenceBar,
+            levelText,
+            actions,
+            uIStorage,
+            levelUpButton,
+            sellButton,
+            attackActions);
 
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
@@ -51,6 +70,7 @@ public class SelectedDetails : NetworkToolkitHelper
         healthBar = root.Q<ProgressBar>("Healthbar");
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
         actions = GetVisualElement("Actions");
+        attackActions = GetVisualElement("AttackActions");
     }
 
     private void SetupManagers()
@@ -161,6 +181,7 @@ public class SelectedDetails : NetworkToolkitHelper
 
         if (selectionManager.selectedObjects.Count == 1)
         {
+            building = null;
             Show();
             var selectable = selectionManager.selectedObjects[0];
             var unit = selectable.GetComponent<Unit>();
@@ -168,10 +189,12 @@ public class SelectedDetails : NetworkToolkitHelper
 
             if (unit != null && selectable.selectableType == SelectableType.Unit)
             {
+                actions.style.display = DisplayStyle.None;
                 unitDetailsUpdater.UpdateUnitDetails(stats);
             }
             else
             {
+                building = selectable.GetComponent<Building>();
                 buildingDetailsUpdater.UpdateBuildingDetails(selectable);
             }
         }
