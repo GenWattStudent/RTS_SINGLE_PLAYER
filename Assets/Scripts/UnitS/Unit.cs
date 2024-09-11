@@ -91,7 +91,7 @@ public class Unit : NetworkBehaviour
         }
 
         var construction = GetComponent<Construction>();
-
+        Debug.Log("Construction: " + construction);
         fovAgent.disappearInFOW = !IsOwner || IsBot;
         fovAgent.contributeToFOV = IsOwner && !IsBot && construction == null;
 
