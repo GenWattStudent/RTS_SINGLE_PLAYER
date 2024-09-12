@@ -1,6 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum AmmoIndicatorType
+{
+    Active,
+    InActive,
+    Reload
+}
 
 public class AmmoIndicator : MonoBehaviour
 {
@@ -9,6 +17,9 @@ public class AmmoIndicator : MonoBehaviour
     private Attack attack;
     private List<Image> bulletIndicators = new();
     private Color initialColor;
+    private Color realoadColor = new Color(255, 203, 59, 1);
+    private Coroutine fillBulletIndicatorsCoroutine;
+    private float initialReloadDelay = 0.5f;
 
     // Start is called before the first frame update
     private void Start()
@@ -18,8 +29,16 @@ public class AmmoIndicator : MonoBehaviour
         if (attack != null)
         {
             attack.OnAmmoChange += HandleAmmoChange;
-            Debug.Log("attack.currentUnit.attackableSo.ammo: " + attack.currentUnit.attackableSo.ammo);
             DrawBulletIndicators(attack.currentUnit.attackableSo.ammo);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (attack != null)
+        {
+            attack.OnAmmoChange -= HandleAmmoChange;
+            StopFillBulletIndicators();
         }
     }
 
@@ -40,25 +59,75 @@ public class AmmoIndicator : MonoBehaviour
         }
     }
 
-    private void ChangeBulletIndicatorColor(bool active, int index = 0)
+    private void Reload()
     {
-        Debug.Log("ChangeBulletIndicatorColor: " + active + " index: " + index);
-        bulletIndicators[index].color = active ? initialColor : Color.gray;
+        // realod animation calulate time per 1 bullet and start filling bullet indicators
+        var timePerBullet = (attack.currentUnit.attackableSo.attackCooldown - initialReloadDelay - .4f) / attack.currentUnit.attackableSo.ammo;
+
+        // start filling bullet indicators
+        fillBulletIndicatorsCoroutine = StartCoroutine(FillBulletIndicators(timePerBullet));
+    }
+
+    // courutine for filling bullet indicators
+    private IEnumerator FillBulletIndicators(float time)
+    {
+        yield return new WaitForSeconds(initialReloadDelay);
+        for (int i = 0; i < bulletIndicators.Count; i++)
+        {
+            ChangeBulletIndicatorColor(AmmoIndicatorType.Reload, i);
+            yield return new WaitForSecondsRealtime(time);
+        }
+
+        StopFillBulletIndicators();
+    }
+
+    private void StopFillBulletIndicators()
+    {
+        if (fillBulletIndicatorsCoroutine != null)
+        {
+            StopCoroutine(fillBulletIndicatorsCoroutine);
+            fillBulletIndicatorsCoroutine = null;
+        }
+    }
+
+    private void ChangeBulletIndicatorColor(AmmoIndicatorType type, int index = 0)
+    {
+        switch (type)
+        {
+            case AmmoIndicatorType.Active:
+                bulletIndicators[index].color = initialColor;
+                break;
+            case AmmoIndicatorType.InActive:
+                bulletIndicators[index].color = Color.gray;
+                break;
+            case AmmoIndicatorType.Reload:
+                bulletIndicators[index].color = realoadColor;
+                break;
+        }
     }
 
     private void HandleAmmoChange(int currentAmmo)
     {
-        Debug.Log("currentAmmo: " + currentAmmo);
         for (int i = 0; i < bulletIndicators.Count; i++)
         {
             if (i < currentAmmo)
             {
-                ChangeBulletIndicatorColor(true, i);
+                ChangeBulletIndicatorColor(AmmoIndicatorType.Active, i);
             }
             else
             {
-                ChangeBulletIndicatorColor(false, i);
+                ChangeBulletIndicatorColor(AmmoIndicatorType.InActive, i);
             }
+        }
+
+        if (currentAmmo == 0)
+        {
+            Reload();
+        }
+
+        if (currentAmmo > 0)
+        {
+            StopFillBulletIndicators();
         }
     }
 }
