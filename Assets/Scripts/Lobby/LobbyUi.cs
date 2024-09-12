@@ -29,7 +29,7 @@ public class LobbyUi : ToolkitHelper
         HideError();
         createLobbyButton.clicked += CreateLobby;
         closeLobbyButton.clicked += CloseLobby;
-        CreateLobbiesUI();
+        // CreateLobbiesUI();
         StartCoroutine(RefreshLobbies());
     }
 

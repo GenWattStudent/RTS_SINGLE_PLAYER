@@ -5,9 +5,10 @@ public class Worker : NetworkBehaviour
 {
     public Construction construction;
     public Unit unit;
+    public Laser laser;
+
     private bool isBuilding = false;
     private UnitMovement unitMovement;
-    private Laser laser;
 
     [ServerRpc(RequireOwnership = false)]
     private void ActivateLaserServerRpc()

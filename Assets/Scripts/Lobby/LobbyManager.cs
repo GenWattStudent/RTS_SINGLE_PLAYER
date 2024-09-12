@@ -16,6 +16,7 @@ public class LobbyManager : ToolkitHelper
 
     private float heartbeatTimer = 0.0f;
     private RoomUi RoomUi;
+    private LobbyData lobbyData = new LobbyData();
 
     private async void Start()
     {
@@ -66,12 +67,10 @@ public class LobbyManager : ToolkitHelper
 
     private async Task UpdateLobbyData(string lobbyId, string code)
     {
+
         UpdateLobbyOptions options = new UpdateLobbyOptions
         {
-            Data = new Dictionary<string, DataObject>
-            {
-                { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, code) }
-            }
+            Data = lobbyData.SetRelayCode(code)
         };
 
         await LobbyService.Instance.UpdateLobbyAsync(lobbyId, options);
@@ -143,7 +142,9 @@ public class LobbyManager : ToolkitHelper
         if (CurrentLobby == null) return;
         string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
 
-        await UpdateLobbyData(CurrentLobby.Id, code);
+        lobbyData.SetRelayCode(code);
+        Debug.Log("Start game - " + code);
+        await lobbyData.UpdateLobbyData(CurrentLobby.Id);
         await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
     }
 

@@ -20,21 +20,25 @@ public class Construction : NetworkBehaviour
 
     public void AddWorker(Unit unit)
     {
-        if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
-        buildingUnits.Add(unit);
-        buildingSpeed += unit.unitSo.attackDamage;
-        Debug.Log("Add worker - building " + buildingUnits.Count + " - " + buildingSpeed);
-        StartConstruction();
+        if (unit.TryGetComponent<Worker>(out var worker))
+        {
+            buildingUnits.Add(unit);
+            buildingSpeed += worker.laser.laserSo.damage;
+            Debug.Log("Add worker - building " + buildingUnits.Count + " - " + buildingSpeed);
+            StartConstruction();
+        }
     }
 
     public void RemoveWorker(Unit unit)
     {
-        if (unit.unitSo.type != UnitSo.UnitType.Worker) return;
-        buildingUnits.Remove(unit);
-        if (buildingSpeed > 0) buildingSpeed -= unit.unitSo.attackDamage;
-        if (buildingUnits.Count == 0)
+        if (unit.TryGetComponent<Worker>(out var worker))
         {
-            StopConstruction();
+            buildingUnits.Remove(unit);
+            if (buildingSpeed > 0) buildingSpeed -= worker.laser.laserSo.damage;
+            if (buildingUnits.Count == 0)
+            {
+                StopConstruction();
+            }
         }
     }
 

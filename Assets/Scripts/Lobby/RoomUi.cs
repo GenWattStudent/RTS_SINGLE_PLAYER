@@ -40,7 +40,6 @@ public class RoomUi : ToolkitHelper
 
         startGameButton.clicked += async () => await StartGame();
         startGameButton.SetEnabled(false);
-
     }
 
     private async Task Ready()
@@ -191,8 +190,13 @@ public class RoomUi : ToolkitHelper
 
     private async Task JoinGameScene()
     {
+        Debug.Log(lobbyManager);
         if (lobbyManager.CurrentLobby == null) return;
-        if (lobbyManager.CurrentLobby.Data.ContainsKey("RelayCode") && lobbyManager.CurrentLobby.Data["RelayCode"] != null && !isGameStarted)
+        if (
+            lobbyManager.CurrentLobby.Data != null &&
+            lobbyManager.CurrentLobby.Data.ContainsKey("RelayCode")
+            && lobbyManager.CurrentLobby.Data["RelayCode"] != null &&
+            !isGameStarted)
         {
             isGameStarted = true;
             if (lobbyManager.CurrentLobby.HostId == AuthenticationService.Instance.PlayerId)
@@ -220,9 +224,10 @@ public class RoomUi : ToolkitHelper
         {
             await lobbyManager.StartGame();
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
             Debug.Log("Failed to start game");
+            Debug.LogError(e.Message);
         }
     }
 
