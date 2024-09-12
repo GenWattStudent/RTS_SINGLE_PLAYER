@@ -98,7 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveIndicatorPrefab: {fileID: 8102645917353766897, guid: 106247f5edf449d4c97c76f36e31eec1,
     type: 3}
-  unitSpacing: 0.2
+  unitSpacing: 2.3
 --- !u!114 &7260419064711618807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3502280097689162745}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 851e59f3cdeea2940b29757777146b48, type: 3}
   m_Name: 

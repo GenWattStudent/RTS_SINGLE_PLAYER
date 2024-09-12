@@ -23,7 +23,7 @@ MonoBehaviour:
   ammo: 12
   attackAngle: 15
   hasTurret: 1
-  turretRotateSpeed: 50
+  turretRotateSpeed: 8
   rotateSpeed: 0
   bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
   CanSalve: 1
@@ -51,11 +51,7 @@ MonoBehaviour:
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
-  usage: 10
-  usageInterval: 5
   cost: 100
-  income: 0
-  incomeInterval: 0
   stats:
   - Type: 1
     Value: 100
@@ -69,3 +65,5 @@ MonoBehaviour:
     Value: 25
   - Type: 3
     Value: 0.4
+  sightAngle: 360
+  sightRange: 4

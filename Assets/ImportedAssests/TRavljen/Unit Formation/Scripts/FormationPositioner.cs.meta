@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6686a096ba25243d5988d0c7111bd79b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 284293
+  packageName: Unit Formation Lite
+  packageVersion: 1.0
+  assetPath: Assets/TRavljen/Unit Formation/Scripts/FormationPositioner.cs
+  uploadId: 662138
