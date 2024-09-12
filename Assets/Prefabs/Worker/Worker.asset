@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
   m_Name: Worker
   m_EditorClassIdentifier: 
-  attackDamage: 10
+  attackDamage: 0
   attackRange: 3
   attackSpeed: 4
   attackCooldown: 1
@@ -25,10 +25,10 @@ MonoBehaviour:
   hasTurret: 0
   turretRotateSpeed: 0
   rotateSpeed: 10
-  bulletSo: {fileID: 11400000, guid: 5d36cf6bb3b854e4db24007ef890a389, type: 2}
+  bulletSo: {fileID: 0}
   CanSalve: 0
   accuracy: 0.5
-  attackSound: 0
+  attackSound: 5
   health: 150
   deathExpirence: 10
   deathEffect: {fileID: 2321514005527918770, guid: 1f8575d656d2d3a4ab08755c09c75292,
@@ -64,3 +64,5 @@ MonoBehaviour:
   resourceUsage: {fileID: 0}
   usage: 0
   usageInterval: 0
+  sightAngle: 360
+  sightRange: 16

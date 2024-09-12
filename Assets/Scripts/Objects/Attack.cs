@@ -6,24 +6,24 @@ using UnityEngine;
 [RequireComponent(typeof(Unit))]
 public class Attack : NetworkBehaviour
 {
-    public Damagable target;
+    [SerializeField] private bool autoAttack = true;
     [SerializeField] private float checkTargetTimer = 0.2f;
-    private float checkTargetTimerTimer = 0f;
-    public Unit currentUnit;
     [SerializeField] private GameObject bulletSpawnPoint;
-    private float attackSpeedTimer;
-    public float attackCooldownTimer;
+    public bool isRealoading = false;
+    public Vector3 targetPosition;
+    public Damagable target;
+    public Unit currentUnit;
     public int currentAmmo;
+    public float attackCooldownTimer;
+    public float lastAttackTime;
+
+    private float checkTargetTimerTimer = 0f;
+    private float attackSpeedTimer;
     private Turret turret;
     private VehicleGun vehicleGun;
     private UnitMovement unitMovement;
-    [SerializeField] private bool autoAttack = true;
-    public bool isRealoading = false;
-
-    public Vector3 targetPosition;
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
-    public float lastAttackTime;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -158,7 +158,7 @@ public class Attack : NetworkBehaviour
             var salvePoint = currentUnit.attackableSo.CanSalve ? salvePoints[salveIndex] : bulletSpawnPoint;
             rotation *= Quaternion.Euler(0, -90, 0);
             Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, rotation);
-            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
+            // MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
         }
     }
 
