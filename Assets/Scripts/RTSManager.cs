@@ -43,33 +43,72 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
+    private List<Vector3> GetRectangleFormationPositions(int unitCount, int ColumnCount, bool centerUnits = true)
+    {
+        List<Vector3> unitPositions = new List<Vector3>();
+        var unitsPerRow = Mathf.Min(ColumnCount, unitCount);
+        float offsetX = (unitsPerRow - 1) * unitSpacing / 2f;
+
+        if (unitsPerRow == 0)
+        {
+            return new List<Vector3>();
+        }
+
+        float rowCount = unitCount / ColumnCount + (unitCount % ColumnCount > 0 ? 1 : 0);
+        float x, y, column;
+        int firstIndexInRow;
+
+        for (int row = 0; unitPositions.Count < unitCount; row++)
+        {
+            // Check if centering is enabled and if row has less than maximum
+            // allowed units within the row.
+            firstIndexInRow = row * ColumnCount;
+            if (centerUnits &&
+                row != 0 &&
+                firstIndexInRow + ColumnCount > unitCount)
+            {
+                // Alter the offset to center the units that do not fill the row
+                var emptySlots = firstIndexInRow + ColumnCount - unitCount;
+                offsetX -= emptySlots / 2f * unitSpacing;
+            }
+
+            for (column = 0; column < ColumnCount; column++)
+            {
+                if (firstIndexInRow + column < unitCount)
+                {
+                    x = column * unitSpacing - offsetX;
+                    y = row * unitSpacing;
+
+                    Vector3 newPosition = new Vector3(x, 0, -y);
+                    unitPositions.Add(newPosition);
+                }
+                else
+                {
+                    return unitPositions;
+                }
+            }
+        }
+
+        return unitPositions;
+    }
+
     private void MoveCommand(Vector3 position)
     {
         int unitsCount = selectionManager.selectedObjects.Count;
         Debug.Log($"unitsCount: {unitsCount}");
         int rows = Mathf.CeilToInt(Mathf.Sqrt(unitsCount));
         int cols = Mathf.CeilToInt((float)unitsCount / rows);
+        var positions = GetRectangleFormationPositions(unitsCount, cols);
 
-        for (int row = 0; row < rows; row++)
+        for (int i = 0; i < unitsCount; i++)
         {
-            for (int col = 0; col < cols; col++)
+            var unit = selectionManager.selectedObjects[i];
+            if (unit.selectableType == Selectable.SelectableType.Unit)
             {
-                var index = row * cols + col;
-                if (index >= unitsCount) continue;
-                var unit = selectionManager.selectedObjects[index];
-                if (unit.selectableType == Selectable.SelectableType.Unit)
-                {
-                    Vector3 offset = new Vector3(col * unitSpacing, 0f, row * unitSpacing);
-                    Vector3 finalPosition = position + offset;
-                    var unitMovement = selectionManager.selectedObjects[index].GetComponent<UnitMovement>();
-
-                    finalPosition += unitMovement.agent.radius * 2.0f * col * transform.right;
-                    finalPosition += unitMovement.agent.radius * 2.0f * row * transform.forward;
-
-                    unitMovement.MoveToServerRpc(finalPosition);
-                    CancelBuildingCommand(unit);
-                    CancelHealingCommand(unit);
-                }
+                var unitMovement = selectionManager.selectedObjects[i].GetComponent<UnitMovement>();
+                unitMovement.MoveToServerRpc(position + positions[i]);
+                CancelBuildingCommand(unit);
+                CancelHealingCommand(unit);
             }
         }
 

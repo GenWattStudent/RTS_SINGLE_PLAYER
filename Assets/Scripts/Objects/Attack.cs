@@ -24,7 +24,6 @@ public class Attack : NetworkBehaviour
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
     public float lastAttackTime;
-    public float rot = 0;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -149,16 +148,17 @@ public class Attack : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void ShootBulletClientRpc(Vector3 direction, int ammo)
+    private void ShootBulletClientRpc(Vector3 direction, int ammo, int salveIndex)
     {
         currentAmmo = ammo;
         OnAmmoChange?.Invoke(currentAmmo);
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
         {
             var rotation = Quaternion.LookRotation(direction);
+            var salvePoint = currentUnit.attackableSo.CanSalve ? salvePoints[salveIndex] : bulletSpawnPoint;
             rotation *= Quaternion.Euler(0, -90, 0);
-            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, bulletSpawnPoint.transform.position, rotation);
-            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, bulletSpawnPoint.transform.position);
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, rotation);
+            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
         }
     }
 
@@ -167,55 +167,23 @@ public class Attack : NetworkBehaviour
     {
         if (currentAmmo <= 0) return;
 
-        var bulletObjcet = Instantiate(currentUnit.attackableSo.bulletSo.prefab);
-        var bullet = bulletObjcet.GetComponent<Bullet>();
-        var motionScript = bullet.GetComponent<Motion>();
-        var no = bulletObjcet.GetComponent<NetworkObject>();
-
-        bullet.motion = motionScript;
-        bullet.networkObject = no;
-
-        var bulletSpawnPoint = this.bulletSpawnPoint;
+        var targetPos = target != null ? (target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position) : targetPosition;
+        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun);
 
         if (currentUnit.attackableSo.CanSalve)
         {
-            bulletSpawnPoint = salvePoints[salveIndex];
             salveIndex++;
-
             if (salveIndex >= salvePoints.Count)
             {
                 salveIndex = 0;
             }
         }
 
-        bullet.transform.position = bulletSpawnPoint.transform.position;
-        bullet.transform.rotation = Quaternion.identity;
-        bullet.Reset();
-
-        var targetPosition = this.targetPosition;
-
-        if (target != null)
-            targetPosition = target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position;
-
-        // take in account unit acccuracy to target position
-        var accuracy = currentUnit.attackableSo.accuracy;
-        var randomX = UnityEngine.Random.Range(-accuracy, accuracy);
-        var randomZ = UnityEngine.Random.Range(-accuracy, accuracy);
-        targetPosition += new Vector3(randomX, 0, randomZ);
-
-        bullet.bulletSo = currentUnit.attackableSo.bulletSo;
-        bullet.motion.target = targetPosition;
-
-        bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
-        bullet.unitsBullet = GetComponent<Damagable>();
-        bullet.motion.Setup();
-        bullet.Setup();
-
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        no.SpawnWithOwnership(OwnerClientId);
-        ShootBulletClientRpc(bullet.motion.direction, currentAmmo);
+        bullet.networkObject.SpawnWithOwnership(OwnerClientId);
+        ShootBulletClientRpc(bullet.motion.direction, currentAmmo, salveIndex);
     }
 
     private bool IsInAngle()
