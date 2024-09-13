@@ -244,9 +244,12 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="GameDataContainer" style="flex-grow: 0; padding-right: 8px; width: 300px; align-items: center;">
                     <ui:Label tabindex="-1" text="Current Map" display-tooltip-when-elided="true" class="text-medium text-primary" style="flex-grow: 0; width: 100%;" />
-                    <ui:VisualElement name="CurrentMap" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-tank-94.png?fileID=2800000&amp;guid=505ac354816cd684594ac2d95f472467&amp;type=3#icons8-tank-94&apos;); width: 250px; height: 250px; background-color: rgb(255, 255, 255); justify-content: flex-start; align-items: auto;" />
+                    <ui:VisualElement style="flex-grow: 0;">
+                        <ui:VisualElement name="CurrentMap" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-tank-94.png?fileID=2800000&amp;guid=505ac354816cd684594ac2d95f472467&amp;type=3#icons8-tank-94&apos;); width: 250px; height: 250px; background-color: rgb(255, 255, 255); justify-content: flex-start; align-items: auto;" />
+                        <ui:Label tabindex="-1" text="Map name" display-tooltip-when-elided="true" name="CurrentMapName" class="text-primary" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    </ui:VisualElement>
                     <ui:Label tabindex="-1" text="Map List" display-tooltip-when-elided="true" class="text-primary text-medium" style="width: 100%;" />
-                    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Maps" style="margin-top: 10px; flex-wrap: nowrap; flex-direction: column;">
+                    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Maps" style="margin-top: 10px; flex-wrap: nowrap; flex-direction: column; align-items: flex-start;">
                         <ui:Instance template="MapItem" name="MapItem" />
                     </ui:ScrollView>
                 </ui:VisualElement>

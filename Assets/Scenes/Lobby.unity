@@ -784,6 +784,7 @@ GameObject:
   - component: {fileID: 1940510939}
   - component: {fileID: 1940510938}
   - component: {fileID: 1940510940}
+  - component: {fileID: 1940510941}
   m_Layer: 0
   m_Name: Lobby
   m_TagString: Untagged
@@ -850,6 +851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d526db3146d0d504699741d53f76296c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
   hearbeatInterval: 25
   isSingInCompleted: 0
   playerId: 
@@ -869,6 +871,29 @@ MonoBehaviour:
   UIDocument: {fileID: 0}
   roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
     type: 3}
+  updateInterval: 3
+  isReady: 0
+  isGameStarted: 0
+  isInRoom: 0
+--- !u!114 &1940510941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940510935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5756fea0f49af3143be2ba55143d5b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  maps:
+  - {fileID: 11400000, guid: dc8b7bc813fef3b4cbec31801299f258, type: 2}
+  - {fileID: 11400000, guid: fd6ea7aaf1c9fae42a6f910ac99bac3a, type: 2}
+  mapItemTemplate: {fileID: 9197481963319205126, guid: a8ec1203b42bd4a4f84a3a5ce2421e7d,
+    type: 3}
+  SelectedMap: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

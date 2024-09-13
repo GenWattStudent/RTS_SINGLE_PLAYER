@@ -2,6 +2,6 @@
     <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
     <ui:Button display-tooltip-when-elided="true" name="MapItem" class="btn-primary" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; flex-direction: row; align-items: center; justify-content: flex-start; align-self: auto; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px;">
         <ui:VisualElement name="MapImage" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-tank-94.png?fileID=2800000&amp;guid=505ac354816cd684594ac2d95f472467&amp;type=3#icons8-tank-94&apos;); width: 50px; height: 50px; background-color: rgb(255, 255, 255); align-items: stretch;" />
-        <ui:Label tabindex="-1" text="Desert sada sdasd as ds ad  asd s daasd a d" display-tooltip-when-elided="true" name="MapName" class="text-primary" style="flex-grow: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; white-space: normal; text-overflow: clip; padding-top: 0; width: 100%; flex-shrink: 1;" />
+        <ui:Label tabindex="-1" text="Desert" display-tooltip-when-elided="true" name="MapName" class="text-primary" style="flex-grow: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; white-space: normal; text-overflow: clip; padding-top: 0; width: 100%; flex-shrink: 1;" />
     </ui:Button>
 </ui:UXML>

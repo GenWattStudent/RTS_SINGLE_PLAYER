@@ -190,7 +190,6 @@ public class RoomUi : ToolkitHelper
 
     private async Task JoinGameScene()
     {
-        Debug.Log(lobbyManager);
         if (lobbyManager.CurrentLobby == null) return;
         if (
             lobbyManager.CurrentLobby.Data != null &&
