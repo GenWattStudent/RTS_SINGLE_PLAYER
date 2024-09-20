@@ -9,10 +9,12 @@ using UnityEngine.UIElements;
 public class RoomUi : ToolkitHelper
 {
     [SerializeField] private VisualTreeAsset roomItemTemplate;
+    [SerializeField] private GameObject playerPrefab;
     public float updateInterval = 3.0f;
     public bool isReady = false;
     public bool isGameStarted = false;
     public bool isInRoom = false;
+    public bool isHostUI = false;
 
     private float updateTimer = 3.0f;
     private Button readyButton;
@@ -23,10 +25,11 @@ public class RoomUi : ToolkitHelper
     private VisualElement room;
     private Dictionary<string, VisualElement> playerItems = new();
     private LobbyManager lobbyManager;
+    private LobbyGameSetup lobbyGameSetup;
 
     void Start()
     {
-        lobbyManager = GetComponent<LobbyManager>();
+        lobbyManager = FindAnyObjectByType<LobbyManager>();
 
         readyButton = GetButton("ReadyButton");
         playerList = GetVisualElement("PlayerList");
@@ -35,14 +38,14 @@ public class RoomUi : ToolkitHelper
         lobby = GetVisualElement("Lobby");
         room = GetVisualElement("Room");
 
-        readyButton.clicked += async () => await Ready();
-        exitButton.clicked += async () => await Exit();
+        readyButton.clicked += Ready;
+        exitButton.clicked += Exit;
+        startGameButton.clicked += StartGame;
 
-        startGameButton.clicked += async () => await StartGame();
         startGameButton.SetEnabled(false);
     }
 
-    private async Task Ready()
+    private async void Ready()
     {
         isReady = !isReady;
         await lobbyManager.Ready(isReady, AuthenticationService.Instance.PlayerId);
@@ -72,7 +75,7 @@ public class RoomUi : ToolkitHelper
         }
     }
 
-    private async Task Exit()
+    private async void Exit()
     {
         try
         {
@@ -86,14 +89,15 @@ public class RoomUi : ToolkitHelper
         }
     }
 
-    private bool shouldShowKickButton(string playerName) => lobbyManager.CurrentLobby.HostId == AuthenticationService.Instance.PlayerId && (playerName != lobbyManager.CurrentLobby.HostId);
+    private bool IsHostByName(string playerName) => playerName == lobbyManager.CurrentLobby.HostId;
+    public bool IsHost() => lobbyManager.CurrentLobby.HostId == AuthenticationService.Instance.PlayerId;
     public void CreatePlayerItem(string playerName)
     {
         var playerItem = roomItemTemplate.CloneTree();
         playerItem.Q<Label>("PlayerName").text = playerName;
-        playerItem.Q<Label>("PlayerType").text = shouldShowKickButton(playerName) ? "Host" : "Member";
+        playerItem.Q<Label>("PlayerType").text = IsHostByName(playerName) ? "Host" : "Member";
 
-        if (shouldShowKickButton(playerName))
+        if (IsHost())
         {
             playerItem.Q<Button>("Kick").style.display = DisplayStyle.Flex;
             playerItem.Q<Button>("Kick").clicked += async () => await KickPlayer(playerName);
@@ -123,12 +127,25 @@ public class RoomUi : ToolkitHelper
     {
         lobby.style.display = DisplayStyle.None;
         room.style.display = DisplayStyle.Flex;
+
+        lobbyGameSetup = FindAnyObjectByType<LobbyGameSetup>();
+        lobbyGameSetup.OnMapSelected += OnMapSelected;
+        if (IsHost()) lobbyGameSetup.Initialize();
+    }
+
+    private async void OnMapSelected(MapSo map)
+    {
+        Debug.Log("Map selected aaaaaaaaa" + map.MapName);
+        if (lobbyManager.CurrentLobby == null) return;
+        await lobbyManager.lobbyData.SetMapName(map.MapName, lobbyManager.CurrentLobby.Id);
     }
 
     private void ShowLobbyAndHideRoom()
     {
         lobby.style.display = DisplayStyle.Flex;
         room.style.display = DisplayStyle.None;
+
+        lobbyGameSetup.OnMapSelected -= OnMapSelected;
     }
 
     private void CreatePlayerItems(List<Player> players)
@@ -190,44 +207,52 @@ public class RoomUi : ToolkitHelper
 
     private async Task JoinGameScene()
     {
-        if (lobbyManager.CurrentLobby == null) return;
         if (
+            lobbyManager.CurrentLobby != null &&
             lobbyManager.CurrentLobby.Data != null &&
-            lobbyManager.CurrentLobby.Data.ContainsKey("RelayCode")
-            && lobbyManager.CurrentLobby.Data["RelayCode"] != null &&
+            lobbyManager.CurrentLobby.Data.ContainsKey("RelayCode") &&
+            lobbyManager.CurrentLobby.Data["RelayCode"] != null &&
+            lobbyManager.CurrentLobby.Data["RelayCode"].Value != default &&
             !isGameStarted)
         {
             isGameStarted = true;
+            var map = lobbyManager.CurrentLobby.Data["MapName"].Value;
             if (lobbyManager.CurrentLobby.HostId == AuthenticationService.Instance.PlayerId)
             {
-                await SceneManager.LoadSceneAsync("Game");
+                await SceneManager.LoadSceneAsync(map);
             }
             else
             {
                 await lobbyManager.JoinRelayServer(lobbyManager.CurrentLobby.Data["RelayCode"].Value);
-                await SceneManager.LoadSceneAsync("Game");
+                await SceneManager.LoadSceneAsync(map);
             }
+
+            lobbyGameSetup.OnMapSelected -= OnMapSelected;
+            lobby.style.display = DisplayStyle.None;
+            room.style.display = DisplayStyle.None;
         }
     }
 
-    public void JoinRoom(Lobby lobby)
+    public void JoinRoom(Lobby lobby, bool isHost)
     {
         HideLobbyAndShowRoom();
         isInRoom = true;
+        isHostUI = isHost;
+        lobbyGameSetup.SetHost(isHostUI);
         CreatePlayerItems(lobby.Players);
     }
 
-    private async Task StartGame()
+    private async void StartGame()
     {
-        try
-        {
-            await lobbyManager.StartGame();
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log("Failed to start game");
-            Debug.LogError(e.Message);
-        }
+        // try
+        // {
+        await lobbyManager.StartGame();
+        // }
+        // catch (System.Exception e)
+        // {
+        //     Debug.Log("Failed to start game");
+        //     Debug.LogError(e.Message);
+        // }
     }
 
     // Update is called once per frame

@@ -13,17 +13,25 @@ public class LobbyManager : ToolkitHelper
     public string playerId;
     public int maxPlayers = 2;
     public Lobby CurrentLobby;
+    public LobbyData lobbyData;
 
     private float heartbeatTimer = 0.0f;
     private RoomUi RoomUi;
-    private LobbyData lobbyData = new LobbyData();
 
     private async void Start()
     {
-        RoomUi = GetComponent<RoomUi>();
+        RoomUi = FindAnyObjectByType<RoomUi>();
         await UnityServices.InitializeAsync();
         AuthenticationService.Instance.SignedIn += OnSignInCompleted;
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        lobbyData = new LobbyData();
     }
 
     private void Update()
@@ -65,21 +73,10 @@ public class LobbyManager : ToolkitHelper
         await LobbyService.Instance.UpdatePlayerAsync(CurrentLobby.Id, playerId, options);
     }
 
-    private async Task UpdateLobbyData(string lobbyId, string code)
-    {
-
-        UpdateLobbyOptions options = new UpdateLobbyOptions
-        {
-            Data = lobbyData.SetRelayCode(code)
-        };
-
-        await LobbyService.Instance.UpdateLobbyAsync(lobbyId, options);
-    }
-
     public async Task JoinLobby(string lobbyId)
     {
         CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-        RoomUi.JoinRoom(CurrentLobby);
+        RoomUi.JoinRoom(CurrentLobby, false);
     }
 
     public async Task LeaveLobby(string playerId)
@@ -110,7 +107,7 @@ public class LobbyManager : ToolkitHelper
             IsPrivate = false,
         };
         CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
-        RoomUi.JoinRoom(CurrentLobby);
+        RoomUi.JoinRoom(CurrentLobby, true);
     }
 
     public async Task<List<Lobby>> GetAll()
@@ -142,9 +139,8 @@ public class LobbyManager : ToolkitHelper
         if (CurrentLobby == null) return;
         string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
 
-        lobbyData.SetRelayCode(code);
-        Debug.Log("Start game - " + code);
-        await lobbyData.UpdateLobbyData(CurrentLobby.Id);
+        Debug.Log("Relay code: " + code + " " + CurrentLobby.Id + " " + lobbyData);
+        await lobbyData.SetRelayCode(code, CurrentLobby.Id);
         await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
     }
 

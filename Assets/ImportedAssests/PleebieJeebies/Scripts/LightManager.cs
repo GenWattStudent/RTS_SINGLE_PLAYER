@@ -23,7 +23,7 @@ public class LightManager : MonoBehaviour
     /// <summary>
     /// On project start, if controlLights is true, collect all non-directional lights in the current scene and place in a list
     /// </summary>
-    private void Start()
+    private void Awake()
     {
         Instance = this;
         if (ControlLights)

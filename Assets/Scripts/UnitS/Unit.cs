@@ -42,14 +42,14 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    public override void OnNetworkSpawn()
-    {
-        if (!IsOwner) HideUnit();
-        var id = IsBot ? 2 : OwnerClientId;
-        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
+    // public override void OnNetworkSpawn()
+    // {
+    //     if (!IsOwner) HideUnit();
+    //     var id = IsBot ? 2 : OwnerClientId;
+    //     var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
 
-        ChangeMaterial(playerColorData.playerMaterial, true);
-    }
+    //     ChangeMaterial(playerColorData.playerMaterial, true);
+    // }
 
     public void HideUiPrefabs()
     {
@@ -79,6 +79,13 @@ public class Unit : NetworkBehaviour
 
     private void Start()
     {
+
+        if (!IsOwner) HideUnit();
+        var id = IsBot ? 2 : OwnerClientId;
+        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
+
+        ChangeMaterial(playerColorData.playerMaterial, true);
+
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
         // visibleTimer = visibleInterval;

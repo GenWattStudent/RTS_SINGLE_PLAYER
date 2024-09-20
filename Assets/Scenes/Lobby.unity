@@ -120,6 +120,75 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &375122624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 375122627}
+  - component: {fileID: 375122626}
+  - component: {fileID: 375122625}
+  m_Layer: 0
+  m_Name: LobbyUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &375122625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121fbc51ec2d4e84caf296357f879c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 1940510936}
+  lobbyItemTemplate: {fileID: 9197481963319205126, guid: 7dcf140dea6cf4f4e9e2b4ed635a3eff,
+    type: 3}
+--- !u!114 &375122626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d84b279c5baebe48b7b236bc766a8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 1940510936}
+  roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
+    type: 3}
+  playerPrefab: {fileID: 3502280097689162745, guid: ae1fef50ca6120c47a40ad8e5b9ce45b,
+    type: 3}
+  updateInterval: 3
+  isReady: 0
+  isGameStarted: 0
+  isInRoom: 0
+--- !u!4 &375122627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &946248992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -782,8 +851,6 @@ GameObject:
   - component: {fileID: 1940510937}
   - component: {fileID: 1940510936}
   - component: {fileID: 1940510939}
-  - component: {fileID: 1940510938}
-  - component: {fileID: 1940510940}
   - component: {fileID: 1940510941}
   m_Layer: 0
   m_Name: Lobby
@@ -824,21 +891,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1940510938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940510935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 121fbc51ec2d4e84caf296357f879c73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIDocument: {fileID: 0}
-  lobbyItemTemplate: {fileID: 9197481963319205126, guid: 7dcf140dea6cf4f4e9e2b4ed635a3eff,
-    type: 3}
 --- !u!114 &1940510939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,25 +908,7 @@ MonoBehaviour:
   isSingInCompleted: 0
   playerId: 
   maxPlayers: 2
---- !u!114 &1940510940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940510935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d84b279c5baebe48b7b236bc766a8d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIDocument: {fileID: 0}
-  roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
-    type: 3}
-  updateInterval: 3
-  isReady: 0
-  isGameStarted: 0
-  isInRoom: 0
+  lobbyData: {fileID: 0}
 --- !u!114 &1940510941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -893,6 +927,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fd6ea7aaf1c9fae42a6f910ac99bac3a, type: 2}
   mapItemTemplate: {fileID: 9197481963319205126, guid: a8ec1203b42bd4a4f84a3a5ce2421e7d,
     type: 3}
+  updateInterval: 3
   SelectedMap: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -905,3 +940,4 @@ SceneRoots:
   - {fileID: 946248992}
   - {fileID: 1465937645}
   - {fileID: 965323024}
+  - {fileID: 375122627}
