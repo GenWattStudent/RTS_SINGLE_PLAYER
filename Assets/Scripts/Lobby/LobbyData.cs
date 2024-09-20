@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class LobbyData : MonoBehaviour
 {
-    public string MapName;
-    public string RelayCode;
+    public string MapName = default;
+    public string RelayCode = default;
 
     public Dictionary<string, DataObject> Get()
     {
@@ -20,18 +20,18 @@ public class LobbyData : MonoBehaviour
         return data;
     }
 
-    public Dictionary<string, DataObject> SetMapName(string mapName)
+    public async Task SetMapName(string mapName, string lobbyId)
     {
         MapName = mapName;
-
-        return Get();
+        Debug.Log("SetMapName: " + MapName);
+        await UpdateLobbyData(lobbyId);
     }
 
-    public Dictionary<string, DataObject> SetRelayCode(string relayCode)
+    public async Task SetRelayCode(string relayCode, string lobbyId)
     {
         RelayCode = relayCode;
 
-        return Get();
+        await UpdateLobbyData(lobbyId);
     }
 
     public async Task UpdateLobbyData(string lobbyId)
@@ -40,7 +40,7 @@ public class LobbyData : MonoBehaviour
         {
             Data = Get()
         };
-        Debug.Log("UpdateLobbyData: " + options.Data["RelayCode"].Value + " - " + lobbyId);
+
         await LobbyService.Instance.UpdateLobbyAsync(lobbyId, options);
     }
 }

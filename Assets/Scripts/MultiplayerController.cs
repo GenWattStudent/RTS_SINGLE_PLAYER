@@ -21,6 +21,7 @@ public class PlayerVisualData
     public Transform spawnPosition;
 }
 
+[DefaultExecutionOrder(-100)]
 public class MultiplayerController : NetworkBehaviour
 {
     public List<PlayerVisualData> playerMaterials = new();

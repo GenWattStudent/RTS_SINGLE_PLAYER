@@ -18,7 +18,7 @@ public class LobbyUi : ToolkitHelper
 
     private void Start()
     {
-        lobbyManager = GetComponent<LobbyManager>();
+        lobbyManager = FindAnyObjectByType<LobbyManager>();
 
         createLobbyButton = GetButton("CreateLobby");
         lobbiesContainer = GetVisualElement("LobbiesContainer");
