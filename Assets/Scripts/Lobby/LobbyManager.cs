@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -11,12 +12,26 @@ public class LobbyManager : ToolkitHelper
     [SerializeField] private float hearbeatInterval = 25.0f;
     public bool isSingInCompleted = false;
     public string playerId;
-    public int maxPlayers = 2;
-    public Lobby CurrentLobby;
+    public bool isHost = false;
+    public int maxPlayers = 4;
     public LobbyData lobbyData;
+    public Lobby CurrentLobby => lobbyData.CurrentLobby;
+    public PlayerLobbyData playerLobbyData;
+    public List<PlayerLobbyData> lobbyPlayers = new();
+    public static LobbyManager Instance;
 
     private float heartbeatTimer = 0.0f;
     private RoomUi RoomUi;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        Instance = this;
+    }
 
     private async void Start()
     {
@@ -34,56 +49,55 @@ public class LobbyManager : ToolkitHelper
         lobbyData = new LobbyData();
     }
 
-    private void Update()
+    private async void Update()
     {
         if (!isSingInCompleted) return;
-        Heartbeat();
+        await Heartbeat();
     }
 
-    private Dictionary<string, PlayerDataObject> GetPlayerData(bool isReady)
+    public bool HasLobbyDataValue(string key) => CurrentLobby != null && CurrentLobby.Data != null && CurrentLobby.Data.ContainsKey(key) &&
+            CurrentLobby.Data[key].Value != default;
+    public bool IsHost() => CurrentLobby != null && CurrentLobby.HostId == playerId;
+    public bool IsHostByPlayerId(string playerId) => CurrentLobby != null && playerId == CurrentLobby.HostId;
+    public bool HasPlayerDataValue(string key, Player player) => CurrentLobby != null && player.Data != null
+        && player.Data.ContainsKey(key) && player.Data[key] != null;
+
+    public Dictionary<TeamType, int> GetTeamPlayersCount(Lobby lobby)
     {
-        Dictionary<string, PlayerDataObject> playerData = new()
+        Dictionary<TeamType, int> teamPlayersCount = new Dictionary<TeamType, int>
         {
-            { "IsReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, isReady.ToString()) }
+            { TeamType.Blue, 0 },
+            { TeamType.Red, 0 }
         };
 
-        return playerData;
-    }
-
-    public async Task Ready(bool isReady, string playerId)
-    {
-        if (CurrentLobby == null) return;
-        UpdatePlayerOptions options = new UpdatePlayerOptions
+        foreach (var player in lobby.Players)
         {
-            Data = GetPlayerData(isReady)
-        };
+            if (HasPlayerDataValue("Team", player))
+            {
+                teamPlayersCount[(TeamType)System.Enum.Parse(typeof(TeamType), player.Data["Team"].Value)]++;
+            }
+        }
 
-        await LobbyService.Instance.UpdatePlayerAsync(CurrentLobby.Id, playerId, options);
-    }
-
-    private async Task UpdatePlayerData(string playerId, Dictionary<string, PlayerDataObject> playerData, string allocationId = default, string connectionData = default)
-    {
-        UpdatePlayerOptions options = new UpdatePlayerOptions
-        {
-            Data = playerData,
-            AllocationId = allocationId,
-            ConnectionInfo = connectionData
-        };
-
-        await LobbyService.Instance.UpdatePlayerAsync(CurrentLobby.Id, playerId, options);
+        return teamPlayersCount;
     }
 
     public async Task JoinLobby(string lobbyId)
     {
-        CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-        RoomUi.JoinRoom(CurrentLobby, false);
+        lobbyData.CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+        playerLobbyData = new PlayerLobbyData(playerId, AuthenticationService.Instance.PlayerName);
+
+        var teamPlayersCount = GetTeamPlayersCount(CurrentLobby);
+        var teamWithLowestPlayers = teamPlayersCount.FirstOrDefault(x => x.Value == teamPlayersCount.Values.Min()).Key;
+
+        await playerLobbyData.SetTeam(teamWithLowestPlayers, CurrentLobby.Id);
+        RoomUi.JoinRoom(CurrentLobby);
     }
 
     public async Task LeaveLobby(string playerId)
     {
         if (CurrentLobby == null) return;
         await LobbyService.Instance.RemovePlayerAsync(CurrentLobby.Id, playerId);
-        CurrentLobby = null;
+        lobbyData.CurrentLobby = null;
     }
 
     public async Task KickPlayer(string playerId)
@@ -101,13 +115,16 @@ public class LobbyManager : ToolkitHelper
 
     public async Task CreateLobby(string lobbyName, int maxPlayers)
     {
+        playerLobbyData = new PlayerLobbyData(playerId, AuthenticationService.Instance.PlayerName, TeamType.Blue);
+        Debug.Log("Create lobby: " + lobbyName + " - " + maxPlayers);
         var lobbyOptions = new CreateLobbyOptions
         {
-            Player = new Player { Data = GetPlayerData(false) },
+            Player = new Player { Data = playerLobbyData.Get() },
             IsPrivate = false,
         };
-        CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
-        RoomUi.JoinRoom(CurrentLobby, true);
+
+        lobbyData.CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
+        RoomUi.JoinRoom(CurrentLobby);
     }
 
     public async Task<List<Lobby>> GetAll()
@@ -116,15 +133,10 @@ public class LobbyManager : ToolkitHelper
         return lobbies.Results;
     }
 
-    public async Task GetLobbyData()
+    private async Task Heartbeat()
     {
-        if (CurrentLobby == null) return;
-        CurrentLobby = await LobbyService.Instance.GetLobbyAsync(CurrentLobby.Id);
-    }
-
-    private async void Heartbeat()
-    {
-        if (CurrentLobby == null) return;
+        Debug.Log("Heartbeat: " + lobbyData.CurrentLobby);
+        if (CurrentLobby == null || IsHost()) return;
 
         heartbeatTimer += Time.deltaTime;
 
@@ -139,15 +151,14 @@ public class LobbyManager : ToolkitHelper
         if (CurrentLobby == null) return;
         string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
 
-        Debug.Log("Relay code: " + code + " " + CurrentLobby.Id + " " + lobbyData);
         await lobbyData.SetRelayCode(code, CurrentLobby.Id);
-        await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
+        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
     }
 
     public async Task JoinRelayServer(string code)
     {
         await RelayManager.Instance.JoinRelay(code);
-        await UpdatePlayerData(playerId, new Dictionary<string, PlayerDataObject>(), RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData));
+        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
     }
 }
 

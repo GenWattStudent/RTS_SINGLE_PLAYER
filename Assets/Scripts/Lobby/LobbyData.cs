@@ -8,6 +8,7 @@ public class LobbyData : MonoBehaviour
 {
     public string MapName = default;
     public string RelayCode = default;
+    public Lobby CurrentLobby;
 
     public Dictionary<string, DataObject> Get()
     {
@@ -42,5 +43,20 @@ public class LobbyData : MonoBehaviour
         };
 
         await LobbyService.Instance.UpdateLobbyAsync(lobbyId, options);
+    }
+
+    public async Task GetLobbyData(string lobbyId)
+    {
+        CurrentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
+
+        if (CurrentLobby.Data.ContainsKey("MapName"))
+        {
+            MapName = CurrentLobby.Data["MapName"].Value;
+        }
+
+        if (CurrentLobby.Data.ContainsKey("RelayCode"))
+        {
+            RelayCode = CurrentLobby.Data["RelayCode"].Value;
+        }
     }
 }

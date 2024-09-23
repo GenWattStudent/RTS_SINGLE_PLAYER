@@ -14,6 +14,7 @@ public class Unit : NetworkBehaviour
     public List<GameObject> unitPrefabs = new();
     public List<GameObject> unitUiPrefabs = new();
     public List<GameObject> bushes = new();
+    public TeamType teamType;
     private Damagable damagable;
     private Attack attack;
     public bool isVisibile = true;
@@ -85,6 +86,13 @@ public class Unit : NetworkBehaviour
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
 
         ChangeMaterial(playerColorData.playerMaterial, true);
+
+        teamType = LobbyManager.Instance.playerLobbyData.Team;
+
+        foreach (var lobbyPlayer in LobbyManager.Instance.lobbyPlayers)
+        {
+            Debug.Log($"Lobby player: {lobbyPlayer.PlayerId} - {lobbyPlayer.Team} - {OwnerClientId}");
+        }
 
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
