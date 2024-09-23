@@ -55,7 +55,7 @@ public class LobbyUi : ToolkitHelper
 
         try
         {
-            await lobbyManager.CreateLobby(lobbyName, lobbyManager.maxPlayers);
+            await lobbyManager.CreateLobby(lobbyName, LobbyManager.Instance.maxPlayers);
         }
         catch (System.Exception)
         {
@@ -71,21 +71,21 @@ public class LobbyUi : ToolkitHelper
         lobbyItem.Q<Label>("LobbyId").text = lobby.Id;
         lobbyItem.Q<Label>("LobbyMaxPlayers").text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
         lobbyItem.Q<Button>("LobbyItem").clicked += async () => await JoinLobby(lobby.Id);
-
+        Debug.Log("Lobby item created " + lobby.MaxPlayers);
         lobbiesContainer.Add(lobbyItem);
     }
 
     private async Task JoinLobby(string lobbyId)
     {
-        try
-        {
-            await lobbyManager.JoinLobby(lobbyId);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to join lobby " + e.Message);
-            ShowError("Failed to join lobby");
-        }
+        // try
+        // {
+        await lobbyManager.JoinLobby(lobbyId);
+        // }
+        // catch (System.Exception e)
+        // {
+        //     Debug.LogError("Failed to join lobby " + e.Message);
+        //     ShowError("Failed to join lobby");
+        // }
     }
 
     private void ShowError(string message)

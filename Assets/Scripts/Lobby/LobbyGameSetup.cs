@@ -7,43 +7,37 @@ public class LobbyGameSetup : ToolkitHelper
 {
     [SerializeField] private List<MapSo> maps = new();
     [SerializeField] private VisualTreeAsset mapItemTemplate;
-    [SerializeField] private float updateInterval = 3.0f;
     [HideInInspector] public MapSo SelectedMap;
 
-    private float updateTimer = 3.0f;
     private VisualElement currentMap;
     private Label currentMapName;
     private ScrollView mapList;
-    private LobbyManager lobbyManager;
+    private VisualElement mapBox;
     private List<VisualElement> mapItems = new();
 
     public event Action<MapSo> OnMapSelected;
 
     public void Initialize()
     {
-        CreateMapItems(maps);
-        SelectMap(maps[0]);
+        if (!LobbyManager.Instance.IsHost())
+        {
+            mapBox.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            CreateMapItems(maps);
+            SelectMap(maps[0]);
+            mapBox.style.display = DisplayStyle.Flex;
+        }
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        lobbyManager = FindAnyObjectByType<LobbyManager>();
         currentMap = GetVisualElement("CurrentMap");
         mapList = root.Q<ScrollView>("Maps");
         currentMapName = GetLabel("CurrentMapName");
-    }
-
-    public void SetHost(bool isHost)
-    {
-        if (isHost)
-        {
-            mapList.style.display = DisplayStyle.Flex;
-        }
-        else
-        {
-            mapList.style.display = DisplayStyle.None;
-        }
+        mapBox = GetVisualElement("MapBox");
     }
 
     private void OnDisable()
@@ -62,18 +56,18 @@ public class LobbyGameSetup : ToolkitHelper
 
     private void UpdateLobbyMap()
     {
-        if (
-            !lobbyManager.CurrentLobby.Data.ContainsKey("MapName") &&
-            lobbyManager.CurrentLobby.Data["MapName"].Value != default
-         ) return;
-        var mapName = lobbyManager.CurrentLobby.Data["MapName"].Value;
+        if (LobbyManager.Instance.IsHost() || !LobbyManager.Instance.HasLobbyDataValue("MapName")) return;
+
+        var mapName = LobbyManager.Instance.CurrentLobby.Data["MapName"].Value;
         var map = maps.Find(m => m.MapName == mapName);
-        Debug.Log($"UpdateLobbyMap {mapName}");
-        if (map != null) SelectMap(map);
+
+        if (map != null && SelectedMap != map) SelectMap(map);
     }
 
     private void UpdateLobbyUI()
     {
+        if (SelectedMap == null) return;
+
         var selectedMapIndex = maps.FindIndex(m => m.MapName == SelectedMap.MapName);
 
         for (int i = 0; i < mapItems.Count; i++)
@@ -105,16 +99,9 @@ public class LobbyGameSetup : ToolkitHelper
         OnMapSelected?.Invoke(SelectedMap);
     }
 
-    private void Update()
+    public void Update()
     {
-        if (lobbyManager.CurrentLobby == null) return;
-
-        updateTimer -= Time.deltaTime;
-        if (updateTimer <= 0)
-        {
-            UpdateLobbyMap();
-            UpdateLobbyUI();
-            updateTimer = updateInterval;
-        }
+        UpdateLobbyMap();
+        UpdateLobbyUI();
     }
 }

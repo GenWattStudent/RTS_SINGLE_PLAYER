@@ -24,6 +24,7 @@ public class ResourceUsage : NetworkBehaviour
         unit = GetComponent<Unit>();
         stats = GetComponent<Stats>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
+        Debug.Log("UsageInterval: " + usageInterval);
         if (IsServer) uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
