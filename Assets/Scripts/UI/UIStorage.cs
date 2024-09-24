@@ -39,6 +39,7 @@ public class UIStorage : NetworkBehaviour
     private NetworkList<Storage> storages;
     private UIDocument UIDocument;
     private VisualElement root;
+    private Label playerName;
 
     private void Awake()
     {
@@ -172,6 +173,7 @@ public class UIStorage : NetworkBehaviour
     {
         UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
+        playerName = root.Q<Label>("PlayerName");
     }
 
     private void UpdateResourceData(Storage storage)
@@ -190,5 +192,7 @@ public class UIStorage : NetworkBehaviour
     private void Start()
     {
         if (IsServer) CreateStorageForResources();
+
+        playerName.text = LobbyManager.Instance.playerName;
     }
 }

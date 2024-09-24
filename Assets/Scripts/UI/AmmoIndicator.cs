@@ -47,12 +47,12 @@ public class AmmoIndicator : MonoBehaviour
         for (int i = 0; i < maxAmmo; i++)
         {
             // create image and add this compnent to container
-            var imagePanel = Instantiate(bulletIndicatorPrefab);
+            var imagePanel = Instantiate(bulletIndicatorPrefab, bulletIndicatorContainer.transform);
             var image = imagePanel.GetComponentsInChildren<Image>()[1];
 
-            imagePanel.transform.SetParent(bulletIndicatorContainer.transform);
             imagePanel.transform.localScale = Vector3.one;
             imagePanel.transform.localPosition = new Vector3(imagePanel.transform.localPosition.x, imagePanel.transform.localPosition.y, 0);
+            imagePanel.transform.localRotation = Quaternion.identity;
 
             initialColor = image.color;
             bulletIndicators.Add(image);

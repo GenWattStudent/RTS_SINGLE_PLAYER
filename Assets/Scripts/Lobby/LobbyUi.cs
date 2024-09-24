@@ -15,10 +15,12 @@ public class LobbyUi : ToolkitHelper
     private Label errorLabel;
     private LobbyManager lobbyManager;
     private Button closeLobbyButton;
+    private RoomUi roomUi;
 
     private void Start()
     {
         lobbyManager = FindAnyObjectByType<LobbyManager>();
+        roomUi = FindAnyObjectByType<RoomUi>();
 
         createLobbyButton = GetButton("CreateLobby");
         lobbiesContainer = GetVisualElement("LobbiesContainer");
@@ -43,9 +45,9 @@ public class LobbyUi : ToolkitHelper
         }
     }
 
-    private void CloseLobby()
+    private async void CloseLobby()
     {
-        Debug.Log("Close lobby");
+        await roomUi.HideLobbyAndRoom();
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -77,15 +79,15 @@ public class LobbyUi : ToolkitHelper
 
     private async Task JoinLobby(string lobbyId)
     {
-        // try
-        // {
-        await lobbyManager.JoinLobby(lobbyId);
-        // }
-        // catch (System.Exception e)
-        // {
-        //     Debug.LogError("Failed to join lobby " + e.Message);
-        //     ShowError("Failed to join lobby");
-        // }
+        try
+        {
+            await lobbyManager.JoinLobby(lobbyId);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to join lobby " + e.Message);
+            ShowError($"Failed to join lobby {e.Message}");
+        }
     }
 
     private void ShowError(string message)

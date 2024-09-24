@@ -13,6 +13,7 @@ public class Attack : NetworkBehaviour
     public Vector3 targetPosition;
     public Damagable target;
     public Unit currentUnit;
+    public Damagable currentDamagable;
     public int currentAmmo;
     public float attackCooldownTimer;
     public float lastAttackTime;
@@ -32,6 +33,7 @@ public class Attack : NetworkBehaviour
     private void Start()
     {
         currentUnit = GetComponent<Unit>();
+        currentDamagable = GetComponent<Damagable>();
         currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
         vehicleGun = GetComponentInChildren<VehicleGun>();
@@ -70,6 +72,7 @@ public class Attack : NetworkBehaviour
         return false;
     }
 
+
     private void CheckForTargets()
     {
         var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
@@ -79,11 +82,10 @@ public class Attack : NetworkBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (damagableScript != null && (damagableScript.IsBot || damagableScript.OwnerClientId != currentUnit.OwnerClientId) && !damagableScript.isDead && unitScript.isVisibile)
+            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
             {
-                if (IsTargetHideInTerrain(damagableScript)) continue;
                 SetTarget(damagableScript);
-                break;
+                return;
             }
         }
     }
@@ -168,7 +170,7 @@ public class Attack : NetworkBehaviour
         if (currentAmmo <= 0) return;
 
         var targetPos = target != null ? (target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position) : targetPosition;
-        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun);
+        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType);
 
         if (currentUnit.attackableSo.CanSalve)
         {

@@ -50,7 +50,7 @@ public class CursorManager : NetworkBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            return damagable != null && !damagable.isDead && damagable.OwnerClientId != playerController.OwnerClientId;
+            return damagable != null && !damagable.isDead && damagable.teamType != playerController.teamType;
         }
         else
         {
@@ -98,7 +98,7 @@ public class CursorManager : NetworkBehaviour
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.OwnerClientId == playerController.OwnerClientId && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
+            if (damagable != null && !damagable.isDead && damagable.teamType == playerController.teamType && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {
                 return true;
             }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -14,8 +13,8 @@ public class PlayerController : NetworkBehaviour
     public PlayerData playerData;
     public NetworkVariable<int> playerExpierence = new(0);
     public NetworkVariable<int> playerLevel = new(1);
-    private FOVManager fovManager;
     private RTSObjectsManager RTSObjectsManager;
+    public TeamType teamType = TeamType.None;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
@@ -26,36 +25,12 @@ public class PlayerController : NetworkBehaviour
         var heroInstance = Instantiate(hero, spawnPosition, Quaternion.identity);
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
         var no = heroInstance.GetComponent<NetworkObject>();
-
+        var damagable = heroInstance.GetComponent<Damagable>();
+        damagable.teamType = teamType;
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
         no.SpawnWithOwnership(clientId);
         RTSObjectsManager.AddUnitServerRpc(no);
-    }
-
-    // [ClientRpc]
-    // private void SpawnHeroClientRpc(NetworkObjectReference no, ulong clientId)
-    // {
-    //     if (no.TryGet(out NetworkObject unit))
-    //     {
-    //         var unitScript = unit.GetComponent<Unit>();
-    //         if (clientId == OwnerClientId) RTSObjectsManager.AddUnitServerRpc(unitScript);
-    //     }
-    // }
-
-    public void AddUnit(Unit unit)
-    {
-        var damagableScript = unit.GetComponent<Damagable>();
-        playerData.units.Add(unit);
-
-        if (unit.TryGetComponent(out FOVAgent fovAgent)) fovManager.AddFOVAgent(fovAgent);
-
-        damagableScript.OnDead += () =>
-        {
-            RemoveUnit(unit);
-        };
-
-        OnUnitChange?.Invoke(unit, playerData.units);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -79,35 +54,6 @@ public class PlayerController : NetworkBehaviour
         }
         Debug.Log("AddExpiernce " + playerExp);
         playerExpierence.Value = playerExp;
-    }
-
-    public void RemoveUnit(Unit unit)
-    {
-        if (unit.TryGetComponent(out FOVAgent fovAgent)) fovManager.RemoveFOVAgent(fovAgent);
-        playerData.units.Remove(unit);
-        OnUnitChange?.Invoke(unit, playerData.units);
-    }
-
-    public void AddBuilding(Building building)
-    {
-        var damagableScript = building.GetComponent<Damagable>();
-        playerData.buildings.Add(building);
-
-        if (building.TryGetComponent(out FOVAgent fovAgent)) fovManager.AddFOVAgent(fovAgent);
-
-        damagableScript.OnDead += () =>
-        {
-            RemoveBuilding(building);
-        };
-
-        OnBuildingChange?.Invoke(building, playerData.buildings);
-    }
-
-    public void RemoveBuilding(Building building)
-    {
-        if (building.TryGetComponent(out FOVAgent fovAgent)) fovManager.RemoveFOVAgent(fovAgent);
-        playerData.buildings.Remove(building);
-        OnBuildingChange?.Invoke(building, playerData.buildings);
     }
 
     public bool IsMaxBuildingOfType(BuildingSo buildingSo)
@@ -141,6 +87,8 @@ public class PlayerController : NetworkBehaviour
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
+                var damagable = unit.GetComponent<Damagable>();
+                damagable.teamType = teamType;
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
@@ -151,17 +99,6 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
-
-    // [ClientRpc]
-    // private void SpawnUnitClientRpc(NetworkObjectReference no, ulong clientId)
-    // {
-    //     if (no.TryGet(out NetworkObject unit))
-    //     {
-    //         var unitScript = unit.GetComponent<Unit>();
-
-    //         if (clientId == OwnerClientId) RTSObjectsManager.AddUnitServerRpc(unitScript);
-    //     }
-    // }
 
     private void OnPlayerLevelChangeHandler(int prev, int current)
     {
@@ -201,8 +138,28 @@ public class PlayerController : NetworkBehaviour
     private void Awake()
     {
         playerData = new PlayerData();
-        fovManager = FindFirstObjectByType<FOVManager>();
         RTSObjectsManager = GetComponent<RTSObjectsManager>();
+    }
+
+    [ServerRpc()]
+    private void SetTeamServerRpc(TeamType teamType)
+    {
+        this.teamType = teamType;
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { OwnerClientId }
+            }
+        };
+
+        SetTeamClientRpc(teamType, clientRpcParams);
+    }
+
+    [ClientRpc]
+    private void SetTeamClientRpc(TeamType teamType, ClientRpcParams clientRpcParams = default)
+    {
+        this.teamType = teamType;
     }
 
     private void Start()
@@ -213,6 +170,8 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
+            var team = LobbyManager.Instance.playerLobbyData.Team;
+            SetTeamServerRpc(team);
             SpawnUnitServerRpc(playerData.spawnPosition);
         }
 

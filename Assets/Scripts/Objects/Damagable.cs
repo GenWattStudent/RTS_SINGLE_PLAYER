@@ -15,12 +15,20 @@ public class Damagable : NetworkBehaviour
     public bool IsBot = false;
     public float damage = 0f;
     public Stats stats;
+    public TeamType teamType = TeamType.None;
+    public Unit unitScript;
 
     public event Action OnDead;
     public event Action OnTakeDamage;
 
+    public bool IsTeamMate(Damagable damagable) => teamType != TeamType.None && teamType == damagable.teamType;
+    public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
+        (damagable.IsBot || damagable.OwnerClientId != unitScript.OwnerClientId) && !damagable.isDead && unit.isVisibile;
+
     public void AddDamageBoost(float boost)
     {
+        if (damagableSo.bulletSo == null) return;
+
         damageBoost += boost;
         var damageToAdd = damagableSo.bulletSo.GetStat(StatType.Damage) * boost / 100;
         stats.AddToStat(StatType.Damage, damageToAdd);
@@ -38,6 +46,7 @@ public class Damagable : NetworkBehaviour
         stats = GetComponent<Stats>();
         progressBarScript = healthBar.GetComponent<ProgresBar>();
         levelable = GetComponent<Levelable>();
+        unitScript = GetComponent<Unit>();
     }
 
     void Start()

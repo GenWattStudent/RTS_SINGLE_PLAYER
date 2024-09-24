@@ -49,6 +49,8 @@ public class LobbyData : MonoBehaviour
     {
         CurrentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
 
+        if (CurrentLobby == null || CurrentLobby.Data == null) return;
+
         if (CurrentLobby.Data.ContainsKey("MapName"))
         {
             MapName = CurrentLobby.Data["MapName"].Value;
