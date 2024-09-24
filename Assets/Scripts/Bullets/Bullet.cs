@@ -9,11 +9,13 @@ public class Bullet : NetworkBehaviour
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
+    public NetworkObject networkObject;
+    public Motion motion;
+    public TeamType teamType;
+
     private float lifeTimeTimer = 0f;
     private TrailRenderer trailRenderer;
     private PlayerController playerController;
-    public NetworkObject networkObject;
-    public Motion motion;
 
     private void Awake()
     {
@@ -73,13 +75,13 @@ public class Bullet : NetworkBehaviour
     private bool IsOwnUnit(RaycastHit hit)
     {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.OwnerClientId == OwnerClientId;
+        return damagable != null && !damagable.isDead && damagable.teamType == teamType;
     }
 
     private bool IsOwnUnit(Collider collider)
     {
         var damagable = collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.OwnerClientId == OwnerClientId;
+        return damagable != null && !damagable.isDead && damagable.teamType == teamType;
     }
 
     private void CheckHit()

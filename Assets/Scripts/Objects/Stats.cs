@@ -13,8 +13,9 @@ public class Stats : NetworkBehaviour
         stats = new NetworkList<Stat>();
     }
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         unit = GetComponent<Unit>();
         building = GetComponent<Building>();
 

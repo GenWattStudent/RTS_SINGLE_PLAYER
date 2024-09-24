@@ -38,7 +38,7 @@ public class RoomUi : ToolkitHelper
         room = GetVisualElement("Room");
 
         readyButton.clicked += Ready;
-        exitButton.clicked += Exit;
+        exitButton.clicked += async () => await Exit();
         startGameButton.clicked += StartGame;
 
         startGameButton.SetEnabled(false);
@@ -74,7 +74,7 @@ public class RoomUi : ToolkitHelper
         }
     }
 
-    private async void Exit()
+    private async Task Exit()
     {
         try
         {
@@ -92,8 +92,9 @@ public class RoomUi : ToolkitHelper
     {
         var playerItem = roomItemTemplate.CloneTree();
         var teamName = LobbyManager.Instance.HasPlayerDataValue("Team", player) ? player.Data["Team"].Value : "None";
+        var playerName = LobbyManager.Instance.HasPlayerDataValue("PlayerName", player) ? player.Data["PlayerName"].Value : player.Id;
 
-        playerItem.Q<Label>("PlayerName").text = player.Id;
+        playerItem.Q<Label>("PlayerName").text = playerName;
         playerItem.Q<Label>("PlayerType").text = lobbyManager.IsHostByPlayerId(player.Id) ? "Host" : "Member";
         playerItem.Q<Label>("PlayerTeam").text = $"Team: {teamName}";
         playerItem.Q<Label>("PlayerTeam").style.color = teamName == "Blue" ? Color.blue : Color.red;
@@ -134,18 +135,31 @@ public class RoomUi : ToolkitHelper
         lobbyGameSetup.Initialize();
     }
 
-    private async void OnMapSelected(MapSo map)
-    {
-        if (lobbyManager.CurrentLobby == null || !lobbyManager.IsHost()) return;
-        await lobbyManager.lobbyData.SetMapName(map.MapName, lobbyManager.CurrentLobby.Id);
-    }
-
     private void ShowLobbyAndHideRoom()
     {
         lobby.style.display = DisplayStyle.Flex;
         room.style.display = DisplayStyle.None;
 
         lobbyGameSetup.OnMapSelected -= OnMapSelected;
+    }
+
+    public async Task HideLobbyAndRoom()
+    {
+        if (lobbyManager.CurrentLobby != null)
+        {
+            await Exit();
+        }
+
+        lobby.style.display = DisplayStyle.None;
+        room.style.display = DisplayStyle.None;
+
+        lobbyGameSetup.OnMapSelected -= OnMapSelected;
+    }
+
+    private async void OnMapSelected(MapSo map)
+    {
+        if (lobbyManager.CurrentLobby == null || !lobbyManager.IsHost()) return;
+        await lobbyManager.lobbyData.SetMapName(map.MapName, lobbyManager.CurrentLobby.Id);
     }
 
     private void CreatePlayerItems(List<Player> players)
@@ -198,6 +212,7 @@ public class RoomUi : ToolkitHelper
         await lobbyManager.lobbyData.GetLobbyData(lobbyManager.CurrentLobby.Id);
         HideStartButtonIfNotHost();
         CheckPlayerInLobby();
+        Debug.Log($"Lobby players count: {lobbyManager.CurrentLobby.Players.Count}");
         CreatePlayerItems(lobbyManager.CurrentLobby.Players);
         ReadyUi();
         CheckIfAllPlayersReady();

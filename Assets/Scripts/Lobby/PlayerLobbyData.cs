@@ -36,7 +36,11 @@ public class PlayerLobbyData
     public PlayerLobbyData(Player player)
     {
         PlayerId = player.Id;
-        PlayerName = player.Id;
+
+        if (player.Data != null && player.Data.ContainsKey("PlayerName"))
+        {
+            PlayerName = player.Data["PlayerName"].Value;
+        }
 
         if (player.Data != null && player.Data.ContainsKey("Team"))
         {
@@ -76,7 +80,8 @@ public class PlayerLobbyData
         Dictionary<string, PlayerDataObject> playerData = new()
         {
             { "Team", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, Team.ToString()) },
-            { "IsReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, IsReady.ToString()) }
+            { "IsReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, IsReady.ToString()) },
+            { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, PlayerName) }
         };
 
         return playerData;

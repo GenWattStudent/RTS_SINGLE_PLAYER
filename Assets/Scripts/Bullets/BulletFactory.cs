@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 public class BulletFactory
 {
-    public static Bullet CreateBullet(Unit unit, Transform bulletSpawnPoint, Vector3 targetPosition, int salveIndex, List<GameObject> salvePoints, VehicleGun vehicleGun)
+    public static Bullet CreateBullet(Unit unit, Transform bulletSpawnPoint, Vector3 targetPosition, int salveIndex, List<GameObject> salvePoints, VehicleGun vehicleGun, TeamType teamType)
     {
         var bulletObject = Object.Instantiate(unit.attackableSo.bulletSo.prefab);
         var bullet = bulletObject.GetComponent<Bullet>();
         var motionScript = bullet.GetComponent<Motion>();
         var networkObject = bulletObject.GetComponent<NetworkObject>();
 
+        bullet.teamType = teamType;
         bullet.motion = motionScript;
         bullet.networkObject = networkObject;
 

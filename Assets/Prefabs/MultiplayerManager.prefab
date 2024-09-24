@@ -48,8 +48,16 @@ MonoBehaviour:
   playerMaterials:
   - playerColor: {r: 0.091276854, g: 1, b: 0.0141509175, a: 1}
     playerMaterial: {fileID: 2100000, guid: 466c52d1edcd56d4b95e88152cfc7345, type: 2}
+    spawnPosition: {fileID: 0}
   - playerColor: {r: 0, g: 0.054017544, b: 1, a: 1}
     playerMaterial: {fileID: 2100000, guid: d697aa8eca9a6074e932a13fe7d7f5c1, type: 2}
+    spawnPosition: {fileID: 0}
+  - playerColor: {r: 1, g: 0.07220561, b: 0, a: 1}
+    playerMaterial: {fileID: 2100000, guid: 21583e009529de2498db37e0c7b79bfe, type: 2}
+    spawnPosition: {fileID: 0}
+  - playerColor: {r: 0, g: 0.054017544, b: 1, a: 1}
+    playerMaterial: {fileID: 2100000, guid: b92ccdad04120894cb97c562a499a17b, type: 2}
+    spawnPosition: {fileID: 0}
 --- !u!114 &8985183775877694157
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEngine;
 
 public class LoseCondition : NetworkBehaviour
 {
     private Damagable damagable;
-    private Dictionary<int, int> teammateAlive = new();
+    private Dictionary<TeamType, int> teammateAlive = new();
 
     private void Start()
     {
@@ -16,11 +15,11 @@ public class LoseCondition : NetworkBehaviour
             damagable.OnDead += OnDeadServerRpc;
             var playerControllers = NetworkManager.Singleton.ConnectedClients.Values;
             // Find player count for a team
-            var teams = playerControllers.Select(x => x.PlayerObject.GetComponent<PlayerController>().playerData.teamId).Distinct();
+            var teams = playerControllers.Select(x => x.PlayerObject.GetComponent<PlayerController>().teamType).Distinct();
 
             foreach (var team in teams)
             {
-                teammateAlive.Add(team, playerControllers.Count(x => x.PlayerObject.GetComponent<PlayerController>().playerData.teamId == team));
+                teammateAlive.Add(team, playerControllers.Count(x => x.PlayerObject.GetComponent<PlayerController>().teamType == team));
             }
         }
     }
@@ -34,12 +33,12 @@ public class LoseCondition : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void GameOverAllClientRpc(int winnerTeamId)
+    private void GameOverAllClientRpc(TeamType winnerTeamId)
     {
         var playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
         var gameResultObject = playerController.GetComponentInChildren<GameResult>();
 
-        if (playerController.playerData.teamId == winnerTeamId)
+        if (playerController.teamType == winnerTeamId)
         {
             gameResultObject.Victory();
         }
@@ -55,9 +54,9 @@ public class LoseCondition : NetworkBehaviour
         if (!IsServer) return;
 
         var playerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
-        teammateAlive[playerController.playerData.teamId]--;
+        teammateAlive[playerController.teamType]--;
 
-        if (teammateAlive[playerController.playerData.teamId] == 0)
+        if (teammateAlive[playerController.teamType] == 0)
         {
             var winnerTeamId = teammateAlive.FirstOrDefault(x => x.Value > 0);
             GameOverAllClientRpc(winnerTeamId.Key);
@@ -71,6 +70,7 @@ public class LoseCondition : NetworkBehaviour
                     TargetClientIds = new ulong[] { OwnerClientId }
                 }
             };
+
             GameOverClientRpc(clientRpcParams);
         }
     }

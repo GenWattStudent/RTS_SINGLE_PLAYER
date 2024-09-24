@@ -36,7 +36,7 @@ public class FPSCounter : NetworkToolkitHelper
         }
     }
 
-    void Update()
+    private void Update()
     {
         updateTimer += Time.unscaledDeltaTime;
 

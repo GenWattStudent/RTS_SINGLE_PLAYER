@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,11 @@ public class LobbyManager : ToolkitHelper
     [SerializeField] private float hearbeatInterval = 25.0f;
     public bool isSingInCompleted = false;
     public string playerId;
+    public string playerName;
     public bool isHost = false;
     public int maxPlayers = 4;
     public LobbyData lobbyData;
-    public Lobby CurrentLobby => lobbyData.CurrentLobby;
+    public Lobby CurrentLobby => lobbyData?.CurrentLobby;
     public PlayerLobbyData playerLobbyData;
     public List<PlayerLobbyData> lobbyPlayers = new();
     public static LobbyManager Instance;
@@ -31,12 +33,18 @@ public class LobbyManager : ToolkitHelper
         }
 
         Instance = this;
+        lobbyData = new LobbyData();
     }
 
     private async void Start()
     {
         RoomUi = FindAnyObjectByType<RoomUi>();
-        await UnityServices.InitializeAsync();
+
+        var initOptions = new InitializationOptions();
+        playerName = $"{PlayerPrefs.GetString("username")}{Mathf.FloorToInt(UnityEngine.Random.Range(0, 1000))}";
+        initOptions.SetProfile(playerName);
+        await UnityServices.InitializeAsync(initOptions);
+
         AuthenticationService.Instance.SignedIn += OnSignInCompleted;
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
@@ -46,7 +54,6 @@ public class LobbyManager : ToolkitHelper
     protected override void OnEnable()
     {
         base.OnEnable();
-        lobbyData = new LobbyData();
     }
 
     private async void Update()
@@ -74,7 +81,7 @@ public class LobbyManager : ToolkitHelper
         {
             if (HasPlayerDataValue("Team", player))
             {
-                teamPlayersCount[(TeamType)System.Enum.Parse(typeof(TeamType), player.Data["Team"].Value)]++;
+                teamPlayersCount[(TeamType)Enum.Parse(typeof(TeamType), player.Data["Team"].Value)]++;
             }
         }
 
@@ -84,7 +91,7 @@ public class LobbyManager : ToolkitHelper
     public async Task JoinLobby(string lobbyId)
     {
         lobbyData.CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-        playerLobbyData = new PlayerLobbyData(playerId, AuthenticationService.Instance.PlayerName);
+        playerLobbyData = new PlayerLobbyData(playerId, playerName);
 
         var teamPlayersCount = GetTeamPlayersCount(CurrentLobby);
         var teamWithLowestPlayers = teamPlayersCount.FirstOrDefault(x => x.Value == teamPlayersCount.Values.Min()).Key;
@@ -110,13 +117,12 @@ public class LobbyManager : ToolkitHelper
     {
         isSingInCompleted = true;
         playerId = AuthenticationService.Instance.PlayerId;
-        Debug.Log("Sign in completed " + playerId);
     }
 
     public async Task CreateLobby(string lobbyName, int maxPlayers)
     {
-        playerLobbyData = new PlayerLobbyData(playerId, AuthenticationService.Instance.PlayerName, TeamType.Blue);
-        Debug.Log("Create lobby: " + lobbyName + " - " + maxPlayers);
+        playerLobbyData = new PlayerLobbyData(playerId, playerName, TeamType.Blue);
+
         var lobbyOptions = new CreateLobbyOptions
         {
             Player = new Player { Data = playerLobbyData.Get() },
@@ -135,7 +141,6 @@ public class LobbyManager : ToolkitHelper
 
     private async Task Heartbeat()
     {
-        Debug.Log("Heartbeat: " + lobbyData.CurrentLobby);
         if (CurrentLobby == null || IsHost()) return;
 
         heartbeatTimer += Time.deltaTime;
@@ -152,13 +157,13 @@ public class LobbyManager : ToolkitHelper
         string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
 
         await lobbyData.SetRelayCode(code, CurrentLobby.Id);
-        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
+        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
     }
 
     public async Task JoinRelayServer(string code)
     {
         await RelayManager.Instance.JoinRelay(code);
-        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), System.Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
+        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
     }
 }
 
