@@ -42,8 +42,6 @@ GameObject:
   - component: {fileID: 5638679581261296277}
   - component: {fileID: 409803782519774222}
   - component: {fileID: 9141244633282151490}
-  - component: {fileID: 4718651210534040361}
-  - component: {fileID: 4962824280736601957}
   - component: {fileID: 9184962378081221949}
   - component: {fileID: 5025436868650576337}
   - component: {fileID: -6002317933877532533}
@@ -52,6 +50,7 @@ GameObject:
   - component: {fileID: 9155980179660922412}
   - component: {fileID: -9197262414064562621}
   - component: {fileID: -2717489241088970413}
+  - component: {fileID: 4718651210534040361}
   m_Layer: 0
   m_Name: WorkerSpawner
   m_TagString: Building
@@ -118,49 +117,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &4718651210534040361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3393997211609255391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7d1ba2acc35984f953c8a7d085537d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitSpawnPoint: {fileID: 6426744666298714295}
-  unitMovePoint: {fileID: 1334659343866613148}
-  totalSpawnTime:
-    m_InternalValue: 0
---- !u!54 &4962824280736601957
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3393997211609255391}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &9184962378081221949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +143,7 @@ MonoBehaviour:
   - {fileID: 5890260340698937729}
   unitUiPrefabs: []
   bushes: []
+  teamType: 0
   isVisibile: 1
 --- !u!114 &5025436868650576337
 MonoBehaviour:
@@ -209,6 +166,8 @@ MonoBehaviour:
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType: 0
+  unitScript: {fileID: 0}
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +262,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInDebt: 0
+--- !u!114 &4718651210534040361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3393997211609255391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd7d1ba2acc35984f953c8a7d085537d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitSpawnPoint: {fileID: 6426744666298714295}
+  unitMovePoint: {fileID: 1334659343866613148}
+  totalSpawnTime:
+    m_InternalValue: 0
 --- !u!1 &4240831702524726709
 GameObject:
   m_ObjectHideFlags: 0

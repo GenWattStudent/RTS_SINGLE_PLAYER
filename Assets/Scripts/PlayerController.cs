@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,14 +12,47 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private List<GameObject> unitPrefabs = new();
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
+
     public NetworkVariable<int> playerExpierence = new(0);
     public NetworkVariable<int> playerLevel = new(1);
+    public NetworkVariable<TeamType> teamType = new(TeamType.None);
+    public float currentPing;
+
     private RTSObjectsManager RTSObjectsManager;
-    public TeamType teamType = TeamType.None;
+    private double lastPingTime;
+    private float checkPingTime = 1f;
+    private float checkPingTimer;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
     public static event Action<Unit, List<Unit>> OnUnitChange;
     public static event Action<Building, List<Building>> OnBuildingChange;
+
+    public void GetPing()
+    {
+        if (IsClient)
+        {
+            lastPingTime = NetworkManager.Singleton.LocalTime.Time;
+            RequestPingServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestPingServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        RespondPingClientRpc(serverRpcParams.Receive.SenderClientId);
+    }
+
+    [ClientRpc]
+    private void RespondPingClientRpc(ulong clientId)
+    {
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            // Calculate the round-trip time (ping)
+            double currentTime = NetworkManager.Singleton.LocalTime.Time;
+            Debug.Log($"RespondPingClientRpc {currentTime} {lastPingTime}");
+            currentPing = (float)((currentTime - lastPingTime) * 1000); // Convert to milliseconds
+        }
+    }
 
     private void SpawnHero(ulong clientId, Vector3 spawnPosition)
     {
@@ -26,7 +60,8 @@ public class PlayerController : NetworkBehaviour
         var unitMovement = heroInstance.GetComponent<UnitMovement>();
         var no = heroInstance.GetComponent<NetworkObject>();
         var damagable = heroInstance.GetComponent<Damagable>();
-        damagable.teamType = teamType;
+
+        damagable.teamType.Value = teamType.Value;
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
         no.SpawnWithOwnership(clientId);
@@ -88,7 +123,7 @@ public class PlayerController : NetworkBehaviour
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
                 var damagable = unit.GetComponent<Damagable>();
-                damagable.teamType = teamType;
+                damagable.teamType.Value = teamType.Value;
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
@@ -144,22 +179,7 @@ public class PlayerController : NetworkBehaviour
     [ServerRpc()]
     private void SetTeamServerRpc(TeamType teamType)
     {
-        this.teamType = teamType;
-        var clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { OwnerClientId }
-            }
-        };
-
-        SetTeamClientRpc(teamType, clientRpcParams);
-    }
-
-    [ClientRpc]
-    private void SetTeamClientRpc(TeamType teamType, ClientRpcParams clientRpcParams = default)
-    {
-        this.teamType = teamType;
+        this.teamType.Value = teamType;
     }
 
     private void Start()
@@ -170,8 +190,17 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            var team = LobbyManager.Instance.playerLobbyData.Team;
-            SetTeamServerRpc(team);
+            if (GameManager.Instance.IsDebug)
+            {
+                var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
+                SetTeamServerRpc(team);
+            }
+            else
+            {
+                var team = LobbyManager.Instance.playerLobbyData.Team;
+                SetTeamServerRpc(team);
+            }
+
             SpawnUnitServerRpc(playerData.spawnPosition);
         }
 
@@ -179,6 +208,21 @@ public class PlayerController : NetworkBehaviour
         {
             AddExpiernceServerRpc(1);
             playerData.teamId = NetworkManager.Singleton.ConnectedClients.Count;
+        }
+    }
+
+    private void Update()
+    {
+        if (IsClient)
+        {
+            checkPingTimer += Time.deltaTime;
+
+            if (checkPingTimer >= checkPingTime)
+            {
+                GetPing();
+                checkPingTimer = 0;
+            }
+            Debug.Log("PlayerController Update " + currentPing);
         }
     }
 }

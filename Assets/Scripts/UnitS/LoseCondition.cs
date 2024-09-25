@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEngine;
 
 public class LoseCondition : NetworkBehaviour
 {
@@ -9,6 +10,7 @@ public class LoseCondition : NetworkBehaviour
 
     private void Start()
     {
+
         damagable = GetComponent<Damagable>();
         if (IsServer)
         {
@@ -19,7 +21,12 @@ public class LoseCondition : NetworkBehaviour
 
             foreach (var team in teams)
             {
-                teammateAlive.Add(team, playerControllers.Count(x => x.PlayerObject.GetComponent<PlayerController>().teamType == team));
+                teammateAlive.Add(team.Value, playerControllers.Count(x => x.PlayerObject.GetComponent<PlayerController>().teamType == team));
+            }
+
+            foreach (var teammate in teammateAlive)
+            {
+                Debug.Log(teammate.Key + " " + teammate.Value);
             }
         }
     }
@@ -38,7 +45,7 @@ public class LoseCondition : NetworkBehaviour
         var playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
         var gameResultObject = playerController.GetComponentInChildren<GameResult>();
 
-        if (playerController.teamType == winnerTeamId)
+        if (playerController.teamType.Value == winnerTeamId)
         {
             gameResultObject.Victory();
         }
@@ -54,11 +61,12 @@ public class LoseCondition : NetworkBehaviour
         if (!IsServer) return;
 
         var playerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
-        teammateAlive[playerController.teamType]--;
+        teammateAlive[playerController.teamType.Value]--;
 
-        if (teammateAlive[playerController.teamType] == 0)
+        if (teammateAlive[playerController.teamType.Value] == 0)
         {
             var winnerTeamId = teammateAlive.FirstOrDefault(x => x.Value > 0);
+            Debug.Log("Game Over " + winnerTeamId.Key);
             GameOverAllClientRpc(winnerTeamId.Key);
         }
         else

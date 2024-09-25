@@ -24,7 +24,6 @@ public class Construction : NetworkBehaviour
         {
             buildingUnits.Add(unit);
             buildingSpeed += worker.laser.laserSo.damage;
-            Debug.Log("Add worker - building " + buildingUnits.Count + " - " + buildingSpeed);
             StartConstruction();
         }
     }
@@ -45,7 +44,6 @@ public class Construction : NetworkBehaviour
     public void StartConstruction()
     {
         isCurrentlyConstructing = true;
-        Debug.Log("Start construction - building");
         ActivateBuildInProgressServerRpc();
     }
 
@@ -90,7 +88,10 @@ public class Construction : NetworkBehaviour
         var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
+        var damagable = building.GetComponent<Damagable>();
+        var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
 
+        damagable.teamType.Value = playerController.teamType.Value;
         no.SpawnWithOwnership(OwnerClientId);
         InstantiateBuildingClientRpc(no);
         constructionNo.Despawn(true);
@@ -153,25 +154,23 @@ public class Construction : NetworkBehaviour
         progresBar?.UpdateProgresBar(health, maxHealth);
     }
 
-    void Start()
+    private void Start()
     {
         progresBar = healthBar.GetComponent<ProgresBar>();
         selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
         stats = GetComponent<Stats>();
-
-        Debug.Log("Construction Start " + OwnerClientId);
 
         if (IsServer)
         {
             var health = stats.GetStat(StatType.Health);
             var maxHealth = stats.GetStat(StatType.MaxHealth);
             constructionTimer = health;
-            Debug.Log("Construction Start " + health + " " + maxHealth);
+
             SetHealthClientRpc(health, maxHealth);
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (isCurrentlyConstructing && IsServer)
         {

@@ -54,10 +54,6 @@ public class Unit : NetworkBehaviour
 
     public void HideUiPrefabs()
     {
-        // foreach (var unitUiPrefab in unitUiPrefabs)
-        // {
-        //     unitUiPrefab.SetActive(false);
-        // }
         var canvases = GetComponentsInChildren<Canvas>();
         foreach (var canvas in canvases)
         {
@@ -67,10 +63,6 @@ public class Unit : NetworkBehaviour
 
     public void ShowUiPrefabs()
     {
-        // foreach (var unitUiPrefab in unitUiPrefabs)
-        // {
-        //     unitUiPrefab.SetActive(true);
-        // }
         var canvases = GetComponentsInChildren<Canvas>();
         foreach (var canvas in canvases)
         {
@@ -86,13 +78,6 @@ public class Unit : NetworkBehaviour
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
 
         ChangeMaterial(playerColorData.playerMaterial, true);
-
-        teamType = LobbyManager.Instance.playerLobbyData.Team;
-
-        foreach (var lobbyPlayer in LobbyManager.Instance.lobbyPlayers)
-        {
-            Debug.Log($"Lobby player: {lobbyPlayer.PlayerId} - {lobbyPlayer.Team} - {OwnerClientId}");
-        }
 
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
@@ -115,11 +100,6 @@ public class Unit : NetworkBehaviour
         {
             fogOfWar.AddFOVAgent(fovAgent);
         }
-
-        // if (damagable != null)
-        // {
-        //     damagable.OnDead += HideUiPrefabs;
-        // }
     }
 
     public void HideUnit()

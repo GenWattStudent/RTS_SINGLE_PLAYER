@@ -44,7 +44,7 @@ public class ResourceUsage : NetworkBehaviour
     {
         var usageData = GetUsageDataFromStats();
         if (usageData.resourceSO == null) return;
-        Debug.Log("UseResources " + usageData.resourceSO.name + " " + usageData.usage);
+
         if (uIStorage.HasEnoughResource(usageData.resourceSO, usageData.usage))
         {
             isInDebt = false;

@@ -125,7 +125,7 @@ public class SelectionManager : NetworkBehaviour
     {
         DeselectAll();
         var buildingScript = selectable.GetComponent<Building>();
-        var tankBuildingScript = selectable.GetComponent<TankBuilding>();
+        var tankBuildingScript = selectable.GetComponent<Spawner>();
         var constructionScript = selectable.GetComponent<Construction>();
 
         if (constructionScript != null)

@@ -214,9 +214,9 @@ public class RTSManager : NetworkBehaviour
                 if (damagableScript != null && !damagableScript.IsBot && selectableScript != null)
                 {
                     // Attack
-                    if (damagableScript.teamType != playerController.teamType)
+                    if (damagableScript.teamType.Value != playerController.teamType.Value)
                     {
-                        Debug.Log("AttackCommand " + damagableScript.OwnerClientId + " " + playerController.OwnerClientId);
+                        Debug.Log("AttackCommand " + damagableScript.teamType + " " + playerController.teamType);
                         AttackCommand(damagableScript);
                         isAction = true;
                         return;
@@ -232,7 +232,7 @@ public class RTSManager : NetworkBehaviour
                     }
 
                     // Heal 
-                    if (damagableScript.teamType == playerController.teamType && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
+                    if (damagableScript.teamType.Value == playerController.teamType.Value && damagableScript.stats.GetStat(StatType.Health) < damagableScript.stats.GetStat(StatType.MaxHealth))
                     {
                         var healers = selectionManager.GetHealers();
                         Debug.Log("HealCommand " + damagableScript.OwnerClientId + " " + playerController.OwnerClientId);

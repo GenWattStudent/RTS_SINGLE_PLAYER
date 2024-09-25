@@ -15,15 +15,15 @@ public class Damagable : NetworkBehaviour
     public bool IsBot = false;
     public float damage = 0f;
     public Stats stats;
-    public TeamType teamType = TeamType.None;
+    public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public Unit unitScript;
 
     public event Action OnDead;
     public event Action OnTakeDamage;
 
-    public bool IsTeamMate(Damagable damagable) => teamType != TeamType.None && teamType == damagable.teamType;
+    public bool IsTeamMate(Damagable damagable) => teamType.Value != TeamType.None && teamType.Value == damagable.teamType.Value;
     public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
-        (damagable.IsBot || damagable.OwnerClientId != unitScript.OwnerClientId) && !damagable.isDead && unit.isVisibile;
+        !damagable.isDead && unit.isVisibile;
 
     public void AddDamageBoost(float boost)
     {
@@ -49,7 +49,7 @@ public class Damagable : NetworkBehaviour
         unitScript = GetComponent<Unit>();
     }
 
-    void Start()
+    private void Start()
     {
         if (IsServer)
         {
@@ -71,6 +71,8 @@ public class Damagable : NetworkBehaviour
             }
 
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
+
+            // TakeDamage(2000);
         }
     }
 
@@ -85,7 +87,6 @@ public class Damagable : NetworkBehaviour
 
     private void InstantiateDestroyedObject()
     {
-        Debug.Log("InstantiateDestroyedObject: " + damagableSo.deathEffect);
         if (damagableSo.deathEffect != null)
         {
             var destroyedObject = Instantiate(damagableSo.deathEffect, transform.position, transform.rotation);
@@ -115,7 +116,6 @@ public class Damagable : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        Debug.Log("OnNetworkDespawn");
         OnDead?.Invoke();
     }
 

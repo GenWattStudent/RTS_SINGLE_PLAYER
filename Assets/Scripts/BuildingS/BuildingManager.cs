@@ -21,7 +21,7 @@ public class BuildingManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        Debug.Log("Building OnNetworkSpawn " + IsOwner);
+
         if (!IsOwner)
         {
             enabled = false;
@@ -36,11 +36,6 @@ public class BuildingManager : NetworkBehaviour
         uIBuildingManager = GetComponentInChildren<UIBuildingManager>();
         uIStorage = GetComponentInChildren<UIStorage>();
         hightPoints = new Vector3[heightRaysCount * heightRaysCount];
-    }
-
-    private void Start()
-    {
-
     }
 
     private void GetHightPoints()
@@ -186,7 +181,6 @@ public class BuildingManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void PlaceBuildingServerRpc(Vector3 position, ushort buildingIndex, ulong clientId)
     {
-        Debug.Log("PlaceBuildingServerRpc " + position + " " + buildingIndex + " ID =" + clientId);
         var buildingSo = networkConstructionsPrefabs[buildingIndex];
 
         if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
@@ -195,23 +189,15 @@ public class BuildingManager : NetworkBehaviour
         var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
-        Debug.Log("PlaceBuildingServerRpc health " + no + " " + stats);
+        var damagable = newBuilding.GetComponent<Damagable>();
+
+        Debug.Log("PlaceBuildingServerRpc " + playerController.teamType);
+
+        damagable.teamType.Value = playerController.teamType.Value;
         no.SpawnWithOwnership(clientId);
         stats.AddStat(StatType.Health, 1);
         RTSObjectsManager.AddBuildingServerRpc(no);
     }
-
-    // [ClientRpc]
-    // private void PlaceBuildingClientRpc(NetworkObjectReference no, ulong ClientId)
-    // {
-    //     if (no.TryGet(out NetworkObject networkObject))
-    //     {
-    //         if (networkObject.OwnerClientId != ClientId) return;
-    //         // var building = networkObject.GetComponent<Building>();
-
-    //         RTSObjectsManager.AddBuildingServerRpc(building);
-    //     }
-    // }
 
     private void PlaceBuilding()
     {
@@ -222,8 +208,8 @@ public class BuildingManager : NetworkBehaviour
                 InfoBox.Instance.AddError("You cant place building here!");
                 return;
             };
+
             var buildingIndex = (ushort)networkConstructionsPrefabs.IndexOf(SelectedBuilding);
-            Debug.Log("PlaceBuilding " + buildingIndex + " " + SelectedBuilding + " " + previewPrefab);
             if (previewPrefab != null) PlaceBuildingServerRpc(previewPrefab.transform.position, buildingIndex, OwnerClientId);
             CancelBuilding();
         }

@@ -119,7 +119,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 5ce088f708c3e084db448afe796db354, type: 2}
 --- !u!1 &12245339
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,10 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb82950ac18b27f47bac0c932a18f895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebug: 1
-  maps:
-  - {fileID: 11400000, guid: dc8b7bc813fef3b4cbec31801299f258, type: 2}
-  - {fileID: 11400000, guid: fd6ea7aaf1c9fae42a6f910ac99bac3a, type: 2}
+  IsDebug: 0
 --- !u!4 &178542653
 Transform:
   m_ObjectHideFlags: 0
@@ -3373,6 +3370,8 @@ Transform:
   m_Children:
   - {fileID: 295715039}
   - {fileID: 524030678}
+  - {fileID: 1935340090}
+  - {fileID: 1068601320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &903520779
@@ -3593,6 +3592,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1060374379}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1068601319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1068601320}
+  m_Layer: 0
+  m_Name: SpawnPoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1068601320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068601319}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.06, y: 0, z: 4.47}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 865925699}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1074294237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5781,6 +5811,16 @@ PrefabInstance:
       propertyPath: playerMaterials.Array.data[1].spawnPosition
       value: 
       objectReference: {fileID: 524030678}
+    - target: {fileID: 1258681414618364533, guid: 0de3efba6f8b86c42a6f25fd869b3d3f,
+        type: 3}
+      propertyPath: playerMaterials.Array.data[2].spawnPosition
+      value: 
+      objectReference: {fileID: 1935340090}
+    - target: {fileID: 1258681414618364533, guid: 0de3efba6f8b86c42a6f25fd869b3d3f,
+        type: 3}
+      propertyPath: playerMaterials.Array.data[3].spawnPosition
+      value: 
+      objectReference: {fileID: 1068601320}
     - target: {fileID: 8985183775877694157, guid: 0de3efba6f8b86c42a6f25fd869b3d3f,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -6785,6 +6825,37 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: e390fcd97de147f4a9a648e35c5c975d, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1 &1935340089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935340090}
+  m_Layer: 0
+  m_Name: SpawnPoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1935340090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935340089}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.4, y: 0, z: 38.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 865925699}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1949850327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6979,7 +7050,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: e36e7f3cf33b7064487e652e84661d14, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
