@@ -124,6 +124,7 @@ MonoBehaviour:
   unitUiPrefabs:
   - {fileID: 0}
   bushes: []
+  teamType: 0
   isVisibile: 1
 --- !u!114 &1117546208343776308
 MonoBehaviour:
@@ -146,6 +147,9 @@ MonoBehaviour:
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &7951579903449969910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,17 +162,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df302aa9d6cae574fbe2d4efc121e1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  checkTargetTimer: 0
-  currentUnit: {fileID: 0}
-  bulletSpawnPoint: {fileID: 8785809381074074484}
-  attackCooldownTimer: 0
-  currentAmmo: 0
   autoAttack: 1
+  checkTargetTimer: 0
+  bulletSpawnPoint: {fileID: 8785809381074074484}
   isRealoading: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  currentUnit: {fileID: 0}
+  currentDamagable: {fileID: 0}
+  currentAmmo: 0
+  attackCooldownTimer: 0
   lastAttackTime: 0
-  rot: 0
 --- !u!114 &6064307292801402592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,7 +599,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5274868833598084267, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
+    - {fileID: -7845219290297878131, guid: d358bb72863aadd49b558e0234676dc8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7286390700322845341, guid: d358bb72863aadd49b558e0234676dc8,

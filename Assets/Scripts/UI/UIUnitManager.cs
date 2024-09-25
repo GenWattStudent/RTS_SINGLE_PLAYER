@@ -9,7 +9,7 @@ public class UIUnitManager : NetworkBehaviour
     private List<VisualElement> unitSlotTabs = new();
     private List<UnitSo> unitsAttachedToTab = new();
     private BuildingSo selectedBuilding;
-    private TankBuilding spawnerBuilding;
+    private Spawner spawnerBuilding;
     public GameObject currentBuilding;
     public bool IsUnitUIOpen { get; set; } = false;
     public bool IsUnitSelectionTabOpen { get; set; } = false;
@@ -240,7 +240,7 @@ public class UIUnitManager : NetworkBehaviour
         }
     }
 
-    public void CreateUnitTabs(BuildingSo BuildingSo, TankBuilding spawnerBuilding, GameObject building)
+    public void CreateUnitTabs(BuildingSo BuildingSo, Spawner spawnerBuilding, GameObject building)
     {
         ClearTabs();
         unitSlotTabs.Clear();

@@ -1,44 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaterialData {
+public class MaterialData
+{
     public Vector4 startValue;
     public Material material;
 }
 
 public class DissolveEffect : MonoBehaviour
 {
-    private List<MaterialData> materials = new ();
-    private Vector4 startValue;
     public float dissolveSpeed = .3f;
     public float dissolveValue = 5f;
-    float startTime;
-    // Start is called before the first frame update
-    void Start()
+
+    private float startTime;
+    private List<MaterialData> materials = new();
+    private int disolveOffsetHash = Shader.PropertyToID("_DissolveOffest");
+
+    private void Start()
     {
-        Renderer meshRenderer = GetComponent<MeshRenderer>();
+        var renderers = GetComponentsInChildren<MeshRenderer>();
 
-        if (meshRenderer == null) {
-            meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-        };
-
-        if (meshRenderer == null) return;
-
-        var material = meshRenderer.material;
-        startValue = material.GetVector("_DissolveOffest");
-
-        if (materials != null) {
-            materials.Add(new MaterialData() {
-                startValue = startValue,
-                material = material
-            });
-        }
-
-        var renders = GetComponentsInChildren<MeshRenderer>();
-
-        foreach (var render in renders) {
-            materials.Add(new MaterialData() {
-                startValue = render.material.GetVector("_DissolveOffest"),
+        foreach (var render in renderers)
+        {
+            materials.Add(new MaterialData()
+            {
+                startValue = render.material.GetVector(disolveOffsetHash),
                 material = render.material
             });
         }
@@ -46,8 +32,7 @@ public class DissolveEffect : MonoBehaviour
         startTime = Time.time;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UpdateMaterial()
     {
         foreach (var materialData in materials)
         {
@@ -56,8 +41,14 @@ public class DissolveEffect : MonoBehaviour
 
             // Calculate the new y value for _DissolveOffest
             float newValue = Mathf.Lerp(materialData.startValue.y, dissolveValue, elapsedTime * dissolveSpeed);
+
             // Set the new value
-            materialData.material.SetVector("_DissolveOffest", new Vector4(0f, newValue, 0f, 0f));
+            materialData.material.SetVector(disolveOffsetHash, new Vector4(0f, newValue, 0f, 0f));
         }
+    }
+
+    private void Update()
+    {
+        UpdateMaterial();
     }
 }

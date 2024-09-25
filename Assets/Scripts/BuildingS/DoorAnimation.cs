@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class DoorAnimation : NetworkBehaviour
 {
-    private TankBuilding spawnerBuilding;
+    private Spawner spawnerBuilding;
     private Animator animator;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        spawnerBuilding = GetComponentInParent<TankBuilding>();
+        spawnerBuilding = GetComponentInParent<Spawner>();
         spawnerBuilding.OnSpawnUnit += OpenDoor;
     }
 

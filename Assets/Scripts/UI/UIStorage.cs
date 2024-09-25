@@ -193,6 +193,6 @@ public class UIStorage : NetworkBehaviour
     {
         if (IsServer) CreateStorageForResources();
 
-        playerName.text = LobbyManager.Instance.playerName;
+        playerName.text = LobbyManager.Instance != null ? LobbyManager.Instance.playerName : "Debug Mode";
     }
 }

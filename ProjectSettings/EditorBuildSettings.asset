@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 69c2fd4d237376846b9eed1415cba1e6
   - enabled: 1
@@ -14,10 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Loader.unity
     guid: a31ab42a3a179984f9ca5cf555b1f243
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: 47e514a97e2d6984d9ad789522e10368
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Maps/Moon.unity
     guid: 3aa865b4cc8c3834c8b06c46344bd631
   m_configObjects: {}

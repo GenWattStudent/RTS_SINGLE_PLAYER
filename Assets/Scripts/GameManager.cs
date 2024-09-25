@@ -6,12 +6,18 @@ using UnityEngine;
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private bool isDebug = false;
+    public bool IsDebug = false;
+    public static GameManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
         // 
-        // if (isDebug) return;
+        if (IsDebug) return;
 
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         if (RelayManager.Instance.IsHost)

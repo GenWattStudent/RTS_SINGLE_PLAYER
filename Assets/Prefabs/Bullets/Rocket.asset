@@ -22,7 +22,7 @@ MonoBehaviour:
     type: 3}
   explosionSound: 4
   radius: 4
-  damage: 100
+  damage: 25
   speed: 15
   stats:
   - Type: 2

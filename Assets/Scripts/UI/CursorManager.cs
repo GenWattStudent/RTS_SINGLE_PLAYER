@@ -41,7 +41,7 @@ public class CursorManager : NetworkBehaviour
 
     public bool IsEnemyHovering()
     {
-        if (selectionManager.selectedObjects.Count == 0 && !selectionManager.IsCanAttack()) return false;
+        if (selectionManager.selectedObjects.Count == 0 || !selectionManager.IsCanAttack()) return false;
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,7 +50,7 @@ public class CursorManager : NetworkBehaviour
         if (isHit)
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-            return damagable != null && !damagable.isDead && damagable.teamType != playerController.teamType;
+            return damagable != null && !damagable.isDead && damagable.teamType.Value != playerController.teamType.Value;
         }
         else
         {
@@ -60,7 +60,7 @@ public class CursorManager : NetworkBehaviour
 
     public bool IsConstructionHovering()
     {
-        if (selectionManager.selectedObjects.Count == 0 && selectionManager.GetWorkers().Count == 0) return false;
+        if (selectionManager.selectedObjects.Count == 0 || selectionManager.GetWorkers().Count == 0) return false;
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -98,7 +98,7 @@ public class CursorManager : NetworkBehaviour
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.teamType == playerController.teamType && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
+            if (damagable != null && !damagable.isDead && damagable.teamType.Value == playerController.teamType.Value && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {
                 return true;
             }

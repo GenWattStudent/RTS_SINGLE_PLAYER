@@ -170,7 +170,7 @@ public class Attack : NetworkBehaviour
         if (currentAmmo <= 0) return;
 
         var targetPos = target != null ? (target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position) : targetPosition;
-        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType);
+        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType.Value);
 
         if (currentUnit.attackableSo.CanSalve)
         {

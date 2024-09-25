@@ -62,7 +62,7 @@ MonoBehaviour:
   - Type: 10
     Value: 5
   - Type: 4
-    Value: 25
+    Value: 10
   - Type: 3
     Value: 0.4
   sightAngle: 360

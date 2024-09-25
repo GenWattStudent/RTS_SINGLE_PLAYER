@@ -4,23 +4,24 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
+public class Spawner : NetworkBehaviour, ISpawnerBuilding
 {
     [SerializeField] private Transform unitSpawnPoint;
     public Transform unitMovePoint;
-    private List<UnitSo> unitsQueue = new();
-    private NetworkVariable<float> spawnTimer = new NetworkVariable<float>(0);
-    public NetworkVariable<float> totalSpawnTime = new NetworkVariable<float>(0);
+    public NetworkVariable<float> totalSpawnTime = new(0);
+
     private bool isUnitSpawning = false;
     private UnitSo currentSpawningUnit;
     private Building buildingScript;
-
+    private List<UnitSo> unitsQueue = new();
+    private NetworkVariable<float> spawnTimer = new(0);
     private ResourceUsage resourceUsage;
     private PlayerController playerController;
     private RTSObjectsManager RTSObjectsManager;
     private UIUnitManager UIUnitManager;
     private UnitCountManager unitCountManager;
     private UIStorage uIStorage;
+
     public event Action<UnitSo, Unit> OnSpawnUnit;
 
     private void Start()
@@ -101,7 +102,10 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         {
             var unit = InstantiateUnit();
             var no = unit.GetComponent<NetworkObject>();
+            var damagable = unit.GetComponent<Damagable>();
+            var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
 
+            damagable.teamType.Value = playerController.teamType.Value;
             no.SpawnWithOwnership(OwnerClientId);
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
@@ -139,22 +143,6 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
         }
     }
 
-    private void UpdateScreen()
-    {
-        var screenController = GetComponentInChildren<ScreenController>();
-
-        if (screenController == null) return;
-
-        if (currentSpawningUnit != null)
-        {
-            screenController.SetProgresBar(spawnTimer.Value, totalSpawnTime.Value);
-        }
-        else
-        {
-            screenController.SetProgresBar(0, 0);
-        }
-    }
-
     private void Update()
     {
         if (!IsServer) return;
@@ -163,7 +151,6 @@ public class TankBuilding : NetworkBehaviour, ISpawnerBuilding
             || resourceUsage.isInDebt) return;
 
         spawnTimer.Value -= Time.deltaTime;
-        UpdateScreen();
         SpawnUnitServerRpc();
     }
 

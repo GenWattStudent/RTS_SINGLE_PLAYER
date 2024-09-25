@@ -94,7 +94,31 @@ namespace FOVMapping
 		[Tooltip("(Do not modify) Pixel reader computer shader")]
 		private ComputeShader pixelReader;
 
-		private Dictionary<ulong, List<FOVAgent>> clientVisibleAgents = new Dictionary<ulong, List<FOVAgent>>();
+		#region Shader properties
+		private int targetAgentCount = Shader.PropertyToID("targetAgentCount");
+		private int targetAgentUVsString = Shader.PropertyToID("targetAgentUVs");
+		private int _MainTex = Shader.PropertyToID("_MainTex");
+		private int inputTexture = Shader.PropertyToID("inputTexture");
+		private int outputBuffer = Shader.PropertyToID("outputBuffer");
+		private int _SamplingRange = Shader.PropertyToID("_SamplingRange");
+		private int _FOVMap = Shader.PropertyToID("_FOVMap");
+		private int _LayerCount = Shader.PropertyToID("_LayerCount");
+		private int _AgentCount = Shader.PropertyToID("_AgentCount");
+		private int _Positions = Shader.PropertyToID("_Positions");
+		private int _Forwards = Shader.PropertyToID("_Forwards");
+		private int _Ranges = Shader.PropertyToID("_Ranges");
+		private int _AngleCosines = Shader.PropertyToID("_AngleCosines");
+		private int _PlaneSizeX = Shader.PropertyToID("_PlaneSizeX");
+		private int _PlaneSizeZ = Shader.PropertyToID("_PlaneSizeZ");
+		private int _FOWColor = Shader.PropertyToID("_FOWColor");
+		private int _BlockOffset = Shader.PropertyToID("_BlockOffset");
+		private int _Sigma = Shader.PropertyToID("_Sigma");
+		private int _PlanePos = Shader.PropertyToID("_PlanePos");
+		private int _PlaneRight = Shader.PropertyToID("_PlaneRight");
+		private int _PlaneForward = Shader.PropertyToID("_PlaneForward");
+		private int _PlaneScale = Shader.PropertyToID("_PlaneScale");
+		#endregion
+
 
 		private void Awake()
 		{
@@ -112,10 +136,10 @@ namespace FOVMapping
 
 			if (FOVMapArray)
 			{
-				FOVMaterial.SetFloat("_SamplingRange", FOVMapArray.mipMapBias);
-				FOVMaterial.SetTexture("_FOVMap", FOVMapArray);
+				FOVMaterial.SetFloat(_SamplingRange, FOVMapArray.mipMapBias);
+				FOVMaterial.SetTexture(_FOVMap, FOVMapArray);
 
-				FOVMaterial.SetInt("_LayerCount", FOVMapArray.depth);
+				FOVMaterial.SetInt(_LayerCount, FOVMapArray.depth);
 			}
 			else
 			{
@@ -124,12 +148,12 @@ namespace FOVMapping
 			}
 
 			FOWRenderTexture = new RenderTexture(FOWTextureSize, FOWTextureSize, 1, RenderTextureFormat.ARGB32);
-			FOWMaterial.SetTexture("_MainTex", FOWRenderTexture); // It will be projected using a Plane.
+			FOWMaterial.SetTexture(_MainTex, FOWRenderTexture); // It will be projected using a Plane.
 
 			outputAlphaBuffer = new ComputeBuffer(1, sizeof(float) * maxEnemyAgentCount, ComputeBufferType.IndirectArguments);
 			kernelID = pixelReader.FindKernel("ReadPixels");
-			pixelReader.SetTexture(kernelID, "inputTexture", FOWRenderTexture);
-			pixelReader.SetBuffer(kernelID, "outputBuffer", outputAlphaBuffer);
+			pixelReader.SetTexture(kernelID, inputTexture, FOWRenderTexture);
+			pixelReader.SetBuffer(kernelID, outputBuffer, outputAlphaBuffer);
 
 			positionsBuffer = new ComputeBuffer(maxFriendlyAgentCount, sizeof(float) * 3, ComputeBufferType.IndirectArguments);
 			forwardsBuffer = new ComputeBuffer(maxFriendlyAgentCount, sizeof(float) * 3, ComputeBufferType.IndirectArguments);
@@ -223,7 +247,7 @@ namespace FOVMapping
 					Debug.LogError($"Maximum friendly agent count ({maxFriendlyAgentCount}) exceeded.");
 				}
 
-				FOVMaterial.SetInt("_AgentCount", positions.Count);
+				FOVMaterial.SetInt(_AgentCount, positions.Count);
 				if (positions.Count > 0)
 				{
 					positionsBuffer.SetData(positions);
@@ -231,24 +255,24 @@ namespace FOVMapping
 					rangesBuffer.SetData(ranges);
 					angleCosinesBuffer.SetData(angleCosines);
 
-					FOVMaterial.SetBuffer("_Positions", positionsBuffer);
-					FOVMaterial.SetBuffer("_Forwards", forwardsBuffer);
-					FOVMaterial.SetBuffer("_Ranges", rangesBuffer);
-					FOVMaterial.SetBuffer("_AngleCosines", angleCosinesBuffer);
+					FOVMaterial.SetBuffer(_Positions, positionsBuffer);
+					FOVMaterial.SetBuffer(_Forwards, forwardsBuffer);
+					FOVMaterial.SetBuffer(_Ranges, rangesBuffer);
+					FOVMaterial.SetBuffer(_AngleCosines, angleCosinesBuffer);
 				}
 
 				// Set uniform values for FOVMaterial
-				FOVMaterial.SetFloat("_PlaneSizeX", transform.lossyScale.x);
-				FOVMaterial.SetFloat("_PlaneSizeZ", transform.lossyScale.z);
+				FOVMaterial.SetFloat(_PlaneSizeX, transform.lossyScale.x);
+				FOVMaterial.SetFloat(_PlaneSizeZ, transform.lossyScale.z);
 
-				FOVMaterial.SetColor("_FOWColor", FOWColor);
-				FOVMaterial.SetFloat("_BlockOffset", blockOffset);
+				FOVMaterial.SetColor(_FOWColor, FOWColor);
+				FOVMaterial.SetFloat(_BlockOffset, blockOffset);
 
 				// Set uniform values for FOWMaterial
-				FOWMaterial.SetVector("_PlanePos", transform.position);
-				FOWMaterial.SetVector("_PlaneRight", transform.right);
-				FOWMaterial.SetVector("_PlaneForward", transform.forward);
-				FOWMaterial.SetVector("_PlaneScale", transform.localScale);
+				FOWMaterial.SetVector(_PlanePos, transform.position);
+				FOWMaterial.SetVector(_PlaneRight, transform.right);
+				FOWMaterial.SetVector(_PlaneForward, transform.forward);
+				FOWMaterial.SetVector(_PlaneScale, transform.localScale);
 			}
 
 			// Apply FOVMapping and Gaussian blur passes to a RenderTexture
@@ -263,7 +287,7 @@ namespace FOVMapping
 
 				// Blur
 				RenderTexture temp = RenderTexture.GetTemporary(FOWRenderTexture.width, FOWRenderTexture.height, 0, FOWRenderTexture.format);
-				blurMaterial.SetFloat("_Sigma", sigma);
+				blurMaterial.SetFloat(_Sigma, sigma);
 
 				// Apply Gaussian blur shader multiple times
 				// Render to one another alternately
@@ -330,8 +354,8 @@ namespace FOVMapping
 				}
 
 				// Use the compute shader to retrieve pixel data from the GPU to CPU
-				pixelReader.SetInt("targetAgentCount", targetAgents.Count);
-				pixelReader.SetVectorArray("targetAgentUVs", targetAgentUVs.ToArray());
+				pixelReader.SetInt(targetAgentCount, targetAgents.Count);
+				pixelReader.SetVectorArray(targetAgentUVsString, targetAgentUVs.ToArray());
 
 				pixelReader.Dispatch(kernelID, 1, 1, 1);
 
@@ -352,7 +376,7 @@ namespace FOVMapping
 		// Interfaces
 		public void FindAllFOVAgents()
 		{
-			FOVAgents = FindObjectsOfType<FOVAgent>().ToList();
+			FOVAgents = FindObjectsByType<FOVAgent>(FindObjectsSortMode.None).ToList();
 		}
 
 		public void AddFOVAgent(FOVAgent agent)
