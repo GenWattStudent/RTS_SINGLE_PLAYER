@@ -180,7 +180,6 @@ GameObject:
   - component: {fileID: 5590514999077052567}
   - component: {fileID: -7845219290297878131}
   - component: {fileID: -4197327715822194599}
-  - component: {fileID: -6878091196926842405}
   m_Layer: 8
   m_Name: DeathGroundTurret
   m_TagString: Untagged
@@ -289,23 +288,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dissolveSpeed: 0.7
   dissolveValue: 5
---- !u!114 &-6878091196926842405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6239037674919067970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1

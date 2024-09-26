@@ -114,8 +114,13 @@ public class Stats : NetworkBehaviour
         stats.Add(new Stat { Type = type, Value = value });
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
-        stats.Dispose();
+        base.OnNetworkDespawn();
+        if (stats != null && IsServer)
+        {
+            stats.Dispose();
+            stats = null;
+        }
     }
 }

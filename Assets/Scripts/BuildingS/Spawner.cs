@@ -105,8 +105,8 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
             var damagable = unit.GetComponent<Damagable>();
             var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
 
-            damagable.teamType.Value = playerController.teamType.Value;
             no.SpawnWithOwnership(OwnerClientId);
+            damagable.teamType.Value = playerController.teamType.Value;
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
             OnSpawnUnit?.Invoke(currentSpawningUnit, unit);

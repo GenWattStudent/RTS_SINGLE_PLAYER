@@ -195,4 +195,13 @@ public class UIStorage : NetworkBehaviour
 
         playerName.text = LobbyManager.Instance != null ? LobbyManager.Instance.playerName : "Debug Mode";
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (storages != null && IsServer)
+        {
+            storages.Dispose();
+            storages = null;
+        }
+    }
 }

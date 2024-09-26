@@ -3,8 +3,6 @@ using UnityEngine.UIElements;
 
 public class FPSCounter : NetworkToolkitHelper
 {
-    public float lowFPS = 30f;
-    public float highFPS = 60f;
     public float updateTimer = 0;
     public float updateInterval = 0.5f;
 
@@ -28,15 +26,6 @@ public class FPSCounter : NetworkToolkitHelper
         currentFPS = (int)(1f / Time.unscaledDeltaTime);
         // fpsLabel.text = $"{currentFPS}FPS";
         fpsLabel.text = $"Team {playerController.teamType.Value} {currentFPS}FPS {Mathf.Round(playerController.currentPing)}ms";
-
-        if (currentFPS < lowFPS)
-        {
-            SetDanger(fpsLabel);
-        }
-        else if (currentFPS > highFPS)
-        {
-            SetSuccess(fpsLabel);
-        }
     }
 
     private void Update()

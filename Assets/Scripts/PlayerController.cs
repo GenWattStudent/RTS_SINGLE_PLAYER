@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-// i want this script to execute first
 [DefaultExecutionOrder(-100)]
 public class PlayerController : NetworkBehaviour
 {
@@ -24,8 +22,6 @@ public class PlayerController : NetworkBehaviour
     private float checkPingTimer;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
-    public static event Action<Unit, List<Unit>> OnUnitChange;
-    public static event Action<Building, List<Building>> OnBuildingChange;
 
     public void GetPing()
     {
@@ -49,7 +45,6 @@ public class PlayerController : NetworkBehaviour
         {
             // Calculate the round-trip time (ping)
             double currentTime = NetworkManager.Singleton.LocalTime.Time;
-            Debug.Log($"RespondPingClientRpc {currentTime} {lastPingTime}");
             currentPing = (float)((currentTime - lastPingTime) * 1000); // Convert to milliseconds
         }
     }
@@ -61,10 +56,10 @@ public class PlayerController : NetworkBehaviour
         var no = heroInstance.GetComponent<NetworkObject>();
         var damagable = heroInstance.GetComponent<Damagable>();
 
-        damagable.teamType.Value = teamType.Value;
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
         no.SpawnWithOwnership(clientId);
+        damagable.teamType.Value = teamType.Value;
         RTSObjectsManager.AddUnitServerRpc(no);
     }
 
@@ -112,7 +107,7 @@ public class PlayerController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnUnitServerRpc(Vector3 spawnPosition, ServerRpcParams rpcParams = default)
     {
-        SpawnHero(rpcParams.Receive.SenderClientId, spawnPosition);
+        SpawnHero(OwnerClientId, spawnPosition);
         spawnPosition += new Vector3(2, 0, 0);
 
         foreach (var unitPrefab in unitPrefabs)
@@ -123,13 +118,15 @@ public class PlayerController : NetworkBehaviour
                 var unitMovement = unit.GetComponent<UnitMovement>();
                 var no = unit.GetComponent<NetworkObject>();
                 var damagable = unit.GetComponent<Damagable>();
-                damagable.teamType.Value = teamType.Value;
+
                 unitMovement.agent.enabled = true;
 
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 spawnPosition += new Vector3(2, 0, 0);
-                no.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+
+                no.SpawnWithOwnership(OwnerClientId);
+                damagable.teamType.Value = teamType.Value;
                 RTSObjectsManager.AddUnitServerRpc(no);
             }
         }
@@ -222,7 +219,6 @@ public class PlayerController : NetworkBehaviour
                 GetPing();
                 checkPingTimer = 0;
             }
-            Debug.Log("PlayerController Update " + currentPing);
         }
     }
 }
