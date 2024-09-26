@@ -20,12 +20,23 @@ public class MultiplayerTools : NetworkBehaviour
         multiplayerModal = root.Q<VisualElement>("MultiplayerTools");
         playerCountLabel = root.Q<Label>("PlayerCount");
 
+        if (GameManager.Instance.IsDebug)
+        {
+            multiplayerModal.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            multiplayerModal.style.display = DisplayStyle.None;
+            return;
+        }
+
         startHostButton.clicked += ToogleHost;
         startClientButton.clicked += ToogleClient;
     }
 
     private void Start()
     {
+        if (!GameManager.Instance.IsDebug) return;
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
     }
@@ -47,13 +58,17 @@ public class MultiplayerTools : NetworkBehaviour
 
     private void OnDisable()
     {
+        if (!GameManager.Instance.IsDebug) return;
         startHostButton.clicked -= ToogleHost;
         startClientButton.clicked -= ToogleClient;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
-        // NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        base.OnNetworkDespawn();
+        if (!GameManager.Instance.IsDebug) return;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
 
     private void StartHost()

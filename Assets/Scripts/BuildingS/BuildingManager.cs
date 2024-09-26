@@ -191,10 +191,8 @@ public class BuildingManager : NetworkBehaviour
         var stats = newBuilding.GetComponent<Stats>();
         var damagable = newBuilding.GetComponent<Damagable>();
 
-        Debug.Log("PlaceBuildingServerRpc " + playerController.teamType);
-
-        damagable.teamType.Value = playerController.teamType.Value;
         no.SpawnWithOwnership(clientId);
+        damagable.teamType.Value = playerController.teamType.Value;
         stats.AddStat(StatType.Health, 1);
         RTSObjectsManager.AddBuildingServerRpc(no);
     }

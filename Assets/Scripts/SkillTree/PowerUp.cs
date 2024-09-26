@@ -112,4 +112,13 @@ public class PowerUp : NetworkBehaviour
 
         return false;
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (unlockedSkillsIndex != null && IsServer)
+        {
+            unlockedSkillsIndex.Dispose();
+            unlockedSkillsIndex = null;
+        }
+    }
 }

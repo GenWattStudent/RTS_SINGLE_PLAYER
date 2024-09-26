@@ -91,8 +91,8 @@ public class Construction : NetworkBehaviour
         var damagable = building.GetComponent<Damagable>();
         var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
 
-        damagable.teamType.Value = playerController.teamType.Value;
         no.SpawnWithOwnership(OwnerClientId);
+        damagable.teamType.Value = playerController.teamType.Value;
         InstantiateBuildingClientRpc(no);
         constructionNo.Despawn(true);
     }

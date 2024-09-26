@@ -73,16 +73,15 @@ public class Unit : NetworkBehaviour
     private void Start()
     {
 
-        if (!IsOwner) HideUnit();
-        var id = IsBot ? 2 : OwnerClientId;
-        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
+        var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
+        var playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
 
         ChangeMaterial(playerColorData.playerMaterial, true);
 
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
         // visibleTimer = visibleInterval;
-
+        if (damagable.teamType.Value != playerController.teamType.Value) HideUnit();
         var fovAgent = GetComponent<FOVAgent>();
 
         if (fovAgent == null)
@@ -91,9 +90,9 @@ public class Unit : NetworkBehaviour
         }
 
         var construction = GetComponent<Construction>();
-        Debug.Log("Construction: " + construction);
-        fovAgent.disappearInFOW = !IsOwner || IsBot;
-        fovAgent.contributeToFOV = IsOwner && !IsBot && construction == null;
+
+        fovAgent.disappearInFOW = damagable.teamType.Value != playerController.teamType.Value;
+        fovAgent.contributeToFOV = damagable.teamType.Value == playerController.teamType.Value && construction == null;
 
         var fogOfWar = FindFirstObjectByType<FOVManager>();
         if (fogOfWar != null)

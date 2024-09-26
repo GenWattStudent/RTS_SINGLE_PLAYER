@@ -4,7 +4,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class LobbyData : MonoBehaviour
+public class LobbyData
 {
     public string MapName = default;
     public string RelayCode = default;
