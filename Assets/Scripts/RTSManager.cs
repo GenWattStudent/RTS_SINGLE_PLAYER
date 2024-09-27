@@ -210,11 +210,12 @@ public class RTSManager : NetworkBehaviour
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
+                var unitScript = raycastHit.transform.gameObject.GetComponent<Unit>();
 
                 if (damagableScript != null && !damagableScript.IsBot && selectableScript != null)
                 {
                     // Attack
-                    if (damagableScript.teamType.Value != playerController.teamType.Value)
+                    if (damagableScript.teamType.Value != playerController.teamType.Value && unitScript.isVisibile)
                     {
                         Debug.Log("AttackCommand " + damagableScript.teamType + " " + playerController.teamType);
                         AttackCommand(damagableScript);

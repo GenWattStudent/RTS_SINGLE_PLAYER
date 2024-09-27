@@ -401,6 +401,11 @@ namespace FOVMapping
 			return FOVAgents.Count;
 		}
 
+		public bool ContainsFOVAgent(FOVAgent agent)
+		{
+			return FOVAgents.Contains(agent);
+		}
+
 		public void ClearFOVAgents()
 		{
 			Debug.Log("ClearFOVAgents");

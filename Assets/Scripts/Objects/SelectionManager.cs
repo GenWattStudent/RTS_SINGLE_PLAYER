@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+
 [DefaultExecutionOrder(-1)]
 public class SelectionManager : NetworkBehaviour
 {
@@ -12,6 +13,7 @@ public class SelectionManager : NetworkBehaviour
     private PlayerController playerController;
     private UIUnitManager UIUnitManager;
     private RTSObjectsManager RTSObjectsManager;
+
     // select event
     public delegate void SelectAction();
     public static event SelectAction OnSelect;
@@ -36,8 +38,8 @@ public class SelectionManager : NetworkBehaviour
         }
 
         playerController = GetComponent<PlayerController>();
-        RTSObjectsManager = GetComponent<RTSObjectsManager>();
         UIUnitManager = GetComponentInChildren<UIUnitManager>();
+        RTSObjectsManager = GetComponent<RTSObjectsManager>();
         selectedObjects = new();
     }
 

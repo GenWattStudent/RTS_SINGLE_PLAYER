@@ -155,6 +155,12 @@ public class SkillTreeManager : NetworkToolkitHelper
         UpdateSkillPoints();
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        skillPoints.OnValueChanged -= OnSkillPointsChange;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))

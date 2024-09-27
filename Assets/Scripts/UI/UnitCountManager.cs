@@ -4,9 +4,11 @@ using UnityEngine.UIElements;
 
 public class UnitCountManager : NetworkToolkitHelper
 {
-    private Label unitCountText;
     [SerializeField] private int maxUnitCount = 20;
     [SerializeField] private int currentUnitCount = 0;
+
+    private Label unitCountText;
+    private RTSObjectsManager RTSObjectsManager;
 
     private void Start()
     {
@@ -21,14 +23,15 @@ public class UnitCountManager : NetworkToolkitHelper
     {
         base.OnEnable();
         UIDocument = GetComponent<UIDocument>();
+        RTSObjectsManager = GetComponentInParent<RTSObjectsManager>();
         root = UIDocument.rootVisualElement;
         unitCountText = root.Q<Label>("UnitCountLabel");
+        Debug.Log("UnitCountManager Start");
         RTSObjectsManager.OnUnitChange += OnUnitChange;
     }
 
     private void OnDisable()
     {
-        if (!IsOwner) return;
         RTSObjectsManager.OnUnitChange -= OnUnitChange;
     }
 
@@ -39,7 +42,7 @@ public class UnitCountManager : NetworkToolkitHelper
 
     private void OnUnitChange(Unit unit, List<Unit> units)
     {
-        if (!IsOwner) return;
+        Debug.Log("OnUnitChange " + units.Count);
         currentUnitCount = units.Count;
         UpdateText();
     }

@@ -1294,9 +1294,10 @@ MonoBehaviour:
   - {fileID: 5005139993492650038}
   - {fileID: 4184588130231238393}
   unitUiPrefabs:
-  - {fileID: 0}
+  - {fileID: 8617468919860334350}
   - {fileID: 8199242462070866894}
   bushes: []
+  teamType: 0
   isVisibile: 1
 --- !u!114 &-1471744200378852231
 MonoBehaviour:
@@ -1336,6 +1337,9 @@ MonoBehaviour:
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &7673169960702776933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1348,17 +1352,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df302aa9d6cae574fbe2d4efc121e1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  checkTargetTimer: 0
-  currentUnit: {fileID: 0}
-  bulletSpawnPoint: {fileID: 8963895157291006664}
-  attackCooldownTimer: 0
-  currentAmmo: 0
   autoAttack: 1
+  checkTargetTimer: 0
+  bulletSpawnPoint: {fileID: 8963895157291006664}
   isRealoading: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  currentUnit: {fileID: 0}
+  currentDamagable: {fileID: 0}
+  currentAmmo: 0
+  attackCooldownTimer: 0
   lastAttackTime: 0
-  rot: 0
 --- !u!195 &6451795301113717441
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3934,6 +3938,12 @@ RectTransform:
 --- !u!224 &5265436525312203228 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6101178895358519602, guid: 51ffc9f1b4ea46143867e911db8a91b0,
+    type: 3}
+  m_PrefabInstance: {fileID: 2141790918199324910}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8617468919860334350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7651137673848111072, guid: 51ffc9f1b4ea46143867e911db8a91b0,
     type: 3}
   m_PrefabInstance: {fileID: 2141790918199324910}
   m_PrefabAsset: {fileID: 0}

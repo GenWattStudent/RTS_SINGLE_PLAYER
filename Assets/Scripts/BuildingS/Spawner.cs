@@ -17,7 +17,6 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     private NetworkVariable<float> spawnTimer = new(0);
     private ResourceUsage resourceUsage;
     private PlayerController playerController;
-    private RTSObjectsManager RTSObjectsManager;
     private UIUnitManager UIUnitManager;
     private UnitCountManager unitCountManager;
     private UIStorage uIStorage;
@@ -30,7 +29,6 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
         resourceUsage = GetComponent<ResourceUsage>();
 
         playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        RTSObjectsManager = playerController.GetComponent<RTSObjectsManager>();
         UIUnitManager = playerController.GetComponentInChildren<UIUnitManager>();
         unitCountManager = playerController.GetComponentInChildren<UnitCountManager>();
         uIStorage = playerController.GetComponentInChildren<UIStorage>();
@@ -104,6 +102,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
             var no = unit.GetComponent<NetworkObject>();
             var damagable = unit.GetComponent<Damagable>();
             var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+            var RTSObjectsManager = playerController.GetComponent<RTSObjectsManager>();
 
             no.SpawnWithOwnership(OwnerClientId);
             damagable.teamType.Value = playerController.teamType.Value;
@@ -124,9 +123,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
         if (networkObjectReference.TryGet(out NetworkObject no))
         {
             if (no.OwnerClientId != OwnerClientId) return;
-            var unit = no.GetComponent<Unit>();
-            RTSObjectsManager.LocalPlayerUnits.Add(unit);
-
+            Debug.Log("SpawnUnitClientRpc " + no.OwnerClientId + " " + OwnerClientId);
             if (!IsServer)
             {
                 if (unitsQueue.Count > 0)
