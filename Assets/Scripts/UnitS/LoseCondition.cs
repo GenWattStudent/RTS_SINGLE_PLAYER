@@ -10,23 +10,40 @@ public class LoseCondition : NetworkBehaviour
 
     private void Start()
     {
-
         damagable = GetComponent<Damagable>();
+
+        NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+
         if (IsServer)
         {
             damagable.OnDead += OnDeadServerRpc;
+        }
+    }
+
+    private void HandleClientConnected(ulong clientId)
+    {
+        if (IsServer)
+        {
             var playerControllers = NetworkManager.Singleton.ConnectedClients.Values;
             // Find player count for a team
-            var teams = playerControllers.Select(x => x.PlayerObject.GetComponent<PlayerController>().teamType).Distinct();
+            var teams = playerControllers.Select(x => x.PlayerObject.GetComponent<PlayerController>().teamType.Value).Distinct();
+            teammateAlive.Clear();
 
             foreach (var team in teams)
             {
-                teammateAlive.Add(team.Value, playerControllers.Count(x => x.PlayerObject.GetComponent<PlayerController>().teamType == team));
+                if (teammateAlive.ContainsKey(team))
+                {
+                    teammateAlive[team]++;
+                }
+                else
+                {
+                    teammateAlive[team] = 1;
+                }
             }
 
-            foreach (var teammate in teammateAlive)
+            foreach (var team in teammateAlive)
             {
-                Debug.Log(teammate.Key + " " + teammate.Value);
+                Debug.Log("Team " + team.Key + " " + teammateAlive[team.Key]);
             }
         }
     }

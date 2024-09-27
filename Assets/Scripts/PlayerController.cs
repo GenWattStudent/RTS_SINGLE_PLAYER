@@ -57,9 +57,9 @@ public class PlayerController : NetworkBehaviour
         var damagable = heroInstance.GetComponent<Damagable>();
 
         if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
-
-        no.SpawnWithOwnership(clientId);
         damagable.teamType.Value = teamType.Value;
+        no.SpawnWithOwnership(clientId);
+
         RTSObjectsManager.AddUnitServerRpc(no);
     }
 
@@ -105,9 +105,9 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnUnitServerRpc(Vector3 spawnPosition, ServerRpcParams rpcParams = default)
+    private void SpawnUnitServerRpc(Vector3 spawnPosition, ulong clientId)
     {
-        SpawnHero(OwnerClientId, spawnPosition);
+        SpawnHero(clientId, spawnPosition);
         spawnPosition += new Vector3(2, 0, 0);
 
         foreach (var unitPrefab in unitPrefabs)
@@ -124,9 +124,8 @@ public class PlayerController : NetworkBehaviour
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 spawnPosition += new Vector3(2, 0, 0);
-
-                no.SpawnWithOwnership(OwnerClientId);
                 damagable.teamType.Value = teamType.Value;
+                no.SpawnWithOwnership(clientId);
                 RTSObjectsManager.AddUnitServerRpc(no);
             }
         }
@@ -163,8 +162,20 @@ public class PlayerController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        if (!IsOwner) return;
         playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
         playerExpierence.OnValueChanged += OnPlayerExpierenceChangeHandler;
+
+        if (GameManager.Instance.IsDebug)
+        {
+            var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
+            SetTeamServerRpc(team);
+        }
+        else
+        {
+            var team = LobbyManager.Instance.playerLobbyData.Team;
+            SetTeamServerRpc(team);
+        }
     }
 
     private void Awake()
@@ -187,18 +198,7 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            if (GameManager.Instance.IsDebug)
-            {
-                var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
-                SetTeamServerRpc(team);
-            }
-            else
-            {
-                var team = LobbyManager.Instance.playerLobbyData.Team;
-                SetTeamServerRpc(team);
-            }
-
-            SpawnUnitServerRpc(playerData.spawnPosition);
+            SpawnUnitServerRpc(playerData.spawnPosition, OwnerClientId);
         }
 
         if (IsServer)
@@ -210,7 +210,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
-        if (IsClient)
+        if (IsClient && IsOwner)
         {
             checkPingTimer += Time.deltaTime;
 

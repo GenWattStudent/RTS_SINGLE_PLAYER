@@ -32,6 +32,7 @@ public class MultiplayerTools : NetworkBehaviour
 
         startHostButton.clicked += ToogleHost;
         startClientButton.clicked += ToogleClient;
+        playerCount.OnValueChanged += (oldValue, newValue) => playerCountLabel.text = $"Player count: {newValue}";
     }
 
     private void Start()
@@ -46,14 +47,12 @@ public class MultiplayerTools : NetworkBehaviour
         if (!IsServer) return;
 
         playerCount.Value += 1;
-        playerCountLabel.text = $"Player count: {playerCount.Value}";
     }
 
     private void OnClientDisconnect(ulong clientId)
     {
         if (!IsServer) return;
         playerCount.Value -= 1;
-        playerCountLabel.text = $"Player count: {playerCount.Value}";
     }
 
     private void OnDisable()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,12 +15,12 @@ public class Unit : NetworkBehaviour
     public List<GameObject> unitPrefabs = new();
     public List<GameObject> unitUiPrefabs = new();
     public List<GameObject> bushes = new();
-    public TeamType teamType;
     private Damagable damagable;
     private Attack attack;
     public bool isVisibile = true;
     // private float visibleTimer = 0f;
     private float visibleInterval = 5f;
+    private PlayerController playerController;
 
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
@@ -43,15 +44,6 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    // public override void OnNetworkSpawn()
-    // {
-    //     if (!IsOwner) HideUnit();
-    //     var id = IsBot ? 2 : OwnerClientId;
-    //     var playerColorData = MultiplayerController.Instance.playerMaterials[(int)id];
-
-    //     ChangeMaterial(playerColorData.playerMaterial, true);
-    // }
-
     public void HideUiPrefabs()
     {
         var canvases = GetComponentsInChildren<Canvas>();
@@ -70,18 +62,47 @@ public class Unit : NetworkBehaviour
         }
     }
 
+    private void HandleTeamChange(TeamType oldValue, TeamType newValue)
+    {
+        AddAgentToFogOfWar(GetComponent<FOVAgent>(), newValue, damagable.teamType.Value);
+    }
+
+    private void HandleUnitTeamChange(TeamType oldValue, TeamType newValue)
+    {
+        AddAgentToFogOfWar(GetComponent<FOVAgent>(), playerController.teamType.Value, newValue);
+    }
+
+    private void AddAgentToFogOfWar(FOVAgent fovAgent, TeamType playerTeamType, TeamType unitTeamType)
+    {
+        var construction = GetComponent<Construction>();
+
+        if (unitTeamType != playerTeamType) HideUnit();
+        else ShowUnit();
+        Debug.Log("AddAgentToFogOfWar " + OwnerClientId + " " + unitTeamType + " " + playerTeamType);
+        fovAgent.disappearInFOW = unitTeamType != playerTeamType;
+        fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
+
+        var fogOfWar = FindFirstObjectByType<FOVManager>();
+        if (fogOfWar != null && !fogOfWar.ContainsFOVAgent(fovAgent))
+        {
+            fogOfWar.AddFOVAgent(fovAgent);
+        }
+    }
+
     private void Start()
     {
-
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
-        var playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
 
         ChangeMaterial(playerColorData.playerMaterial, true);
 
         damagable = GetComponent<Damagable>();
         attack = GetComponent<Attack>();
+
+        playerController.teamType.OnValueChanged += HandleTeamChange;
+        damagable.teamType.OnValueChanged += HandleUnitTeamChange;
         // visibleTimer = visibleInterval;
-        if (damagable.teamType.Value != playerController.teamType.Value) HideUnit();
+
         var fovAgent = GetComponent<FOVAgent>();
 
         if (fovAgent == null)
@@ -89,16 +110,7 @@ public class Unit : NetworkBehaviour
             fovAgent = gameObject.AddComponent<FOVAgent>();
         }
 
-        var construction = GetComponent<Construction>();
-
-        fovAgent.disappearInFOW = damagable.teamType.Value != playerController.teamType.Value;
-        fovAgent.contributeToFOV = damagable.teamType.Value == playerController.teamType.Value && construction == null;
-
-        var fogOfWar = FindFirstObjectByType<FOVManager>();
-        if (fogOfWar != null)
-        {
-            fogOfWar.AddFOVAgent(fovAgent);
-        }
+        AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, damagable.teamType.Value);
     }
 
     public void HideUnit()

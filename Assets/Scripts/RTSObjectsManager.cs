@@ -6,13 +6,12 @@ using UnityEngine;
 public class RTSObjectsManager : NetworkBehaviour
 {
     public static Dictionary<ulong, List<Unit>> Units { get; private set; } = new();
-    public List<Building> Buildings { get; private set; } = new();
-    public List<Unit> LocalPlayerUnits { get; private set; } = new();
-    public List<Building> LocalPlayerBuildings { get; private set; } = new();
-    // private PlayerController playerController;
+    public List<Building> Buildings = new();
+    public List<Unit> LocalPlayerUnits = new();
+    public List<Building> LocalPlayerBuildings = new();
 
-    public static event Action<Unit, List<Unit>> OnUnitChange;
-    public static event Action<Building, List<Building>> OnBuildingChange;
+    public event Action<Unit, List<Unit>> OnUnitChange;
+    public event Action<Building, List<Building>> OnBuildingChange;
 
     private void Start()
     {
@@ -57,10 +56,11 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
+            if (no.OwnerClientId != OwnerClientId) return;
             var unit = no.GetComponent<Unit>();
             var damagableScript = unit.GetComponent<Damagable>();
             LocalPlayerUnits.Add(unit);
-            Debug.Log($"Client({unit.OwnerClientId}) have {LocalPlayerUnits.Count} units.");
+            Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
             // playerController.AddUnit(unit);
             OnUnitChange?.Invoke(unit, LocalPlayerUnits);
         }
@@ -71,7 +71,7 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            var senderClientId = serverRpcParams.Receive.SenderClientId;
+            var senderClientId = no.OwnerClientId;
             var unit = no.GetComponent<Unit>();
             if (!Units[senderClientId].Contains(unit)) return;
 
