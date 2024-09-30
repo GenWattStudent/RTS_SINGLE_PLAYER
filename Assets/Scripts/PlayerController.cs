@@ -11,9 +11,9 @@ public class PlayerController : NetworkBehaviour
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
 
-    public NetworkVariable<int> playerExpierence = new(0);
-    public NetworkVariable<int> playerLevel = new(1);
-    public NetworkVariable<TeamType> teamType = new(TeamType.None);
+    [HideInInspector] public NetworkVariable<int> playerExpierence = new(0);
+    [HideInInspector] public NetworkVariable<int> playerLevel = new(1);
+    [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public float currentPing;
 
     private RTSObjectsManager RTSObjectsManager;
@@ -70,7 +70,6 @@ public class PlayerController : NetworkBehaviour
 
         var playerExp = playerExpierence.Value;
         playerExp += amount;
-        Debug.Log("AddExpiernceServerRpc " + playerExp + " " + playerLevel.Value + " " + amount);
         var nextLevelData = playerLevelSo.levelsData[playerLevel.Value];
         var diffrence = playerExp - nextLevelData.expToNextLevel;
 
@@ -79,10 +78,10 @@ public class PlayerController : NetworkBehaviour
             playerLevel.Value++;
             playerExp = diffrence;
             var playerSkillTree = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<SkillTreeManager>();
-            Debug.Log("AddExpiernceServerRpc " + playerSkillTree.OwnerClientId);
+
             playerSkillTree.AddSkillPointsServerRpc(1);
         }
-        Debug.Log("AddExpiernce " + playerExp);
+
         playerExpierence.Value = playerExp;
     }
 
@@ -112,7 +111,7 @@ public class PlayerController : NetworkBehaviour
 
         foreach (var unitPrefab in unitPrefabs)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();
@@ -174,6 +173,7 @@ public class PlayerController : NetworkBehaviour
         else
         {
             var team = LobbyManager.Instance.playerLobbyData.Team;
+            Debug.Log("OnNetworkSpawn " + team);
             SetTeamServerRpc(team);
         }
     }
@@ -198,6 +198,8 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
+            var cameraSystem = FindAnyObjectByType<CameraSystem>();
+            cameraSystem.SetCameraPosition(new Vector3(playerData.spawnPosition.x, cameraSystem.transform.position.y, playerData.spawnPosition.z));
             SpawnUnitServerRpc(playerData.spawnPosition, OwnerClientId);
         }
 

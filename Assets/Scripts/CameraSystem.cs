@@ -115,6 +115,7 @@ public class CameraSystem : MonoBehaviour
         {
             targetFieldOfView -= 5f;
         }
+
         if (Input.mouseScrollDelta.y < 0)
         {
             targetFieldOfView += 5f;
@@ -132,11 +133,17 @@ public class CameraSystem : MonoBehaviour
         {
             rotateDirection = +1f;
         }
+
         if (Input.GetKey(KeyCode.E))
         {
             rotateDirection = -1f;
         }
 
         transform.eulerAngles += new Vector3(0, rotateDirection * cameraRotationSpeed * Time.deltaTime, 0);
+    }
+
+    public void SetCameraPosition(Vector3 position)
+    {
+        transform.position = position;
     }
 }

@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 3485088078220064484}
   - component: {fileID: 1709523348646625838}
   - component: {fileID: 34031861805293224}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FOWPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 126
   m_IsActive: 1
 --- !u!4 &572624217859586369
 Transform:
@@ -27,9 +27,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 916920257270916091}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 251, y: 1, z: 251}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -96,8 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b7f514248fb86d4292adf0c6dd0edf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FOWTextureSize: 2048
-  FOWColor: {r: 0, g: 0, b: 0, a: 0.9372549}
+  FOWTextureSize: 1024
+  FOWColor: {r: 0, g: 0, b: 0, a: 0.39607844}
   maxFriendlyAgentCount: 128
   maxEnemyAgentCount: 128
   updateInterval: 0.051

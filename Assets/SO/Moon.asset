@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Moon
   m_EditorClassIdentifier: 
   MapName: Moon
-  MapImage: {fileID: 0}
+  MapImage: {fileID: 2800000, guid: 2900d4bb3dd86db428c23f5cf4e1414d, type: 3}
