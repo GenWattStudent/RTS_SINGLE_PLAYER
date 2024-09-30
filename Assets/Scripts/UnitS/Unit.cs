@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
@@ -78,7 +77,7 @@ public class Unit : NetworkBehaviour
 
         if (unitTeamType != playerTeamType) HideUnit();
         else ShowUnit();
-        Debug.Log("AddAgentToFogOfWar " + OwnerClientId + " " + unitTeamType + " " + playerTeamType);
+
         fovAgent.disappearInFOW = unitTeamType != playerTeamType;
         fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
 
@@ -167,26 +166,5 @@ public class Unit : NetworkBehaviour
         }
 
         ShowUiPrefabs();
-    }
-
-    private void Update()
-    {
-        // visibleTimer += Time.deltaTime;
-
-        // if (attack != null && bushes.Count > 0 && attack.targetPosition != Vector3.zero)
-        // {
-        //     ShowUnit();
-        //     // visibleTimer = 0f;
-        //     return;
-        // }
-
-        // if (bushes.Count > 0)
-        // {
-        //     HideUnit();
-        // }
-        // else
-        // {
-        //     ShowUnit();
-        // }
     }
 }

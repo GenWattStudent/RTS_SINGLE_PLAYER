@@ -6,17 +6,25 @@ using UnityEngine;
 public class LoseCondition : NetworkBehaviour
 {
     private Damagable damagable;
-    private Dictionary<TeamType, int> teammateAlive = new();
+    private static Dictionary<TeamType, int> teammateAlive = new();
 
     private void Start()
     {
         damagable = GetComponent<Damagable>();
 
-        NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
-
         if (IsServer)
         {
+            NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
             damagable.OnDead += OnDeadServerRpc;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (IsServer && NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
         }
     }
 
@@ -24,21 +32,18 @@ public class LoseCondition : NetworkBehaviour
     {
         if (IsServer)
         {
-            var playerControllers = NetworkManager.Singleton.ConnectedClients.Values;
             // Find player count for a team
-            var teams = playerControllers.Select(x => x.PlayerObject.GetComponent<PlayerController>().teamType.Value).Distinct();
-            teammateAlive.Clear();
+            var ConnectedClientTeam = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayerController>().teamType.Value;
+            Debug.Log("ConnectedClientTeam " + ConnectedClientTeam);
 
-            foreach (var team in teams)
+            // Add team to dictionary
+            if (!teammateAlive.ContainsKey(ConnectedClientTeam))
             {
-                if (teammateAlive.ContainsKey(team))
-                {
-                    teammateAlive[team]++;
-                }
-                else
-                {
-                    teammateAlive[team] = 1;
-                }
+                teammateAlive.Add(ConnectedClientTeam, 1);
+            }
+            else
+            {
+                teammateAlive[ConnectedClientTeam]++;
             }
 
             foreach (var team in teammateAlive)
@@ -79,7 +84,7 @@ public class LoseCondition : NetworkBehaviour
 
         var playerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
         teammateAlive[playerController.teamType.Value]--;
-
+        Debug.Log("OnDeadServerRpc " + teammateAlive[playerController.teamType.Value]);
         if (teammateAlive[playerController.teamType.Value] == 0)
         {
             var winnerTeamId = teammateAlive.FirstOrDefault(x => x.Value > 0);

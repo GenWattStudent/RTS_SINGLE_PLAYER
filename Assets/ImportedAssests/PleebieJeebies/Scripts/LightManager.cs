@@ -86,7 +86,7 @@ public class LightManager : MonoBehaviour
                 float rotationAngle = timePercent * 175f;
 
                 // Set the rotation of the DirectionalLight
-                DirectionalLight.transform.rotation = Quaternion.Euler(rotationAngle, SunDirection, 0);
+                // DirectionalLight.transform.rotation = Quaternion.Euler(rotationAngle, SunDirection, 0);
                 // DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, SunDirection, 0));
             }
         }
