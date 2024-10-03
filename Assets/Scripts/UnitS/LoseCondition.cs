@@ -10,40 +10,41 @@ public class LoseCondition : NetworkBehaviour
 
     private void Start()
     {
-        damagable = GetComponent<Damagable>();
-
         if (IsServer)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+            damagable = GetComponent<Damagable>();
             damagable.OnDead += OnDeadServerRpc;
+            CreateTeamDictionary();
         }
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        if (IsServer && NetworkManager.Singleton != null)
+
+        if (IsServer)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+            damagable.OnDead -= OnDeadServerRpc;
+            CreateTeamDictionary();
         }
     }
 
-    private void HandleClientConnected(ulong clientId)
+    private void CreateTeamDictionary()
     {
-        if (IsServer)
+        teammateAlive.Clear();
+        foreach (var clientId in NetworkManager.Singleton.ConnectedClients.Keys)
         {
-            // Find player count for a team
-            var ConnectedClientTeam = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayerController>().teamType.Value;
-            Debug.Log("ConnectedClientTeam " + ConnectedClientTeam);
+            var connectedClientTeam = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayerController>().teamType.Value;
+            Debug.Log("ConnectedClientTeam " + connectedClientTeam);
 
             // Add team to dictionary
-            if (!teammateAlive.ContainsKey(ConnectedClientTeam))
+            if (!teammateAlive.ContainsKey(connectedClientTeam))
             {
-                teammateAlive.Add(ConnectedClientTeam, 1);
+                teammateAlive.Add(connectedClientTeam, 1);
             }
             else
             {
-                teammateAlive[ConnectedClientTeam]++;
+                teammateAlive[connectedClientTeam]++;
             }
 
             foreach (var team in teammateAlive)

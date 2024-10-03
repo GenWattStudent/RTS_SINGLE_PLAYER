@@ -6,10 +6,11 @@ using UnityEngine;
 public class SelectionManager : NetworkBehaviour
 {
     [SerializeField] private RectTransform selectionBox;
+    [HideInInspector] public List<Selectable> selectedObjects;
+
     private bool isDragging = false;
     private Vector3 mouseStartPosition;
     private Vector3 mouseThreshold = new Vector3(0.1f, 0.1f, 0.1f);
-    [HideInInspector] public List<Selectable> selectedObjects;
     private PlayerController playerController;
     private UIUnitManager UIUnitManager;
     private RTSObjectsManager RTSObjectsManager;
@@ -58,9 +59,7 @@ public class SelectionManager : NetworkBehaviour
         foreach (Selectable selectable in selectedObjects)
         {
             var unitScript = selectable.GetComponent<Unit>();
-            if (unitScript == null) continue;
-            if (unitScript.unitSo == null) continue;
-            if (unitScript.unitSo.type == UnitSo.UnitType.Worker) continue;
+            if (unitScript == null || unitScript.unitSo == null || unitScript.unitSo.type == UnitSo.UnitType.Worker) continue;
             return true;
         }
 

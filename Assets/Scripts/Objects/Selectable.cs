@@ -13,7 +13,6 @@ public class Selectable : NetworkBehaviour
     [SerializeField] private RectTransform selectionCircle;
     public SelectableType selectableType;
     [HideInInspector] public bool isSelected = false;
-    private Damagable damagable;
     private Camera unitCamera;
     private SelectionManager selectionManager;
 
@@ -26,7 +25,6 @@ public class Selectable : NetworkBehaviour
     // when unit killed should be diselected
     private void Awake()
     {
-        damagable = GetComponent<Damagable>();
         unitCamera = GetComponentInChildren<Camera>(true);
     }
 
@@ -35,7 +33,7 @@ public class Selectable : NetworkBehaviour
         selectionManager = NetworkManager.LocalClient.PlayerObject.GetComponent<SelectionManager>();
     }
 
-    private void OnDead()
+    public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
         selectionManager.Deselect(this);
@@ -46,7 +44,6 @@ public class Selectable : NetworkBehaviour
     {
         if (!IsOwner) return;
         isSelected = true;
-        damagable.OnDead += OnDead;
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(true);
     }
@@ -55,9 +52,12 @@ public class Selectable : NetworkBehaviour
     {
         if (!IsOwner) return;
         isSelected = false;
+
         if (unitCamera != null) unitCamera.gameObject.SetActive(false);
-        damagable.OnDead -= OnDead;
-        if (selectionCircle == null) return;
-        selectionCircle.gameObject.SetActive(false);
+
+        if (selectionCircle != null)
+        {
+            selectionCircle.gameObject.SetActive(false);
+        }
     }
 }
