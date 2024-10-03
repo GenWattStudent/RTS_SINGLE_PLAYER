@@ -93,7 +93,7 @@ public class Worker : NetworkBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         unit = GetComponent<Unit>();
         unitMovement = GetComponent<UnitMovement>();
@@ -106,7 +106,7 @@ public class Worker : NetworkBehaviour
         StopConstructionServerRpc();
     }
 
-    void Update()
+    private void Update()
     {
         if (!IsServer) return;
 
