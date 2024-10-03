@@ -6,9 +6,7 @@ using UnityEngine.UIElements;
 
 public class MiniMapRectangle : NetworkBehaviour
 {
-    public Material cameraBoxMaterial;
     public VisualElement minimapImage;
-    public Camera mainCamera;
     public Camera minimap;
     public CameraSystem cameraSystem;
     public Collider terrainCollider;
@@ -21,24 +19,25 @@ public class MiniMapRectangle : NetworkBehaviour
     void OnEnable()
     {
         UIDocument = GetComponent<UIDocument>();
-        mainCamera = Camera.main;
-        cameraSystem = FindAnyObjectByType<CameraSystem>();
-        terrainCollider = Terrain.activeTerrain.GetComponent<Collider>();
-        minimap = GameObject.Find("MinimapCamera").GetComponent<Camera>();
+
         var root = UIDocument.rootVisualElement;
         minimapImage = root.Q<VisualElement>("Minimap");
         // add click listener to the minimap
         minimapImage.RegisterCallback<PointerDownEvent>(HandleMinimapClick);
-        RenderPipelineManager.endCameraRendering += OnPostRenderr;
+        RenderPipelineManager.endCameraRendering += HandlePostRender;
     }
 
-    void Start()
+    private void Start()
     {
         if (!IsOwner)
         {
             enabled = false;
             return;
         }
+
+        cameraSystem = FindAnyObjectByType<CameraSystem>();
+        terrainCollider = Terrain.activeTerrain.GetComponent<Collider>();
+        minimap = GameObject.Find("MinimapCamera").GetComponent<Camera>();
     }
 
     private void HandleMinimapClick(PointerDownEvent ev)
@@ -79,7 +78,7 @@ public class MiniMapRectangle : NetworkBehaviour
         cameraSystem.transform.position = GetMinimapPositionToWorld(position);
     }
 
-    private void OnPostRenderr(ScriptableRenderContext context, Camera camera)
+    private void HandlePostRender(ScriptableRenderContext context, Camera camera)
     {
         if (camera.name == "MinimapCamera")
         {
@@ -96,7 +95,7 @@ public class MiniMapRectangle : NetworkBehaviour
         tempTexture.Apply();
 
         // Calculate the camera's view corners in world space
-        Vector3[] corners = GetCameraViewCorners(mainCamera);
+        Vector3[] corners = GetCameraViewCorners(Camera.main);
 
         // Convert world space corners to minimap texture space
         Vector2[] textureCorners = new Vector2[4];
