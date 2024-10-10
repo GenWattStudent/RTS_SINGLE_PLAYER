@@ -9,8 +9,7 @@ public class NetworkToolkitHelper : NetworkBehaviour
 
     protected virtual void OnEnable()
     {
-        UIDocument = GetComponent<UIDocument>();
-        if (UIDocument == null) return;
+        if (UIDocument == null) UIDocument = GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
     }
 

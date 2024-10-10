@@ -26,9 +26,33 @@ public class MultiplayerController : NetworkBehaviour
 {
     public List<PlayerVisualData> playerMaterials = new();
     public static MultiplayerController Instance;
+    public GameObject playerPrefab;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        LobbyRoomService.Instance.OnAllPlayersLoaded += OnAllPlayersLoaded;
+    }
+
+    private void OnDisable()
+    {
+        LobbyRoomService.Instance.OnAllPlayersLoaded -= OnAllPlayersLoaded;
+    }
+
+    private void OnAllPlayersLoaded()
+    {
+        if (!IsServer) return;
+
+        foreach (var player in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            var playerObject = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            var no = playerObject.GetComponent<NetworkObject>();
+
+            no.SpawnAsPlayerObject(player.ClientId);
+        }
     }
 }

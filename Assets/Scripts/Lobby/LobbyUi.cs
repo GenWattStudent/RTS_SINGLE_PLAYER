@@ -55,14 +55,14 @@ public class LobbyUi : ToolkitHelper
     {
         var lobbyName = this.lobbyName.text;
 
-        try
-        {
-            await lobbyManager.CreateLobby(lobbyName, LobbyManager.Instance.maxPlayers);
-        }
-        catch (System.Exception)
-        {
-            ShowError("Failed to create lobby");
-        }
+        // try
+        // {
+        await lobbyManager.CreateLobby(lobbyName, LobbyManager.Instance.maxPlayers);
+        // }
+        // catch (System.Exception)
+        // {
+        //     ShowError("Failed to create lobby");
+        // }
     }
 
     private void CreateLobbyItem(Lobby lobby)
