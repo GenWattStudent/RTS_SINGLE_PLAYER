@@ -9,13 +9,15 @@ public class LobbyData
     public string MapName = default;
     public string RelayCode = default;
     public Lobby CurrentLobby;
+    public bool Started = false;
 
     public Dictionary<string, DataObject> Get()
     {
         Dictionary<string, DataObject> data = new Dictionary<string, DataObject>
         {
             { "MapName", new DataObject(DataObject.VisibilityOptions.Member, MapName) },
-            { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, RelayCode) }
+            { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, RelayCode) },
+            { "Started", new DataObject(DataObject.VisibilityOptions.Member, Started.ToString()) }
         };
 
         return data;
@@ -31,6 +33,13 @@ public class LobbyData
     public async Task SetRelayCode(string relayCode, string lobbyId)
     {
         RelayCode = relayCode;
+
+        await UpdateLobbyData(lobbyId);
+    }
+
+    public async Task SetStarted(bool started, string lobbyId)
+    {
+        Started = started;
 
         await UpdateLobbyData(lobbyId);
     }
@@ -59,6 +68,11 @@ public class LobbyData
         if (CurrentLobby.Data.ContainsKey("RelayCode"))
         {
             RelayCode = CurrentLobby.Data["RelayCode"].Value;
+        }
+
+        if (CurrentLobby.Data.ContainsKey("Started"))
+        {
+            Started = bool.Parse(CurrentLobby.Data["Started"].Value);
         }
     }
 }

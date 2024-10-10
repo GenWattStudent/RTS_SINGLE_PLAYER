@@ -192,12 +192,14 @@ public class PlayerController : NetworkBehaviour
 
     private void Start()
     {
-        playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
-        playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
-        playerData.spawnPosition = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].spawnPosition.position;
+        Debug.Log($"PlayerController Start {OwnerClientId} {MultiplayerController.Instance}");
 
         if (IsOwner)
         {
+            playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
+            playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
+            playerData.spawnPosition = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].spawnPosition.position;
+
             var cameraSystem = FindAnyObjectByType<CameraSystem>();
             cameraSystem.SetCameraPosition(new Vector3(playerData.spawnPosition.x, cameraSystem.transform.position.y, playerData.spawnPosition.z));
             SpawnUnitServerRpc(playerData.spawnPosition, OwnerClientId);

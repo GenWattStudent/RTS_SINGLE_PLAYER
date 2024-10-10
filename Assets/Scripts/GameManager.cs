@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // 
-        if (IsDebug) return;
+        if (true) return;
 
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         if (RelayManager.Instance.IsHost)

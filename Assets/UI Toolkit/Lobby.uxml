@@ -267,4 +267,9 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="SceneLoading" style="flex-grow: 1; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/Desert.png?fileID=2800000&amp;guid=bc4a83ea0e448ab4fbe674b05056855e&amp;type=3#Desert&apos;); display: none;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.73);">
+            <ui:ProgressBar value="22" title="Loading(20%)" name="LoadingProgressbar" class="mass" style="position: absolute; right: 30px; left: 30px; bottom: 15px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>
