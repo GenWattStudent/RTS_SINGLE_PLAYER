@@ -98,9 +98,9 @@ public class LobbyManager : ToolkitHelper
 
         await lobbyData.GetLobbyData(lobbyId);
         await playerLobbyData.SetTeam(teamWithLowestPlayers, CurrentLobby.Id);
-        Debug.Log("Joined lobby: " + lobbyData.RelayCode);
+
         await JoinRelayServer(lobbyData.RelayCode);
-        await RoomUi.JoinRoom(CurrentLobby);
+        await RoomUi.JoinRoom(this);
     }
 
     public async Task LeaveLobby(string playerId)
@@ -134,7 +134,7 @@ public class LobbyManager : ToolkitHelper
 
         lobbyData.CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
         await StartGame();
-        await RoomUi.JoinRoom(CurrentLobby);
+        await RoomUi.JoinRoom(this);
     }
 
     public async Task<List<Lobby>> GetAll()

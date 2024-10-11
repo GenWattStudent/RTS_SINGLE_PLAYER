@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.Lobbies.Models;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +24,7 @@ public class LobbyPlayerList : NetworkToolkitHelper
         lobbyManager = FindAnyObjectByType<LobbyManager>();
     }
 
-    public void CreatePlayerItems(List<Player> players)
+    public void CreatePlayerItems(NetworkList<PlayerNetcodeLobbyData> players)
     {
         playerList.Clear();
         playerItems.Clear();
@@ -35,21 +35,22 @@ public class LobbyPlayerList : NetworkToolkitHelper
         }
     }
 
-    public void CreatePlayerItem(Player player)
+    public void CreatePlayerItem(PlayerNetcodeLobbyData player)
     {
         var playerItem = roomItemTemplate.CloneTree();
-        var teamName = LobbyManager.Instance.HasPlayerDataValue("Team", player) ? player.Data["Team"].Value : "None";
-        var playerName = LobbyManager.Instance.HasPlayerDataValue("PlayerName", player) ? player.Data["PlayerName"].Value : player.Id;
+        var teamName = player.Team.ToString();
+        var playerName = player.PlayerName.ToString();
 
         playerItem.Q<Label>("PlayerName").text = playerName;
-        playerItem.Q<Label>("PlayerType").text = lobbyManager.IsHostByPlayerId(player.Id) ? "Host" : "Member";
+        playerItem.Q<Label>("PlayerType").text = lobbyManager.IsHostByPlayerId(player.LobbyPlayerId.ToString()) ? "Host" : "Member";
         playerItem.Q<Label>("PlayerTeam").text = $"Team: {teamName}";
         playerItem.Q<Label>("PlayerTeam").style.color = teamName == "Blue" ? Color.blue : Color.red;
+        playerItem.Q<VisualElement>("PlayerColor").style.backgroundColor = player.playerColor;
 
-        if (lobbyManager.IsHost() && !lobbyManager.IsHostByPlayerId(player.Id))
+        if (lobbyManager.IsHost() && !lobbyManager.IsHostByPlayerId(player.LobbyPlayerId.ToString()))
         {
             playerItem.Q<Button>("Kick").style.display = DisplayStyle.Flex;
-            playerItem.Q<Button>("Kick").clicked += async () => await KickPlayer(player.Id);
+            playerItem.Q<Button>("Kick").clicked += async () => await KickPlayer(player.LobbyPlayerId.ToString(), player.NetcodePlayerId);
         }
         else
         {
@@ -57,18 +58,18 @@ public class LobbyPlayerList : NetworkToolkitHelper
         }
 
         playerList.Add(playerItem);
-        playerItems.Add(player.Id, playerItem);
+        playerItems.Add(player.LobbyPlayerId.ToString(), playerItem);
     }
 
-    public void CheckPlayerReadyStatus()
+    public void CheckPlayerReadyStatus(NetworkList<PlayerNetcodeLobbyData> players)
     {
         foreach (var playerItem in playerItems)
         {
-            foreach (var player in lobbyManager.CurrentLobby.Players)
+            foreach (var player in players)
             {
-                if (playerItem.Key == player.Id && lobbyManager.HasPlayerDataValue("IsReady", player))
+                if (playerItem.Key == player.LobbyPlayerId.ToString())
                 {
-                    ChangePlayerItemStatus(playerItem.Value, player.Data["IsReady"].Value == "True");
+                    ChangePlayerItemStatus(playerItem.Value, player.IsReady);
                 }
             }
         }
@@ -81,10 +82,12 @@ public class LobbyPlayerList : NetworkToolkitHelper
         playerItem.Q<Label>("Status").text = isReady ? "Ready" : "Not Ready";
     }
 
-    private async Task KickPlayer(string playerId)
+    private async Task KickPlayer(string playerId, ulong netcodePlayerId)
     {
         try
         {
+            Debug.Log($"Kicking player {playerId}");
+            LobbyRoomService.Instance.KickPlayer(netcodePlayerId);
             await lobbyManager.KickPlayer(playerId);
         }
         catch (System.Exception)

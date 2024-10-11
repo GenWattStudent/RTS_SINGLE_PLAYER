@@ -58,6 +58,8 @@ MonoBehaviour:
   - playerColor: {r: 1, g: 0.32010552, b: 0, a: 1}
     playerMaterial: {fileID: 2100000, guid: b92ccdad04120894cb97c562a499a17b, type: 2}
     spawnPosition: {fileID: 0}
+  playerPrefab: {fileID: 3502280097689162745, guid: ae1fef50ca6120c47a40ad8e5b9ce45b,
+    type: 3}
 --- !u!114 &8985183775877694157
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -79,15 +79,15 @@ public class LobbyUi : ToolkitHelper
 
     private async Task JoinLobby(string lobbyId)
     {
-        try
-        {
-            await lobbyManager.JoinLobby(lobbyId);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to join lobby " + e.Message);
-            ShowError($"Failed to join lobby {e.Message}");
-        }
+        // try
+        // {
+        await lobbyManager.JoinLobby(lobbyId);
+        // }
+        // catch (System.Exception e)
+        // {
+        //     Debug.LogError("Failed to join lobby " + e.Message);
+        //     ShowError($"Failed to join lobby {e.Message}");
+        // }
     }
 
     private void ShowError(string message)

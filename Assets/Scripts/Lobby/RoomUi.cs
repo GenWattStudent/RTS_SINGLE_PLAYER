@@ -1,6 +1,7 @@
+using System;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using Unity.Services.Authentication;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,9 +9,8 @@ public class RoomUi : NetworkToolkitHelper
 {
     [SerializeField] private GameObject playerPrefab;
     public float updateInterval = 3.0f;
-    public bool isReady = false;
-    public bool isGameStarted = false;
     public bool isInRoom = false;
+    [HideInInspector] NetworkVariable<bool> IsGameStarted = new(false);
 
     private float updateTimer = 0;
     private Button readyButton;
@@ -36,41 +36,60 @@ public class RoomUi : NetworkToolkitHelper
         room = GetVisualElement("Room");
         readyButton = GetButton("ReadyButton");
 
-        readyButton.clicked += async () => await Ready();
+        readyButton.clicked += Ready;
         exitButton.clicked += async () => await Exit();
         startGameButton.clicked += StartGame;
 
         startGameButton.SetEnabled(false);
     }
 
+    private void Start()
+    {
+        LobbyRoomService.Instance.playerNetcodeLobbyData.OnListChanged += PlayerListChanged;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        IsGameStarted.OnValueChanged += HandleGameStarted;
+    }
+
+    private void HandleGameStarted(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            CloseRoom();
+        }
+    }
+
     private void OnDisable()
     {
-        readyButton.clicked -= async () => await Ready();
+        readyButton.clicked -= Ready;
         exitButton.clicked -= async () => await Exit();
         startGameButton.clicked -= StartGame;
 
         startGameButton.SetEnabled(false);
     }
 
-    private async Task Ready()
+    private void Ready()
     {
-        isReady = !isReady;
-        await lobbyManager.playerLobbyData.SetReady(isReady, lobbyManager.CurrentLobby.Id);
+        LobbyRoomService.Instance.SetReadyServerRpc();
     }
 
     private async Task Exit()
     {
-        try
-        {
-            await lobbyManager.LeaveLobby(AuthenticationService.Instance.PlayerId);
-            isInRoom = false;
-            ShowLobbyAndHideRoom();
-            LobbyRoomService.Instance.Exit();
-        }
-        catch (System.Exception)
-        {
-            Debug.Log("Failed to leave lobby");
-        }
+        // try
+        // {
+        LobbyRoomService.Instance.Exit();
+        await lobbyManager.LeaveLobby(AuthenticationService.Instance.PlayerId);
+        isInRoom = false;
+        ShowLobbyAndHideRoom();
+        // }
+        // catch (Exception)
+        // {
+        //     Debug.Log("Failed to leave lobby");
+        // }
     }
 
     private void HideLobbyAndShowRoom()
@@ -119,20 +138,34 @@ public class RoomUi : NetworkToolkitHelper
         }
     }
 
-    private void CheckIfAllPlayersReady()
+    private void CheckIfAllPlayersReady(NetworkList<PlayerNetcodeLobbyData> players)
     {
-        // if (lobbyManager.CurrentLobby.Players.Count < 2) return;
-        if (isReady) readyButton.AddToClassList("active");
+
+        PlayerNetcodeLobbyData? me = null;
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].NetcodePlayerId == NetworkManager.Singleton.LocalClientId)
+            {
+                me = players[i];
+                break;
+            }
+        }
+
+        if (me.HasValue && me.Value.IsReady) readyButton.AddToClassList("active");
         else readyButton.RemoveFromClassList("active");
 
-        foreach (var player in lobbyManager.CurrentLobby.Players)
+        if (players.Count < 2) return;
+
+        foreach (var player in players)
         {
-            if (lobbyManager.HasPlayerDataValue("IsReady", player) && player.Data["IsReady"].Value == "False")
+            if (!player.IsReady)
             {
                 startGameButton.SetEnabled(false);
                 return;
             }
         }
+
         startGameButton.SetEnabled(true);
     }
 
@@ -152,13 +185,8 @@ public class RoomUi : NetworkToolkitHelper
         await lobbyManager.lobbyData.GetLobbyData(lobbyManager.CurrentLobby.Id);
         HideStartButtonIfNotHost();
         CheckPlayerInLobby();
-        lobbyPlayerList.CreatePlayerItems(lobbyManager.CurrentLobby.Players);
-        lobbyPlayerList.CheckPlayerReadyStatus();
-        CheckIfAllPlayersReady();
         lobbyGameSetup.Update();
         UpdatePlayersLobbyData();
-
-        JoinGameScene();
     }
 
     private void UpdatePlayersLobbyData()
@@ -169,33 +197,42 @@ public class RoomUi : NetworkToolkitHelper
         }
     }
 
+    private void CloseRoom()
+    {
+        lobbyGameSetup.OnMapSelected -= OnMapSelected;
+        room.style.display = DisplayStyle.None;
+    }
+
     private void JoinGameScene()
     {
-        if (!isGameStarted && lobbyManager.HasLobbyDataValue("Started") && lobbyManager.lobbyData.Started)
+        if (!IsGameStarted.Value && RelayManager.Instance.IsHost)
         {
             var map = lobbyManager.CurrentLobby.Data["MapName"].Value;
 
             LobbyRoomService.Instance.ChangeScene(map);
-
-            lobbyGameSetup.OnMapSelected -= OnMapSelected;
-            lobby.style.display = DisplayStyle.None;
-            room.style.display = DisplayStyle.None;
-            isGameStarted = true;
+            IsGameStarted.Value = true;
         }
     }
 
-    public async Task JoinRoom(Lobby lobby)
+    public async Task JoinRoom(LobbyManager lobby)
     {
-        if (RelayManager.Instance.IsHost)
-        {
-            await Ready();
-        }
-
         await UpdateRoomData();
         HideLobbyAndShowRoom();
         isInRoom = true;
 
-        LobbyRoomService.Instance.StartNetcode();
+        LobbyRoomService.Instance.StartNetcode(lobby.playerLobbyData.PlayerName);
+
+        if (RelayManager.Instance.IsHost)
+        {
+            Ready();
+        }
+    }
+
+    private void PlayerListChanged(NetworkListEvent<PlayerNetcodeLobbyData> changeEvent)
+    {
+        lobbyPlayerList.CreatePlayerItems(LobbyRoomService.Instance.playerNetcodeLobbyData);
+        lobbyPlayerList.CheckPlayerReadyStatus(LobbyRoomService.Instance.playerNetcodeLobbyData);
+        CheckIfAllPlayersReady(LobbyRoomService.Instance.playerNetcodeLobbyData);
     }
 
     private async void StartGame()
@@ -203,7 +240,8 @@ public class RoomUi : NetworkToolkitHelper
         // try
         // {
         await lobbyManager.lobbyData.SetStarted(true, lobbyManager.CurrentLobby.Id);
-        await lobbyManager.StartGame();
+        JoinGameScene();
+
         // }
         // catch (System.Exception e)
         // {

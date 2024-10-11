@@ -196,9 +196,10 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
+            var spawnPositions = GameObject.Find("PlayerSpawnPoints");
             playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
             playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
-            playerData.spawnPosition = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].spawnPosition.position;
+            playerData.spawnPosition = spawnPositions.transform.GetChild((int)OwnerClientId).position;
 
             var cameraSystem = FindAnyObjectByType<CameraSystem>();
             cameraSystem.SetCameraPosition(new Vector3(playerData.spawnPosition.x, cameraSystem.transform.position.y, playerData.spawnPosition.z));
