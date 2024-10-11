@@ -205,7 +205,7 @@
 }
 
 .active {
-    background-color: rgb(202, 202, 202);
+    background-color: rgb(212, 119, 15);
     color: rgb(82, 82, 82);
 }
 

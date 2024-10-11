@@ -30,10 +30,20 @@ public class MultiplayerController : NetworkBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void OnEnable()
+    private void Start()
     {
         LobbyRoomService.Instance.OnAllPlayersLoaded += OnAllPlayersLoaded;
     }

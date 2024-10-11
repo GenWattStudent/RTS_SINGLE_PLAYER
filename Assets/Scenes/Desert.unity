@@ -2583,12 +2583,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1258681414618364533, guid: 0de3efba6f8b86c42a6f25fd869b3d3f,
         type: 3}
-      propertyPath: playerPrefab
-      value: 
-      objectReference: {fileID: 3502280097689162745, guid: ae1fef50ca6120c47a40ad8e5b9ce45b,
-        type: 3}
-    - target: {fileID: 1258681414618364533, guid: 0de3efba6f8b86c42a6f25fd869b3d3f,
-        type: 3}
       propertyPath: playerMaterials.Array.data[0].spawnPosition
       value: 
       objectReference: {fileID: 1418593938}
