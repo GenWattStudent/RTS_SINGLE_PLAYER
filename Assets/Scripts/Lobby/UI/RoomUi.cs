@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -45,7 +44,7 @@ public class RoomUi : NetworkToolkitHelper
 
     private void Start()
     {
-        LobbyRoomService.Instance.playerNetcodeLobbyData.OnListChanged += PlayerListChanged;
+        LobbyRoomService.Instance.PlayerNetcodeLobbyData.OnListChanged += PlayerListChanged;
     }
 
     public override void OnNetworkSpawn()
@@ -74,7 +73,7 @@ public class RoomUi : NetworkToolkitHelper
 
     private void Ready()
     {
-        LobbyRoomService.Instance.SetReadyServerRpc();
+        LobbyRoomService.Instance.lobbyPlayersHandler.SetReadyServerRpc();
     }
 
     private async Task Exit()
@@ -96,9 +95,6 @@ public class RoomUi : NetworkToolkitHelper
     {
         lobby.style.display = DisplayStyle.None;
         room.style.display = DisplayStyle.Flex;
-
-        lobbyGameSetup.OnMapSelected += OnMapSelected;
-        lobbyGameSetup.Initialize();
     }
 
     private void ShowLobbyAndHideRoom()
@@ -122,10 +118,10 @@ public class RoomUi : NetworkToolkitHelper
         lobbyGameSetup.OnMapSelected -= OnMapSelected;
     }
 
-    private async void OnMapSelected(MapSo map)
+    private void OnMapSelected(MapSo map)
     {
-        if (lobbyManager.CurrentLobby == null || !lobbyManager.IsHost()) return;
-        await lobbyManager.lobbyData.SetMapName(map.MapName, lobbyManager.CurrentLobby.Id);
+        if (!NetworkManager.Singleton.IsServer) return;
+        LobbyRoomService.Instance.lobbyNetcodeDataHandler.SetMapName(map.MapName);
     }
 
     private void CheckPlayerInLobby()
@@ -140,22 +136,12 @@ public class RoomUi : NetworkToolkitHelper
 
     private void CheckIfAllPlayersReady(NetworkList<PlayerNetcodeLobbyData> players)
     {
-
-        PlayerNetcodeLobbyData? me = null;
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            if (players[i].NetcodePlayerId == NetworkManager.Singleton.LocalClientId)
-            {
-                me = players[i];
-                break;
-            }
-        }
+        PlayerNetcodeLobbyData? me = LobbyRoomService.Instance.lobbyPlayersHandler.GetPlayerData(NetworkManager.Singleton.LocalClientId);
 
         if (me.HasValue && me.Value.IsReady) readyButton.AddToClassList("active");
         else readyButton.RemoveFromClassList("active");
 
-        if (players.Count < 2) return;
+        // if (players.Count < 2) return;
 
         foreach (var player in players)
         {
@@ -185,16 +171,6 @@ public class RoomUi : NetworkToolkitHelper
         await lobbyManager.lobbyData.GetLobbyData(lobbyManager.CurrentLobby.Id);
         HideStartButtonIfNotHost();
         CheckPlayerInLobby();
-        lobbyGameSetup.Update();
-        UpdatePlayersLobbyData();
-    }
-
-    private void UpdatePlayersLobbyData()
-    {
-        foreach (var player in lobbyManager.CurrentLobby.Players)
-        {
-            LobbyManager.Instance.lobbyPlayers.Add(new PlayerLobbyData(player));
-        }
     }
 
     private void CloseRoom()
@@ -207,8 +183,8 @@ public class RoomUi : NetworkToolkitHelper
     {
         if (!IsGameStarted.Value && RelayManager.Instance.IsHost)
         {
-            var map = lobbyManager.CurrentLobby.Data["MapName"].Value;
-
+            var map = LobbyRoomService.Instance.lobbyNetcodeDataHandler.GetMapName();
+            Debug.Log($"Changing scene to {map}");
             LobbyRoomService.Instance.ChangeScene(map);
             IsGameStarted.Value = true;
         }
@@ -222,6 +198,8 @@ public class RoomUi : NetworkToolkitHelper
 
         LobbyRoomService.Instance.StartNetcode(lobby.playerLobbyData.PlayerName);
 
+        lobbyGameSetup.OnMapSelected += OnMapSelected;
+        lobbyGameSetup.Initialize();
         if (RelayManager.Instance.IsHost)
         {
             Ready();
@@ -230,9 +208,9 @@ public class RoomUi : NetworkToolkitHelper
 
     private void PlayerListChanged(NetworkListEvent<PlayerNetcodeLobbyData> changeEvent)
     {
-        lobbyPlayerList.CreatePlayerItems(LobbyRoomService.Instance.playerNetcodeLobbyData);
-        lobbyPlayerList.CheckPlayerReadyStatus(LobbyRoomService.Instance.playerNetcodeLobbyData);
-        CheckIfAllPlayersReady(LobbyRoomService.Instance.playerNetcodeLobbyData);
+        lobbyPlayerList.CreatePlayerItems(LobbyRoomService.Instance.PlayerNetcodeLobbyData);
+        lobbyPlayerList.CheckPlayerReadyStatus(LobbyRoomService.Instance.PlayerNetcodeLobbyData);
+        CheckIfAllPlayersReady(LobbyRoomService.Instance.PlayerNetcodeLobbyData);
     }
 
     private async void StartGame()

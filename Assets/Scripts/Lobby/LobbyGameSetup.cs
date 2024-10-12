@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Unity.Netcode;
 
-public class LobbyGameSetup : ToolkitHelper
+public class LobbyGameSetup : NetworkToolkitHelper
 {
     [SerializeField] private List<MapSo> maps = new();
     [SerializeField] private VisualTreeAsset mapItemTemplate;
@@ -17,8 +18,27 @@ public class LobbyGameSetup : ToolkitHelper
 
     public event Action<MapSo> OnMapSelected;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
+    }
+
+    private void OnClientConnectedCallback(ulong clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId && !NetworkManager.Singleton.IsServer)
+        {
+            SelectedMap = maps.Find(m => m.MapName == LobbyRoomService.Instance.lobbyNetcodeDataHandler.GetMapName());
+            UpdateMapUI(SelectedMap);
+            UpdateLobbyUI();
+        }
+    }
+
     public void Initialize()
     {
+        LobbyRoomService.Instance.lobbyNetcodeDataHandler.lobbyNetcodeData.OnValueChanged += HandleLobbyDataChange;
+
         if (!LobbyManager.Instance.IsHost())
         {
             mapBox.style.display = DisplayStyle.None;
@@ -29,6 +49,14 @@ public class LobbyGameSetup : ToolkitHelper
             SelectMap(maps[0]);
             mapBox.style.display = DisplayStyle.Flex;
         }
+    }
+
+    private void HandleLobbyDataChange(LobbyNetcodeData previousValue, LobbyNetcodeData newValue)
+    {
+        SelectedMap = maps.Find(m => m.MapName == newValue.MapName.ToString());
+        Debug.Log($"Map changed to {SelectedMap.MapName}");
+        UpdateMapUI(SelectedMap);
+        UpdateLobbyUI();
     }
 
     protected override void OnEnable()
@@ -43,6 +71,7 @@ public class LobbyGameSetup : ToolkitHelper
     private void OnDisable()
     {
         mapList.Clear();
+        LobbyRoomService.Instance.lobbyNetcodeDataHandler.lobbyNetcodeData.OnValueChanged -= HandleLobbyDataChange;
     }
 
     private void CreateMapItems(List<MapSo> maps)
@@ -52,16 +81,6 @@ public class LobbyGameSetup : ToolkitHelper
         {
             CreateMapItem(map);
         }
-    }
-
-    private void UpdateLobbyMap()
-    {
-        if (LobbyManager.Instance.IsHost() || !LobbyManager.Instance.HasLobbyDataValue("MapName")) return;
-
-        var mapName = LobbyManager.Instance.CurrentLobby.Data["MapName"].Value;
-        var map = maps.Find(m => m.MapName == mapName);
-
-        if (map != null && SelectedMap != map) SelectMap(map);
     }
 
     private void UpdateLobbyUI()
@@ -91,17 +110,13 @@ public class LobbyGameSetup : ToolkitHelper
     private void SelectMap(MapSo map)
     {
         if (SelectedMap == map) return;
-
-        currentMapName.text = map.MapName;
-        currentMap.style.backgroundImage = new StyleBackground(map.MapImage);
-
         SelectedMap = map;
         OnMapSelected?.Invoke(SelectedMap);
     }
 
-    public void Update()
+    private void UpdateMapUI(MapSo map)
     {
-        UpdateLobbyMap();
-        UpdateLobbyUI();
+        currentMapName.text = map.MapName;
+        currentMap.style.backgroundImage = new StyleBackground(map.MapImage);
     }
 }

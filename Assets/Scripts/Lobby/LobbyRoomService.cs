@@ -1,8 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
@@ -10,71 +7,16 @@ using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public struct PlayerNetcodeLobbyData : INetworkSerializable, IEquatable<PlayerNetcodeLobbyData>
-{
-    public FixedString32Bytes LobbyPlayerId;
-    public ulong NetcodePlayerId;
-    public FixedString32Bytes PlayerName;
-    public bool IsReady;
-    public TeamType Team;
-    public Color playerColor;
-
-    public bool Equals(PlayerNetcodeLobbyData other)
-    {
-        return LobbyPlayerId == other.LobbyPlayerId &&
-            NetcodePlayerId == other.NetcodePlayerId &&
-            IsReady == other.IsReady &&
-            Team == other.Team &&
-            playerColor == other.playerColor &&
-            PlayerName == other.PlayerName;
-    }
-
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref PlayerName);
-        serializer.SerializeValue(ref LobbyPlayerId);
-        serializer.SerializeValue(ref NetcodePlayerId);
-        serializer.SerializeValue(ref IsReady);
-        serializer.SerializeValue(ref Team);
-        serializer.SerializeValue(ref playerColor);
-    }
-}
-
-[Serializable]
-public class PlayerConnectionData
-{
-    public string PlayerId;
-    public string PlayerName;
-
-    public PlayerConnectionData(string playerId, string playerName)
-    {
-        PlayerId = playerId;
-        PlayerName = playerName;
-    }
-
-    public byte[] ToByteArray()
-    {
-        string json = JsonUtility.ToJson(this);
-        return Encoding.UTF8.GetBytes(json);
-    }
-
-    public static PlayerConnectionData FromByteArray(byte[] data)
-    {
-        string json = Encoding.UTF8.GetString(data);
-        return JsonUtility.FromJson<PlayerConnectionData>(json);
-    }
-}
-
 public class LobbyRoomService : NetworkBehaviour
 {
-    private int completedPlayers = 0;
-    private SceneLoader sceneLoader;
-
-    [HideInInspector] public NetworkVariable<float> progress = new(0.0f);
     [HideInInspector] public NetworkVariable<bool> isLoading = new(false);
     public static LobbyRoomService Instance;
-    public Dictionary<ulong, PlayerNetcodeLobbyData> playerNetcodeLobbyDataDict;
-    public NetworkList<PlayerNetcodeLobbyData> playerNetcodeLobbyData;
+    public LobbyPlayersHandler lobbyPlayersHandler;
+    public LobbyNetcodeDataHandler lobbyNetcodeDataHandler;
+    public NetworkList<PlayerNetcodeLobbyData> PlayerNetcodeLobbyData => lobbyPlayersHandler.playerNetcodeLobbyData;
+
+    private int completedPlayers = 0;
+    private SceneLoader sceneLoader;
 
     public event Action OnAllPlayersLoaded;
 
@@ -82,17 +24,14 @@ public class LobbyRoomService : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        progress.OnValueChanged += HandleProgressChange;
         isLoading.OnValueChanged += HandleLoadingChange;
         NetworkManager.Singleton.OnClientDisconnectCallback += HandlePlayerDisconnect;
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
 
-        progress.OnValueChanged -= HandleProgressChange;
         isLoading.OnValueChanged -= HandleLoadingChange;
     }
 
@@ -101,7 +40,6 @@ public class LobbyRoomService : NetworkBehaviour
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= HandlePlayerDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
 
             if (NetworkManager.Singleton.IsHost)
             {
@@ -110,26 +48,11 @@ public class LobbyRoomService : NetworkBehaviour
         }
     }
 
-    private void OnClientConnectedCallback(ulong clientId)
-    {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            var savedPlayerData = playerNetcodeLobbyDataDict[clientId];
-            Color? notSelectedColor = MultiplayerController.Instance.playerMaterials[(int)clientId].playerColor;
-
-            savedPlayerData.Team = clientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
-            savedPlayerData.playerColor = (Color)notSelectedColor;
-            savedPlayerData.IsReady = false;
-
-            playerNetcodeLobbyData.Add(savedPlayerData);
-        }
-    }
-
     private void Awake()
     {
-        sceneLoader = FindAnyObjectByType<SceneLoader>();
-        playerNetcodeLobbyDataDict = new();
-        playerNetcodeLobbyData = new();
+        sceneLoader = GetComponent<SceneLoader>();
+        lobbyPlayersHandler = GetComponent<LobbyPlayersHandler>();
+        lobbyNetcodeDataHandler = GetComponent<LobbyNetcodeDataHandler>();
 
         if (Instance != null && Instance != this)
         {
@@ -141,32 +64,9 @@ public class LobbyRoomService : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void RemovePlayer(ulong clientId)
-    {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            if (playerNetcodeLobbyDataDict.ContainsKey(clientId))
-            {
-                playerNetcodeLobbyDataDict.Remove(clientId);
-            }
-
-            for (int i = 0; i < playerNetcodeLobbyData.Count; i++)
-            {
-                if (playerNetcodeLobbyData[i].NetcodePlayerId == clientId)
-                {
-                    Debug.Log($"Player {clientId} disconnected");
-                    playerNetcodeLobbyData.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-    }
-
     private void HandlePlayerDisconnect(ulong clientId)
     {
-        Debug.Log($"Player {clientId} disconnected");
-
-        RemovePlayer(clientId);
+        lobbyPlayersHandler.RemovePlayer(clientId);
 
         if (NetworkManager.LocalClientId == clientId)
         {
@@ -175,17 +75,11 @@ public class LobbyRoomService : NetworkBehaviour
         }
     }
 
-    private void HandleProgressChange(float previousValue, float newValue)
-    {
-        sceneLoader.SetProgress(Mathf.RoundToInt(newValue));
-    }
-
     private void HandleLoadingChange(bool previousValue, bool newValue)
     {
         if (newValue)
         {
-            sceneLoader.SetProgress(0);
-            sceneLoader.ShowSceneLoading();
+            sceneLoader.ShowSceneLoading(PlayerNetcodeLobbyData);
         }
         else
         {
@@ -193,24 +87,14 @@ public class LobbyRoomService : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void SetReadyServerRpc(ServerRpcParams rpcParams = default)
+    private void Start()
     {
-        for (int i = 0; i < playerNetcodeLobbyData.Count; i++)
-        {
-            if (playerNetcodeLobbyData[i].NetcodePlayerId == rpcParams.Receive.SenderClientId)
-            {
-                var playerData = playerNetcodeLobbyData[i];
-                playerData.IsReady = !playerData.IsReady;
-                playerNetcodeLobbyData[i] = playerData;
-            }
-        }
+        PlayerNetcodeLobbyData.OnListChanged += PlayerListChanged;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void SetTeamServerRpc(TeamType team, ServerRpcParams rpcParams = default)
+    private void PlayerListChanged(NetworkListEvent<PlayerNetcodeLobbyData> changeEvent)
     {
-
+        sceneLoader.CreatePlayerList(PlayerNetcodeLobbyData);
     }
 
     public void StartNetcode(string playerName)
@@ -248,8 +132,7 @@ public class LobbyRoomService : NetworkBehaviour
 
     public void Exit()
     {
-        playerNetcodeLobbyDataDict.Clear();
-        if (NetworkManager.Singleton.IsServer) playerNetcodeLobbyData.Clear();
+        lobbyPlayersHandler.Clear();
         RemoveNetworkManagerCallbacks();
         NetworkManager.Singleton.Shutdown();
     }
@@ -272,14 +155,8 @@ public class LobbyRoomService : NetworkBehaviour
             return;
         }
 
-        var playerData = new PlayerNetcodeLobbyData
-        {
-            LobbyPlayerId = playerConnectionData.PlayerId,
-            NetcodePlayerId = request.ClientNetworkId,
-            PlayerName = playerConnectionData.PlayerName ?? playerConnectionData.PlayerId,
-        };
-
-        playerNetcodeLobbyDataDict.Add(request.ClientNetworkId, playerData);
+        var playerData = new PlayerNetcodeLobbyData(playerConnectionData, request.ClientNetworkId);
+        lobbyPlayersHandler.AddPlayerToDict(playerData);
 
         response.Approved = true;
         response.CreatePlayerObject = false;
@@ -306,10 +183,7 @@ public class LobbyRoomService : NetworkBehaviour
     {
         while (!asyncOperation.isDone)
         {
-            if (NetworkManager.Singleton.IsServer)
-            {
-                progress.Value = asyncOperation.progress;
-            }
+            lobbyPlayersHandler.SetPlayerProgressServerRpc((int)(asyncOperation.progress * 100));
 
             yield return new WaitForSeconds(0.01f);
         }

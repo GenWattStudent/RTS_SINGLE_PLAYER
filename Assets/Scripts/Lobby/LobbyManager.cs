@@ -145,13 +145,14 @@ public class LobbyManager : ToolkitHelper
 
     private async Task Heartbeat()
     {
-        if (CurrentLobby == null || IsHost()) return;
+        if (CurrentLobby == null || !IsHost()) return;
 
         heartbeatTimer += Time.deltaTime;
 
         if (heartbeatTimer < hearbeatInterval) return;
 
         heartbeatTimer = 0.0f;
+        Debug.Log("Sending heartbeat ping");
         await LobbyService.Instance.SendHeartbeatPingAsync(CurrentLobby.Id);
     }
 
