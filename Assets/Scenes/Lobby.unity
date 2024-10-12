@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 375122630}
   - component: {fileID: 375122631}
   - component: {fileID: 375122632}
+  - component: {fileID: 375122633}
+  - component: {fileID: 375122634}
   m_Layer: 0
   m_Name: LobbyUI
   m_TagString: Untagged
@@ -174,8 +176,6 @@ MonoBehaviour:
   playerPrefab: {fileID: 3502280097689162745, guid: ae1fef50ca6120c47a40ad8e5b9ce45b,
     type: 3}
   updateInterval: 3
-  isReady: 0
-  isGameStarted: 0
   isInRoom: 0
 --- !u!4 &375122627
 Transform:
@@ -224,6 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIDocument: {fileID: 1940510936}
+  loaderPlayerTemplate: {fileID: 9197481963319205126, guid: 1e8be526cb41fa84a8599311298c8376,
+    type: 3}
 --- !u!114 &375122630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,10 +258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e659d0434e2b48947af984774be9ca64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  progress:
-    m_InternalValue: 0
   isLoading:
     m_InternalValue: 0
+  lobbyPlayersHandler: {fileID: 0}
+  lobbyNetcodeDataHandler: {fileID: 0}
 --- !u!114 &375122632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +277,30 @@ MonoBehaviour:
   UIDocument: {fileID: 1940510936}
   roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
     type: 3}
+--- !u!114 &375122633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c77da14bb12cf44ba74cd1d0c34e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &375122634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdaa5057a315844082624cbfcd033d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &910422787
 PrefabInstance:
   m_ObjectHideFlags: 0

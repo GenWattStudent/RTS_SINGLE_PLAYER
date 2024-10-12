@@ -2,6 +2,7 @@
     <ui:Template name="LobbyItem" src="project://database/Assets/UI%20Toolkit/LobbyItem.uxml?fileID=9197481963319205126&amp;guid=7dcf140dea6cf4f4e9e2b4ed635a3eff&amp;type=3#LobbyItem" />
     <ui:Template name="PlayerItem" src="project://database/Assets/UI%20Toolkit/PlayerItem.uxml?fileID=9197481963319205126&amp;guid=0da8f2e6ad731014eb5d6fcf7648717b&amp;type=3#PlayerItem" />
     <ui:Template name="MapItem" src="project://database/Assets/Prefabs/UI/MapItem.uxml?fileID=9197481963319205126&amp;guid=a8ec1203b42bd4a4f84a3a5ce2421e7d&amp;type=3#MapItem" />
+    <ui:Template name="PlayerLoader" src="project://database/Assets/Prefabs/UI/PlayerLoader.uxml?fileID=9197481963319205126&amp;guid=1e8be526cb41fa84a8599311298c8376&amp;type=3#PlayerLoader" />
     <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
     <ui:VisualElement name="Lobby" style="flex-grow: 1; justify-content: center; align-items: center; align-self: auto; display: flex;">
         <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0.65); width: 1100px; height: 900px; justify-content: flex-start; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; flex-shrink: 0; align-items: stretch;">
@@ -268,8 +269,13 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="SceneLoading" style="flex-grow: 1; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/Desert.png?fileID=2800000&amp;guid=bc4a83ea0e448ab4fbe674b05056855e&amp;type=3#Desert&apos;); display: none;">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.73);">
-            <ui:ProgressBar value="22" title="Loading(20%)" name="LoadingProgressbar" class="mass" style="position: absolute; right: 30px; left: 30px; bottom: 15px;" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.73); justify-content: space-evenly; align-items: flex-start; align-self: auto;">
+            <ui:VisualElement name="LoaderPlayerBox" style="flex-grow: 0; margin-left: 30px;">
+                <ui:Instance template="PlayerLoader" name="PlayerLoader" />
+                <ui:Instance template="PlayerLoader" name="PlayerLoader" />
+                <ui:Instance template="PlayerLoader" name="PlayerLoader" />
+                <ui:Instance template="PlayerLoader" name="PlayerLoader" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
