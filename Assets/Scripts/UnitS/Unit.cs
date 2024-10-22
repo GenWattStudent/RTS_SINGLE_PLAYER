@@ -6,21 +6,22 @@ using UnityEngine;
 public class Unit : NetworkBehaviour
 {
     public UnitSo unitSo;
-    public bool IsBot = false;
     public AttackableSo attackableSo;
     public Material unitMaterial;
     public Material originalMaterial;
-    public bool shouldChangeMaterial = true;
     public List<GameObject> unitPrefabs = new();
     public List<GameObject> unitUiPrefabs = new();
     public List<GameObject> bushes = new();
+    public bool IsBot = false;
+    public bool shouldChangeMaterial = true;
+    public bool IsUpgrading = false;
+    public bool isVisibile = true;
+
     private Damagable damagable;
     private Attack attack;
-    public bool isVisibile = true;
     // private float visibleTimer = 0f;
     private float visibleInterval = 5f;
     private PlayerController playerController;
-
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
     {

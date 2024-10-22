@@ -34,11 +34,10 @@ public class UnitMovement : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void MoveToServerRpc(Vector3 destination)
     {
-        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
+        if (!unit.IsUpgrading && NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
         {
             agent.SetDestination(hit.position);
             agent.isStopped = false;
-            agent.avoidancePriority = Random.Range(1, 100);
         }
     }
 

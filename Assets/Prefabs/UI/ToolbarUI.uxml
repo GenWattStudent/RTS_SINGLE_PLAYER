@@ -3,6 +3,7 @@
     <ui:Template name="SettingsModal" src="project://database/Assets/Prefabs/UI/SettingsModal.uxml?fileID=9197481963319205126&amp;guid=01b192d55b905284681372f7fa632d74&amp;type=3#SettingsModal" />
     <ui:Template name="SettingsBox" src="project://database/Assets/Prefabs/UI/SettingsBox.uxml?fileID=9197481963319205126&amp;guid=cf3949801f299bb48aa6d181cbe4601c&amp;type=3#SettingsBox" />
     <ui:Template name="MultiplayerTools" src="project://database/Assets/Prefabs/UI/MultiplayerTools.uxml?fileID=9197481963319205126&amp;guid=8a679db2caf70714ab9fc7195f72835e&amp;type=3#MultiplayerTools" />
+    <ui:Template name="UpgradeItem" src="project://database/Assets/Prefabs/UI/UpgradeItem.uxml?fileID=9197481963319205126&amp;guid=6092e297f2d972443955faa6757e8464&amp;type=3#UpgradeItem" />
     <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
     <ui:VisualElement name="GameUI" style="flex-grow: 1; background-color: rgba(255, 242, 242, 0); justify-content: flex-end;">
         <ui:VisualElement name="MousePopup" class="border-secondary border-medium" style="flex-grow: 1; position: absolute; left: 0; top: 0; background-color: rgba(55, 55, 55, 0.95); color: rgb(209, 209, 209); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; translate: 0 0; display: none;">
@@ -192,5 +193,8 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Instance template="MultiplayerTools" style="position: absolute; top: 0; display: none;" />
+        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="UpgradeContainer" class="bg-primary border-primary" style="position: absolute; top: 100px; right: 5px; flex-grow: 1; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px;">
+            <ui:Instance template="UpgradeItem" name="UpgradeItem" />
+        </ui:ScrollView>
     </ui:VisualElement>
 </ui:UXML>

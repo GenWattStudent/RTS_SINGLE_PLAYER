@@ -26,8 +26,8 @@ public class SelectionManager : NetworkBehaviour
             selectable.Deselect();
         }
 
-        OnSelect?.Invoke();
         selectedObjects.Clear();
+        OnSelect?.Invoke();
     }
 
     private void Start()
