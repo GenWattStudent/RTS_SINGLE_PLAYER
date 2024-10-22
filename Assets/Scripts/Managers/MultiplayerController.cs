@@ -45,12 +45,18 @@ public class MultiplayerController : NetworkBehaviour
 
     private void Start()
     {
-        LobbyRoomService.Instance.OnAllPlayersLoaded += OnAllPlayersLoaded;
+        if (!GameManager.Instance.IsDebug)
+        {
+            LobbyRoomService.Instance.OnAllPlayersLoaded += OnAllPlayersLoaded;
+        }
     }
 
     private void OnDisable()
     {
-        LobbyRoomService.Instance.OnAllPlayersLoaded -= OnAllPlayersLoaded;
+        if (!GameManager.Instance.IsDebug)
+        {
+            LobbyRoomService.Instance.OnAllPlayersLoaded -= OnAllPlayersLoaded;
+        }
     }
 
     private void OnAllPlayersLoaded()

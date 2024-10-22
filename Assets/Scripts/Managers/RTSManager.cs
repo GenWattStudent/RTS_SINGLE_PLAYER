@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using RTS.Domain.SO;
+using RTS.Managers;
 using Unity.Netcode;
 using UnityEngine;
 
 public class RTSManager : NetworkBehaviour
 {
     [SerializeField] private GameObject moveIndicatorPrefab;
+    public float unitSpacing = 0.2f;
+
     private PlayerController playerController;
     private SelectionManager selectionManager;
     private UIRTSActions uiRTSActions;
-    public float unitSpacing = 0.2f;
+    private UpgradeManager upgradeManager;
 
     private void Start()
     {
@@ -21,6 +25,7 @@ public class RTSManager : NetworkBehaviour
         playerController = GetComponent<PlayerController>();
         selectionManager = GetComponent<SelectionManager>();
         uiRTSActions = GetComponentInChildren<UIRTSActions>();
+        upgradeManager = GetComponent<UpgradeManager>();
     }
 
     private void CancelBuildingCommand(Selectable selectable)
@@ -191,7 +196,27 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    void Update()
+    [ServerRpc]
+    private void UpgradeCommandServerRpc(NetworkObjectReference no, int index)
+    {
+        var upgrade = upgradeManager.Upgrades[index];
+
+        if (no.TryGet(out NetworkObject networkObject))
+        {
+            var unit = networkObject.GetComponent<Unit>();
+            unit.IsUpgrading = true;
+            var upgradeGo = Instantiate(upgrade.ConstructionPrefab, unit.transform.position, Quaternion.identity, unit.transform);
+
+            upgradeGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        }
+    }
+
+    private void UpgradeCommand(Unit unit, UpgradeSO upgrade)
+    {
+        UpgradeCommandServerRpc(unit.GetComponent<NetworkObject>(), upgradeManager.Upgrades.IndexOf(upgrade));
+    }
+
+    private void Update()
     {
         if (Input.GetMouseButtonDown(1) && selectionManager.selectedObjects.Count > 0 && !UIHelper.Instance.IsPointerOverUIElement())
         {
@@ -251,6 +276,25 @@ public class RTSManager : NetworkBehaviour
                     MoveCommand(raycastHits[0].point);
                 }
             }
+        }
+
+        if (Input.GetMouseButtonDown(0) && !UIHelper.Instance.IsPointerOverUIElement())
+        {
+            // Raycast hit unit or building
+            RaycastHit raycastHit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out raycastHit, Mathf.Infinity))
+            {
+                var unit = raycastHit.transform.gameObject.GetComponent<Unit>();
+
+                if (upgradeManager.CanApplyUpgrade(unit))
+                {
+                    Debug.Log("Upgrade");
+                    UpgradeCommand(unit, upgradeManager.SelectedUpgrade);
+                }
+            }
+
+            upgradeManager.SelectUpgrade(null);
         }
     }
 }

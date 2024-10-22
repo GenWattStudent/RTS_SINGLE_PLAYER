@@ -1,3 +1,4 @@
+using RTS.Managers;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,12 +11,15 @@ public class CursorManager : NetworkBehaviour
     [SerializeField] private Vector2 cursorOffset = new(10, 4);
     private PlayerController playerController;
     private SelectionManager selectionManager;
+    private UpgradeManager upgradeManager;
 
     private void Start()
     {
         if (!IsOwner) { enabled = false; return; }
         playerController = GetComponent<PlayerController>();
         selectionManager = GetComponent<SelectionManager>();
+        upgradeManager = GetComponent<UpgradeManager>();
+
         SetDefaultCursor();
     }
 
@@ -108,9 +112,18 @@ public class CursorManager : NetworkBehaviour
         return false;
     }
 
+    private bool IsUpgradeSelected()
+    {
+        return upgradeManager.SelectedUpgrade != null;
+    }
+
     private void FixedUpdate()
     {
-        if (IsEnemyHovering())
+        if (IsUpgradeSelected())
+        {
+            SetBuildCursor();
+        }
+        else if (IsEnemyHovering())
         {
             SetAttackCursor();
         }
