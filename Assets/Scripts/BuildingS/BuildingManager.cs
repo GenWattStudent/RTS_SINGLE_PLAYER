@@ -190,7 +190,9 @@ public class BuildingManager : NetworkBehaviour
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
         var damagable = newBuilding.GetComponent<Damagable>();
+        var construction = newBuilding.GetComponent<Construction>();
 
+        construction.construction = buildingSo;
         no.SpawnWithOwnership(clientId);
         damagable.teamType.Value = playerController.teamType.Value;
         stats.AddStat(StatType.Health, 1);

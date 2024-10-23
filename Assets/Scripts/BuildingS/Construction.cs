@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class Construction : NetworkBehaviour
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
     public List<Unit> buildingUnits = new();
-    public BuildingSo buildingSo;
+    public IConstruction construction;
 
     private float constructionTimer = 0f;
     private bool isCurrentlyConstructing = false;
@@ -17,6 +18,8 @@ public class Construction : NetworkBehaviour
     private ProgresBar progresBar;
     private Stats stats;
     private SelectionManager selectionManager;
+
+    public event Action OnConstructionFinished;
 
     public void AddWorker(Unit unit)
     {
@@ -85,14 +88,23 @@ public class Construction : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void InstantiateBuildingServerRpc()
     {
-        var building = Instantiate(buildingSo.prefab, transform.position, Quaternion.identity);
+        var building = Instantiate(construction.prefab, transform.position, Quaternion.identity);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
         var damagable = building.GetComponent<Damagable>();
         var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+        var unit = transform.parent != null ? transform.parent.GetComponentInParent<Unit>() : null;
 
-        no.SpawnWithOwnership(OwnerClientId);
         damagable.teamType.Value = playerController.teamType.Value;
+        no.SpawnWithOwnership(OwnerClientId);
+
+        if (unit != null)
+        {
+            Debug.Log("Unit is not null " + unit.transform.name);
+            unit.IsUpgrading = false;
+            no.transform.SetParent(unit.transform);
+        }
+
         InstantiateBuildingClientRpc(no);
         constructionNo.Despawn(true);
     }
@@ -101,6 +113,7 @@ public class Construction : NetworkBehaviour
     {
         // Finished building
         InstantiateBuildingServerRpc();
+        OnConstructionFinished?.Invoke();
     }
 
     [ClientRpc]

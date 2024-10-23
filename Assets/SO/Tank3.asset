@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 801d55a6c98246249b4bdee44c16fdb4, type: 2}
   requiredSkillPoints: 3
   skillTag: TankSkill3
-  valueName: health
+  statTypes: 0000000001000000
   value: 10
   unitName: Tank
+  isPercentage: 1

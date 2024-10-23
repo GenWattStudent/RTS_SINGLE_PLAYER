@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using UnityEngine;
 
-public static class Extensions
+namespace Utils
 {
-    public static void GetIndex<T>(this List<T> list, T item, out int index)
+    public static class Extensions
     {
-        index = list.IndexOf(item);
+        public static float GetValueFromPercent(this int value, float max)
+        {
+            return value * max / 100;
+        }
     }
 }
+

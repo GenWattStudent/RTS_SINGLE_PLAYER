@@ -40,17 +40,12 @@ MonoBehaviour:
   buildingName: Rocket Turret
   description: Turret lol
   sprite: {fileID: 0}
-  prefab: {fileID: 8989622198761688359, guid: 133b0c64da67ff644a0747bde0b41b63, type: 3}
-  previewPrefab: {fileID: 6647195554574366884, guid: d71a8540f077deb4b8fd664d76698739,
-    type: 3}
-  constructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
-    type: 3}
   unitsToSpawn: []
   maxBuildingCount: 2
-  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   cost: 100
   stats:
   - Type: 1
@@ -67,3 +62,8 @@ MonoBehaviour:
     Value: 0.4
   sightAngle: 360
   sightRange: 4
+  _prefab: {fileID: 8989622198761688359, guid: 133b0c64da67ff644a0747bde0b41b63, type: 3}
+  _previewPrefab: {fileID: 6647195554574366884, guid: d71a8540f077deb4b8fd664d76698739,
+    type: 3}
+  _constructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
+    type: 3}

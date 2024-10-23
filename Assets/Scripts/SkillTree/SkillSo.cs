@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,8 @@ public class SkillSo : ScriptableObject
     public List<SkillSo> requiredSkills = new();
     public int requiredSkillPoints;
     public string skillTag;
-    public string valueName;
+    public StatType[] statTypes;
     public int value;
     public string unitName;
+    public bool isPercentage = true;
 }

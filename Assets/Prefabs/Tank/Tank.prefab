@@ -608,8 +608,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3608245604000595314}
-  - {fileID: 9049202424186145774}
   - {fileID: 925022976110872777}
+  - {fileID: 9049202424186145774}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1433148383842979001
@@ -699,11 +699,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
-  IsBot: 0
   attackableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   unitMaterial: {fileID: 2100000, guid: b15db24d1857c5c47bbcad69788d9750, type: 2}
   originalMaterial: {fileID: 0}
-  shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 548744067611726451}
   - {fileID: 6445681543270372012}
@@ -712,6 +710,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 4647910288746205808}
   bushes: []
+  IsBot: 0
+  shouldChangeMaterial: 1
+  IsUpgrading: 0
   isVisibile: 1
 --- !u!114 &-8074666234003767969
 MonoBehaviour:
@@ -725,17 +726,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df302aa9d6cae574fbe2d4efc121e1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  checkTargetTimer: 0.2
-  currentUnit: {fileID: 0}
-  bulletSpawnPoint: {fileID: 4344669776812657341}
-  attackCooldownTimer: 0
-  currentAmmo: 0
   autoAttack: 1
+  checkTargetTimer: 0.2
+  bulletSpawnPoint: {fileID: 4344669776812657341}
   isRealoading: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  currentUnit: {fileID: 0}
+  currentDamagable: {fileID: 0}
+  currentAmmo: 0
+  attackCooldownTimer: 0
   lastAttackTime: 0
-  rot: 0
 --- !u!114 &1506612390311189066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,6 +758,9 @@ MonoBehaviour:
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &170826199209899036
 MonoBehaviour:
   m_ObjectHideFlags: 0

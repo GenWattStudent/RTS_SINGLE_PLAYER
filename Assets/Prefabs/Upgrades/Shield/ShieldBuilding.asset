@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
-  m_Name: ForceField
+  m_Name: ShieldBuilding
   m_EditorClassIdentifier: 
   attackDamage: 0
   attackRange: 0
@@ -28,34 +28,27 @@ MonoBehaviour:
   CanSalve: 0
   accuracy: 0.5
   attackSound: 0
-  health: 600
+  health: 100
   deathExpirence: 10
   deathEffect: {fileID: 0}
   deathEffectTime: 2
   explosionPrefab: {fileID: 0}
   type: 2
-  buildingName: Force Field
-  description: Force with you
-  sprite: {fileID: 21300000, guid: 89a8a255b1b6e454aa699618ef43518d, type: 3}
+  buildingName: 
+  description: 
+  sprite: {fileID: 0}
   unitsToSpawn: []
-  maxBuildingCount: 2
+  maxBuildingCount: 0
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   levelUpEffect: {fileID: 0}
-  costResource: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
-  cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  cost: 0
   stats:
   - Type: 1
-    Value: 200
-  - Type: 8
-    Value: 400
-  - Type: 9
-    Value: 40
-  - Type: 10
-    Value: 4
+    Value: 100
   sightAngle: 360
   sightRange: 4
-  _prefab: {fileID: 8981118739002768634, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
-  _previewPrefab: {fileID: 6494298419494808799, guid: 7ae6ee2b0d584fa4484094c8ebdab555,
-    type: 3}
-  _constructionManagerPrefab: {fileID: 3286866004926964515, guid: 692d08ec7ce21b749b31d4b703b18e8f,
+  _prefab: {fileID: 3466841267310500670, guid: 8e994c1b45a7f2b4aac2217ff984f969, type: 3}
+  _previewPrefab: {fileID: 0}
+  _constructionManagerPrefab: {fileID: 4100258203609856823, guid: e9c7b3fe79b425048a6f2636a2198dc2,
     type: 3}

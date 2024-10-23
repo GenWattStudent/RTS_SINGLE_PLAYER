@@ -15,7 +15,7 @@ public class Damagable : NetworkBehaviour
     public bool IsBot = false;
     public float damage = 0f;
     public Stats stats;
-    public NetworkVariable<TeamType> teamType = new(TeamType.None);
+    [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public Unit unitScript;
 
     public event Action OnDead;
@@ -44,7 +44,7 @@ public class Damagable : NetworkBehaviour
     private void Awake()
     {
         stats = GetComponent<Stats>();
-        progressBarScript = healthBar.GetComponent<ProgresBar>();
+        progressBarScript = GetComponentInChildren<ProgresBar>();
         levelable = GetComponent<Levelable>();
         unitScript = GetComponent<Unit>();
     }
@@ -63,11 +63,13 @@ public class Damagable : NetworkBehaviour
                 var unit = GetComponent<Unit>();
                 if (unit.GetComponent<Building>() != null) return;
 
-                var damagePercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "damage");
-                var healthPercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "health");
+                powerUp.ApplySkills(unit);
 
-                AddDamageBoost(damagePercent);
-                AddHealthBoost(healthPercent);
+                // var damagePercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "damage");
+                // var healthPercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "health");
+
+                // AddDamageBoost(damagePercent);
+                // AddHealthBoost(healthPercent);
             }
 
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
