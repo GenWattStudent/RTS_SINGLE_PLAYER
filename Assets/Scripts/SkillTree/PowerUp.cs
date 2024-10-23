@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using Utils;
 
 public class PowerUp : NetworkBehaviour
 {
@@ -15,33 +17,16 @@ public class PowerUp : NetworkBehaviour
         skillTreeManager = GetComponent<SkillTreeManager>();
     }
 
-    private void AddDamageToUnits(RTSObjectsManager player, string unitName, int value)
+    private void ApplySkill(Unit unit, SkillSo skillSo)
     {
-        foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
+        var stats = unit.GetComponent<Stats>();
+
+        if (stats != null && unit != null && unit.unitSo.unitName == skillSo.unitName)
         {
-            var damagable = unit.GetComponent<Damagable>();
-            var unitScript = unit.GetComponent<Unit>();
-
-            if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
+            foreach (var statType in skillSo.statTypes)
             {
-                damagable.AddDamageBoost(value);
-            }
-        }
-    }
-
-    private void AddHealthToUnits(RTSObjectsManager player, string unitName, int value)
-    {
-        foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
-        {
-            var damagable = unit.GetComponent<Damagable>();
-            var unitScript = unit.GetComponent<Unit>();
-
-            if (damagable != null && unitScript != null && unitScript.unitSo.unitName == unitName)
-            {
-                var newHealth = damagable.stats.GetStat(StatType.MaxHealth) * value / 100;
-
-                damagable.stats.AddToStat(StatType.MaxHealth, newHealth);
-                damagable.TakeDamage(-newHealth);
+                float newValue = skillSo.isPercentage ? skillSo.value.GetValueFromPercent(stats.GetStat(statType)) : skillSo.value;
+                stats.AddToStat(statType, newValue);
             }
         }
     }
@@ -59,12 +44,12 @@ public class PowerUp : NetworkBehaviour
         return null;
     }
 
-    public float GetPercentAmountOfByUnitName(string unitName, string valueName)
+    public float GetPercentAmountOfByUnitName(string unitName, StatType valueName)
     {
         var value = 0f;
         foreach (var skill in skillTreeManager.skills)
         {
-            if (skill.unitName == unitName && IsUnlocked(skill) && skill.valueName == valueName)
+            if (skill.unitName == unitName && IsUnlocked(skill) && skill.statTypes.Contains(valueName))
             {
                 value += skill.value;
             }
@@ -73,14 +58,32 @@ public class PowerUp : NetworkBehaviour
         return value;
     }
 
+    public void ApplySkillForUnits(RTSObjectsManager player, SkillSo skill)
+    {
+        foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
+        {
+            ApplySkill(unit, skill);
+        }
+    }
+
+    public void ApplySkills(Unit unit)
+    {
+        foreach (var skill in skillTreeManager.skills)
+        {
+            if (skill.unitName == unit.unitSo.unitName && IsUnlocked(skill))
+            {
+                ApplySkill(unit, skill);
+            }
+        }
+    }
+
     public bool Unlock(SkillSo skill, int skillIndex, int skillPoints, ServerRpcParams serverRpcParams = default)
     {
         if (CanBePurchased(skill, skillPoints))
         {
             var rtsObjectManager = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject.GetComponent<RTSObjectsManager>();
             Debug.Log($"Unlocking skill {skill.skillName} for player {rtsObjectManager.OwnerClientId}");
-            if (skill.valueName == "damage") AddDamageToUnits(rtsObjectManager, skill.unitName, skill.value);
-            else if (skill.valueName == "health") AddHealthToUnits(rtsObjectManager, skill.unitName, skill.value);
+            ApplySkillForUnits(rtsObjectManager, skill);
             unlockedSkillsIndex.Add(skillIndex);
             OnSkillUnlocked?.Invoke(skill);
             return true;

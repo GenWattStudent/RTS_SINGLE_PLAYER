@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using FOVMapping;
+using RTS.Domain.SO;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -16,12 +17,24 @@ public class Unit : NetworkBehaviour
     public bool shouldChangeMaterial = true;
     public bool IsUpgrading = false;
     public bool isVisibile = true;
+    public List<UpgradeSO> Upgrades;
 
     private Damagable damagable;
     private Attack attack;
     // private float visibleTimer = 0f;
     private float visibleInterval = 5f;
     private PlayerController playerController;
+
+    public void AddUpgrade(UpgradeSO upgrade)
+    {
+        Upgrades.Add(upgrade);
+    }
+
+    public void RemoveUpgrade(UpgradeSO upgrade)
+    {
+        // remove upgrade from list by name
+        Upgrades.RemoveAll(u => u.name == upgrade.name);
+    }
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
     {

@@ -18,8 +18,10 @@ MonoBehaviour:
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   UnlockLevel: 1
   Icon: {fileID: 21300000, guid: 89a8a255b1b6e454aa699618ef43518d, type: 3}
-  ConstructionPrefab: {fileID: 7280734897435676637, guid: ad81f3d4636159e4291de92711a8d50c,
-    type: 3}
   Stats: []
   ForUnits:
-  - {fileID: 4631067923334548659, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
+  - {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
+  _prefab: {fileID: 3466841267310500670, guid: 8e994c1b45a7f2b4aac2217ff984f969, type: 3}
+  _previewPrefab: {fileID: 0}
+  _constructionManagerPrefab: {fileID: 4100258203609856823, guid: e9c7b3fe79b425048a6f2636a2198dc2,
+    type: 3}

@@ -18,6 +18,7 @@ MonoBehaviour:
   requiredSkills: []
   requiredSkillPoints: 1
   skillTag: TankSkill1
-  valueName: damage
+  statTypes: 02000000
   value: 10
   unitName: Tank
+  isPercentage: 1

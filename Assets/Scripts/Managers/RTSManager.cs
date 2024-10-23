@@ -13,6 +13,7 @@ public class RTSManager : NetworkBehaviour
     private SelectionManager selectionManager;
     private UIRTSActions uiRTSActions;
     private UpgradeManager upgradeManager;
+    private UIStorage uiStorage;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class RTSManager : NetworkBehaviour
         selectionManager = GetComponent<SelectionManager>();
         uiRTSActions = GetComponentInChildren<UIRTSActions>();
         upgradeManager = GetComponent<UpgradeManager>();
+        uiStorage = GetComponentInChildren<UIStorage>();
     }
 
     private void CancelBuildingCommand(Selectable selectable)
@@ -204,10 +206,24 @@ public class RTSManager : NetworkBehaviour
         if (no.TryGet(out NetworkObject networkObject))
         {
             var unit = networkObject.GetComponent<Unit>();
-            unit.IsUpgrading = true;
-            var upgradeGo = Instantiate(upgrade.ConstructionPrefab, unit.transform.position, Quaternion.identity, unit.transform);
+            if (!upgradeManager.CanApplyUpgrade(unit) && !uiStorage.HasEnoughResource(upgrade.costResource, upgrade.Cost)) return;
 
-            upgradeGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+            unit.IsUpgrading = true;
+            unit.AddUpgrade(upgrade);
+
+            var upgradeGo = Instantiate(upgrade.constructionManagerPrefab, unit.transform.position, Quaternion.identity);
+            var upgradeNo = upgradeGo.GetComponent<NetworkObject>();
+            var damagable = upgradeGo.GetComponent<Damagable>();
+            var stats = upgradeGo.GetComponent<Stats>();
+            var construction = upgradeGo.GetComponent<Construction>();
+
+            construction.construction = upgrade;
+            upgradeNo.SpawnWithOwnership(OwnerClientId);
+            upgradeNo.transform.SetParent(unit.transform);
+            damagable.teamType.Value = playerController.teamType.Value;
+            stats.AddStat(StatType.Health, 1);
+
+            uiStorage.DecreaseResource(upgrade.costResource, upgrade.Cost);
         }
     }
 

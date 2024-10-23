@@ -36,23 +36,6 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
-  stats:
-  - Type: 1
-    Value: 200
-  - Type: 4
-    Value: 10
-  - Type: 3
-    Value: 3
-  - Type: 5
-    Value: 4
-  - Type: 9
-    Value: 10
-  - Type: 10
-    Value: 4
-  - Type: 8
-    Value: 50
-  - Type: 7
-    Value: 2
   type: 1
   unitName: Tank
   speed: 4
@@ -65,6 +48,6 @@ MonoBehaviour:
   spawnerLevelToUnlock: 1
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   usage: 40
-  usageInterval: 1
+  usageInterval: 3
   sightAngle: 360
   sightRange: 8

@@ -58,7 +58,7 @@ namespace RTS.Managers
 
         public bool CanApplyUpgrade(Unit unit)
         {
-            return SelectedUpgrade != null && SelectedUpgrade.ForUnits.Any(u => unit.unitSo.name == u.name);
+            return SelectedUpgrade != null && SelectedUpgrade.ForUnits.Any(u => unit.unitSo.name == u.name) && unit.Upgrades.All(u => u.name != SelectedUpgrade.name);
         }
 
         private void Update()
