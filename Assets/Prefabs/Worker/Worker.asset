@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
   m_Name: Worker
   m_EditorClassIdentifier: 
-  attackDamage: 0
+  attackDamage: 40
   attackRange: 3
   attackSpeed: 4
   attackCooldown: 1
@@ -36,21 +36,6 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
-  stats:
-  - Type: 1
-    Value: 150
-  - Type: 3
-    Value: 4
-  - Type: 4
-    Value: 3
-  - Type: 5
-    Value: 7
-  - Type: 8
-    Value: 10
-  - Type: 6
-    Value: 3
-  - Type: 7
-    Value: 3
   type: 0
   unitName: Worker
   speed: 7

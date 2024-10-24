@@ -5,7 +5,7 @@ using static Selectable;
 
 public class SelectedDetails : NetworkToolkitHelper
 {
-    private Building building;
+    private Selectable selectedObject;
     private SelectionManager selectionManager;
     private UIStorage uIStorage;
     private UITabManagement uITabManagement;
@@ -15,6 +15,7 @@ public class SelectedDetails : NetworkToolkitHelper
     // UI Elements
     private Button levelUpButton;
     private Button sellButton;
+    private Button cancelUpgradeButton;
     private VisualElement statsContainer;
     private Label levelText;
     private ProgressBar healthBar;
@@ -42,7 +43,9 @@ public class SelectedDetails : NetworkToolkitHelper
             actions,
             levelUpButton,
             sellButton,
-            attackActions);
+            attackActions,
+            cancelUpgradeButton);
+
         buildingDetailsUpdater = new BuildingDetailsUpdater(
             statsContainer,
             healthBar,
@@ -56,8 +59,12 @@ public class SelectedDetails : NetworkToolkitHelper
 
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);
+        cancelUpgradeButton.RegisterCallback<ClickEvent>(OnCancelUpgradeButtonClick);
+
+        SelectionManager.OnSelect += UpdateSelectedDetails;
 
         ActivateButtons(false);
+        UpdateSelectedDetails();
     }
 
     private void InitializeUIElements()
@@ -69,6 +76,7 @@ public class SelectedDetails : NetworkToolkitHelper
         levelText = root.Q<Label>("Level");
         healthBar = root.Q<ProgressBar>("Healthbar");
         expirenceBar = root.Q<ProgressBar>("Expirencebar");
+        cancelUpgradeButton = root.Q<Button>("CancelUpgrade");
         actions = GetVisualElement("Actions");
         attackActions = GetVisualElement("AttackActions");
     }
@@ -81,10 +89,8 @@ public class SelectedDetails : NetworkToolkitHelper
         uITabManagement = playerController.GetComponentInChildren<UITabManagement>();
     }
 
-
     private void OnDisable()
     {
-
         // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
         // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
     }
@@ -97,16 +103,23 @@ public class SelectedDetails : NetworkToolkitHelper
 
     private void OnUpgradeButtonClick(ClickEvent ev)
     {
-        if (building.buildingLevelable != null)
+        var building = selectedObject.GetComponent<Building>();
+        if (building != null && building.buildingLevelable != null)
         {
             building.buildingLevelable.LevelUpServerRpc();
         }
     }
 
+    private void OnCancelUpgradeButtonClick(ClickEvent ev)
+    {
+        var unit = selectedObject.GetComponent<Unit>();
+        if (unit != null) unit.CancelUpgradeServerRpc();
+    }
+
     private void OnSellButtonClick(ClickEvent ev)
     {
-        Debug.Log("SellButtonClick " + building.buildingSo.buildingName + " " + building.buildingSo.cost);
-        building.SellServerRpc();
+        var building = selectedObject.GetComponent<Building>();
+        if (building != null) building.SellServerRpc();
     }
 
     private void CreateStat(string name, string value)
@@ -162,10 +175,10 @@ public class SelectedDetails : NetworkToolkitHelper
     private void UpdateSelectedDetails()
     {
         ClearStats();
+        selectedObject = null;
 
         if (selectionManager.selectedObjects.Count == 0)
         {
-            Hide();
             if (!isGoToTab)
             {
                 var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
@@ -174,6 +187,7 @@ public class SelectedDetails : NetworkToolkitHelper
                 isGoToTab = true;
             }
 
+            Hide();
             return;
         };
 
@@ -181,20 +195,19 @@ public class SelectedDetails : NetworkToolkitHelper
 
         if (selectionManager.selectedObjects.Count == 1)
         {
-            building = null;
-            Show();
             var selectable = selectionManager.selectedObjects[0];
-            var unit = selectable.GetComponent<Unit>();
+            selectedObject = selectable;
+            Show();
+
             var stats = selectable.GetComponent<Stats>();
 
-            if (unit != null && selectable.selectableType == SelectableType.Unit)
+            if (selectable.selectableType == SelectableType.Unit)
             {
                 actions.style.display = DisplayStyle.None;
                 unitDetailsUpdater.UpdateUnitDetails(stats);
             }
             else
             {
-                building = selectable.GetComponent<Building>();
                 buildingDetailsUpdater.UpdateBuildingDetails(selectable);
             }
         }
@@ -204,8 +217,8 @@ public class SelectedDetails : NetworkToolkitHelper
         }
     }
 
-    private void FixedUpdate()
-    {
-        UpdateSelectedDetails();
-    }
+    // private void FixedUpdate()
+    // {
+    //     UpdateSelectedDetails();
+    // }
 }

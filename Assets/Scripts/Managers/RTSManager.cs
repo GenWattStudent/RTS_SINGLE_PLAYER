@@ -13,7 +13,6 @@ public class RTSManager : NetworkBehaviour
     private SelectionManager selectionManager;
     private UIRTSActions uiRTSActions;
     private UpgradeManager upgradeManager;
-    private UIStorage uiStorage;
 
     private void Start()
     {
@@ -27,7 +26,6 @@ public class RTSManager : NetworkBehaviour
         selectionManager = GetComponent<SelectionManager>();
         uiRTSActions = GetComponentInChildren<UIRTSActions>();
         upgradeManager = GetComponent<UpgradeManager>();
-        uiStorage = GetComponentInChildren<UIStorage>();
     }
 
     private void CancelBuildingCommand(Selectable selectable)
@@ -198,38 +196,9 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    private void UpgradeCommandServerRpc(NetworkObjectReference no, int index)
-    {
-        var upgrade = upgradeManager.Upgrades[index];
-
-        if (no.TryGet(out NetworkObject networkObject))
-        {
-            var unit = networkObject.GetComponent<Unit>();
-            if (!upgradeManager.CanApplyUpgrade(unit) && !uiStorage.HasEnoughResource(upgrade.costResource, upgrade.Cost)) return;
-
-            unit.IsUpgrading = true;
-            unit.AddUpgrade(upgrade);
-
-            var upgradeGo = Instantiate(upgrade.constructionManagerPrefab, unit.transform.position, Quaternion.identity);
-            var upgradeNo = upgradeGo.GetComponent<NetworkObject>();
-            var damagable = upgradeGo.GetComponent<Damagable>();
-            var stats = upgradeGo.GetComponent<Stats>();
-            var construction = upgradeGo.GetComponent<Construction>();
-
-            construction.construction = upgrade;
-            upgradeNo.SpawnWithOwnership(OwnerClientId);
-            upgradeNo.transform.SetParent(unit.transform);
-            damagable.teamType.Value = playerController.teamType.Value;
-            stats.AddStat(StatType.Health, 1);
-
-            uiStorage.DecreaseResource(upgrade.costResource, upgrade.Cost);
-        }
-    }
-
     private void UpgradeCommand(Unit unit, UpgradeSO upgrade)
     {
-        UpgradeCommandServerRpc(unit.GetComponent<NetworkObject>(), upgradeManager.Upgrades.IndexOf(upgrade));
+        upgradeManager.UpgradeServerRpc(unit.GetComponent<NetworkObject>(), upgradeManager.Upgrades.IndexOf(upgrade));
     }
 
     private void Update()
@@ -303,7 +272,7 @@ public class RTSManager : NetworkBehaviour
             {
                 var unit = raycastHit.transform.gameObject.GetComponent<Unit>();
 
-                if (upgradeManager.CanApplyUpgrade(unit))
+                if (upgradeManager.CanApplyUpgrade(unit, upgradeManager.SelectedUpgrade))
                 {
                     Debug.Log("Upgrade");
                     UpgradeCommand(unit, upgradeManager.SelectedUpgrade);

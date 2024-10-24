@@ -53,14 +53,23 @@ namespace RTS.UI
 
         private void CreateList()
         {
+            _upgradeItemContainer.Clear();
+            _upgradeItems.Clear();
+
             for (int i = 0; i < _upgradeManager.Upgrades.Count; i++)
             {
                 CreateItem(_upgradeManager.Upgrades[i], i);
             }
         }
 
-        private void SelectUpgrade(UpgradeSO upgrade)
+        private void SelectUpgrade(UpgradeSO upgrade, VisualElement upgradeItem)
         {
+            foreach (var item in _upgradeItems)
+            {
+                item.RemoveFromClassList("active");
+            }
+
+            upgradeItem.AddToClassList("active");
             OnUpgradeSelected?.Invoke(upgrade);
         }
 
@@ -68,7 +77,7 @@ namespace RTS.UI
         {
             var upgradeItem = _upgradeItemTemplate.CloneTree();
             upgradeItem.Q<VisualElement>("UpgradeItem").style.backgroundImage = new StyleBackground(upgrade.Icon);
-            upgradeItem.Q<VisualElement>("UpgradeItem").RegisterCallback((ClickEvent evt) => SelectUpgrade(upgrade));
+            upgradeItem.Q<VisualElement>("UpgradeItem").RegisterCallback((ClickEvent evt) => SelectUpgrade(upgrade, upgradeItem));
 
             if (_upgradeManager.Upgrades.Count != 1 || index != _upgradeManager.Upgrades.Count - 1)
             {

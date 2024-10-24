@@ -77,11 +77,13 @@ public class UIBuildingManager : NetworkBehaviour
     public void CreateBuildingTabs(BuildingSo.BuildingType buildingType)
     {
         ClearTabs();
+        Debug.Log("Creating building tabs for " + buildingType);
         uIUnitManager.IsUnitUIOpen = false;
         uIUnitManager.IsUnitSelectionTabOpen = false;
 
         foreach (var building in buildings)
         {
+            Debug.Log("Checking " + building.type + " against " + buildingType);
             if (building.type == buildingType)
             {
                 CreateBuildingTab(building);
@@ -131,7 +133,7 @@ public class UIBuildingManager : NetworkBehaviour
         TemplateContainer buildingTab = visualTree.Instantiate();
         buildingTab.name = building.buildingName;
         buildingTab.style.height = Length.Percent(100);
-
+        Debug.Log("Creating building tab for " + building.buildingName);
         SetBuildingData(buildingTab, building);
         slotContainer.Add(buildingTab);
         slots.Add(new SlotData { buildingSo = building, templateContainer = buildingTab });

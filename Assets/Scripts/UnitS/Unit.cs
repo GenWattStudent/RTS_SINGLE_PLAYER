@@ -13,17 +13,27 @@ public class Unit : NetworkBehaviour
     public List<GameObject> unitPrefabs = new();
     public List<GameObject> unitUiPrefabs = new();
     public List<GameObject> bushes = new();
+    public List<UpgradeSO> Upgrades = new();
     public bool IsBot = false;
     public bool shouldChangeMaterial = true;
-    public bool IsUpgrading = false;
+    public NetworkVariable<bool> IsUpgrading = new(false);
     public bool isVisibile = true;
-    public List<UpgradeSO> Upgrades;
 
     private Damagable damagable;
-    private Attack attack;
-    // private float visibleTimer = 0f;
-    private float visibleInterval = 5f;
     private PlayerController playerController;
+
+    [ServerRpc(RequireOwnership = false)]
+    public void CancelUpgradeServerRpc()
+    {
+        if (IsUpgrading.Value)
+        {
+            var construction = GetComponentInChildren<Construction>();
+            construction.DestroyConstructionServerRpc();
+            IsUpgrading.Value = false;
+            // remove last upgrade
+            Upgrades.RemoveAt(Upgrades.Count - 1);
+        }
+    }
 
     public void AddUpgrade(UpgradeSO upgrade)
     {
@@ -33,7 +43,7 @@ public class Unit : NetworkBehaviour
     public void RemoveUpgrade(UpgradeSO upgrade)
     {
         // remove upgrade from list by name
-        Upgrades.RemoveAll(u => u.name == upgrade.name);
+        Upgrades.RemoveAll(u => u.Name == upgrade.Name);
     }
 
     public void ChangeMaterial(Material material, bool shouldChangeOriginalMaterial = false)
@@ -110,7 +120,6 @@ public class Unit : NetworkBehaviour
         ChangeMaterial(playerColorData.playerMaterial, true);
 
         damagable = GetComponent<Damagable>();
-        attack = GetComponent<Attack>();
 
         playerController.teamType.OnValueChanged += HandleTeamChange;
         damagable.teamType.OnValueChanged += HandleUnitTeamChange;

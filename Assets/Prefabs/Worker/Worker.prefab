@@ -221,11 +221,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
-  IsBot: 0
   attackableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
-  shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 1259631158737612746}
   - {fileID: 1259631158737612738}
@@ -234,8 +232,11 @@ MonoBehaviour:
   - {fileID: 363848697267320202}
   - {fileID: 6977154542806008979}
   bushes: []
-  teamType: 0
+  IsBot: 0
+  shouldChangeMaterial: 1
+  IsUpgrading: 0
   isVisibile: 1
+  Upgrades: []
 --- !u!195 &6739326068420461195
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -718,7 +719,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9044136549788504387, guid: 2706fbf2a5a42a24e9e59b610b8e1268,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7084904555914772712}
   m_SourcePrefab: {fileID: 100100000, guid: 2706fbf2a5a42a24e9e59b610b8e1268, type: 3}
 --- !u!1 &363848697267320202 stripped
 GameObject:
@@ -726,6 +731,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8687333937516520649}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7084904555914772712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363848697267320202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a36ca2325d22934dae5324b6a47558e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1259631158737612736 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7634876721255123721, guid: 2706fbf2a5a42a24e9e59b610b8e1268,

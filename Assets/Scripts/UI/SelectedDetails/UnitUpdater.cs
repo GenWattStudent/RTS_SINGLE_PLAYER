@@ -11,6 +11,7 @@ public class UnitDetailsUpdater
     private Button levelUpButton;
     private Button sellButton;
     private VisualElement attackActions;
+    private Button cancelUpgradeButton;
 
     public UnitDetailsUpdater(
         VisualElement statsContainer,
@@ -20,7 +21,8 @@ public class UnitDetailsUpdater
         VisualElement actions,
         Button levelUpButton,
         Button sellButton,
-        VisualElement attackActions)
+        VisualElement attackActions,
+        Button cancelUpgradeButton)
     {
         this.statsContainer = statsContainer;
         this.healthBar = healthBar;
@@ -30,6 +32,7 @@ public class UnitDetailsUpdater
         this.levelUpButton = levelUpButton;
         this.sellButton = sellButton;
         this.attackActions = attackActions;
+        this.cancelUpgradeButton = cancelUpgradeButton;
     }
 
     public void UpdateUnitDetails(Stats stats)
@@ -42,10 +45,29 @@ public class UnitDetailsUpdater
         var health = stats.GetStat(StatType.Health);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
         var damage = stats.GetStat(StatType.Damage);
+        var attackSpeed = stats.GetStat(StatType.AttackSpeed);
+        var buildingDistance = stats.GetStat(StatType.BuildingDistance);
         var damagable = stats.GetComponent<Damagable>();
 
-        StatCreator.CreateHealthStat(statsContainer, health, maxHealth);
-        StatCreator.CreateDamageStat(statsContainer, damage);
+        if (damagable.unitScript.unitSo.type == UnitSo.UnitType.Worker)
+        {
+            StatCreator.CreateBuildingSpeedStat(statsContainer, damage);
+            StatCreator.CreateBuildingDistanceStat(statsContainer, buildingDistance);
+        }
+        else
+        {
+            StatCreator.CreateDamageStat(statsContainer, damage);
+            StatCreator.CreateAttackSpeedStat(statsContainer, attackSpeed);
+        }
+
+        if (damagable.unitScript.IsUpgrading.Value)
+        {
+            cancelUpgradeButton.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            cancelUpgradeButton.style.display = DisplayStyle.None;
+        }
 
         if (damagable.damagableSo.canAttack)
         {

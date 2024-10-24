@@ -41,15 +41,15 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="Bars" style="flex-grow: 0; width: 100%; margin-top: 5px; margin-bottom: 5px;">
-                        <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="width: 95%; justify-content: flex-start; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center; height: auto;">
+                        <ui:ProgressBar value="70" title="HP: 20/100" name="Healthbar" class="healthbar" style="width: 100%; justify-content: flex-start; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center; height: auto;">
                             <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-heart-50.png?fileID=2800000&amp;guid=467c785996b12d44293a6b13f8d411c6&amp;type=3#icons8-heart-50&apos;); width: 20px; height: 20px; position: absolute; left: 5px; top: 2px;" />
                         </ui:ProgressBar>
-                        <ui:ProgressBar value="70" title="Exp: 20/100" name="Expirencebar" class="expirence" style="width: 95%; justify-content: flex-start; margin-top: 5px; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
+                        <ui:ProgressBar value="70" title="Exp: 20/100" name="Expirencebar" class="expirence" style="width: 100%; justify-content: flex-start; margin-top: 5px; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
                             <ui:Label tabindex="-1" text="EXP" display-tooltip-when-elided="true" name="Label" style="position: absolute; top: 4px; left: 5px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                         </ui:ProgressBar>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="Info" style="flex-grow: 0; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; padding-bottom: 8px; padding-top: 8px; padding-right: 8px; padding-left: 8px;">
+                <ui:VisualElement name="Info" style="flex-grow: 0; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; padding-bottom: 8px; padding-top: 8px; padding-right: 0; padding-left: 0;">
                     <ui:VisualElement name="Stats" style="flex-grow: 0; width: 100%;">
                         <ui:VisualElement name="Stat" class="stat">
                             <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="-unity-text-align: upper-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
@@ -69,11 +69,14 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="AttackActions" class="border-secondary" style="flex-grow: 0; height: auto; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-items: flex-start; justify-content: flex-start;">
-                    <ui:Button text="&#10;" display-tooltip-when-elided="true" name="Target" tooltip="Sey target" class="btn-secondary" style="height: 40px; width: 40px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-target-50.png?fileID=2800000&amp;guid=3fc16ec9513e7514d885ae03fac44231&amp;type=3#icons8-target-50&apos;);" />
-                    <ui:Button display-tooltip-when-elided="true" name="Cancel" tooltip="Cancel target" class="btn-secondary" style="height: 40px; width: 40px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-cancel-48.png?fileID=2800000&amp;guid=35e876fafe5337746bde0ba796448ee6&amp;type=3#icons8-cancel-48&apos;); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                        <ui:VisualElement name="CancelIconTarget" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-target-50.png?fileID=2800000&amp;guid=3fc16ec9513e7514d885ae03fac44231&amp;type=3#icons8-target-50&apos;); width: 100%; height: 100%;" />
-                    </ui:Button>
+                <ui:VisualElement name="UnitActionsContainer" class="border-secondary" style="flex-grow: 0; height: auto; padding-top: 8px; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-items: flex-start; justify-content: flex-start;">
+                    <ui:Button text="Stop upgrade" display-tooltip-when-elided="true" name="CancelUpgrade" tooltip="Sey target" class="btn-secondary" style="height: 40px; width: 110px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 0; background-image: none;" />
+                    <ui:VisualElement name="AttackActions" style="flex-grow: 1; flex-direction: row;">
+                        <ui:Button text="&#10;" display-tooltip-when-elided="true" name="Target" tooltip="Sey target" class="btn-secondary" style="height: 40px; width: 40px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-target-50.png?fileID=2800000&amp;guid=3fc16ec9513e7514d885ae03fac44231&amp;type=3#icons8-target-50&apos;);" />
+                        <ui:Button display-tooltip-when-elided="true" name="Cancel" tooltip="Cancel target" class="btn-secondary" style="height: 40px; width: 40px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-cancel-48.png?fileID=2800000&amp;guid=35e876fafe5337746bde0ba796448ee6&amp;type=3#icons8-cancel-48&apos;); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                            <ui:VisualElement name="CancelIconTarget" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-target-50.png?fileID=2800000&amp;guid=3fc16ec9513e7514d885ae03fac44231&amp;type=3#icons8-target-50&apos;); width: 100%; height: 100%;" />
+                        </ui:Button>
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="RTSTabInfo" style="flex-grow: 1;">

@@ -12,6 +12,21 @@ public static class StatCreator
         CreateStat(statsContainer, "Damage", $"{damage}");
     }
 
+    public static void CreateBuildingSpeedStat(VisualElement statsContainer, float speed)
+    {
+        CreateStat(statsContainer, "Building Speed", $"{speed}");
+    }
+
+    public static void CreateAttackSpeedStat(VisualElement statsContainer, float attackSpeed)
+    {
+        CreateStat(statsContainer, "Attack Speed", $"{attackSpeed}");
+    }
+
+    public static void CreateBuildingDistanceStat(VisualElement statsContainer, float distance)
+    {
+        CreateStat(statsContainer, "Building Distance", $"{distance}");
+    }
+
     public static void CreateStat(VisualElement statsContainer, string name, string value)
     {
         var statBox = new VisualElement

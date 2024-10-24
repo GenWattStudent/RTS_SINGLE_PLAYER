@@ -6,6 +6,7 @@ public class Worker : NetworkBehaviour
     public Construction construction;
     public Unit unit;
     public Laser laser;
+    public Stats stats;
 
     private bool isBuilding = false;
     private UnitMovement unitMovement;
@@ -97,7 +98,18 @@ public class Worker : NetworkBehaviour
     {
         unit = GetComponent<Unit>();
         unitMovement = GetComponent<UnitMovement>();
+        stats = GetComponent<Stats>();
         laser = GetComponent<Laser>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (!IsServer) return;
+
+        stats.AddStat(StatType.Damage, laser.laserSo.Damage);
+        stats.AddStat(StatType.AttackSpeed, laser.laserSo.AttackSpeed);
     }
 
     public override void OnNetworkDespawn()
@@ -108,11 +120,11 @@ public class Worker : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsServer) return;
+        if (!IsServer || construction == null) return;
 
-        if (construction == null) return;
         var distance = DistanceToConstruction();
         unitMovement.RotateToTarget(construction.transform.position);
+
         if (distance <= unit.unitSo.buildingDistance && !isBuilding)
         {
             if (unitMovement != null)

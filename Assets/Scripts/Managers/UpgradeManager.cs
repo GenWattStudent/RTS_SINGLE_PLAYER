@@ -12,12 +12,17 @@ namespace RTS.Managers
         public List<UpgradeSO> Upgrades;
         public UpgradeSO SelectedUpgrade;
 
-        private SelectionManager _selectionManager;
         private UpgradeUI _upgradeUI;
+        private UIStorage _uiStorage;
+        private PlayerController _playerController;
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+
+            _upgradeUI = GetComponentInChildren<UpgradeUI>();
+            _uiStorage = GetComponentInChildren<UIStorage>();
+            _playerController = GetComponent<PlayerController>();
 
             if (!IsOwner)
             {
@@ -25,30 +30,14 @@ namespace RTS.Managers
                 return;
             }
 
-            _selectionManager = GetComponent<SelectionManager>();
-            _upgradeUI = GetComponentInChildren<UpgradeUI>();
             _upgradeUI.OnUpgradeSelected += SelectUpgrade;
-            SelectionManager.OnSelect += OnSelect;
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
 
-            SelectionManager.OnSelect -= OnSelect;
             _upgradeUI.OnUpgradeSelected -= SelectUpgrade;
-        }
-
-        private void OnSelect()
-        {
-            if (_selectionManager.GetWorkers().Count > 0)
-            {
-                _upgradeUI.Show();
-            }
-            else
-            {
-                _upgradeUI.Hide();
-            }
         }
 
         public void SelectUpgrade(UpgradeSO upgrade)
@@ -56,9 +45,40 @@ namespace RTS.Managers
             SelectedUpgrade = upgrade;
         }
 
-        public bool CanApplyUpgrade(Unit unit)
+        public bool CanApplyUpgrade(Unit unit, UpgradeSO upgrade)
         {
-            return SelectedUpgrade != null && SelectedUpgrade.ForUnits.Any(u => unit.unitSo.name == u.name) && unit.Upgrades.All(u => u.name != SelectedUpgrade.name);
+            return upgrade != null && unit != null && unit.unitSo != null &&
+            upgrade.ForUnits.Any(u => u != null && unit.unitSo.unitName == u.unitName)
+                   && unit.Upgrades.All(u => u != null && u.Name != upgrade.Name);
+        }
+
+        [ServerRpc]
+        public void UpgradeServerRpc(NetworkObjectReference no, int index)
+        {
+            var upgrade = Upgrades[index];
+
+            if (no.TryGet(out NetworkObject networkObject))
+            {
+                var unit = networkObject.GetComponent<Unit>();
+                if (!CanApplyUpgrade(unit, upgrade) || !_uiStorage.HasEnoughResource(upgrade.costResource, upgrade.Cost)) return;
+
+                unit.IsUpgrading.Value = true;
+                unit.AddUpgrade(upgrade);
+
+                var upgradeGo = Instantiate(upgrade.constructionManagerPrefab, unit.transform.position, Quaternion.identity);
+                var upgradeNo = upgradeGo.GetComponent<NetworkObject>();
+                var damagable = upgradeGo.GetComponent<Damagable>();
+                var stats = upgradeGo.GetComponent<Stats>();
+                var construction = upgradeGo.GetComponent<Construction>();
+
+                construction.construction = upgrade;
+                upgradeNo.SpawnWithOwnership(OwnerClientId);
+                upgradeNo.transform.SetParent(unit.transform);
+                damagable.teamType.Value = _playerController.teamType.Value;
+
+                _uiStorage.DecreaseResource(upgrade.costResource, upgrade.Cost);
+                stats.AddStat(StatType.Health, 1);
+            }
         }
 
         private void Update()
@@ -67,6 +87,11 @@ namespace RTS.Managers
             {
                 _upgradeUI.Hide();
                 SelectedUpgrade = null;
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                _upgradeUI.Show();
             }
         }
     }
