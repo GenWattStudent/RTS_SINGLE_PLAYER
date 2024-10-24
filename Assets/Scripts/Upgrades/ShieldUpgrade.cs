@@ -13,7 +13,6 @@ public class ShieldUpgrade : NetworkBehaviour
     {
         _collider = transform.parent.GetComponentInParent<Collider>();
         _unit = transform.parent.GetComponentInParent<Unit>();
-        _collider.enabled = false;
 
         ScaleShield();
     }
@@ -22,7 +21,6 @@ public class ShieldUpgrade : NetworkBehaviour
     {
         base.OnNetworkDespawn();
 
-        _collider.enabled = true;
         _unit.RemoveUpgrade(upgradeSo);
     }
 

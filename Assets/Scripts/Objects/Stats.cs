@@ -35,15 +35,13 @@ public class Stats : NetworkBehaviour
     private void AddStatsFromProperties(object source)
     {
         FieldInfo[] fields = source.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
         foreach (FieldInfo field in fields)
         {
-            Debug.Log($"Field '{field.Name}' props");
             if (field.FieldType == typeof(int) || field.FieldType == typeof(float) || field.FieldType == typeof(double))
             {
-                Debug.Log($"Field '{field.Name}' try");
                 if (System.Enum.TryParse(field.Name, true, out StatType statType))
                 {
-                    Debug.Log($"Field '{field.Name}' converted to StatType.");
                     if (statType == StatType.Health)
                     {
                         stats.Add(new Stat { Type = StatType.MaxHealth, Value = System.Convert.ToSingle(field.GetValue(source)) });
@@ -52,10 +50,6 @@ public class Stats : NetworkBehaviour
 
                     Stat stat = new Stat { Type = statType, Value = System.Convert.ToSingle(field.GetValue(source)) };
                     stats.Add(stat);
-                }
-                else
-                {
-                    Debug.LogWarning($"Field '{field.Name}' could not be converted to StatType.");
                 }
             }
         }

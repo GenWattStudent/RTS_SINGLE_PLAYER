@@ -130,7 +130,7 @@ public class UIUnitManager : NetworkBehaviour
 
     public void CreateSelectionUnitTab()
     {
-        if (unitCountPrev == 0 && selectionManager.selectedObjects.Count == 0) return;
+        if (selectionManager.selectedObjects.Count == 0) return;
         if (selectionManager.selectedObjects.Count == 1 && selectionManager.IsBuilding(selectionManager.selectedObjects[0])) return;
 
         unitCountPrev = selectionManager.selectedObjects.Count;

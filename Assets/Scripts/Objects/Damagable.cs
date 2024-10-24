@@ -7,7 +7,6 @@ public class Damagable : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
     public DamagableSo damagableSo;
-    private ProgresBar progressBarScript;
     public Levelable levelable;
     public GameObject targetPoint;
     public bool isDead = false;
@@ -17,6 +16,8 @@ public class Damagable : NetworkBehaviour
     public Stats stats;
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public Unit unitScript;
+
+    private ProgresBar progressBarScript;
 
     public event Action OnDead;
     public event Action OnTakeDamage;
@@ -64,12 +65,6 @@ public class Damagable : NetworkBehaviour
                 if (unit.GetComponent<Building>() != null) return;
 
                 powerUp.ApplySkills(unit);
-
-                // var damagePercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "damage");
-                // var healthPercent = powerUp.GetPercentAmountOfByUnitName(unit.unitSo.unitName, "health");
-
-                // AddDamageBoost(damagePercent);
-                // AddHealthBoost(healthPercent);
             }
 
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));

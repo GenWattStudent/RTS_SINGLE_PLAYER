@@ -21,12 +21,18 @@ public class Construction : NetworkBehaviour
 
     public event Action OnConstructionFinished;
 
+    [ServerRpc(RequireOwnership = false)]
+    public void DestroyConstructionServerRpc()
+    {
+        GetComponent<NetworkObject>().Despawn(true);
+    }
+
     public void AddWorker(Unit unit)
     {
         if (unit.TryGetComponent<Worker>(out var worker))
         {
             buildingUnits.Add(unit);
-            buildingSpeed += worker.laser.laserSo.damage;
+            buildingSpeed += worker.stats.GetStat(StatType.Damage);
             StartConstruction();
         }
     }
@@ -36,7 +42,7 @@ public class Construction : NetworkBehaviour
         if (unit.TryGetComponent<Worker>(out var worker))
         {
             buildingUnits.Remove(unit);
-            if (buildingSpeed > 0) buildingSpeed -= worker.laser.laserSo.damage;
+            if (buildingSpeed > 0) buildingSpeed -= worker.stats.GetStat(StatType.Damage);
             if (buildingUnits.Count == 0)
             {
                 StopConstruction();
@@ -101,7 +107,7 @@ public class Construction : NetworkBehaviour
         if (unit != null)
         {
             Debug.Log("Unit is not null " + unit.transform.name);
-            unit.IsUpgrading = false;
+            unit.IsUpgrading.Value = false;
             no.transform.SetParent(unit.transform);
         }
 

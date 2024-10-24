@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Laser", menuName = "ScriptableObjects/Laser")]
 public class LaserSo : ScriptableObject
 {
-    public string laserName;
-    public float damage;
-    public float damgeInterval;
-    public Material laserMaterial;
+    public string LaserName;
+    public float Damage;
+    public float AttackSpeed;
+    public Material LaserMaterial;
 }

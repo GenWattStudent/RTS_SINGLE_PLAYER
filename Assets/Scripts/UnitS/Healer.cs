@@ -5,10 +5,11 @@ public class Healer : NetworkBehaviour
 {
     public Damagable target;
     public DamagableSo damagableSo;
-    private float healRate = 1f;
+
     private UnitMovement unitMovement;
     private Laser laser;
-    private float healPoints = 0f;
+    private Stats stats;
+    private float currentHealTimer;
 
     public void Heal(Damagable target)
     {
@@ -18,7 +19,10 @@ public class Healer : NetworkBehaviour
             return;
         }
 
+        var healPoints = stats.GetStat(StatType.Damage);
+
         target.TakeDamage(healPoints * Time.deltaTime * -1);
+        currentHealTimer = stats.GetStat(StatType.AttackSpeed);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -95,24 +99,28 @@ public class Healer : NetworkBehaviour
         unitMovement.MoveToServerRpc(destination);
     }
 
-    void Start()
+    private void Start()
     {
         unitMovement = GetComponent<UnitMovement>();
         laser = GetComponent<Laser>();
-        healRate = damagableSo.attackSpeed;
-        healPoints = damagableSo.attackDamage / healRate;
+        stats = GetComponent<Stats>();
+
+        currentHealTimer = stats.GetStat(StatType.AttackSpeed);
     }
 
-    void Update()
+    private void Update()
     {
         if (!IsServer) return;
+
+        currentHealTimer -= Time.deltaTime;
+
         if (target == null) return;
 
         if (!IsInRange())
         {
             MoveToTarget();
         }
-        else
+        else if (currentHealTimer <= 0)
         {
             Heal(target);
         }

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -7973908048828951078}
   - component: {fileID: -7747716521333080736}
   - component: {fileID: 499269340302252969}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ShieldUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -202,9 +202,11 @@ MonoBehaviour:
   unitPrefabs: []
   unitUiPrefabs: []
   bushes: []
+  Upgrades: []
   IsBot: 0
   shouldChangeMaterial: 1
-  IsUpgrading: 0
+  IsUpgrading:
+    m_InternalValue: 0
   isVisibile: 1
 --- !u!114 &499269340302252969
 MonoBehaviour:
@@ -219,6 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldPadding: 1
+  upgradeSo: {fileID: 11400000, guid: fd661daae6a5033419336af84e7aa779, type: 2}
 --- !u!1001 &1470285898732288549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -232,6 +235,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 3DProgress
       objectReference: {fileID: 0}
+    - target: {fileID: 1505029048282074148, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 1821047678900424390, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -241,6 +249,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.7890065
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494718034336087024, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4.289595
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183169987997676204, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4288406152876238697, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906921392866838938, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6613926738086380166, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
@@ -285,12 +333,12 @@ PrefabInstance:
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0020372432
+      value: 0.0017411503
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0016374993
+      value: 0.0008860345
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
@@ -335,7 +383,7 @@ PrefabInstance:
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.252
+      value: 1.367
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}

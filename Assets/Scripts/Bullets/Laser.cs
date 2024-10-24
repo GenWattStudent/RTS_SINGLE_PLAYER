@@ -6,14 +6,16 @@ public class Laser : NetworkBehaviour
     // laser beam have light, paricle system and line renderer
     [SerializeField] private GameObject spawnPoint;
     [SerializeField] private GameObject goLaserBeam;
-    private LineRenderer lineRenderer;
-    private ParticleSystem laserHitEffect;
-    private Light laserLight;
     public LaserSo laserSo;
     public float currentDamageInterval = 0;
     public bool isAttacking = false;
+
     private Damagable target;
     private bool areEffectsInstantiated = false;
+    private LineRenderer lineRenderer;
+    private ParticleSystem laserHitEffect;
+    private Light laserLight;
+    private Stats stats;
 
     public void SetTarget(Damagable target)
     {
@@ -22,15 +24,16 @@ public class Laser : NetworkBehaviour
 
     private void Awake()
     {
-        currentDamageInterval = laserSo.damgeInterval;
+        stats = GetComponentInParent<Stats>();
+        currentDamageInterval = stats.GetStat(StatType.AttackSpeed);
     }
 
     private void Attack()
     {
         if (currentDamageInterval <= 0 && isAttacking)
         {
-            currentDamageInterval = laserSo.damgeInterval;
-            target.TakeDamage(laserSo.damage);
+            currentDamageInterval = stats.GetStat(StatType.AttackSpeed);
+            target.TakeDamage(stats.GetStat(StatType.Damage));
         }
     }
 

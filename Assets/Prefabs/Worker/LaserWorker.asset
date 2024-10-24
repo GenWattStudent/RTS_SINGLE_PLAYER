@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd403fc958596cf448981fa28920baac, type: 3}
   m_Name: LaserWorker
   m_EditorClassIdentifier: 
-  laserName: Worker Laser
-  damage: 10
-  damgeInterval: 0.25
-  laserMaterial: {fileID: 2100000, guid: 32a76832b79e84347ad9df08b12709c3, type: 2}
+  LaserName: Laser
+  Damage: 10
+  AttackSpeed: 0.25
+  LaserMaterial: {fileID: 2100000, guid: 32a76832b79e84347ad9df08b12709c3, type: 2}

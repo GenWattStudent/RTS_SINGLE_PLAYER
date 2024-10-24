@@ -137,6 +137,7 @@ MonoBehaviour:
   shouldChangeMaterial: 1
   IsUpgrading: 0
   isVisibile: 1
+  Upgrades: []
 --- !u!114 &1379326573058633565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +212,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.8192014
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094689066509866394, guid: c6528704abe87a54ab03b7642f06dcc8,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -254,12 +270,12 @@ PrefabInstance:
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.008767999
+      value: 0.0062323813
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0153899705
+      value: 0.008008171
       objectReference: {fileID: 0}
     - target: {fileID: 7656945151712465778, guid: c6528704abe87a54ab03b7642f06dcc8,
         type: 3}

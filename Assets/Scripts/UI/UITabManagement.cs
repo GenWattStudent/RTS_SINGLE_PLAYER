@@ -20,6 +20,7 @@ public class UITabManagement : MonoBehaviour
     public void HandleTabClick(Button tab)
     {
         tabs.ForEach(tab => tab.RemoveFromClassList("active"));
+        Debug.Log(tab.name);
         tab.AddToClassList("active");
         CreateTabs(tab.name);
     }
