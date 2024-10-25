@@ -5,9 +5,10 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class Stats : NetworkBehaviour
 {
+    public NetworkList<Stat> stats;
+
     private Unit unit;
     private Building building;
-    private NetworkList<Stat> stats;
 
     private void Awake()
     {

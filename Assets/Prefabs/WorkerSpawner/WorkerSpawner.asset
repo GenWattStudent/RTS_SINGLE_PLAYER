@@ -35,26 +35,24 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
-  type: 0
   buildingName: Worker Spawner
   description: Worker haha
+  type: 0
   sprite: {fileID: 0}
+  income: 0
+  incomeInterval: 0
   unitsToSpawn:
   - {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   maxBuildingCount: 2
-  resourceUsage: {fileID: 0}
   levelUpEffect: {fileID: 0}
+  resourceUsage: {fileID: 0}
+  usage: 0
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   cost: 100
-  stats:
-  - Type: 1
-    Value: 300
-  - Type: 8
-    Value: 100
   sightAngle: 360
   sightRange: 4
-  _prefab: {fileID: 3393997211609255391, guid: 7cf47f9a5ec98974db522a1c380bae13, type: 3}
-  _previewPrefab: {fileID: 2824673038589032327, guid: 047448c67ae8e1d45b83d6049ce39dbb,
+  Prefab: {fileID: 3393997211609255391, guid: 7cf47f9a5ec98974db522a1c380bae13, type: 3}
+  PreviewPrefab: {fileID: 2824673038589032327, guid: 047448c67ae8e1d45b83d6049ce39dbb,
     type: 3}
-  _constructionManagerPrefab: {fileID: 3286866004926964515, guid: e3b21bfbe4b8990459cdc95806e9f444,
+  ConstructionManagerPrefab: {fileID: 3286866004926964515, guid: e3b21bfbe4b8990459cdc95806e9f444,
     type: 3}

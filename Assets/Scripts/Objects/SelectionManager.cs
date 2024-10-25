@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -16,8 +17,7 @@ public class SelectionManager : NetworkBehaviour
     private RTSObjectsManager RTSObjectsManager;
 
     // select event
-    public delegate void SelectAction();
-    public static event SelectAction OnSelect;
+    public static event Action<List<Selectable>> OnSelect;
 
     public void DeselectAll()
     {
@@ -27,7 +27,7 @@ public class SelectionManager : NetworkBehaviour
         }
 
         selectedObjects.Clear();
-        OnSelect?.Invoke();
+        OnSelect?.Invoke(selectedObjects);
     }
 
     private void Start()
@@ -112,33 +112,35 @@ public class SelectionManager : NetworkBehaviour
     {
         selectable.Select();
         selectedObjects.Add(selectable);
-        OnSelect?.Invoke();
+        OnSelect?.Invoke(selectedObjects);
     }
 
     public void Deselect(Selectable selectable)
     {
         selectable.Deselect();
         selectedObjects.Remove(selectable);
-        OnSelect?.Invoke();
+        OnSelect?.Invoke(selectedObjects);
     }
 
     public void SelectBuilding(Selectable selectable)
     {
         DeselectAll();
         var buildingScript = selectable.GetComponent<Building>();
-        var tankBuildingScript = selectable.GetComponent<Spawner>();
+        var Spawner = selectable.GetComponent<Spawner>();
         var constructionScript = selectable.GetComponent<Construction>();
 
         if (constructionScript != null)
         {
             selectable.Select();
             selectedObjects.Add(selectable);
+            OnSelect?.Invoke(selectedObjects);
             return;
         }
 
-        if (tankBuildingScript != null) UIUnitManager.CreateUnitTabs(buildingScript.buildingSo, tankBuildingScript, tankBuildingScript.gameObject);
+        if (Spawner != null) UIUnitManager.CreateUnitTabs(buildingScript.buildingSo, Spawner);
         selectable.Select();
         selectedObjects.Add(selectable);
+        OnSelect?.Invoke(selectedObjects);
     }
 
     private void OnClickHandler()
@@ -215,7 +217,7 @@ public class SelectionManager : NetworkBehaviour
             }
         }
 
-        OnSelect?.Invoke();
+        OnSelect?.Invoke(selectedObjects);
         selectionBox.sizeDelta = Vector2.zero;
     }
 

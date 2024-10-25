@@ -668,9 +668,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
-  isReachedDestinationAfterSpawn: 0
   destinationAfterSpawn: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isReachedDestinationAfterSpawn: 0
 --- !u!114 &8007638447650181562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,9 +710,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 4647910288746205808}
   bushes: []
+  Upgrades: []
   IsBot: 0
   shouldChangeMaterial: 1
-  IsUpgrading: 0
+  IsUpgrading:
+    m_InternalValue: 0
   isVisibile: 1
 --- !u!114 &-8074666234003767969
 MonoBehaviour:
@@ -1521,6 +1523,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4665208790130634584, guid: 51ffc9f1b4ea46143867e911db8a91b0,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6101178895358519602, guid: 51ffc9f1b4ea46143867e911db8a91b0,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1604,7 +1611,7 @@ PrefabInstance:
     - target: {fileID: 6101178895358519602, guid: 51ffc9f1b4ea46143867e911db8a91b0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.932
+      value: 5.772
       objectReference: {fileID: 0}
     - target: {fileID: 6101178895358519602, guid: 51ffc9f1b4ea46143867e911db8a91b0,
         type: 3}

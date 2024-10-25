@@ -10,9 +10,11 @@ public class UsageData
 [DefaultExecutionOrder(1)]
 public class ResourceUsage : NetworkBehaviour
 {
+    public bool isInDebt = false;
+    public ResourceSO ResourceSO;
+
     private float usageTimer = 0;
     private float usageInterval = 0;
-    public bool isInDebt = false;
     private Stats stats;
     private Building building;
     private Unit unit;
@@ -24,16 +26,16 @@ public class ResourceUsage : NetworkBehaviour
         unit = GetComponent<Unit>();
         stats = GetComponent<Stats>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
+        ResourceSO = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
         Debug.Log("UsageInterval: " + usageInterval);
         if (IsServer) uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
     private UsageData GetUsageDataFromStats()
     {
-        var resourceSo = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
         var usageData = new UsageData
         {
-            resourceSO = resourceSo,
+            resourceSO = ResourceSO,
             usage = stats.GetStat(StatType.Usage),
         };
 
@@ -53,6 +55,7 @@ public class ResourceUsage : NetworkBehaviour
         else
         {
             isInDebt = true;
+            InfoBox.Instance.AddError($"Not enough {usageData.resourceSO.resourceName}!");
         }
     }
 

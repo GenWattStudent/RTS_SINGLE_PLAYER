@@ -186,7 +186,7 @@ public class BuildingManager : NetworkBehaviour
         if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
         uIStorage.DecreaseResource(buildingSo.costResource, buildingSo.cost);
 
-        var newBuilding = Instantiate(buildingSo.constructionManagerPrefab, position, buildingSo.constructionManagerPrefab.transform.rotation);
+        var newBuilding = Instantiate(buildingSo.ConstructionManagerPrefab, position, buildingSo.ConstructionManagerPrefab.transform.rotation);
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
         var damagable = newBuilding.GetComponent<Damagable>();
@@ -245,7 +245,7 @@ public class BuildingManager : NetworkBehaviour
 
             if (mousePosition != null)
             {
-                previewPrefab = Instantiate(SelectedBuilding.previewPrefab);
+                previewPrefab = Instantiate(SelectedBuilding.PreviewPrefab);
                 previewPrefab.transform.position = (Vector3)mousePosition;
                 GetHightPoints();
             }

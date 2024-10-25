@@ -13,12 +13,12 @@ public class SlotData
 public class UIBuildingManager : NetworkBehaviour
 {
     [SerializeField] private BuildingSo[] buildings;
+    public VisualTreeAsset visualTree;
+
     private UIDocument UIDocument;
     private BuildingSo selectedBuilding;
-
     private VisualElement root;
     private VisualElement slotContainer;
-    public VisualTreeAsset visualTree;
     private List<SlotData> slots = new();
     private UIUnitManager uIUnitManager;
     private UIStorage uIStorage;
@@ -37,6 +37,16 @@ public class UIBuildingManager : NetworkBehaviour
     {
         uIStorage = GetComponent<UIStorage>();
         uIUnitManager = GetComponent<UIUnitManager>();
+
+        uIStorage.OnStoragesChanged += OnStoragesChanged;
+    }
+
+    private void OnStoragesChanged()
+    {
+        foreach (var slotData in slots)
+        {
+            UpdateSlot(slotData.buildingSo, slotData.templateContainer);
+        }
     }
 
     private void OnEnable()
@@ -77,13 +87,9 @@ public class UIBuildingManager : NetworkBehaviour
     public void CreateBuildingTabs(BuildingSo.BuildingType buildingType)
     {
         ClearTabs();
-        Debug.Log("Creating building tabs for " + buildingType);
-        uIUnitManager.IsUnitUIOpen = false;
-        uIUnitManager.IsUnitSelectionTabOpen = false;
 
         foreach (var building in buildings)
         {
-            Debug.Log("Checking " + building.type + " against " + buildingType);
             if (building.type == buildingType)
             {
                 CreateBuildingTab(building);
@@ -133,7 +139,7 @@ public class UIBuildingManager : NetworkBehaviour
         TemplateContainer buildingTab = visualTree.Instantiate();
         buildingTab.name = building.buildingName;
         buildingTab.style.height = Length.Percent(100);
-        Debug.Log("Creating building tab for " + building.buildingName);
+
         SetBuildingData(buildingTab, building);
         slotContainer.Add(buildingTab);
         slots.Add(new SlotData { buildingSo = building, templateContainer = buildingTab });
@@ -148,14 +154,6 @@ public class UIBuildingManager : NetworkBehaviour
         else
         {
             container.SetEnabled(true);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        foreach (var slotData in slots)
-        {
-            UpdateSlot(slotData.buildingSo, slotData.templateContainer);
         }
     }
 }

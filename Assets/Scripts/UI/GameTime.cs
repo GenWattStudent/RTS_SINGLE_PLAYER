@@ -5,14 +5,16 @@ using UnityEngine.UIElements;
 
 public class GameTime : NetworkToolkitHelper
 {
-    private Label timeText;
-    private VisualElement dayIcon;
     [SerializeField] private Texture2D dayIconTexture;
     [SerializeField] private Texture2D nightIconTexture;
     [SerializeField] private float updateTimer = .7f;
-    private float timer;
+
     public NetworkVariable<float> timeOfDay = new(0);
     public NetworkVariable<bool> isNight = new(false);
+
+    private Label timeText;
+    private VisualElement dayIcon;
+    private float timer;
 
     void Start()
     {

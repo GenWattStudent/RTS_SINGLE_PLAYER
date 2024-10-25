@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public interface IConstruction
 {
-   GameObject prefab { get; set; }
-   GameObject previewPrefab { get; set; }
-   GameObject constructionManagerPrefab { get; set; }
+   GameObject Prefab { get; }
+   GameObject PreviewPrefab { get; }
+   GameObject ConstructionManagerPrefab { get; }
 }
 
-[CreateAssetMenu(fileName = "New Building", menuName = "ScriptableObjects/Create Building")]
+[CreateAssetMenu(fileName = "New Building", menuName = "RTS/Create Building")]
 public class BuildingSo : DamagableSo, IConstruction
 {
    public enum BuildingType
@@ -19,44 +18,43 @@ public class BuildingSo : DamagableSo, IConstruction
       Defanse
    }
 
-   public BuildingType type;
+   [Header("General")]
    public string buildingName;
    public string description;
+   public BuildingType type;
    public Sprite sprite;
+
+   [Header("Income")]
    public float income;
    public float incomeInterval;
+   public ResourceSO incomeResource;
 
-   public UnitSo[] unitsToSpawn;
+   [Header("Spawner")]
+   public List<UnitSo> unitsToSpawn;
+
+   [Header("Other")]
    public int maxBuildingCount;
-   public ResourceSO resourceUsage;
    public GameObject levelUpEffect;
 
+   [Header("Usage")]
+   public ResourceSO resourceUsage;
+   public int usage;
+   public float usageInterval;
+
+   [Header("Cost")]
    public ResourceSO costResource;
    public int cost;
 
+   [Header("Sight")]
    public float sightAngle = 360f;
    public float sightRange = 4f;
 
-   [Header("Building Prefabs")]
-   [SerializeField] private GameObject _prefab;
-   [SerializeField] private GameObject _previewPrefab;
-   [SerializeField] private GameObject _constructionManagerPrefab;
+   [Header("Construction")]
+   public GameObject Prefab;
+   public GameObject PreviewPrefab;
+   public GameObject ConstructionManagerPrefab;
 
-   public GameObject prefab
-   {
-      get => _prefab;
-      set => _prefab = value;
-   }
-
-   public GameObject previewPrefab
-   {
-      get => _previewPrefab;
-      set => _previewPrefab = value;
-   }
-
-   public GameObject constructionManagerPrefab
-   {
-      get => _constructionManagerPrefab;
-      set => _constructionManagerPrefab = value;
-   }
+   GameObject IConstruction.Prefab => Prefab;
+   GameObject IConstruction.PreviewPrefab => PreviewPrefab;
+   GameObject IConstruction.ConstructionManagerPrefab => ConstructionManagerPrefab;
 }

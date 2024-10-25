@@ -5,19 +5,20 @@ public class Resource : NetworkBehaviour
 {
     public BuildingSo buildingSo;
     public ResourceSO resourceSo;
-    public float incomeInterval;
     public float incomeTimer;
     public float currentIncome = 0;
     public float totalIncome = 0;
+
     private Stats stats;
     private UIStorage uIStorage;
+    private Building building;
 
     private void Income()
     {
         var income = stats.GetStat(StatType.Income);
 
         currentIncome += income;
-        incomeTimer = incomeInterval;
+        incomeTimer = stats.GetStat(StatType.IncomeInterval);
         totalIncome += income;
         uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
 
@@ -27,7 +28,9 @@ public class Resource : NetworkBehaviour
     void Start()
     {
         stats = GetComponent<Stats>();
-        incomeInterval = stats.GetStat(StatType.IncomeInterval);
+        building = GetComponent<Building>();
+        incomeTimer = stats.GetStat(StatType.IncomeInterval);
+        resourceSo = building.buildingSo.incomeResource;
     }
 
     void FixedUpdate()

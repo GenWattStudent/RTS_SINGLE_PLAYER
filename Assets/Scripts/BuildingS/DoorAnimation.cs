@@ -18,7 +18,7 @@ public class DoorAnimation : NetworkBehaviour
     {
         if (!IsServer) return;
         animator.SetBool("isOpen", true);
-
+        Debug.Log("Open door" + unitSo + " " + unit);
         // calculate time when unit will be in unit move point
         float timeToMove = Vector3.Distance(unit.transform.position, spawnerBuilding.unitMovePoint.position) / unitSo.speed;
         StartCoroutine(CloseDoorAfterDelay(timeToMove));
