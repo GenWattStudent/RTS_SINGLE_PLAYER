@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="UnitSlot" src="project://database/Assets/Prefabs/UI/UnitSlot.uxml?fileID=9197481963319205126&amp;guid=9d629ae1ec7e770408676dfa1b67bea3&amp;type=3#UnitSlot" />
     <ui:Template name="Slot" src="project://database/Assets/UI%20Toolkit/Slot.uxml?fileID=9197481963319205126&amp;guid=4c4dab1f694f6e549b4b8c1cd9d53b4f&amp;type=3#Slot" />
     <ui:Template name="SettingsModal" src="project://database/Assets/Prefabs/UI/SettingsModal.uxml?fileID=9197481963319205126&amp;guid=01b192d55b905284681372f7fa632d74&amp;type=3#SettingsModal" />
     <ui:Template name="SettingsBox" src="project://database/Assets/Prefabs/UI/SettingsBox.uxml?fileID=9197481963319205126&amp;guid=cf3949801f299bb48aa6d181cbe4601c&amp;type=3#SettingsBox" />
@@ -30,7 +31,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="Toolbar" style="flex-grow: 0; background-color: rgba(55, 55, 55, 0.95); height: 250px; width: 100%; flex-direction: row; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             <ui:VisualElement name="SelectionInfo" class="border-medium border-secondary btn-rounded-small" style="flex-grow: 0; width: 280px; justify-content: flex-start; align-self: auto; flex-shrink: 1; height: 135%; border-top-width: 2px; border-right-width: 3px; border-bottom-width: 0; border-left-width: 0; top: -35%; background-color: rgba(55, 55, 55, 0.95); border-top-left-radius: 0; border-top-right-radius: 10px; border-bottom-right-radius: 0; border-bottom-left-radius: 10px;">
-                <ui:VisualElement name="Actions" class="border-secondary" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; border-top-left-radius: 20px; border-bottom-width: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; display: flex; border-top-width: 0; border-right-width: 0; border-left-width: 0;">
+                <ui:VisualElement name="Actions" class="border-secondary" style="flex-grow: 1; width: 100%; flex-shrink: 0; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; border-top-left-radius: 20px; border-bottom-width: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; display: none; border-top-width: 0; border-right-width: 0; border-left-width: 0;">
                     <ui:VisualElement name="Image" class="border-secondary" style="flex-grow: 1; width: 100%; background-image: url(&apos;project://database/Assets/Textures/UnitView.renderTexture?fileID=8400000&amp;guid=ddc110a189a88164ebe1b68d5534392f&amp;type=2#UnitView&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; -unity-background-image-tint-color: rgb(255, 255, 255); height: auto; align-self: auto; align-items: auto; justify-content: space-evenly; border-top-left-radius: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-right-width: 0; border-bottom-width: 3px;">
                         <ui:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; justify-content: space-between; align-items: flex-end; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
                             <ui:Label tabindex="-1" text="1 LVL" display-tooltip-when-elided="true" name="Level" parse-escape-sequences="true" class="text-primary text-bold text-large" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; height: 31px;" />
@@ -49,7 +50,7 @@
                         </ui:ProgressBar>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="Info" style="flex-grow: 0; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; padding-bottom: 8px; padding-top: 8px; padding-right: 0; padding-left: 0;">
+                <ui:VisualElement name="Info" style="flex-grow: 0; width: 100%; justify-content: flex-start; align-self: auto; align-items: auto; height: auto; padding-bottom: 8px; padding-top: 8px; padding-right: 0; padding-left: 0; flex-direction: column;">
                     <ui:VisualElement name="Stats" style="flex-grow: 0; width: 100%;">
                         <ui:VisualElement name="Stat" class="stat">
                             <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="-unity-text-align: upper-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
@@ -67,6 +68,15 @@
                             <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" style="-unity-text-align: upper-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                             <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
                         </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="UnitSlotContainer" style="flex-grow: 1; width: 100%; flex-direction: row; flex-wrap: wrap; align-self: auto; justify-content: space-around; display: flex;">
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" />
+                        <ui:Instance template="UnitSlot" name="UnitSlot" style="justify-content: flex-end;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="UnitActionsContainer" class="border-secondary" style="flex-grow: 0; height: auto; padding-top: 8px; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-items: flex-start; justify-content: flex-start;">

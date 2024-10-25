@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Selectable;
@@ -62,9 +64,10 @@ public class SelectedDetails : NetworkToolkitHelper
         cancelUpgradeButton.RegisterCallback<ClickEvent>(OnCancelUpgradeButtonClick);
 
         SelectionManager.OnSelect += UpdateSelectedDetails;
+        uIStorage.OnStoragesChanged += HandleStoragesChanged;
 
         ActivateButtons(false);
-        UpdateSelectedDetails();
+        UpdateSelectedDetails(selectionManager.selectedObjects);
     }
 
     private void InitializeUIElements()
@@ -89,10 +92,19 @@ public class SelectedDetails : NetworkToolkitHelper
         uITabManagement = playerController.GetComponentInChildren<UITabManagement>();
     }
 
+    private void HandleStoragesChanged()
+    {
+        UpdateSelectedDetails(selectionManager.selectedObjects);
+    }
+
     private void OnDisable()
     {
-        // levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
-        // sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
+        levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
+        sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
+        cancelUpgradeButton.UnregisterCallback<ClickEvent>(OnCancelUpgradeButtonClick);
+
+        SelectionManager.OnSelect -= UpdateSelectedDetails;
+        uIStorage.OnStoragesChanged -= HandleStoragesChanged;
     }
 
     private void ActivateButtons(bool isActive)
@@ -168,20 +180,29 @@ public class SelectedDetails : NetworkToolkitHelper
     {
         Show();
         actions.style.display = DisplayStyle.None;
+        cancelUpgradeButton.style.display = DisplayStyle.None;
         CreateStat("Selected", $"{selectionManager.selectedObjects.Count} units");
         ActivateButtons(false);
     }
 
-    private void UpdateSelectedDetails()
+    private void HandleStatChanged(NetworkListEvent<Stat> changeEvent)
+    {
+        UpdateSelectedDetails(selectionManager.selectedObjects);
+    }
+
+    private void UpdateSelectedDetails(List<Selectable> selectables)
     {
         ClearStats();
+
+        var prevStats = selectedObject?.GetComponent<Stats>();
+        if (prevStats != null) prevStats.stats.OnListChanged -= HandleStatChanged;
         selectedObject = null;
 
-        if (selectionManager.selectedObjects.Count == 0)
+        if (selectables.Count == 0)
         {
             if (!isGoToTab)
             {
-                var tabs = System.Enum.GetValues(typeof(BuildingSo.BuildingType));
+                var tabs = Enum.GetValues(typeof(BuildingSo.BuildingType));
                 var tabName = tabs.GetValue(0).ToString();
                 uITabManagement.HandleTabClick(uITabManagement.GetTab(tabName));
                 isGoToTab = true;
@@ -193,22 +214,22 @@ public class SelectedDetails : NetworkToolkitHelper
 
         isGoToTab = false;
 
-        if (selectionManager.selectedObjects.Count == 1)
+        if (selectables.Count == 1)
         {
-            var selectable = selectionManager.selectedObjects[0];
-            selectedObject = selectable;
+            selectedObject = selectables[0];
             Show();
 
-            var stats = selectable.GetComponent<Stats>();
+            var stats = selectedObject.GetComponent<Stats>();
+            stats.stats.OnListChanged += HandleStatChanged;
 
-            if (selectable.selectableType == SelectableType.Unit)
+            if (selectedObject.selectableType == SelectableType.Unit)
             {
                 actions.style.display = DisplayStyle.None;
                 unitDetailsUpdater.UpdateUnitDetails(stats);
             }
             else
             {
-                buildingDetailsUpdater.UpdateBuildingDetails(selectable);
+                buildingDetailsUpdater.UpdateBuildingDetails(selectedObject);
             }
         }
         else
@@ -216,9 +237,4 @@ public class SelectedDetails : NetworkToolkitHelper
             UpdateMultipleDetails();
         }
     }
-
-    // private void FixedUpdate()
-    // {
-    //     UpdateSelectedDetails();
-    // }
 }

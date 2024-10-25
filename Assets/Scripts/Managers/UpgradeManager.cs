@@ -65,7 +65,7 @@ namespace RTS.Managers
                 unit.IsUpgrading.Value = true;
                 unit.AddUpgrade(upgrade);
 
-                var upgradeGo = Instantiate(upgrade.constructionManagerPrefab, unit.transform.position, Quaternion.identity);
+                var upgradeGo = Instantiate(upgrade.ConstructionManagerPrefab, unit.transform.position, Quaternion.identity);
                 var upgradeNo = upgradeGo.GetComponent<NetworkObject>();
                 var damagable = upgradeGo.GetComponent<Damagable>();
                 var stats = upgradeGo.GetComponent<Stats>();

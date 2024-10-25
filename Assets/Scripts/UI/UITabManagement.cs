@@ -74,7 +74,7 @@ public class UITabManagement : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
         UIDocument = GetComponent<UIDocument>();
         uIBuildingManager = GetComponent<UIBuildingManager>();

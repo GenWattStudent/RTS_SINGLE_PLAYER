@@ -41,18 +41,18 @@ public class UIStorage : NetworkBehaviour
     private VisualElement root;
     private Label playerName;
 
+    public event Action OnStoragesChanged;
+
     private void Awake()
     {
         storages = new NetworkList<Storage>();
-        storages.OnListChanged += OnStoragesChanged;
+        storages.OnListChanged += HandleStorageChange;
     }
 
-    private void OnStoragesChanged(NetworkListEvent<Storage> changeEvent)
+    private void HandleStorageChange(NetworkListEvent<Storage> changeEvent)
     {
-        if (changeEvent.Type == NetworkListEvent<Storage>.EventType.Add)
-        {
-            UpdateResourceData(changeEvent.Value);
-        }
+        UpdateResourceData(changeEvent.Value);
+        OnStoragesChanged?.Invoke();
     }
 
     public Storage GetStorageByResource(ResourceSO resource)
@@ -116,7 +116,7 @@ public class UIStorage : NetworkBehaviour
 
         storage.currentValue += amountCanFit;
         UpdateStorage(storage);
-        SendUpdateToClient(storage);
+        // SendUpdateToClient(storage);
     }
 
     private void UpdateStorage(Storage storage)
@@ -136,7 +136,7 @@ public class UIStorage : NetworkBehaviour
         storage.currentValue += amountCanFit;
         Debug.Log($"New value: {storage.currentValue}");
         UpdateStorage(storage);
-        SendUpdateToClient(storage);
+        // SendUpdateToClient(storage);
     }
 
     public bool HasEnoughResource(ResourceSO resourceSO, float amount)

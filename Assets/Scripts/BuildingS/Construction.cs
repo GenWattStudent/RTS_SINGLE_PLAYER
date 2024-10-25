@@ -94,7 +94,7 @@ public class Construction : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void InstantiateBuildingServerRpc()
     {
-        var building = Instantiate(construction.prefab, transform.position, Quaternion.identity);
+        var building = Instantiate(construction.Prefab, transform.position, Quaternion.identity);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
         var damagable = building.GetComponent<Damagable>();

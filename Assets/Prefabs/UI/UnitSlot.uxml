@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="UnitSlot" style="flex-grow: 0; flex-wrap: nowrap; flex-direction: column; width: 60px; height: 60px; justify-content: flex-end;">
+        <ui:VisualElement name="UnitImage" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/Tank/TankSprite.png?fileID=2800000&amp;guid=847675753ed3bee479569c08afe093f8&amp;type=3#TankSprite&apos;); position: absolute; top: 0; bottom: 0; right: 0; left: 0;" />
+        <ui:Label tabindex="-1" text="1x" display-tooltip-when-elided="true" name="UnitCount" class="text-primary" style="-unity-text-align: upper-center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgba(0, 0, 0, 0.55);" />
+    </ui:VisualElement>
+</ui:UXML>

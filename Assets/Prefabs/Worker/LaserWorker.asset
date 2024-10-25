@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LaserWorker
   m_EditorClassIdentifier: 
   LaserName: Laser
-  Damage: 10
+  Damage: 50
   AttackSpeed: 0.25
   LaserMaterial: {fileID: 2100000, guid: 32a76832b79e84347ad9df08b12709c3, type: 2}

@@ -322,6 +322,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8610899562959490568}
+    - targetCorrespondingSourceObject: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1495371900801276266}
   m_SourcePrefab: {fileID: 100100000, guid: fd1b3b54da07ef74296c67c0cb422592, type: 3}
 --- !u!1 &2701871629304572570 stripped
 GameObject:
@@ -356,6 +360,20 @@ MonoBehaviour:
   UIDocument: {fileID: 0}
   _upgradeItemTemplate: {fileID: 9197481963319205126, guid: 6092e297f2d972443955faa6757e8464,
     type: 3}
+--- !u!114 &1495371900801276266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701871629304572570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7adea43dc8638d4f812c2304d3303a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIDocument: {fileID: 0}
+  slot: {fileID: 9197481963319205126, guid: 9d629ae1ec7e770408676dfa1b67bea3, type: 3}
 --- !u!4 &4931006504880166157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5795796074291358839, guid: fd1b3b54da07ef74296c67c0cb422592,

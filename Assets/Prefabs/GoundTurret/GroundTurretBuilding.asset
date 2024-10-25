@@ -36,23 +36,24 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
-  type: 2
   buildingName: Ground Turret
   description: lalaa
+  type: 2
   sprite: {fileID: 21300000, guid: 83180f082d4a54f4289be6f03ce8cbe1, type: 3}
   income: 0
   incomeInterval: 0
   unitsToSpawn: []
   maxBuildingCount: 4
-  resourceUsage: {fileID: 0}
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
+  resourceUsage: {fileID: 0}
+  usage: 0
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   cost: 100
   sightAngle: 360
   sightRange: 4
-  _prefab: {fileID: 5393129853425955648, guid: 825765985e9e9074491829f7a4327bd5, type: 3}
-  _previewPrefab: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
+  Prefab: {fileID: 5393129853425955648, guid: 825765985e9e9074491829f7a4327bd5, type: 3}
+  PreviewPrefab: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
     type: 3}
-  _constructionManagerPrefab: {fileID: 3286866004926964515, guid: 801935982bfa58240af8575938c394c1,
+  ConstructionManagerPrefab: {fileID: 3286866004926964515, guid: 801935982bfa58240af8575938c394c1,
     type: 3}

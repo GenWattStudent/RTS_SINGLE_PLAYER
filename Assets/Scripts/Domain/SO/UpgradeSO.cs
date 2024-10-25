@@ -22,19 +22,19 @@ namespace RTS.Domain.SO
         [SerializeField] private GameObject _previewPrefab;
         [SerializeField] private GameObject _constructionManagerPrefab;
 
-        public GameObject prefab
+        public GameObject Prefab
         {
             get => _prefab;
             set => _prefab = value;
         }
 
-        public GameObject previewPrefab
+        public GameObject PreviewPrefab
         {
             get => _previewPrefab;
             set => _previewPrefab = value;
         }
 
-        public GameObject constructionManagerPrefab
+        public GameObject ConstructionManagerPrefab
         {
             get => _constructionManagerPrefab;
             set => _constructionManagerPrefab = value;
