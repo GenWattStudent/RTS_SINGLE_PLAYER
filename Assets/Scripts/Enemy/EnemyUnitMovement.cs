@@ -18,7 +18,7 @@ public class EnemyUnitMovement : MonoBehaviour
         target.OnDead += OnDead;
     }
 
-    private void OnDead()
+    private void OnDead(Damagable damagable)
     {
         SetTarget(null);
         Destroy(gameObject);

@@ -99,6 +99,7 @@ public class SelectedDetails : NetworkToolkitHelper
 
     private void OnDisable()
     {
+        if (!IsOwner) return;
         levelUpButton.UnregisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.UnregisterCallback<ClickEvent>(OnSellButtonClick);
         cancelUpgradeButton.UnregisterCallback<ClickEvent>(OnCancelUpgradeButtonClick);

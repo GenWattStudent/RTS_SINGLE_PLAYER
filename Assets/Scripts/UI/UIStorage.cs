@@ -71,10 +71,39 @@ public class UIStorage : NetworkBehaviour
         return storage;
     }
 
-    private bool IsStorageFull(Storage storage)
+    public bool IsStorageFull(Storage storage)
     {
         var resource = resources[storage.recourceIndex];
         return storage.currentValue >= resource.resourceSO.maxValue;
+    }
+
+    public bool IsStorageFull(ResourceSO resource, float addAmount)
+    {
+        var storage = GetStorageByResource(resource);
+        return storage.currentValue + addAmount >= resource.maxValue;
+    }
+
+    public bool IsStorageFull(ResourceSO resource)
+    {
+        var storage = GetStorageByResource(resource);
+        return storage.currentValue >= resource.maxValue;
+    }
+
+    public float AmountCanFit(ResourceSO resource, float amount)
+    {
+        var storage = GetStorageByResource(resource);
+
+        if (storage.currentValue + amount > resource.maxValue)
+        {
+            return resource.maxValue - storage.currentValue;
+        }
+
+        if (storage.currentValue + amount < 0)
+        {
+            return -storage.currentValue;
+        }
+
+        return amount;
     }
 
     private float AmountCanFit(Storage storage, float amount)
@@ -93,21 +122,6 @@ public class UIStorage : NetworkBehaviour
         return amount;
     }
 
-    private void SendUpdateToClient(Storage storage)
-    {
-        ClientRpcParams clientRpcParams = default;
-        clientRpcParams.Send.TargetClientIds = new ulong[] { OwnerClientId };
-        var storageIndex = storages.IndexOf(storage);
-        UpdateResourceDataClientRpc(storageIndex, clientRpcParams);
-    }
-
-    [ClientRpc]
-    private void UpdateResourceDataClientRpc(int storageIndex, ClientRpcParams clientRpcParams = default)
-    {
-        var storage = storages[storageIndex];
-        UpdateResourceData(storage);
-    }
-
     public void IncreaseResource(ResourceSO resourceSO, float amount)
     {
         if (!IsServer) return;
@@ -116,7 +130,6 @@ public class UIStorage : NetworkBehaviour
 
         storage.currentValue += amountCanFit;
         UpdateStorage(storage);
-        // SendUpdateToClient(storage);
     }
 
     private void UpdateStorage(Storage storage)
@@ -136,7 +149,6 @@ public class UIStorage : NetworkBehaviour
         storage.currentValue += amountCanFit;
         Debug.Log($"New value: {storage.currentValue}");
         UpdateStorage(storage);
-        // SendUpdateToClient(storage);
     }
 
     public bool HasEnoughResource(ResourceSO resourceSO, float amount)
@@ -185,8 +197,8 @@ public class UIStorage : NetworkBehaviour
 
         progressBar.lowValue = 0;
         progressBar.highValue = resource.resourceSO.maxValue;
-        progressBar.value = storage.currentValue;
-        progressBar.title = $"{resource.resourceSO.resourceName} {storage.currentValue}/{resource.resourceSO.maxValue}";
+        progressBar.value = Mathf.RoundToInt(storage.currentValue);
+        progressBar.title = $"{resource.resourceSO.resourceName} {Mathf.RoundToInt(storage.currentValue)}/{resource.resourceSO.maxValue}";
     }
 
     private void Start()

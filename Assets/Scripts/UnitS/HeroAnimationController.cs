@@ -7,6 +7,9 @@ public class HeroAnimationController : NetworkBehaviour
     private UnitMovement unitMovement;
     private Attack attackScript;
     private Damagable damagableScript;
+    private int isWalkingHash = Animator.StringToHash("isWalking");
+    private int isShootingHash = Animator.StringToHash("isShooting");
+    private int isDeadHash = Animator.StringToHash("isDead");
 
     private void Awake()
     {
@@ -17,18 +20,18 @@ public class HeroAnimationController : NetworkBehaviour
         damagableScript.OnDead += HandleOnDead;
     }
 
-    private void HandleOnDead()
+    private void HandleOnDead(Damagable damagable)
     {
         if (!IsServer) return;
-        animator.SetBool("isShooting", false);
-        animator.SetBool("isDead", damagableScript.isDead);
-        animator.SetBool("isWalking", false);
+        animator.SetBool(isShootingHash, false);
+        animator.SetBool(isDeadHash, damagableScript.isDead);
+        animator.SetBool(isWalkingHash, false);
     }
 
     private void Update()
     {
         if (!IsServer || animator == null) return;
-        animator.SetBool("isWalking", unitMovement.isMoving);
-        animator.SetBool("isShooting", attackScript.targetPosition != Vector3.zero);
+        animator.SetBool(isWalkingHash, unitMovement.isMoving);
+        animator.SetBool(isShootingHash, attackScript.targetPosition != Vector3.zero);
     }
 }

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4de168ae25ee4c443a945d861f92f111
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 205002
+  packageName: SCIFI-Vector Elements
+  packageVersion: 1.0
+  assetPath: Assets/SciFi Assets/Animations/GunSign.controller
+  uploadId: 457733

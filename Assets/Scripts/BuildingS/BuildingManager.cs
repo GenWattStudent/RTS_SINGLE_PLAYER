@@ -9,14 +9,16 @@ public class BuildingManager : NetworkBehaviour
     [SerializeField] private Material invalidMaterial;
     [SerializeField] private List<BuildingSo> networkConstructionsPrefabs;
     public BuildingSo SelectedBuilding { get; private set; }
-    private GameObject previewPrefab;
-    public float diffranceBetweenMaxAndMinHeight = 1f;
     public int heightRaysCount = 15;
+    public float diffranceBetweenMaxAndMinHeight = 1f;
+
+    private GameObject previewPrefab;
     private Vector3[] hightPoints;
     private PlayerController playerController;
     private RTSObjectsManager RTSObjectsManager;
     private UIBuildingManager uIBuildingManager;
     private UIStorage uIStorage;
+    private InfoBox infoBox;
 
     public override void OnNetworkSpawn()
     {
@@ -36,6 +38,11 @@ public class BuildingManager : NetworkBehaviour
         uIBuildingManager = GetComponentInChildren<UIBuildingManager>();
         uIStorage = GetComponentInChildren<UIStorage>();
         hightPoints = new Vector3[heightRaysCount * heightRaysCount];
+    }
+
+    private void Start()
+    {
+        infoBox = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<InfoBox>();
     }
 
     private void GetHightPoints()
@@ -205,7 +212,7 @@ public class BuildingManager : NetworkBehaviour
         {
             if (!IsValidPosition())
             {
-                InfoBox.Instance.AddError("You cant place building here!");
+                infoBox.AddError("You cant place building here!");
                 return;
             };
 

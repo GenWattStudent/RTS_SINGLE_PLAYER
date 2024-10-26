@@ -51,7 +51,7 @@ public class Healer : NetworkBehaviour
             return;
         }
 
-        target.OnDead += () => SetTarget(null);
+        target.OnDead += (Damagable damagable) => SetTarget(null);
 
         SetLaserTargetClientRpc(target.GetComponent<NetworkObject>());
     }
@@ -61,7 +61,7 @@ public class Healer : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject networkObject))
         {
-            laser.SetTarget(networkObject.GetComponent<Damagable>());
+            laser.SetTarget(networkObject.transform);
         }
     }
 

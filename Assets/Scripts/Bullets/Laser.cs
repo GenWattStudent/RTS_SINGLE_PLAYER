@@ -10,14 +10,14 @@ public class Laser : NetworkBehaviour
     public float currentDamageInterval = 0;
     public bool isAttacking = false;
 
-    private Damagable target;
+    private Transform target;
     private bool areEffectsInstantiated = false;
     private LineRenderer lineRenderer;
     private ParticleSystem laserHitEffect;
     private Light laserLight;
     private Stats stats;
 
-    public void SetTarget(Damagable target)
+    public void SetTarget(Transform target)
     {
         this.target = target;
     }
@@ -33,7 +33,9 @@ public class Laser : NetworkBehaviour
         if (currentDamageInterval <= 0 && isAttacking)
         {
             currentDamageInterval = stats.GetStat(StatType.AttackSpeed);
-            target.TakeDamage(stats.GetStat(StatType.Damage));
+            var damagable = target.GetComponent<Damagable>();
+
+            if (damagable != null) damagable.TakeDamage(stats.GetStat(StatType.Damage));
         }
     }
 

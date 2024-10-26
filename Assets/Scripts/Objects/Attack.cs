@@ -123,7 +123,7 @@ public class Attack : NetworkBehaviour
         target = null;
     }
 
-    private void OnTargetDead()
+    private void OnTargetDead(Damagable target)
     {
         SetTarget(null);
     }
