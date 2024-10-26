@@ -4,12 +4,12 @@ using Unity.Netcode;
 using UnityEngine;
 
 [DefaultExecutionOrder(1)]
-public class Construction : NetworkBehaviour
+public class Construction : NetworkBehaviour, IWorkerConstruction
 {
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private GameObject buildingInProgressPrefab;
     [SerializeField] private GameObject constructionPrefab;
-    public List<Unit> buildingUnits = new();
+    public List<Worker> buildingUnits = new();
     public IConstruction construction;
 
     private float constructionTimer = 0f;
@@ -27,26 +27,20 @@ public class Construction : NetworkBehaviour
         GetComponent<NetworkObject>().Despawn(true);
     }
 
-    public void AddWorker(Unit unit)
+    public void AddWorker(Worker worker)
     {
-        if (unit.TryGetComponent<Worker>(out var worker))
-        {
-            buildingUnits.Add(unit);
-            buildingSpeed += worker.stats.GetStat(StatType.Damage);
-            StartConstruction();
-        }
+        buildingUnits.Add(worker);
+        buildingSpeed += worker.stats.GetStat(StatType.Damage);
+        StartConstruction();
     }
 
-    public void RemoveWorker(Unit unit)
+    public void RemoveWorker(Worker worker)
     {
-        if (unit.TryGetComponent<Worker>(out var worker))
+        buildingUnits.Remove(worker);
+        if (buildingSpeed > 0) buildingSpeed -= worker.stats.GetStat(StatType.Damage);
+        if (buildingUnits.Count == 0)
         {
-            buildingUnits.Remove(unit);
-            if (buildingSpeed > 0) buildingSpeed -= worker.stats.GetStat(StatType.Damage);
-            if (buildingUnits.Count == 0)
-            {
-                StopConstruction();
-            }
+            StopConstruction();
         }
     }
 

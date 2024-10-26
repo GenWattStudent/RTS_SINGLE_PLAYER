@@ -17,6 +17,11 @@
 
 .healthbar .unity-progress-bar__progress {
     background-color: rgba(0, 140, 7, 0.81);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-image: url('project://database/Assets/ImportedAssests/SciFi%20Assets/Sprites/vector_1/Vector_4.png?fileID=2800000&guid=da359f85c20fa664a986f4f001e2e9d9&type=3#Vector_4');
 }
 
 .healthbar .unity-progress-bar__background {
@@ -29,6 +34,10 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .healthbar .unity-progress-bar__title {
@@ -42,6 +51,11 @@
 
 .expirence .unity-progress-bar__progress {
     background-color: rgb(255, 155, 0);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-image: url('project://database/Assets/Prefabs/UI/PROGRESS.png?fileID=2800000&guid=817f6c5f6b92271479db7491108ea4d2&type=3#PROGRESS');
 }
 
 .expirence .unity-progress-bar__title {
@@ -60,6 +74,10 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .btn-primary {
@@ -232,6 +250,11 @@
 .mass .unity-progress-bar__background {
     height: 30px;
     background-color: rgb(255, 255, 255);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: auto;
 }
 
 .mass .unity-progress-bar__progress {
@@ -242,6 +265,13 @@
     justify-content: flex-start;
     left: -3px;
     top: -3px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-image: url('project://database/Assets/ImportedAssests/SciFi%20Assets/Sprites/vector_1/Vector_2.png?fileID=2800000&guid=d642f0450c6a98c4fb5ba1491b677bd5&type=3#Vector_2');
+    right: 0;
+    width: auto;
 }
 
 .mass .unity-progress-bar__container {
@@ -262,6 +292,12 @@
     height: 30px;
     background-color: rgb(255, 198, 0);
     flex-direction: column;
+    background-image: url('project://database/Assets/Prefabs/UI/PROGRESS.png?fileID=2800000&guid=817f6c5f6b92271479db7491108ea4d2&type=3#PROGRESS');
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 .energy .unity-progress-bar__container {
@@ -274,6 +310,10 @@
     flex-grow: 0;
     width: auto;
     flex-shrink: 1;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
 .text-xxl {

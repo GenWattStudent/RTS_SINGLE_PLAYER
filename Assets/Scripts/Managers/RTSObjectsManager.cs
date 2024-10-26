@@ -33,7 +33,7 @@ public class RTSObjectsManager : NetworkBehaviour
             Units[no.OwnerClientId].Add(unit);
 
             var damagableScript = unit.GetComponent<Damagable>();
-            damagableScript.OnDead += () =>
+            damagableScript.OnDead += (Damagable damagable) =>
             {
                 Debug.Log("Unit dead");
                 RemoveUnitServerRpc(no);

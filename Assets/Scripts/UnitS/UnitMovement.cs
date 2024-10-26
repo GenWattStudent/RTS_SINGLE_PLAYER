@@ -52,6 +52,7 @@ public class UnitMovement : NetworkBehaviour
     {
         if (!unit.IsUpgrading.Value && (resourceUsage == null || !resourceUsage.isInDebt) && NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
         {
+            Debug.Log("Move to " + destination);
             agent.SetDestination(hit.position);
             agent.isStopped = false;
         }

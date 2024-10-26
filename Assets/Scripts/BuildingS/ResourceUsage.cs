@@ -19,12 +19,14 @@ public class ResourceUsage : NetworkBehaviour
     private Building building;
     private Unit unit;
     private UIStorage uIStorage;
+    private InfoBox infoBox;
 
     private void Start()
     {
         building = GetComponent<Building>();
         unit = GetComponent<Unit>();
         stats = GetComponent<Stats>();
+        infoBox = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<InfoBox>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
         ResourceSO = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
         Debug.Log("UsageInterval: " + usageInterval);
@@ -47,16 +49,39 @@ public class ResourceUsage : NetworkBehaviour
         var usageData = GetUsageDataFromStats();
         if (usageData.resourceSO == null) return;
 
+        Debug.Log($"UseResources {usageData.resourceSO.resourceName} {usageData.usage} {OwnerClientId}");
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { OwnerClientId }
+            }
+        };
+
         if (uIStorage.HasEnoughResource(usageData.resourceSO, usageData.usage))
         {
             isInDebt = false;
             uIStorage.DecreaseResource(usageData.resourceSO, usageData.usage);
+            UserDebtEndClientRpc(clientRpcParams);
         }
         else
         {
             isInDebt = true;
-            InfoBox.Instance.AddError($"Not enough {usageData.resourceSO.resourceName}!");
+            UserDebtClientRpc(clientRpcParams);
         }
+    }
+
+    [ClientRpc]
+    public void UserDebtClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        isInDebt = true;
+        infoBox.AddError($"Not enough {ResourceSO.resourceName}!");
+    }
+
+    [ClientRpc]
+    public void UserDebtEndClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        isInDebt = false;
     }
 
     private void Update()

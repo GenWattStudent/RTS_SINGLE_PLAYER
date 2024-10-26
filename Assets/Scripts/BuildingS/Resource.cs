@@ -25,7 +25,7 @@ public class Resource : NetworkBehaviour
         uIStorage.IncreaseResource(resourceSo, income);
     }
 
-    void Start()
+    private void Start()
     {
         stats = GetComponent<Stats>();
         building = GetComponent<Building>();
@@ -33,7 +33,7 @@ public class Resource : NetworkBehaviour
         resourceSo = building.buildingSo.incomeResource;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!IsServer) return;
         incomeTimer -= Time.fixedDeltaTime;

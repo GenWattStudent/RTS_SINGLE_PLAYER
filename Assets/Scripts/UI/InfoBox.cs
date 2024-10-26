@@ -5,25 +5,22 @@ using UnityEngine.UIElements;
 public class InfoBox : ToolkitHelper
 {
     private VisualElement infoBox;
-    [SerializeField] private int maxMessages = 4; 
+    [SerializeField] private int maxMessages = 4;
     [SerializeField] private float timeToHide = 5f;
-    private List<Label> messages = new ();
+    private List<Label> messages = new();
     public bool IsOpen = false;
     private float currentTime = 0f;
 
-    public static InfoBox Instance { get; private set; }
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        Instance = this;
         infoBox = GetVisualElement("InfoBox");
         ClearAllMessages();
         Hide();
     }
 
-    private void ClearAllMessages() {
-        List<VisualElement> labels = new ();
+    private void ClearAllMessages()
+    {
+        List<VisualElement> labels = new();
 
         foreach (var label in infoBox.Children())
         {
@@ -38,30 +35,36 @@ public class InfoBox : ToolkitHelper
         messages.Clear();
     }
 
-    private void RemoveMessage() {
-        if (messages.Count > 0) {
+    private void RemoveMessage()
+    {
+        if (messages.Count > 0)
+        {
             infoBox.Remove(messages[0]);
             messages.RemoveAt(0);
         }
     }
 
-    public void Show() {
+    public void Show()
+    {
         IsOpen = true;
         currentTime = 0f;
         infoBox.style.display = DisplayStyle.Flex;
     }
 
-    public void Hide() {
+    public void Hide()
+    {
         IsOpen = false;
         infoBox.style.display = DisplayStyle.None;
     }
 
-    public void AddError(string error) {
+    public void AddError(string error)
+    {
         var errorLabel = new Label(error);
-        AddClasses(errorLabel, new string[] { "text-danger", "text-medium" } );
+        AddClasses(errorLabel, new string[] { "text-danger", "text-medium" });
         errorLabel.style.whiteSpace = WhiteSpace.Normal;
 
-        if (messages.Count >= maxMessages) {
+        if (messages.Count >= maxMessages)
+        {
             RemoveMessage();
         }
 
@@ -70,13 +73,14 @@ public class InfoBox : ToolkitHelper
         Show();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        if (IsOpen) {
-            currentTime += Time.deltaTime;
+        if (IsOpen)
+        {
+            currentTime += Time.fixedDeltaTime;
 
-            if (currentTime >= timeToHide) {
+            if (currentTime >= timeToHide)
+            {
                 currentTime = 0f;
                 Hide();
             }

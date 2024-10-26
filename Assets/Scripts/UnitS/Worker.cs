@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Worker : NetworkBehaviour
 {
-    public Construction construction;
+    public IWorkerConstruction construction;
     public Unit unit;
     public Laser laser;
     public Stats stats;
@@ -14,7 +14,8 @@ public class Worker : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ActivateLaserServerRpc()
     {
-        var targetNo = construction.GetComponent<NetworkObject>();
+        var targetNo = (construction as NetworkBehaviour).GetComponent<NetworkObject>();
+        Debug.Log("ActivateLaserServerRpc " + targetNo);
         ActivateLaserClientRpc(targetNo);
     }
 
@@ -23,9 +24,9 @@ public class Worker : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            var construction = no.GetComponent<Construction>();
+            var construction = no.GetComponent<IWorkerConstruction>();
             laser.isAttacking = false;
-            laser.SetTarget(construction.GetComponent<Damagable>());
+            laser.SetTarget(construction.transform);
         }
     }
 
@@ -43,12 +44,13 @@ public class Worker : NetworkBehaviour
 
     private float DistanceToConstruction()
     {
-        return Vector3.Distance(transform.position, construction.transform.position);
+        return Vector3.Distance(transform.position, (construction as NetworkBehaviour).transform.position);
     }
 
     private void StartConstruction()
     {
-        construction.AddWorker(unit);
+        Debug.Log("StartConstruction");
+        construction.AddWorker(this);
         isBuilding = true;
         ActivateLaserServerRpc();
     }
@@ -57,18 +59,19 @@ public class Worker : NetworkBehaviour
     public void StopConstructionServerRpc(bool removeFromList = true)
     {
         if (construction == null) return;
-        if (removeFromList) construction.RemoveWorker(unit);
+        if (removeFromList) construction.RemoveWorker(this);
         isBuilding = false;
         construction = null;
         DeactivateLaserServerRpc();
     }
 
-    private void MoveToConstruction(Construction construction)
+    private void MoveToConstruction(IWorkerConstruction construction)
     {
         this.construction = construction;
 
-        if (unitMovement != null && DistanceToConstruction() > unit.unitSo.buildingDistance)
+        if (unitMovement != null && DistanceToConstruction() > stats.GetStat(StatType.BuildingDistance))
         {
+            Debug.Log("Move " + construction);
             unitMovement.MoveToServerRpc(construction.transform.position);
         }
     }
@@ -78,7 +81,8 @@ public class Worker : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            var construction = no.GetComponent<Construction>();
+            var construction = no.GetComponent<IWorkerConstruction>();
+
             // if worker is building something else
             if (this.construction != null)
             {
@@ -125,17 +129,20 @@ public class Worker : NetworkBehaviour
         var distance = DistanceToConstruction();
         unitMovement.RotateToTarget(construction.transform.position);
 
-        if (distance <= unit.unitSo.buildingDistance && !isBuilding)
+        var buildingDistance = stats.GetStat(StatType.BuildingDistance);
+
+        if (distance <= buildingDistance && !isBuilding)
         {
             if (unitMovement != null)
             {
+                Debug.Log("Stop");
                 unitMovement.Stop();
             }
 
             StartConstruction();
         }
 
-        if (isBuilding && distance > unit.unitSo.buildingDistance)
+        if (isBuilding)
         {
             MoveToConstruction(construction);
         }

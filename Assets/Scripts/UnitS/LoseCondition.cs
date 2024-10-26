@@ -13,7 +13,7 @@ public class LoseCondition : NetworkBehaviour
         if (IsServer)
         {
             damagable = GetComponent<Damagable>();
-            damagable.OnDead += OnDeadServerRpc;
+            damagable.OnDead += HandleDeath;
             CreateTeamDictionary();
         }
     }
@@ -24,9 +24,14 @@ public class LoseCondition : NetworkBehaviour
 
         if (IsServer)
         {
-            damagable.OnDead -= OnDeadServerRpc;
+            damagable.OnDead -= HandleDeath;
             CreateTeamDictionary();
         }
+    }
+
+    private void HandleDeath(Damagable damagable)
+    {
+        OnDeadServerRpc();
     }
 
     private void CreateTeamDictionary()

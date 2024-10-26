@@ -159,7 +159,7 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
-    private void BuildCommand(Construction construction)
+    private void BuildCommand(IWorkerConstruction construction)
     {
         var workers = selectionManager.GetWorkers();
 
@@ -196,6 +196,22 @@ public class RTSManager : NetworkBehaviour
         }
     }
 
+    private void GatherCommand(GatherItem gatherItem)
+    {
+        var workers = selectionManager.GetWorkers();
+
+        foreach (var worker in workers)
+        {
+            var workerScript = worker.GetComponent<Worker>();
+            var no = gatherItem.GetComponent<NetworkObject>();
+
+            if (workerScript != null)
+            {
+                workerScript.MoveToConstructionServerRpc(no);
+            }
+        }
+    }
+
     private void UpgradeCommand(Unit unit, UpgradeSO upgrade)
     {
         upgradeManager.UpgradeServerRpc(unit.GetComponent<NetworkObject>(), upgradeManager.Upgrades.IndexOf(upgrade));
@@ -221,6 +237,7 @@ public class RTSManager : NetworkBehaviour
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();
                 var unitScript = raycastHit.transform.gameObject.GetComponent<Unit>();
+                var gatherItem = raycastHit.transform.gameObject.GetComponent<GatherItem>();
 
                 if (damagableScript != null && !damagableScript.IsBot && selectableScript != null)
                 {
@@ -251,6 +268,15 @@ public class RTSManager : NetworkBehaviour
                         isAction = true;
                         return;
                     }
+                }
+
+                if (gatherItem != null)
+                {
+                    // Gather
+                    Debug.Log("GatherCommand");
+                    BuildCommand(gatherItem);
+                    isAction = true;
+                    return;
                 }
             }
             // Move

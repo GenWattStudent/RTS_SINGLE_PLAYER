@@ -232,11 +232,12 @@ MonoBehaviour:
   - {fileID: 363848697267320202}
   - {fileID: 6977154542806008979}
   bushes: []
+  Upgrades: []
   IsBot: 0
   shouldChangeMaterial: 1
-  IsUpgrading: 0
+  IsUpgrading:
+    m_InternalValue: 0
   isVisibile: 1
-  Upgrades: []
 --- !u!195 &6739326068420461195
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -253,7 +254,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0.4
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
@@ -272,9 +273,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
-  isReachedDestinationAfterSpawn: 0
   destinationAfterSpawn: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isReachedDestinationAfterSpawn: 0
 --- !u!114 &1419450092642985885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,9 +327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4697e4b7243902d46abd5b542e096e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  construction: {fileID: 0}
   unit: {fileID: 0}
   laser: {fileID: 0}
+  stats: {fileID: 0}
 --- !u!95 &-8539418394513040316
 Animator:
   serializedVersion: 7

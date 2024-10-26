@@ -19,7 +19,7 @@ public class Damagable : NetworkBehaviour
 
     private ProgresBar progressBarScript;
 
-    public event Action OnDead;
+    public event Action<Damagable> OnDead;
     public event Action OnTakeDamage;
 
     public bool IsTeamMate(Damagable damagable) => teamType.Value != TeamType.None && teamType.Value == damagable.teamType.Value;
@@ -113,7 +113,7 @@ public class Damagable : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        OnDead?.Invoke();
+        OnDead?.Invoke(this);
     }
 
     [ClientRpc]
