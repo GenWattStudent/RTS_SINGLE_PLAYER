@@ -1,4 +1,3 @@
-using RTS.Managers;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,17 +7,16 @@ public class CursorManager : NetworkBehaviour
     [SerializeField] private Texture2D attackCursor;
     [SerializeField] private Texture2D buildCursor;
     [SerializeField] private Texture2D healCursor;
+    [SerializeField] private Texture2D gatherCursor;
     [SerializeField] private Vector2 cursorOffset = new(10, 4);
     private PlayerController playerController;
     private SelectionManager selectionManager;
-    private UpgradeManager upgradeManager;
 
     private void Start()
     {
         if (!IsOwner) { enabled = false; return; }
         playerController = GetComponent<PlayerController>();
         selectionManager = GetComponent<SelectionManager>();
-        upgradeManager = GetComponent<UpgradeManager>();
 
         SetDefaultCursor();
     }
@@ -41,6 +39,11 @@ public class CursorManager : NetworkBehaviour
     public void SetHealCursor()
     {
         Cursor.SetCursor(healCursor, cursorOffset, CursorMode.Auto);
+    }
+
+    public void SetGatherCursor()
+    {
+        Cursor.SetCursor(gatherCursor, cursorOffset, CursorMode.Auto);
     }
 
     public bool IsEnemyHovering()
@@ -112,18 +115,28 @@ public class CursorManager : NetworkBehaviour
         return false;
     }
 
-    private bool IsUpgradeSelected()
+    public bool IsGatheringHovering()
     {
-        return upgradeManager.SelectedUpgrade != null;
+        if (selectionManager.GetWorkers().Count == 0) return false;
+
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var isHit = Physics.Raycast(ray, out hit, 1000f);
+
+        if (isHit)
+        {
+            var resource = hit.collider.gameObject.GetComponent<GatherItem>();
+            return resource != null;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (IsUpgradeSelected())
-        {
-            SetBuildCursor();
-        }
-        else if (IsEnemyHovering())
+        if (IsEnemyHovering())
         {
             SetAttackCursor();
         }
@@ -134,6 +147,10 @@ public class CursorManager : NetworkBehaviour
         else if (IsHealHovering())
         {
             SetHealCursor();
+        }
+        else if (IsGatheringHovering())
+        {
+            SetGatherCursor();
         }
         else
         {
