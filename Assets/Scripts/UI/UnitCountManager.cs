@@ -42,7 +42,6 @@ public class UnitCountManager : NetworkToolkitHelper
 
     private void OnUnitChange(Unit unit, List<Unit> units)
     {
-        Debug.Log("OnUnitChange " + units.Count);
         currentUnitCount = units.Count;
         UpdateText();
     }

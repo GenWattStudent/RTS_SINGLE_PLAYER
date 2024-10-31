@@ -35,7 +35,7 @@ public class Selectable : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || selectionManager == null) return;
         selectionManager.Deselect(this);
         Deselect();
     }

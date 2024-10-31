@@ -7,7 +7,7 @@ public class DoorAnimation : NetworkBehaviour
     private Spawner spawnerBuilding;
     private Animator animator;
 
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
         spawnerBuilding = GetComponentInParent<Spawner>();
@@ -18,16 +18,32 @@ public class DoorAnimation : NetworkBehaviour
     {
         if (!IsServer) return;
         animator.SetBool("isOpen", true);
-        Debug.Log("Open door" + unitSo + " " + unit);
         // calculate time when unit will be in unit move point
         float timeToMove = Vector3.Distance(unit.transform.position, spawnerBuilding.unitMovePoint.position) / unitSo.speed;
-        StartCoroutine(CloseDoorAfterDelay(timeToMove));
+        StartCoroutine(CloseDoorAfterDelay(unit, timeToMove));
     }
 
-    IEnumerator CloseDoorAfterDelay(float delay)
+    IEnumerator CloseDoorAfterDelay(Unit unit, float delay)
     {
         if (!IsServer) yield break;
-        yield return new WaitForSeconds(delay);
+
+        float elapsedTime = 0f;
+        while (elapsedTime < delay)
+        {
+            if (!spawnerBuilding.IsInsideSpawner(unit.transform.position))
+            {
+                break;
+            }
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Wait until the unit leaves the spawner
+        while (spawnerBuilding.IsInsideSpawner(unit.transform.position))
+        {
+            yield return null;
+        }
+
         animator.SetBool("isOpen", false);
     }
 }

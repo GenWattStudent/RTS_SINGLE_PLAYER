@@ -18,6 +18,7 @@ public class UnitMovement : NetworkBehaviour
     {
         agent.speed = stats.GetStat(StatType.Speed);
         agent.acceleration = stats.GetStat(StatType.Acceleration);
+        agent.stoppingDistance = 1f;
     }
 
     public void RotateToTarget(Vector3 target)
@@ -27,12 +28,38 @@ public class UnitMovement : NetworkBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, unit.unitSo.rotateSpeed * Time.deltaTime);
     }
 
+    private void HandleDebt(bool isInDebt)
+    {
+        if (isInDebt)
+        {
+            Stop();
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if (resourceUsage != null)
+        {
+            resourceUsage.OnDebtChanged -= HandleDebt;
+        }
+
+        if (stats != null)
+        {
+            stats.stats.OnListChanged -= StatsChanged;
+        }
+    }
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         unit = GetComponent<Unit>();
         resourceUsage = GetComponent<ResourceUsage>();
         stats = GetComponent<Stats>();
+
+        if (resourceUsage != null)
+        {
+            resourceUsage.OnDebtChanged += HandleDebt;
+        }
 
         SetNavMeshValues();
     }
@@ -50,11 +77,14 @@ public class UnitMovement : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void MoveToServerRpc(Vector3 destination)
     {
+        Debug.Log("Move to server rpc: " + transform + " Upgrading: " + unit.IsUpgrading.Value + " ResourceUsage: " + (resourceUsage == null || !resourceUsage.isInDebt).ToString());
         if (!unit.IsUpgrading.Value && (resourceUsage == null || !resourceUsage.isInDebt) && NavMesh.SamplePosition(destination, out NavMeshHit hit, 30f, NavMesh.AllAreas))
         {
-            Debug.Log("Move to " + destination);
-            agent.SetDestination(hit.position);
+            Debug.Log("Move to: " + destination);
             agent.isStopped = false;
+            agent.acceleration = stats.GetStat(StatType.Acceleration);
+            agent.SetDestination(hit.position);
+            isMoving = true;
         }
     }
 
@@ -81,32 +111,25 @@ public class UnitMovement : NetworkBehaviour
     public void Stop()
     {
         agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+        isMoving = false;
     }
 
     private void Update()
     {
         if (!IsServer) return;
 
-        if (!isReachedDestinationAfterSpawn)
-        {
-            MoveToWithoutNavMesh(destinationAfterSpawn);
-            isMoving = true;
-        }
+        // if (!isReachedDestinationAfterSpawn)
+        // {
+        //     MoveToWithoutNavMesh(destinationAfterSpawn);
+        //     isMoving = true;
+        // }
 
-        if (!agent.enabled) return;
-
-        if (resourceUsage != null && resourceUsage.isInDebt)
+        if (isMoving && !agent.isStopped && agent.hasPath && agent.remainingDistance <= 0.08f)
         {
+            Debug.Log("Stop: " + agent.remainingDistance);
             Stop();
-        }
-
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            isMoving = false;
-        }
-        else
-        {
-            isMoving = true;
         }
     }
 }

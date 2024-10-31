@@ -26,22 +26,6 @@ public class Damagable : NetworkBehaviour
     public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
         !damagable.isDead && unit.isVisibile;
 
-    public void AddDamageBoost(float boost)
-    {
-        if (damagableSo.bulletSo == null) return;
-
-        damageBoost += boost;
-        var damageToAdd = damagableSo.bulletSo.GetStat(StatType.Damage) * boost / 100;
-        stats.AddToStat(StatType.Damage, damageToAdd);
-    }
-
-    public void AddHealthBoost(float boost)
-    {
-        var newHealth = stats.GetStat(StatType.MaxHealth) * boost / 100;
-        stats.AddToStat(StatType.MaxHealth, newHealth);
-        stats.AddToStat(StatType.Health, newHealth);
-    }
-
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -61,10 +45,14 @@ public class Damagable : NetworkBehaviour
             // add damage boost and helth boost
             if (powerUp != null)
             {
-                var unit = GetComponent<Unit>();
-                if (unit.GetComponent<Building>() != null) return;
-
-                powerUp.ApplySkills(unit);
+                if (unitScript.GetComponent<Building>() == null)
+                {
+                    powerUp.ApplySkills(unitScript);
+                }
+                else
+                {
+                    powerUp.ApplySkills(unitScript.GetComponent<Building>());
+                }
             }
 
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));

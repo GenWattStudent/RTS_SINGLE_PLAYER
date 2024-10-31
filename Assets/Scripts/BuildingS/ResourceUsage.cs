@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -21,6 +22,8 @@ public class ResourceUsage : NetworkBehaviour
     private UIStorage uIStorage;
     private InfoBox infoBox;
 
+    public event Action<bool> OnDebtChanged;
+
     private void Start()
     {
         building = GetComponent<Building>();
@@ -29,7 +32,7 @@ public class ResourceUsage : NetworkBehaviour
         infoBox = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<InfoBox>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
         ResourceSO = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
-        Debug.Log("UsageInterval: " + usageInterval);
+
         if (IsServer) uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
     }
 
@@ -49,7 +52,6 @@ public class ResourceUsage : NetworkBehaviour
         var usageData = GetUsageDataFromStats();
         if (usageData.resourceSO == null) return;
 
-        Debug.Log($"UseResources {usageData.resourceSO.resourceName} {usageData.usage} {OwnerClientId}");
         var clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -62,11 +64,13 @@ public class ResourceUsage : NetworkBehaviour
         {
             isInDebt = false;
             uIStorage.DecreaseResource(usageData.resourceSO, usageData.usage);
+            OnDebtChanged?.Invoke(false);
             UserDebtEndClientRpc(clientRpcParams);
         }
         else
         {
             isInDebt = true;
+            OnDebtChanged?.Invoke(true);
             UserDebtClientRpc(clientRpcParams);
         }
     }

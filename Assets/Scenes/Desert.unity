@@ -104,9 +104,9 @@ NavMeshSettings:
     serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.3
-    agentHeight: 2
-    agentSlope: 42.3
-    agentClimb: 0.51
+    agentHeight: 0.2
+    agentSlope: 36.5
+    agentClimb: 0.15
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 0.2
@@ -119,7 +119,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 04e93f9e03ee8e848a7fbe75bb922d09, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: f22229b1c2469b246b0b614c2b90eb54, type: 2}
 --- !u!1001 &16663169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2352,7 +2352,7 @@ PrefabInstance:
     - target: {fileID: 572624217859586369, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 572624217859586369, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
         type: 3}
@@ -2402,7 +2402,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 916920257270916091, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1079859255}
   m_SourcePrefab: {fileID: 100100000, guid: 3e59967b7c49c2e47af40ff3dcb8c394, type: 3}
 --- !u!1 &751772664
 GameObject:
@@ -4006,6 +4010,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1212786571}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1079859250 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 916920257270916091, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
+    type: 3}
+  m_PrefabInstance: {fileID: 738479320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1079859255
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079859250}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 125, y: 0.05, z: 125.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.5, y: 0, z: 0.5}
+  m_TimeToStationary: 0.5
 --- !u!4 &1119133444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4151135140323060571, guid: 81e1c720071a5b0468b348682c698d43,
@@ -7025,12 +7051,12 @@ PrefabInstance:
     - target: {fileID: 1507636620937791777, guid: 7097ba7ba649e1f41bba232312bdcbd8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 37.66
+      value: 37.78
       objectReference: {fileID: 0}
     - target: {fileID: 1507636620937791777, guid: 7097ba7ba649e1f41bba232312bdcbd8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.77
+      value: 0.93
       objectReference: {fileID: 0}
     - target: {fileID: 1507636620937791777, guid: 7097ba7ba649e1f41bba232312bdcbd8,
         type: 3}
@@ -7136,7 +7162,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.33333334
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: e390fcd97de147f4a9a648e35c5c975d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: fd08648b554939d4b954ec41972f083e, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1001 &2090786142
 PrefabInstance:
