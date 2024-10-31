@@ -44,12 +44,12 @@ public class Worker : NetworkBehaviour
 
     private float DistanceToConstruction()
     {
+        if (construction == null) return 0;
         return Vector3.Distance(transform.position, (construction as NetworkBehaviour).transform.position);
     }
 
     private void StartConstruction()
     {
-        Debug.Log("StartConstruction");
         construction.AddWorker(this);
         isBuilding = true;
         ActivateLaserServerRpc();
@@ -61,17 +61,16 @@ public class Worker : NetworkBehaviour
         if (construction == null) return;
         if (removeFromList) construction.RemoveWorker(this);
         isBuilding = false;
+
+        construction.GetComponent<Damagable>().OnDead -= (damagable) => StopConstructionServerRpc();
         construction = null;
         DeactivateLaserServerRpc();
     }
 
-    private void MoveToConstruction(IWorkerConstruction construction)
+    private void MoveToConstruction()
     {
-        this.construction = construction;
-
-        if (unitMovement != null && DistanceToConstruction() > stats.GetStat(StatType.BuildingDistance))
+        if (unitMovement != null && construction != null && DistanceToConstruction() > stats.GetStat(StatType.BuildingDistance))
         {
-            Debug.Log("Move " + construction);
             unitMovement.MoveToServerRpc(construction.transform.position);
         }
     }
@@ -94,7 +93,10 @@ public class Worker : NetworkBehaviour
                 return;
             }
 
-            MoveToConstruction(construction);
+            this.construction = construction;
+            this.construction.GetComponent<Damagable>().OnDead += (damagable) => StopConstructionServerRpc();
+
+            MoveToConstruction();
         }
     }
 
@@ -135,7 +137,6 @@ public class Worker : NetworkBehaviour
         {
             if (unitMovement != null)
             {
-                Debug.Log("Stop");
                 unitMovement.Stop();
             }
 
@@ -144,7 +145,7 @@ public class Worker : NetworkBehaviour
 
         if (isBuilding)
         {
-            MoveToConstruction(construction);
+            MoveToConstruction();
         }
     }
 }

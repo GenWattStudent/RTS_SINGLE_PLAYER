@@ -85,24 +85,6 @@ public class PlayerController : NetworkBehaviour
         playerExpierence.Value = playerExp;
     }
 
-    public bool IsMaxBuildingOfType(BuildingSo buildingSo)
-    {
-        int count = GetBuildingCountOfType(buildingSo);
-        return count >= buildingSo.maxBuildingCount;
-    }
-
-    public int GetBuildingCountOfType(BuildingSo buildingSo)
-    {
-        int count = 0;
-
-        foreach (var building in playerData.buildings)
-        {
-            if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
-        }
-
-        return count;
-    }
-
     [ServerRpc(RequireOwnership = false)]
     private void SpawnUnitServerRpc(Vector3 spawnPosition, ulong clientId)
     {
@@ -111,7 +93,7 @@ public class PlayerController : NetworkBehaviour
 
         foreach (var unitPrefab in unitPrefabs)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 8; i++)
             {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();

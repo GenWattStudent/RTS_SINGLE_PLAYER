@@ -45,26 +45,14 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
     private Unit InstantiateUnit()
     {
-        if (!unitCountManager.CanSpawnUnit())
-        {
-            return null;
-        }
+        if (!unitCountManager.CanSpawnUnit()) return null;
 
         uIStorage.DecreaseResource(currentSpawningUnit.costResource, currentSpawningUnit.cost);
-
-        var agent = currentSpawningUnit.prefab.GetComponent<NavMeshAgent>();
-        agent.enabled = false;
 
         GameObject unitInstance = Instantiate(currentSpawningUnit.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
         var unitScript = unitInstance.GetComponent<Unit>();
 
         unitScript.ChangeMaterial(playerController.playerData.playerMaterial, true);
-
-        if (unitMovePoint != null)
-        {
-            var unitMovement = unitInstance.GetComponent<UnitMovement>();
-            if (unitMovement != null) unitMovement.SetDestinationAfterSpawn(unitMovePoint.position);
-        }
 
         return unitScript;
     }
@@ -88,6 +76,25 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
         AddUnitToQueueClientRpc(index, clientRpcParams);
     }
 
+    private Vector3 FindFreePosition(Vector3 startPosition, float radius, int maxAttempts = 10)
+    {
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * radius;
+            randomDirection += startPosition;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomDirection, out hit, radius, NavMesh.AllAreas))
+            {
+                if (!Physics.CheckSphere(hit.position, 0.5f)) // Check if the position is free
+                {
+                    return hit.position;
+                }
+            }
+        }
+
+        return startPosition; // Return the original position if no free position is found
+    }
+
     [ServerRpc(RequireOwnership = false)]
     private void SpawnUnitServerRpc()
     {
@@ -97,6 +104,12 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
             if (unit == null) return;
 
             SetupUnitNetwork(unit);
+
+            if (unitMovePoint != null)
+            {
+                var unitMovement = unit.GetComponent<UnitMovement>();
+                if (unitMovement != null) unitMovement.MoveToServerRpc(FindFreePosition(unitMovePoint.position, 5, 25));
+            }
 
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
@@ -153,9 +166,9 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
     public void AddUnitToQueue(int index)
     {
-        if (IsValidIndex(index)) return;
+        if (!IsValidIndex(index)) return;
 
-        if (unitCountManager.CanSpawnUnit())
+        if (!unitCountManager.CanSpawnUnit())
         {
             infoBox.AddError("You have reached unit limit");
             return;
@@ -216,6 +229,12 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
     public UnitSo GetCurrentSpawningUnit() => currentSpawningUnit;
     public int GetUnitQueueCountByName(string unitName) => unitsQueue.FindAll(unit => unit.unitName == unitName).Count;
+
+    public bool IsInsideSpawner(Vector3 position)
+    {
+        var BoxCollider = GetComponent<BoxCollider>();
+        return BoxCollider.bounds.Contains(position);
+    }
 
     #endregion
 }

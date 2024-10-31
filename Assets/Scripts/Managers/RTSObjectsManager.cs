@@ -6,24 +6,18 @@ using UnityEngine;
 public class RTSObjectsManager : NetworkBehaviour
 {
     public static Dictionary<ulong, List<Unit>> Units { get; private set; } = new();
-    public List<Building> Buildings = new();
+    public static Dictionary<ulong, List<Building>> Buildings { get; private set; } = new();
     public List<Unit> LocalPlayerUnits = new();
     public List<Building> LocalPlayerBuildings = new();
 
     public event Action<Unit, List<Unit>> OnUnitChange;
     public event Action<Building, List<Building>> OnBuildingChange;
 
-    private void Start()
-    {
-        // playerController = GetComponent<PlayerController>();
-    }
-
     [ServerRpc(RequireOwnership = false)]
     public void AddUnitServerRpc(NetworkObjectReference nor, ServerRpcParams serverRpcParams = default)
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            Debug.Log("AddUnitServerRpc:  " + no.OwnerClientId);
             var unit = no.GetComponent<Unit>();
 
             if (!Units.ContainsKey(no.OwnerClientId))
@@ -35,19 +29,10 @@ public class RTSObjectsManager : NetworkBehaviour
             var damagableScript = unit.GetComponent<Damagable>();
             damagableScript.OnDead += (Damagable damagable) =>
             {
-                Debug.Log("Unit dead");
                 RemoveUnitServerRpc(no);
             };
 
-            var clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { no.OwnerClientId }
-                }
-            };
-
-            AddUnitClientRpc(no, clientRpcParams);
+            AddUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
@@ -77,15 +62,7 @@ public class RTSObjectsManager : NetworkBehaviour
 
             Units[senderClientId].Remove(unit);
 
-            var clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { no.OwnerClientId }
-                }
-            };
-
-            RemoveUnitClientRpc(no, clientRpcParams);
+            RemoveUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
@@ -96,7 +73,6 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             var unit = no.GetComponent<Unit>();
             LocalPlayerUnits.Remove(unit);
-            Debug.Log($"Client({unit.OwnerClientId}) have {LocalPlayerUnits.Count} units.");
             // playerController.RemoveUnit(unit);
             OnUnitChange?.Invoke(unit, LocalPlayerUnits);
         }
@@ -108,17 +84,20 @@ public class RTSObjectsManager : NetworkBehaviour
         if (nor.TryGet(out NetworkObject no))
         {
             var building = no.GetComponent<Building>();
-            Buildings.Add(building);
 
-            var clientRpcParams = new ClientRpcParams
+            if (!Buildings.ContainsKey(no.OwnerClientId))
             {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { building.OwnerClientId }
-                }
+                Buildings[no.OwnerClientId] = new List<Building>();
+            }
+            Buildings[no.OwnerClientId].Add(building);
+
+            var damagableScript = building.GetComponent<Damagable>();
+            damagableScript.OnDead += (Damagable damagable) =>
+            {
+                RemoveBuildingServerRpc(no);
             };
 
-            AddBuildingClientRpc(no, clientRpcParams);
+            AddBuildingClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
@@ -127,8 +106,10 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
+            if (no.OwnerClientId != OwnerClientId) return;
             var building = no.GetComponent<Building>();
             LocalPlayerBuildings.Add(building);
+            Debug.Log($"Client({building.OwnerClientId}, {OwnerClientId}) have {LocalPlayerBuildings.Count} buildings.");
             // playerController.AddBuilding(building);
             OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
         }
@@ -139,20 +120,13 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
+            var senderClientId = no.OwnerClientId;
             var building = no.GetComponent<Building>();
-            if (!Buildings.Contains(building)) return;
+            if (!Buildings[senderClientId].Contains(building)) return;
 
-            Buildings.Remove(building);
+            Buildings[senderClientId].Remove(building);
 
-            var clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { building.OwnerClientId }
-                }
-            };
-
-            RemoveBuildingClientRpc(no, clientRpcParams);
+            RemoveBuildingClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
@@ -166,5 +140,34 @@ public class RTSObjectsManager : NetworkBehaviour
             // playerController.RemoveBuilding(building);
             OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
         }
+    }
+
+    public bool IsMaxBuildingOfType(BuildingSo buildingSo)
+    {
+        int count = GetBuildingCountOfType(buildingSo);
+        return count >= buildingSo.maxBuildingCount;
+    }
+
+    public int GetBuildingCountOfType(BuildingSo buildingSo)
+    {
+        int count = 0;
+
+        foreach (var building in LocalPlayerBuildings)
+        {
+            if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
+        }
+
+        return count;
+    }
+
+    private ClientRpcParams GetClientRpcParams(ulong clientId)
+    {
+        return new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
     }
 }

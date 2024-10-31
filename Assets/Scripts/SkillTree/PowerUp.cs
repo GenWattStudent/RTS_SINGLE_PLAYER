@@ -17,11 +17,9 @@ public class PowerUp : NetworkBehaviour
         skillTreeManager = GetComponent<SkillTreeManager>();
     }
 
-    private void ApplySkill(Unit unit, SkillSo skillSo)
+    private void ApplySkill(Stats stats, string objectName, SkillSo skillSo)
     {
-        var stats = unit.GetComponent<Stats>();
-
-        if (stats != null && unit != null && unit.unitSo.unitName == skillSo.unitName)
+        if (stats != null && objectName == skillSo.unitName)
         {
             foreach (var statType in skillSo.statTypes)
             {
@@ -62,7 +60,10 @@ public class PowerUp : NetworkBehaviour
     {
         foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
         {
-            ApplySkill(unit, skill);
+            if (unit.unitSo.unitName == skill.unitName)
+            {
+                ApplySkill(unit.GetComponent<Stats>(), unit.unitSo.unitName, skill);
+            }
         }
     }
 
@@ -72,7 +73,18 @@ public class PowerUp : NetworkBehaviour
         {
             if (skill.unitName == unit.unitSo.unitName && IsUnlocked(skill))
             {
-                ApplySkill(unit, skill);
+                ApplySkill(unit.GetComponent<Stats>(), unit.unitSo.unitName, skill);
+            }
+        }
+    }
+
+    public void ApplySkills(Building building)
+    {
+        foreach (var skill in skillTreeManager.skills)
+        {
+            if (skill.unitName == building.buildingSo.buildingName && IsUnlocked(skill))
+            {
+                ApplySkill(building.GetComponent<Stats>(), building.buildingSo.buildingName, skill);
             }
         }
     }

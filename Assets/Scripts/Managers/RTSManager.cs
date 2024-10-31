@@ -59,7 +59,6 @@ public class RTSManager : NetworkBehaviour
             return new List<Vector3>();
         }
 
-        float rowCount = unitCount / ColumnCount + (unitCount % ColumnCount > 0 ? 1 : 0);
         float x, y, column;
         int firstIndexInRow;
 
@@ -192,22 +191,6 @@ public class RTSManager : NetworkBehaviour
             {
                 var no = target.GetComponent<NetworkObject>();
                 healerScript.SetTargetServerRpc(no);
-            }
-        }
-    }
-
-    private void GatherCommand(GatherItem gatherItem)
-    {
-        var workers = selectionManager.GetWorkers();
-
-        foreach (var worker in workers)
-        {
-            var workerScript = worker.GetComponent<Worker>();
-            var no = gatherItem.GetComponent<NetworkObject>();
-
-            if (workerScript != null)
-            {
-                workerScript.MoveToConstructionServerRpc(no);
             }
         }
     }

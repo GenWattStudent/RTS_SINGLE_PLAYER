@@ -80,7 +80,7 @@ public class SpawnerSlot
     private void HandleClick(ClickEvent evt)
     {
         var index = Building.buildingSo.unitsToSpawn.IndexOf(SoUnit);
-        Spawner.AddUnitToQueueServerRpc(index);
+        Spawner.AddUnitToQueue(index);
     }
 
     private string GetQuantityText()

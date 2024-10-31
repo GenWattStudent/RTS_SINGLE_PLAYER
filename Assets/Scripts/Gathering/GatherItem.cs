@@ -21,6 +21,9 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
     {
         base.OnNetworkSpawn();
 
+        currentValue.OnValueChanged += HandleCurrentValueChange;
+        maxValue.OnValueChanged += HandleMaxValueChange;
+
         if (IsServer)
         {
             var randomValue = Random.Range(gatherItemSo.minValue, gatherItemSo.maxValue);
@@ -28,8 +31,7 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
             maxValue.Value = randomValue;
         }
 
-        currentValue.OnValueChanged += HandleCurrentValueChange;
-        maxValue.OnValueChanged += HandleMaxValueChange;
+        progressBarScript.UpdateProgresBar(currentValue.Value, maxValue.Value);
     }
 
     public override void OnNetworkDespawn()

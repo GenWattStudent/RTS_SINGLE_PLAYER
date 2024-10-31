@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7304531776999461873
 Transform:
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2548751832132793852}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.010000001, y: 0, z: 9.55}
+  m_LocalPosition: {x: 0.010000001, y: 0, z: 12.47}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,7 +45,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5289973568738679937
 Transform:
@@ -87,7 +87,7 @@ GameObject:
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5638679581261296277
 Transform:
@@ -139,12 +139,12 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.85, y: 0.5, z: 1.45}
-  m_MoveThreshold: 0.1
+  m_Extents: {x: 0.08, y: 0.5, z: 1.45}
+  m_MoveThreshold: 2.85
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_Center: {x: -0.91, y: 0, z: 0}
+  m_TimeToStationary: 1.54
 --- !u!114 &4718651210534040361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,6 +161,8 @@ MonoBehaviour:
   unitMovePoint: {fileID: 7304531776999461873}
   totalSpawnTime:
     m_InternalValue: 0
+  spawnTimer:
+    m_InternalValue: 0
 --- !u!114 &9184962378081221949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,11 +176,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSo: {fileID: 0}
-  IsBot: 0
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
-  shouldChangeMaterial: 1
   unitPrefabs:
   - {fileID: 1566492945416425327}
   - {fileID: 7825836509912857267}
@@ -188,6 +188,11 @@ MonoBehaviour:
   unitUiPrefabs:
   - {fileID: 5070802742954924416}
   bushes: []
+  Upgrades: []
+  IsBot: 0
+  shouldChangeMaterial: 1
+  IsUpgrading:
+    m_InternalValue: 0
   isVisibile: 1
 --- !u!114 &5025436868650576337
 MonoBehaviour:
@@ -210,6 +215,9 @@ MonoBehaviour:
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &-6002317933877532533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInDebt: 0
+  ResourceSO: {fileID: 0}
 --- !u!114 &-2937200284990800649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +331,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!224 &7512592960258103650
 RectTransform:
@@ -558,7 +567,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4700887954246426167
 Transform:
@@ -592,7 +601,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!224 &8377671776861197003
 RectTransform:
@@ -674,7 +683,7 @@ PrefabInstance:
     - target: {fileID: 270268923959103934, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1557780845714414655, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
@@ -749,7 +758,7 @@ PrefabInstance:
     - target: {fileID: 2221833450515023493, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
@@ -759,7 +768,7 @@ PrefabInstance:
     - target: {fileID: 6283097865136294372, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6486099545665834401, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
@@ -769,12 +778,12 @@ PrefabInstance:
     - target: {fileID: 6486099545665834401, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7490102040393659225, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -792,6 +801,14 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7304531776999461873}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2221833450515023493, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1302314532118810318}
+    - targetCorrespondingSourceObject: {fileID: 270268923959103934, guid: b426e496210a16744b3f6a654afe58b8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 832315408901454393}
     - targetCorrespondingSourceObject: {fileID: 6486099545665834401, guid: b426e496210a16744b3f6a654afe58b8,
         type: 3}
       insertIndex: -1
@@ -823,12 +840,44 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 822123297997375978}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &832315408901454393
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624017856343578708}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.545, y: 2.715, z: 0.04}
+  m_MoveThreshold: 0.03
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.44, y: 0.089, z: -12.67}
+  m_TimeToStationary: 0.64
 --- !u!1 &1566492945416425327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2221833450515023493, guid: b426e496210a16744b3f6a654afe58b8,
     type: 3}
   m_PrefabInstance: {fileID: 822123297997375978}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &1302314532118810318
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566492945416425327}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.1, y: 5.4210005, z: 7.5000005}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -4.84, y: 5.4210005, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &2231143994585503189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1557780845714414655, guid: b426e496210a16744b3f6a654afe58b8,

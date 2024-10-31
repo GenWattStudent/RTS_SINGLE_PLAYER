@@ -88,7 +88,7 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     [ServerRpc(RequireOwnership = false)]
     private void InstantiateBuildingServerRpc()
     {
-        var building = Instantiate(construction.Prefab, transform.position, Quaternion.identity);
+        var building = Instantiate(construction.Prefab, transform.position, transform.rotation);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
         var damagable = building.GetComponent<Damagable>();
@@ -156,9 +156,13 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
         constructionPrefab.SetActive(true);
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
-        StopWorkersConstruction();
+        base.OnNetworkDespawn();
+        if (IsServer)
+        {
+            StopWorkersConstruction();
+        }
     }
 
     [ClientRpc]

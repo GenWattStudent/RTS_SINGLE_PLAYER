@@ -20,8 +20,8 @@ public class UIBuildingManager : NetworkBehaviour
     private VisualElement root;
     private VisualElement slotContainer;
     private List<SlotData> slots = new();
-    private UIUnitManager uIUnitManager;
     private UIStorage uIStorage;
+    private RTSObjectsManager rTSObjectsManager;
 
     public override void OnNetworkSpawn()
     {
@@ -36,7 +36,7 @@ public class UIBuildingManager : NetworkBehaviour
     private void Awake()
     {
         uIStorage = GetComponent<UIStorage>();
-        uIUnitManager = GetComponent<UIUnitManager>();
+        rTSObjectsManager = GetComponentInParent<RTSObjectsManager>();
 
         uIStorage.OnStoragesChanged += OnStoragesChanged;
     }
@@ -147,7 +147,7 @@ public class UIBuildingManager : NetworkBehaviour
 
     private void UpdateSlot(BuildingSo buildingSo, TemplateContainer container)
     {
-        if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost))
+        if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost) || rTSObjectsManager.IsMaxBuildingOfType(buildingSo))
         {
             container.SetEnabled(false);
         }

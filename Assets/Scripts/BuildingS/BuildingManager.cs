@@ -10,15 +10,16 @@ public class BuildingManager : NetworkBehaviour
     [SerializeField] private List<BuildingSo> networkConstructionsPrefabs;
     public BuildingSo SelectedBuilding { get; private set; }
     public int heightRaysCount = 15;
-    public float diffranceBetweenMaxAndMinHeight = 1f;
+    public float differenceBetweenMaxAndMinHeight = 1f;
 
     private GameObject previewPrefab;
-    private Vector3[] hightPoints;
     private PlayerController playerController;
     private RTSObjectsManager RTSObjectsManager;
     private UIBuildingManager uIBuildingManager;
     private UIStorage uIStorage;
     private InfoBox infoBox;
+    private BuildingValidator buildingValidator;
+    private float currentRotation = 0f; // Track the current rotation of the building
 
     public override void OnNetworkSpawn()
     {
@@ -37,84 +38,13 @@ public class BuildingManager : NetworkBehaviour
         RTSObjectsManager = GetComponent<RTSObjectsManager>();
         uIBuildingManager = GetComponentInChildren<UIBuildingManager>();
         uIStorage = GetComponentInChildren<UIStorage>();
-        hightPoints = new Vector3[heightRaysCount * heightRaysCount];
+
+        buildingValidator = new BuildingValidator(heightRaysCount, terrainLayer, differenceBetweenMaxAndMinHeight);
     }
 
     private void Start()
     {
         infoBox = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<InfoBox>();
-    }
-
-    private void GetHightPoints()
-    {
-        if (previewPrefab == null) return;
-        var collider = previewPrefab.GetComponent<BoxCollider>();
-        var bounds = collider.bounds;
-        var rows = heightRaysCount;
-        var cols = heightRaysCount;
-        var index = 0;
-
-        for (int i = 0; i < rows; i++)
-        {
-            var x = bounds.min.x + (bounds.size.x / rows) * i;
-            for (int j = 0; j < cols; j++)
-            {
-                var z = bounds.min.z + (bounds.size.z / cols) * j;
-                hightPoints[index] = new Vector3(x, 100f, z);
-                index++;
-            }
-        }
-    }
-
-    private bool IsFlatTerrain()
-    {
-        float maxHeight = 0;
-        float minHeight = 0;
-
-        foreach (var point in hightPoints)
-        {
-            var rayPosition = new Vector3(point.x, 100f, point.z);
-            Ray ray = new Ray(rayPosition, Vector3.down);
-
-            // if ray hit notthing then return false
-            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, terrainLayer))
-            {
-                if (hit.point.y > maxHeight) maxHeight = hit.point.y;
-                if (hit.point.y < minHeight) minHeight = hit.point.y;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return Mathf.Abs(maxHeight - minHeight) <= diffranceBetweenMaxAndMinHeight;
-    }
-
-    private bool IsBuildingColliding()
-    {
-        bool isCollidingWithOtherUnits = false;
-
-        foreach (var hightPoint in hightPoints)
-        {
-            var rayPosition = new Vector3(hightPoint.x, 100f, hightPoint.z);
-            Ray ray = new Ray(rayPosition, Vector3.down);
-
-            RaycastHit[] hits = Physics.RaycastAll(ray, float.MaxValue);
-            foreach (var hit in hits)
-            {
-                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Terrain")
-                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ghost")
-                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("FlatMap")
-                    && !hit.collider.gameObject.CompareTag("ForceField"))
-                {
-                    isCollidingWithOtherUnits = true;
-                    break;
-                }
-            }
-        }
-
-        return isCollidingWithOtherUnits;
     }
 
     public void SetSelectedBuilding(BuildingSo building)
@@ -137,9 +67,22 @@ public class BuildingManager : NetworkBehaviour
         }
     }
 
+    private void RotateBuildingPreview()
+    {
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            currentRotation += Input.mouseScrollDelta.y > 0 ? 90f : -90f;
+            currentRotation = Mathf.Round(currentRotation / 90f) * 90f; // Ensure rotation is a multiple of 90
+            if (previewPrefab != null)
+            {
+                previewPrefab.transform.rotation = Quaternion.Euler(0, currentRotation, 0);
+            }
+        }
+    }
+
     private void SetPopup()
     {
-        var message = $"{SelectedBuilding.name} ({playerController.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
+        var message = $"{SelectedBuilding.name} ({RTSObjectsManager.GetBuildingCountOfType(SelectedBuilding)}/{SelectedBuilding.maxBuildingCount})";
         MousePopup.Instance.SetText(message);
         MousePopup.Instance.Show();
     }
@@ -165,7 +108,7 @@ public class BuildingManager : NetworkBehaviour
     private void BuildingPreview()
     {
         if (SelectedBuilding is null) return;
-        GetHightPoints();
+        buildingValidator.GenerateHeightPoints(previewPrefab);
         var mousePosition = GetMouseWorldPosition();
         bool isValid = IsValidPosition();
 
@@ -182,7 +125,11 @@ public class BuildingManager : NetworkBehaviour
             }
         }
 
-        if (mousePosition != null && previewPrefab != null) previewPrefab.transform.position = (Vector3)mousePosition;
+        if (mousePosition != null && previewPrefab != null)
+        {
+            previewPrefab.transform.position = (Vector3)mousePosition;
+            RotateBuildingPreview();
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -193,7 +140,7 @@ public class BuildingManager : NetworkBehaviour
         if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
         uIStorage.DecreaseResource(buildingSo.costResource, buildingSo.cost);
 
-        var newBuilding = Instantiate(buildingSo.ConstructionManagerPrefab, position, buildingSo.ConstructionManagerPrefab.transform.rotation);
+        var newBuilding = Instantiate(buildingSo.ConstructionManagerPrefab, position, Quaternion.Euler(0, currentRotation, 0));
         var no = newBuilding.GetComponent<NetworkObject>();
         var stats = newBuilding.GetComponent<Stats>();
         var damagable = newBuilding.GetComponent<Damagable>();
@@ -224,9 +171,7 @@ public class BuildingManager : NetworkBehaviour
 
     private bool IsValidPosition()
     {
-        return !IsBuildingColliding() &&
-        !playerController.IsMaxBuildingOfType(SelectedBuilding) &&
-        IsFlatTerrain();
+        return !RTSObjectsManager.IsMaxBuildingOfType(SelectedBuilding) && buildingValidator.IsValid();
     }
 
     public void CancelBuilding()
@@ -254,7 +199,7 @@ public class BuildingManager : NetworkBehaviour
             {
                 previewPrefab = Instantiate(SelectedBuilding.PreviewPrefab);
                 previewPrefab.transform.position = (Vector3)mousePosition;
-                GetHightPoints();
+                buildingValidator.GenerateHeightPoints(previewPrefab);
             }
         }
     }
