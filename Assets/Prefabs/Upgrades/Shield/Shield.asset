@@ -17,7 +17,7 @@ MonoBehaviour:
   Cost: 100
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   UnlockLevel: 1
-  Icon: {fileID: 21300000, guid: 89a8a255b1b6e454aa699618ef43518d, type: 3}
+  Icon: {fileID: 21300000, guid: 2687085aa75f4344b905abfbe1d32495, type: 3}
   Stats: []
   ForUnits:
   - {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}

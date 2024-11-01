@@ -21,11 +21,22 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/ImportedAssests/SciFi%20Assets/Sprites/vector_1/Vector_4.png?fileID=2800000&guid=da359f85c20fa664a986f4f001e2e9d9&type=3#Vector_4');
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01');
+    -unity-background-image-tint-color: rgb(0, 250, 72);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    -unity-slice-scale: 1px;
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 0;
+    height: 25px;
+    top: -3px;
+    left: 0;
 }
 
 .healthbar .unity-progress-bar__background {
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -34,10 +45,11 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
 }
 
 .healthbar .unity-progress-bar__title {
@@ -50,12 +62,15 @@
 }
 
 .expirence .unity-progress-bar__progress {
-    background-color: rgb(255, 155, 0);
+    background-color: rgba(255, 155, 0, 0);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/Prefabs/UI/PROGRESS.png?fileID=2800000&guid=817f6c5f6b92271479db7491108ea4d2&type=3#PROGRESS');
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill02.png?fileID=21300000&guid=bcb5b4fb84e360f4ab517305cc7ea5ab&type=3#gage_b_fill02');
+    height: 25px;
+    top: -3px;
+    left: 0;
 }
 
 .expirence .unity-progress-bar__title {
@@ -65,7 +80,7 @@
 }
 
 .expirence .unity-progress-bar__background {
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -78,28 +93,7 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-}
-
-.btn-primary {
-    width: 200px;
-    background-color: rgb(58, 58, 58);
-    color: rgb(217, 217, 217);
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    -unity-font-style: bold;
-    font-size: 16px;
-    transition-duration: 0.3s;
-    margin-right: 0;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
 }
 
 .btn-danger {
@@ -224,8 +218,8 @@
 
 .active {
     background-color: rgb(212, 119, 15);
-    color: rgb(82, 82, 82);
-    -unity-background-image-tint-color: rgb(212, 119, 15);
+    color: rgb(197, 197, 197);
+    -unity-background-image-tint-color: rgb(144, 154, 145);
 }
 
 .slot-medium {
@@ -236,9 +230,9 @@
 
 .btn-primary:hover:enabled {
     scale: 1 1;
-    background-color: rgb(207, 207, 207);
-    color: rgb(84, 84, 84);
-    -unity-background-image-tint-color: rgb(231, 166, 18);
+    background-color: rgba(207, 207, 207, 0);
+    color: rgb(188, 188, 188);
+    -unity-background-image-tint-color: rgb(227, 231, 225);
 }
 
 .btn-primary:disabled {
@@ -249,27 +243,29 @@
 
 .mass .unity-progress-bar__background {
     height: 30px;
-    background-color: rgb(255, 255, 255);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
+    background-color: rgba(255, 255, 255, 0);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     width: auto;
+    justify-content: flex-start;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
 }
 
 .mass .unity-progress-bar__progress {
     height: 30px;
-    background-color: rgba(58, 159, 0, 0.84);
+    background-color: rgba(58, 159, 0, 0);
     flex-direction: column;
     align-self: auto;
     justify-content: flex-start;
-    left: -3px;
+    left: 0;
     top: -3px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/ImportedAssests/SciFi%20Assets/Sprites/vector_1/Vector_2.png?fileID=2800000&guid=d642f0450c6a98c4fb5ba1491b677bd5&type=3#Vector_2');
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01');
     right: 0;
     width: auto;
 }
@@ -290,30 +286,30 @@
 
 .energy .unity-progress-bar__progress {
     height: 30px;
-    background-color: rgb(255, 198, 0);
+    background-color: rgba(255, 198, 0, 0);
     flex-direction: column;
-    background-image: url('project://database/Assets/Prefabs/UI/PROGRESS.png?fileID=2800000&guid=817f6c5f6b92271479db7491108ea4d2&type=3#PROGRESS');
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill06.png?fileID=21300000&guid=9e2d10e868bfcc2459840cd98bcfde42&type=3#gage_b_fill06');
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 .energy .unity-progress-bar__container {
-    height: auto;
+    height: 30px;
     align-items: stretch;
     justify-content: flex-start;
     align-self: auto;
     flex-direction: row;
     flex-wrap: nowrap;
     flex-grow: 0;
-    width: auto;
+    width: 100%;
     flex-shrink: 1;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .text-xxl {
@@ -328,18 +324,9 @@
     opacity: 0;
 }
 
-.btn-secondary {
-    background-color: rgb(221, 221, 221);
-    border-left-color: rgb(55, 55, 55);
-    border-right-color: rgb(55, 55, 55);
-    border-top-color: rgb(55, 55, 55);
-    border-bottom-color: rgb(55, 55, 55);
-    transition-property: background-color;
-    transition-duration: 0.4s;
-}
-
 .btn-secondary:hover {
     background-color: rgb(137, 137, 137);
+    -unity-background-image-tint-color: rgb(154, 154, 154);
 }
 
 .skill {
@@ -379,16 +366,17 @@
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
     border-bottom-color: rgb(255, 255, 255);
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    background-color: rgba(39, 39, 39, 0.79);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(39, 39, 39, 0);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    color: rgb(207, 206, 206);
+    color: rgb(0, 0, 0);
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/textinput_a.png?fileID=21300000&guid=e4430d406d9e002418f1d3cf864fb0ff&type=3#textinput_a');
 }
 
 .border-secondary {
@@ -401,7 +389,7 @@
 }
 
 .text-input .unity-base-field__label {
-    color: rgb(236, 236, 236);
+    color: rgb(46, 46, 46);
     -unity-text-align: upper-left;
     -unity-font-style: bold;
 }
@@ -415,15 +403,20 @@
     height: 20px;
     top: auto;
     margin-top: 6px;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
-    background-color: rgb(255, 189, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: rgba(255, 189, 0, 0);
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige');
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: stretch-to-fill;
+    overflow: visible;
 }
 
 .slider .unity-base-slider__tracker {
     background-color: rgb(96, 83, 49);
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_empty.png?fileID=21300000&guid=f6c1dea84b7a31e4b81d0f719c477e2e&type=3#gage_b_empty');
 }
 
 .margin-left-md {
@@ -432,7 +425,7 @@
 }
 
 .slider .unity-base-slider__label:foucused {
-    color: rgb(236, 136, 1);
+    color: rgb(255, 226, 186);
 }
 
 .bg-success {
@@ -444,10 +437,6 @@
 }
 
 .mass {
-}
-
-.bg-primary {
-    background-color: rgba(55, 55, 55, 0.95);
 }
 
 .border-primary {
@@ -463,4 +452,80 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+.btn-icon-red {
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_c_red.png?fileID=2800000&guid=dfe0f8b3b8f11c54d94569c6e1326583&type=3#btn_c_red');
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.btn-icon {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_c_beige.png?fileID=2800000&guid=9c0068a62e7a92d40824e0b03460035a&type=3#btn_c_beige');
+}
+
+.bg-primary {
+    background-color: rgba(55, 55, 55, 0.95);
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a');
+}
+
+.btn-primary {
+    width: 200px;
+    background-color: rgb(58, 58, 58);
+    color: rgb(217, 217, 217);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -unity-font-style: bold;
+    font-size: 16px;
+    transition-duration: 0.3s;
+    margin-right: 0;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_emerald.png?fileID=21300000&guid=e87e973aa97e2cf41885259822725eb5&type=3#btn_a_emerald');
+}
+
+.btn-icon:hover:enabled {
+    -unity-background-image-tint-color: rgb(185, 185, 185);
+}
+
+.bg-secondary {
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_c.png?fileID=21300000&guid=7b03ca51eb13fef46ad379e25bc1bb4b&type=3#box_c');
+}
+
+.bg-primary {
+    background-color: rgba(55, 55, 55, 0.95);
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a');
+}
+
+.btn-secondary {
+    background-color: rgb(221, 221, 221);
+    border-left-color: rgb(55, 55, 55);
+    border-right-color: rgb(55, 55, 55);
+    border-top-color: rgb(55, 55, 55);
+    border-bottom-color: rgb(55, 55, 55);
+    transition-property: background-color;
+    transition-duration: 0.4s;
+    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige');
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.btn-icon-red:hover:enabled {
+    -unity-background-image-tint-color: rgb(154, 152, 152);
 }
