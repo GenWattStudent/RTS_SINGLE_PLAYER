@@ -104,7 +104,7 @@ NavMeshSettings:
     serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.3
-    agentHeight: 0.2
+    agentHeight: 0.3
     agentSlope: 36.5
     agentClimb: 0.15
     ledgeDropHeight: 0
@@ -2344,6 +2344,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 34031861805293224, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
+        type: 3}
+      propertyPath: FOWColor.a
+      value: 0.7882353
+      objectReference: {fileID: 0}
     - target: {fileID: 572624217859586369, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2398,6 +2403,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FOWPlane
+      objectReference: {fileID: 0}
+    - target: {fileID: 916920257270916091, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5462,6 +5472,7 @@ GameObject:
   - component: {fileID: 1579055629}
   - component: {fileID: 1579055633}
   - component: {fileID: 1579055634}
+  - component: {fileID: 1579055635}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5637,6 +5648,19 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1579055635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579055628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6356b51c955f0e74a9fc6be2589dab8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Fog: {fileID: 0}
 --- !u!4 &1585621138 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7493511432247085256, guid: 058372e3e721de24c9d6fea4cd9bfcd8,

@@ -1,168 +1,130 @@
 using System.Collections.Generic;
-using FOVMapping;
 using Unity.Netcode;
 using UnityEngine;
 
+[DefaultExecutionOrder(-150)]
 public class VisibilityManager : NetworkBehaviour
 {
-    private RTSObjectsManager rtsObjectsManager;
-    private Dictionary<ulong, int> playerTeams = new Dictionary<ulong, int>();
+    private Dictionary<NetworkObject, int> visibilityCounts = new Dictionary<NetworkObject, int>();
 
-    [SerializeField]
-    private float visibilityUpdateInterval = 0.5f; // Update visibility every half second
+    private void Start()
+    {
+        base.OnNetworkSpawn();
 
-    private float lastUpdateTime;
+        if (IsServer)
+        {
+            NetworkManager.Singleton.NetworkTickSystem.Tick += OnNetworkTick;
+        }
+    }
 
-    // public override void OnNetworkSpawn()
-    // {
-    //     if (!IsServer) return;
+    private void OnNetworkTick()
+    {
+        UpdateVisibility();
+    }
 
-    //     rtsObjectsManager = GetComponent<RTSObjectsManager>();
+    private bool IsUnitInSight(Unit unit, Unit enemyUnit)
+    {
+        var sightRange = unit.unitSo.sightRange;
+        var sightAngle = unit.unitSo.sightAngle;
 
-    //     // Initialize player teams
-    //     foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-    //     {
-    //         var playerController = client.PlayerObject.GetComponent<PlayerController>();
-    //         if (playerController != null)
-    //         {
-    //             playerTeams[client.ClientId] = playerController.playerData.teamId;
-    //         }
-    //     }
+        var distance = Vector3.Distance(unit.transform.position, enemyUnit.transform.position);
+        if (distance > sightRange) return false;
 
-    //     // Set up visibility checks for all units
-    //     foreach (var kvp in RTSObjectsManager.Units)
-    //     {
-    //         foreach (var unit in kvp.Value)
-    //         {
-    //             var networkObject = unit.GetComponent<NetworkObject>();
-    //             if (networkObject != null)
-    //             {
-    //                 networkObject.CheckObjectVisibility += (ulong clientId) => CheckVisibility(clientId, networkObject, kvp.Key);
-    //             }
-    //         }
-    //     }
+        var directionToUnit = (enemyUnit.transform.position - unit.transform.position).normalized;
+        var angle = Vector3.Angle(unit.transform.forward, directionToUnit);
+        if (angle > sightAngle / 2) return false;
 
-    //     NetworkManager.OnClientDisconnectCallback += OnClientDisconnect;
-    // }
+        return true;
+    }
 
-    // public override void OnNetworkDespawn()
-    // {
-    //     if (!IsServer) return;
+    public void Show(Unit unit)
+    {
+        var networkObject = unit.GetComponent<NetworkObject>();
+        var IsNotServerUnit = NetworkManager.ServerClientId != OwnerClientId;
 
-    //     foreach (var kvp in RTSObjectsManager.Units)
-    //     {
-    //         foreach (var unit in kvp.Value)
-    //         {
-    //             if (unit == null) continue;
-    //             var networkObject = unit.GetComponent<NetworkObject>();
-    //             if (networkObject != null)
-    //             {
-    //                 networkObject.CheckObjectVisibility -= (ulong clientId) => CheckVisibility(clientId, networkObject, kvp.Key);
-    //             }
-    //         }
-    //     }
+        if (IsNotServerUnit && !networkObject.IsNetworkVisibleTo(OwnerClientId))
+        {
+            Debug.Log($"Show {unit.OwnerClientId} for {OwnerClientId}");
+            networkObject.NetworkShow(OwnerClientId);
+        }
+        else if (!IsNotServerUnit)
+        {
+            unit.ShowUnit(unit);
+        }
+    }
 
-    //     NetworkManager.OnClientDisconnectCallback -= OnClientDisconnect;
-    // }
+    private void Hide(Unit unit)
+    {
+        var IsNotServerUnit = NetworkManager.ServerClientId != OwnerClientId;
+        var networkObject = unit.GetComponent<NetworkObject>();
 
-    // private void Update()
-    // {
-    //     if (!IsServer) return;
+        if (IsNotServerUnit && networkObject.IsNetworkVisibleTo(OwnerClientId))
+        {
+            Debug.Log($"Hide {unit.OwnerClientId} for {OwnerClientId}");
+            networkObject.NetworkHide(OwnerClientId);
+        }
+        else if (!IsNotServerUnit)
+        {
+            unit.HideUnit(unit);
+        }
+    }
 
-    //     if (Time.time - lastUpdateTime >= visibilityUpdateInterval)
-    //     {
-    //         UpdateVisibility();
-    //         lastUpdateTime = Time.time;
-    //     }
-    // }
+    private void UpdateVisibility()
+    {
+        var playerUnits = RTSObjectsManager.Units[OwnerClientId];
 
-    // private void UpdateVisibility()
-    // {
-    //     foreach (var kvp in RTSObjectsManager.Units)
-    //     {
-    //         Debug.Log("Units: " + kvp.Key + " " + kvp.Value.Count);
-    //     }
+        visibilityCounts.Clear();
 
-    //     foreach (var kvp in RTSObjectsManager.Units)
-    //     {
-    //         ulong ownerClientId = kvp.Key;
-    //         List<Unit> units = kvp.Value;
+        foreach (var unit in playerUnits)
+        {
+            if (unit == null) continue;
 
-    //         foreach (var unit in units)
-    //         {
-    //             var fovAgent = unit.GetComponent<FOVAgent>(); // Replace with actual FOV component type
-    //             var networkObject = unit.GetComponent<NetworkObject>();
+            foreach (var player in RTSObjectsManager.Units)
+            {
+                var playerController = NetworkManager.Singleton.ConnectedClients[player.Key].PlayerObject.GetComponent<PlayerController>();
+                var unitPlayerController = NetworkManager.Singleton.ConnectedClients[unit.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
 
-    //             if (fovAgent == null || networkObject == null) continue;
+                if (playerController.teamType.Value == unitPlayerController.teamType.Value) continue;
 
-    //             foreach (var clientId in NetworkManager.ConnectedClientsIds)
-    //             {
-    //                 bool isServerClient = clientId == NetworkManager.ServerClientId;
-    //                 if (isServerClient) continue;
+                foreach (var enemyUnit in player.Value)
+                {
+                    if (enemyUnit == null) continue;
 
-    //                 // Ensure the client always sees its own units
-    //                 if (clientId == ownerClientId)
-    //                 {
-    //                     if (!networkObject.IsNetworkVisibleTo(clientId))
-    //                     {
-    //                         networkObject.NetworkShow(clientId);
-    //                     }
-    //                     continue;
-    //                 }
+                    if (IsUnitInSight(unit, enemyUnit))
+                    {
+                        var networkObject = enemyUnit.GetComponent<NetworkObject>();
 
-    //                 // Check visibility based on team and FOV
-    //                 bool shouldBeVisible = CheckVisibility(clientId, networkObject, ownerClientId);
-    //                 bool isVisible = networkObject.IsNetworkVisibleTo(clientId);
+                        if (!visibilityCounts.ContainsKey(networkObject))
+                        {
+                            visibilityCounts[networkObject] = 0;
+                        }
+                        visibilityCounts[networkObject] = 0;
+                        visibilityCounts[networkObject]++;
+                    }
+                    else
+                    {
+                        var networkObject = enemyUnit.GetComponent<NetworkObject>();
 
-    //                 if (shouldBeVisible && !isVisible)
-    //                 {
-    //                     networkObject.NetworkShow(clientId);
-    //                 }
-    //                 else if (!shouldBeVisible && isVisible)
-    //                 {
-    //                     networkObject.NetworkHide(clientId);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+                        if (!visibilityCounts.ContainsKey(networkObject))
+                        {
+                            visibilityCounts[networkObject] = 0;
+                        }
+                    }
+                }
+            }
+        }
 
-    // private bool CheckVisibility(ulong clientId, NetworkObject networkObject, ulong ownerClientId)
-    // {
-    //     if (!networkObject.IsSpawned) return false;
-
-    //     var fovAgent = networkObject.GetComponent<FOVAgent>();
-
-    //     if (fovAgent == null) return false;
-
-    //     // Check if the client is on the same team as the unit's owner
-    //     bool sameTeam = playerTeams.TryGetValue(clientId, out int clientTeam) &&
-    //                     playerTeams.TryGetValue(ownerClientId, out int unitTeam) &&
-    //                     clientTeam == unitTeam;
-
-    //     // If on the same team, always visible
-    //     if (sameTeam) return true;
-
-    //     Debug.Log("CheckVisibility: " + clientId + " " + ownerClientId + " " + fovAgent.IsUnderFOW());
-    //     // If not on the same team, check FOV
-    //     return !fovAgent.IsUnderFOW();
-    // }
-
-    // // Call this method when a new player joins or when a player's team changes
-    // [ServerRpc(RequireOwnership = false)]
-    // public void UpdatePlayerTeamServerRpc(ulong clientId, int teamId)
-    // {
-    //     if (!IsServer) return;
-
-    //     playerTeams[clientId] = teamId;
-    //     UpdateVisibility(); // Immediately update visibility for all units
-    // }
-
-    // private void OnClientDisconnect(ulong clientId)
-    // {
-    //     if (playerTeams.ContainsKey(clientId))
-    //     {
-    //         playerTeams.Remove(clientId);
-    //     }
-    // }
+        // Show or hide units based on visibility counts
+        foreach (var kvp in visibilityCounts)
+        {
+            if (kvp.Value > 0)
+            {
+                Show(kvp.Key.GetComponent<Unit>());
+            }
+            else
+            {
+                Hide(kvp.Key.GetComponent<Unit>());
+            }
+        }
+    }
 }

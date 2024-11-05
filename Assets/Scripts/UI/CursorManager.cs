@@ -58,7 +58,7 @@ public class CursorManager : NetworkBehaviour
         {
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
             var unit = hit.collider.gameObject.GetComponent<Unit>();
-            return damagable != null && !damagable.isDead && damagable.teamType.Value != playerController.teamType.Value && unit.isVisibile;
+            return damagable != null && !damagable.isDead.Value && damagable.teamType.Value != playerController.teamType.Value && unit.isVisibile;
         }
         else
         {
@@ -106,7 +106,7 @@ public class CursorManager : NetworkBehaviour
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
 
-            if (damagable != null && !damagable.isDead && damagable.teamType.Value == playerController.teamType.Value && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
+            if (damagable != null && !damagable.isDead.Value && damagable.teamType.Value == playerController.teamType.Value && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {
                 return true;
             }

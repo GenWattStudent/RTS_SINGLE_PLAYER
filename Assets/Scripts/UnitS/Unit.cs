@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FOVMapping;
 using RTS.Domain.SO;
@@ -67,18 +68,18 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    public void HideUiPrefabs()
+    public void HideUiPrefabs(Unit unit)
     {
-        var canvases = GetComponentsInChildren<Canvas>();
+        var canvases = unit.GetComponentsInChildren<Canvas>();
         foreach (var canvas in canvases)
         {
             canvas.enabled = false;
         }
     }
 
-    public void ShowUiPrefabs()
+    public void ShowUiPrefabs(Unit unit)
     {
-        var canvases = GetComponentsInChildren<Canvas>();
+        var canvases = unit.GetComponentsInChildren<Canvas>();
         foreach (var canvas in canvases)
         {
             canvas.enabled = true;
@@ -99,8 +100,8 @@ public class Unit : NetworkBehaviour
     {
         var construction = GetComponent<Construction>();
 
-        if (unitTeamType != playerTeamType) HideUnit();
-        else ShowUnit();
+        // if (unitTeamType != playerTeamType) HideUnit();
+        // else ShowUnit();
 
         fovAgent.disappearInFOW = unitTeamType != playerTeamType;
         fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
@@ -135,59 +136,134 @@ public class Unit : NetworkBehaviour
         AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, damagable.teamType.Value);
     }
 
-    public void HideUnit()
+    public override void OnNetworkSpawn()
     {
-        isVisibile = false;
+        base.OnNetworkSpawn();
 
+        if (IsServer)
+        {
+            // NetworkManager.Singleton.NetworkTickSystem.Tick += OnNetworkTick;
+        }
+
+        if (!IsOwner) return;
+
+        var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
+        rtsObjectManager.AddLocalUnit(this);
+    }
+
+    // private void OnNetworkTick()
+    // {
+    //     UpdateVisibility();
+    // }
+
+    // private bool IsUnitInSight(Unit unit)
+    // {
+    //     var sightRange = unitSo.sightRange;
+    //     var sightAngle = unitSo.sightAngle;
+
+    //     var distance = Vector3.Distance(transform.position, unit.transform.position);
+    //     if (distance > sightRange) return false;
+
+    //     var directionToUnit = (unit.transform.position - transform.position).normalized;
+    //     var angle = Vector3.Angle(transform.forward, directionToUnit);
+    //     if (angle > sightAngle / 2) return false;
+
+    //     return true;
+    // }
+
+    // private void UpdateVisibility()
+    // {
+    //     foreach (var player in RTSObjectsManager.Units)
+    //     {
+    //         // skip your team units
+    //         var playerController = NetworkManager.Singleton.ConnectedClients[player.Key].PlayerObject.GetComponent<PlayerController>();
+    //         var unitPlayerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+    //         Debug.Log($"Player {playerController.OwnerClientId} have {player.Value.Count} units.");
+
+    //         if (playerController.teamType.Value == unitPlayerController.teamType.Value) continue;
+
+    //         foreach (var unit in player.Value)
+    //         {
+    //             if (unit == null) continue;
+
+    //             if (IsUnitInSight(unit))
+    //             {
+    //                 Debug.Log($"Unit {unit.OwnerClientId} is in sight of {OwnerClientId}");
+    //                 Show(unit);
+    //             }
+    //             else
+    //             {
+    //                 Debug.Log($"Unit {unit.OwnerClientId} is not in sight of {OwnerClientId}");
+    //                 Hide(unit);
+    //             }
+    //         }
+    //     }
+    // }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (IsServer)
+        {
+            // NetworkManager.Singleton.NetworkTickSystem.Tick -= OnNetworkTick;
+        }
+
+        if (!IsOwner) return;
+
+        var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
+        rtsObjectManager.RemoveLocalUnit(this);
+    }
+
+    public void HideUnit(Unit unit)
+    {
         // get all renderers in children and from compoenent and disable them
-        var renderers = GetComponentsInChildren<Renderer>(true);
+        var renderers = unit.GetComponentsInChildren<Renderer>(true);
         foreach (var renderer in renderers)
         {
             renderer.enabled = false;
         }
 
         // ligths 
-        var lights = GetComponentsInChildren<Light>(true);
+        var lights = unit.GetComponentsInChildren<Light>(true);
         foreach (var light in lights)
         {
             light.enabled = false;
         }
 
         // line renderers
-        var lineRenderers = GetComponentsInChildren<LineRenderer>(true);
+        var lineRenderers = unit.GetComponentsInChildren<LineRenderer>(true);
         foreach (var lineRenderer in lineRenderers)
         {
             lineRenderer.enabled = false;
         }
 
-        HideUiPrefabs();
+        HideUiPrefabs(unit);
     }
 
-    public void ShowUnit()
+    public void ShowUnit(Unit unit)
     {
-        isVisibile = true;
-
         // get all renderers in children and from compoenent and enable them
-        var renderers = GetComponentsInChildren<Renderer>(true);
+        var renderers = unit.GetComponentsInChildren<Renderer>(true);
         foreach (var renderer in renderers)
         {
             renderer.enabled = true;
         }
 
         // ligths
-        var lights = GetComponentsInChildren<Light>(true);
+        var lights = unit.GetComponentsInChildren<Light>(true);
         foreach (var light in lights)
         {
             light.enabled = true;
         }
 
         // line renderers
-        var lineRenderers = GetComponentsInChildren<LineRenderer>(true);
+        var lineRenderers = unit.GetComponentsInChildren<LineRenderer>(true);
         foreach (var lineRenderer in lineRenderers)
         {
             lineRenderer.enabled = true;
         }
 
-        ShowUiPrefabs();
+        ShowUiPrefabs(unit);
     }
 }

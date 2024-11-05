@@ -58,7 +58,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hero: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   unitPrefabs:
-  - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   - {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
   playerLevelSo: {fileID: 11400000, guid: 5ebbb1ff371dbf8458c816a299c3ecee, type: 2}
   playerExpierence:
@@ -144,7 +143,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 74a4e42868055c94b81cae18c0b8a48a, type: 2}
   - {fileID: 11400000, guid: b58ee27185fe7fb4b93b40202ab372d3, type: 2}
   heightRaysCount: 15
-  diffranceBetweenMaxAndMinHeight: 1
+  differenceBetweenMaxAndMinHeight: 1
 --- !u!114 &3935365758164698151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e02a99d567138fd4786a3f36ee560ea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Buildings: []
   LocalPlayerUnits: []
   LocalPlayerBuildings: []
 --- !u!114 &-3848033353401656120
@@ -200,12 +198,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3502280097689162745}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 851e59f3cdeea2940b29757777146b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visibilityUpdateInterval: 0.5
 --- !u!114 &2775828512116916213
 MonoBehaviour:
   m_ObjectHideFlags: 0

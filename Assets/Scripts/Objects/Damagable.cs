@@ -9,11 +9,11 @@ public class Damagable : NetworkBehaviour
     public DamagableSo damagableSo;
     public Levelable levelable;
     public GameObject targetPoint;
-    public bool isDead = false;
     public float damageBoost = 0;
     public bool IsBot = false;
     public float damage = 0f;
     public Stats stats;
+    public NetworkVariable<bool> isDead = new(false);
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public Unit unitScript;
 
@@ -24,7 +24,7 @@ public class Damagable : NetworkBehaviour
 
     public bool IsTeamMate(Damagable damagable) => teamType.Value != TeamType.None && teamType.Value == damagable.teamType.Value;
     public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
-        !damagable.isDead && unit.isVisibile;
+        !damagable.isDead.Value && unit.isVisibile;
 
     private void Awake()
     {
@@ -59,6 +59,16 @@ public class Damagable : NetworkBehaviour
 
             // TakeDamage(2000);
         }
+
+        isDead.OnValueChanged += HandleDeadState;
+    }
+
+    private void HandleDeadState(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            DeathClientRpc();
+        }
     }
 
     private void InstantiateExplosion()
@@ -89,25 +99,14 @@ public class Damagable : NetworkBehaviour
     private void DeathServerRpc()
     {
         var no = GetComponent<NetworkObject>();
-        DeathClientRpc();
+        isDead.Value = true;
         no.Despawn(true);
-    }
-
-    public override void OnDestroy()
-    {
-        DeathClientRpc();
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-        OnDead?.Invoke(this);
     }
 
     [ClientRpc]
     private void DeathClientRpc()
     {
-        isDead = true;
+        OnDead?.Invoke(this);
         InstantiateExplosion();
         InstantiateDestroyedObject();
     }
@@ -120,6 +119,8 @@ public class Damagable : NetworkBehaviour
 
     public bool TakeDamage(float damage)
     {
+        if (!IsServer) return false;
+
         var newHealth = stats.SubstractFromStat(StatType.Health, damage);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
 
