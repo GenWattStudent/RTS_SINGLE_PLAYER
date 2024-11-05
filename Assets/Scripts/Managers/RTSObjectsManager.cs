@@ -32,7 +32,7 @@ public class RTSObjectsManager : NetworkBehaviour
                 RemoveUnitServerRpc(no);
             };
 
-            AddUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
+            // AddUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
@@ -43,12 +43,17 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             if (no.OwnerClientId != OwnerClientId) return;
             var unit = no.GetComponent<Unit>();
-            var damagableScript = unit.GetComponent<Damagable>();
-            LocalPlayerUnits.Add(unit);
-            Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
-            // playerController.AddUnit(unit);
-            OnUnitChange?.Invoke(unit, LocalPlayerUnits);
+            AddLocalUnit(unit);
         }
+    }
+
+    public void AddLocalUnit(Unit unit)
+    {
+        var damagableScript = unit.GetComponent<Damagable>();
+        LocalPlayerUnits.Add(unit);
+        Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
+        // playerController.AddUnit(unit);
+        OnUnitChange?.Invoke(unit, LocalPlayerUnits);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -62,20 +67,25 @@ public class RTSObjectsManager : NetworkBehaviour
 
             Units[senderClientId].Remove(unit);
 
-            RemoveUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
+            // RemoveUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
         }
     }
 
-    [ClientRpc]
-    private void RemoveUnitClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
+    // [ClientRpc]
+    // private void RemoveUnitClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
+    // {
+    //     if (nor.TryGet(out NetworkObject no))
+    //     {
+    //         var unit = no.GetComponent<Unit>();
+    //         Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
+    //         RemoveLocalUnit(unit);
+    //     }
+    // }
+
+    public void RemoveLocalUnit(Unit unit)
     {
-        if (nor.TryGet(out NetworkObject no))
-        {
-            var unit = no.GetComponent<Unit>();
-            LocalPlayerUnits.Remove(unit);
-            // playerController.RemoveUnit(unit);
-            OnUnitChange?.Invoke(unit, LocalPlayerUnits);
-        }
+        LocalPlayerUnits.Remove(unit);
+        OnUnitChange?.Invoke(unit, LocalPlayerUnits);
     }
 
     [ServerRpc(RequireOwnership = false)]

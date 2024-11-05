@@ -24,7 +24,7 @@ public class HeroAnimationController : NetworkBehaviour
     {
         if (!IsServer) return;
         animator.SetBool(isShootingHash, false);
-        animator.SetBool(isDeadHash, damagableScript.isDead);
+        animator.SetBool(isDeadHash, damagableScript.isDead.Value);
         animator.SetBool(isWalkingHash, false);
     }
 

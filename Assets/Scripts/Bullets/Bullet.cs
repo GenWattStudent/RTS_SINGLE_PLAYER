@@ -75,13 +75,13 @@ public class Bullet : NetworkBehaviour
     private bool IsOwnUnit(RaycastHit hit)
     {
         var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.teamType.Value == teamType;
+        return damagable != null && !damagable.isDead.Value && damagable.teamType.Value == teamType;
     }
 
     private bool IsOwnUnit(Collider collider)
     {
         var damagable = collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead && damagable.teamType.Value == teamType;
+        return damagable != null && !damagable.isDead.Value && damagable.teamType.Value == teamType;
     }
 
     private void CheckHit()

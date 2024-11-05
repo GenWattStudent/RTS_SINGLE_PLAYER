@@ -1,22 +1,21 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class TankShotController : MonoBehaviour
+public class TankShotController : NetworkBehaviour
 {
     private VehicleGun vehicleGun;
     private Animator animator;
     private Attack attack;
     private float lastAttackTime;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        if (!IsServer) return;
+
         vehicleGun = GetComponentInChildren<VehicleGun>();
         if (vehicleGun == null) return;
 
         animator = vehicleGun.GetComponent<Animator>();
-        attack = GetComponent<Attack>();
-
-        attack.OnAttack += HandleAttack;
     }
 
     private void HandleAttack()
@@ -25,13 +24,26 @@ public class TankShotController : MonoBehaviour
         animator.SetBool("isShot", true);
     }
 
-    private void OnDestroy()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        enabled = IsServer;
+        if (!IsServer) return;
+
+        Debug.Log("Tank shoot");
+        attack = GetComponent<Attack>();
+        attack.OnAttack += HandleAttack;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (attack == null) return;
         attack.OnAttack -= HandleAttack;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (vehicleGun == null) return;
 

@@ -30,13 +30,18 @@ public class Attack : NetworkBehaviour
     public event Action<Damagable, Unit> OnTarget;
     public event Action<int> OnAmmoChange;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         currentUnit = GetComponent<Unit>();
         currentDamagable = GetComponent<Damagable>();
         currentAmmo = currentUnit.attackableSo.ammo;
         unitMovement = GetComponent<UnitMovement>();
         vehicleGun = GetComponentInChildren<VehicleGun>();
+    }
+
+    private void Start()
+    {
         lastAttackTime = Time.time;
 
         if (currentUnit.attackableSo.hasTurret)
@@ -71,7 +76,6 @@ public class Attack : NetworkBehaviour
 
         return false;
     }
-
 
     private void CheckForTargets()
     {

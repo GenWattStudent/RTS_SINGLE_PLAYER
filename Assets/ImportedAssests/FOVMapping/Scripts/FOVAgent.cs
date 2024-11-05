@@ -134,17 +134,17 @@ namespace FOVMapping
 		{
 			isUnderFOW = isUnder;
 
-			if (disappearInFOW && unit != null)
-			{
-				if (isUnderFOW)
-				{
-					unit.ShowUnit();
-				}
-				else
-				{
-					unit.HideUnit();
-				}
-			}
+			// if (disappearInFOW && unit != null)
+			// {
+			// 	if (isUnderFOW)
+			// 	{
+			// 		unit.ShowUnit();
+			// 	}
+			// 	else
+			// 	{
+			// 		unit.HideUnit();
+			// 	}
+			// }
 		}
 
 		public bool IsUnderFOW()

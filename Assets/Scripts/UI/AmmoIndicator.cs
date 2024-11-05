@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ public enum AmmoIndicatorType
     Reload
 }
 
-public class AmmoIndicator : MonoBehaviour
+public class AmmoIndicator : NetworkBehaviour
 {
     [SerializeField] private GameObject bulletIndicatorContainer;
     [SerializeField] private Image bulletIndicatorPrefab;
@@ -21,9 +22,9 @@ public class AmmoIndicator : MonoBehaviour
     private Coroutine fillBulletIndicatorsCoroutine;
     private float initialReloadDelay = 0.5f;
 
-    // Start is called before the first frame update
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         attack = GetComponentInParent<Attack>();
 
         if (attack != null)
@@ -33,8 +34,9 @@ public class AmmoIndicator : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
         if (attack != null)
         {
             attack.OnAmmoChange -= HandleAmmoChange;

@@ -88,7 +88,7 @@ public class EnemyUnitMovement : MonoBehaviour
 
     private void Update()
     {
-        if (damagable.isDead || agent == null) return;
+        if (damagable.isDead.Value || agent == null) return;
 
         if (targetDamagable == null)
         {
