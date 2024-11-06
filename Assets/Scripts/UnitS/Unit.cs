@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using FOVMapping;
 using RTS.Domain.SO;
@@ -100,9 +99,6 @@ public class Unit : NetworkBehaviour
     {
         var construction = GetComponent<Construction>();
 
-        // if (unitTeamType != playerTeamType) HideUnit();
-        // else ShowUnit();
-
         fovAgent.disappearInFOW = unitTeamType != playerTeamType;
         fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
 
@@ -124,7 +120,6 @@ public class Unit : NetworkBehaviour
 
         playerController.teamType.OnValueChanged += HandleTeamChange;
         damagable.teamType.OnValueChanged += HandleUnitTeamChange;
-        // visibleTimer = visibleInterval;
 
         var fovAgent = GetComponent<FOVAgent>();
 
@@ -140,74 +135,15 @@ public class Unit : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (IsServer)
-        {
-            // NetworkManager.Singleton.NetworkTickSystem.Tick += OnNetworkTick;
-        }
-
         if (!IsOwner) return;
 
         var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         rtsObjectManager.AddLocalUnit(this);
     }
 
-    // private void OnNetworkTick()
-    // {
-    //     UpdateVisibility();
-    // }
-
-    // private bool IsUnitInSight(Unit unit)
-    // {
-    //     var sightRange = unitSo.sightRange;
-    //     var sightAngle = unitSo.sightAngle;
-
-    //     var distance = Vector3.Distance(transform.position, unit.transform.position);
-    //     if (distance > sightRange) return false;
-
-    //     var directionToUnit = (unit.transform.position - transform.position).normalized;
-    //     var angle = Vector3.Angle(transform.forward, directionToUnit);
-    //     if (angle > sightAngle / 2) return false;
-
-    //     return true;
-    // }
-
-    // private void UpdateVisibility()
-    // {
-    //     foreach (var player in RTSObjectsManager.Units)
-    //     {
-    //         // skip your team units
-    //         var playerController = NetworkManager.Singleton.ConnectedClients[player.Key].PlayerObject.GetComponent<PlayerController>();
-    //         var unitPlayerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
-    //         Debug.Log($"Player {playerController.OwnerClientId} have {player.Value.Count} units.");
-
-    //         if (playerController.teamType.Value == unitPlayerController.teamType.Value) continue;
-
-    //         foreach (var unit in player.Value)
-    //         {
-    //             if (unit == null) continue;
-
-    //             if (IsUnitInSight(unit))
-    //             {
-    //                 Debug.Log($"Unit {unit.OwnerClientId} is in sight of {OwnerClientId}");
-    //                 Show(unit);
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log($"Unit {unit.OwnerClientId} is not in sight of {OwnerClientId}");
-    //                 Hide(unit);
-    //             }
-    //         }
-    //     }
-    // }
-
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-
-        if (IsServer)
-        {
-            // NetworkManager.Singleton.NetworkTickSystem.Tick -= OnNetworkTick;
-        }
 
         if (!IsOwner) return;
 

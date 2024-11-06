@@ -12,6 +12,24 @@ public class Building : NetworkBehaviour
         buildingLevelable = GetComponent<BuildingLevelable>();
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner) return;
+
+        var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
+        rtsObjectManager.AddLocalBuilding(this);
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (!IsOwner) return;
+
+        var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
+        rtsObjectManager.RemoveLocalBuilding(this);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SellServerRpc()
     {

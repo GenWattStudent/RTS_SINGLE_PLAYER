@@ -11,8 +11,11 @@ public class HeroAnimationController : NetworkBehaviour
     private int isShootingHash = Animator.StringToHash("isShooting");
     private int isDeadHash = Animator.StringToHash("isDead");
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        if (!IsServer) return;
+
         animator = GetComponent<Animator>();
         unitMovement = GetComponent<UnitMovement>();
         attackScript = GetComponent<Attack>();
@@ -22,7 +25,6 @@ public class HeroAnimationController : NetworkBehaviour
 
     private void HandleOnDead(Damagable damagable)
     {
-        if (!IsServer) return;
         animator.SetBool(isShootingHash, false);
         animator.SetBool(isDeadHash, damagableScript.isDead.Value);
         animator.SetBool(isWalkingHash, false);
@@ -31,6 +33,7 @@ public class HeroAnimationController : NetworkBehaviour
     private void Update()
     {
         if (!IsServer || animator == null) return;
+
         animator.SetBool(isWalkingHash, unitMovement.isMoving);
         animator.SetBool(isShootingHash, attackScript.targetPosition != Vector3.zero);
     }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(Unit))]
+[RequireComponent(typeof(Unit), typeof(Damagable))]
 public class Attack : NetworkBehaviour
 {
     [SerializeField] private bool autoAttack = true;
-    [SerializeField] private float checkTargetTimer = 0.2f;
+    [SerializeField] private float checkTargetTimer = 2f;
     [SerializeField] private GameObject bulletSpawnPoint;
     public bool isRealoading = false;
     public Vector3 targetPosition;
@@ -25,6 +25,7 @@ public class Attack : NetworkBehaviour
     private UnitMovement unitMovement;
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
+    private RTSObjectsManager RTSObjectsManager;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -42,6 +43,7 @@ public class Attack : NetworkBehaviour
 
     private void Start()
     {
+        RTSObjectsManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         lastAttackTime = Time.time;
 
         if (currentUnit.attackableSo.hasTurret)
@@ -63,15 +65,11 @@ public class Attack : NetworkBehaviour
 
     private bool IsTargetHideInTerrain(Damagable target)
     {
-        if (target == null) return false;
+        var direction = target.targetPoint.transform.position - currentDamagable.targetPoint.transform.position;
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + new Vector3(0, 1, 0), target.transform.position - transform.position, out hit, Mathf.Infinity))
+        if (Physics.Raycast(currentDamagable.targetPoint.transform.position, direction, currentUnit.attackableSo.attackRange, LayerMask.GetMask("Terrain")))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -79,14 +77,13 @@ public class Attack : NetworkBehaviour
 
     private void CheckForTargets()
     {
-        var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
+        var units = RTSObjectsManager.quadtree.FindUnitsInRange(transform.position, currentUnit.attackableSo.attackRange);
 
-        foreach (var collider in colliders)
+        foreach (var unit in units)
         {
-            var damagableScript = collider.gameObject.GetComponent<Damagable>();
-            var unitScript = collider.gameObject.GetComponent<Unit>();
+            var damagableScript = unit.GetComponent<Damagable>();
 
-            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
+            if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
             {
                 SetTarget(damagableScript);
                 return;
@@ -281,7 +278,7 @@ public class Attack : NetworkBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!IsServer) return;
         attackSpeedTimer -= Time.fixedDeltaTime;
@@ -296,6 +293,7 @@ public class Attack : NetworkBehaviour
 
         if (target != null)
         {
+            targetPosition = target.transform.position;
             PerformTargetAiming();
             RotateToTargetServerRpc();
             return;

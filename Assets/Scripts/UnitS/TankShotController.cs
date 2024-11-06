@@ -1,12 +1,15 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 public class TankShotController : NetworkBehaviour
 {
     private VehicleGun vehicleGun;
-    private Animator animator;
+    private NetworkAnimator animator;
     private Attack attack;
     private float lastAttackTime;
+
+    private int isShotHash = Animator.StringToHash("isShot");
 
     private void Start()
     {
@@ -15,13 +18,13 @@ public class TankShotController : NetworkBehaviour
         vehicleGun = GetComponentInChildren<VehicleGun>();
         if (vehicleGun == null) return;
 
-        animator = vehicleGun.GetComponent<Animator>();
+        animator = vehicleGun.GetComponent<NetworkAnimator>();
     }
 
     private void HandleAttack()
     {
         lastAttackTime = Time.time;
-        animator.SetBool("isShot", true);
+        animator.Animator.SetBool("isShot", true);
     }
 
     public override void OnNetworkSpawn()
@@ -38,7 +41,7 @@ public class TankShotController : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        if (attack == null) return;
+        if (attack == null || !IsServer) return;
         attack.OnAttack -= HandleAttack;
     }
 
@@ -49,7 +52,7 @@ public class TankShotController : NetworkBehaviour
 
         if (Time.time - lastAttackTime > 0.25f)
         {
-            animator.SetBool("isShot", false);
+            animator.Animator.SetBool("isShot", false);
         }
     }
 }

@@ -37,6 +37,9 @@ public class Levelable : NetworkBehaviour
     {
         level.Value++;
         expirence.Value = 0;
+
+        if (level.Value > maxLevel) return;
+
         var levelData = levelableSo.levels[level.Value - 1];
 
         damagable.stats.AddToStat(StatType.MaxHealth, levelData.health);
