@@ -32,6 +32,7 @@ public class MultiplayerTools : NetworkBehaviour
 
         startHostButton.clicked += ToogleHost;
         startClientButton.clicked += ToogleClient;
+        playerCountLabel.text = $"Player count: {playerCount.Value}";
         playerCount.OnValueChanged += (oldValue, newValue) => playerCountLabel.text = $"Player count: {newValue}";
     }
 

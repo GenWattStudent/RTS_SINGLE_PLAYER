@@ -25,7 +25,7 @@ public class FPSCounter : NetworkToolkitHelper
         var playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
         currentFPS = (int)(1f / Time.unscaledDeltaTime);
         // fpsLabel.text = $"{currentFPS}FPS";
-        fpsLabel.text = $"Team {playerController.teamType.Value} {currentFPS}FPS {Mathf.Round(playerController.currentPing)}ms";
+        fpsLabel.text = $"Team {playerController.teamType.Value} {currentFPS}FPS {Mathf.Round(playerController.LatencyManager.Latency)}ms";
     }
 
     private void Update()

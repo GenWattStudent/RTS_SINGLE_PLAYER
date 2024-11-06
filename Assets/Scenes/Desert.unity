@@ -2349,6 +2349,12 @@ PrefabInstance:
       propertyPath: FOWColor.a
       value: 0.7882353
       objectReference: {fileID: 0}
+    - target: {fileID: 34031861805293224, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
+        type: 3}
+      propertyPath: FOVMapArray
+      value: 
+      objectReference: {fileID: 18700000, guid: 8e00cee081e8ca44fa4b7c8c18a958cc,
+        type: 2}
     - target: {fileID: 572624217859586369, guid: 3e59967b7c49c2e47af40ff3dcb8c394,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5660,7 +5666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6356b51c955f0e74a9fc6be2589dab8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Fog: {fileID: 0}
 --- !u!4 &1585621138 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7493511432247085256, guid: 058372e3e721de24c9d6fea4cd9bfcd8,
@@ -7080,7 +7085,7 @@ PrefabInstance:
     - target: {fileID: 1507636620937791777, guid: 7097ba7ba649e1f41bba232312bdcbd8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.93
+      value: 0.56
       objectReference: {fileID: 0}
     - target: {fileID: 1507636620937791777, guid: 7097ba7ba649e1f41bba232312bdcbd8,
         type: 3}

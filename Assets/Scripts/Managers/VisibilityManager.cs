@@ -22,6 +22,19 @@ public class VisibilityManager : NetworkBehaviour
         UpdateVisibility();
     }
 
+    private bool IsTargetHideInTerrain(Unit unit, Unit enemyUnit)
+    {
+        var damagable = enemyUnit.GetComponent<Damagable>();
+        var currentDamagable = unit.GetComponent<Damagable>();
+
+        var ray = new Ray(currentDamagable.targetPoint.transform.position, damagable.targetPoint.transform.position - currentDamagable.targetPoint.transform.position);
+        var isHit = Physics.Raycast(ray, unit.unitSo.sightRange, LayerMask.GetMask("Terrain"));
+
+        if (isHit) return true;
+
+        return false;
+    }
+
     private bool IsUnitInSight(Unit unit, Unit enemyUnit)
     {
         var sightRange = unit.unitSo.sightRange;
@@ -34,7 +47,7 @@ public class VisibilityManager : NetworkBehaviour
         var angle = Vector3.Angle(unit.transform.forward, directionToUnit);
         if (angle > sightAngle / 2) return false;
 
-        return true;
+        return !IsTargetHideInTerrain(unit, enemyUnit);
     }
 
     public void Show(Unit unit)
@@ -44,7 +57,6 @@ public class VisibilityManager : NetworkBehaviour
 
         if (IsNotServerUnit && !networkObject.IsNetworkVisibleTo(OwnerClientId))
         {
-            Debug.Log($"Show {unit.OwnerClientId} for {OwnerClientId}");
             networkObject.NetworkShow(OwnerClientId);
         }
         else if (!IsNotServerUnit)
@@ -60,7 +72,6 @@ public class VisibilityManager : NetworkBehaviour
 
         if (IsNotServerUnit && networkObject.IsNetworkVisibleTo(OwnerClientId))
         {
-            Debug.Log($"Hide {unit.OwnerClientId} for {OwnerClientId}");
             networkObject.NetworkHide(OwnerClientId);
         }
         else if (!IsNotServerUnit)
@@ -71,6 +82,8 @@ public class VisibilityManager : NetworkBehaviour
 
     private void UpdateVisibility()
     {
+        if (!RTSObjectsManager.Units.ContainsKey(OwnerClientId)) return;
+
         var playerUnits = RTSObjectsManager.Units[OwnerClientId];
 
         visibilityCounts.Clear();

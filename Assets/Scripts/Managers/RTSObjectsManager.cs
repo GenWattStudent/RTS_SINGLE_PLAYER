@@ -1,17 +1,67 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 
 public class RTSObjectsManager : NetworkBehaviour
 {
     public static Dictionary<ulong, List<Unit>> Units { get; private set; } = new();
     public static Dictionary<ulong, List<Building>> Buildings { get; private set; } = new();
+    public static Quadtree quadtree = new Quadtree(new UnityEngine.Rect(0, 0, 250, 250), 6, 6);
+
     public List<Unit> LocalPlayerUnits = new();
     public List<Building> LocalPlayerBuildings = new();
 
     public event Action<Unit, List<Unit>> OnUnitChange;
     public event Action<Building, List<Building>> OnBuildingChange;
+
+    #region Draw Quadtree
+    private void OnDrawGizmos()
+    {
+        quadtree.DrawGizmos();
+    }
+    #endregion
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+        }
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        Units[clientId] = new List<Unit>();
+        Buildings[clientId] = new List<Building>();
+    }
+
+    private void OnClientDisconnect(ulong clientId)
+    {
+        foreach (var unit in Units[clientId])
+        {
+            quadtree.Remove(unit);
+        }
+        Units.Remove(clientId);
+        Buildings.Remove(clientId);
+    }
+    private void HandleUnitDeath(Damagable damagable)
+    {
+        RemoveUnitServerRpc(damagable.GetComponent<NetworkObject>());
+    }
 
     [ServerRpc(RequireOwnership = false)]
     public void AddUnitServerRpc(NetworkObjectReference nor, ServerRpcParams serverRpcParams = default)
@@ -19,40 +69,16 @@ public class RTSObjectsManager : NetworkBehaviour
         if (nor.TryGet(out NetworkObject no))
         {
             var unit = no.GetComponent<Unit>();
-
-            if (!Units.ContainsKey(no.OwnerClientId))
-            {
-                Units[no.OwnerClientId] = new List<Unit>();
-            }
             Units[no.OwnerClientId].Add(unit);
+            quadtree.Insert(unit);
 
-            var damagableScript = unit.GetComponent<Damagable>();
-            damagableScript.OnDead += (Damagable damagable) =>
-            {
-                RemoveUnitServerRpc(no);
-            };
-
-            // AddUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
-        }
-    }
-
-    [ClientRpc]
-    private void AddUnitClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
-    {
-        if (nor.TryGet(out NetworkObject no))
-        {
-            if (no.OwnerClientId != OwnerClientId) return;
-            var unit = no.GetComponent<Unit>();
-            AddLocalUnit(unit);
+            unit.GetComponent<Damagable>().OnDead += HandleUnitDeath;
         }
     }
 
     public void AddLocalUnit(Unit unit)
     {
-        var damagableScript = unit.GetComponent<Damagable>();
         LocalPlayerUnits.Add(unit);
-        Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
-        // playerController.AddUnit(unit);
         OnUnitChange?.Invoke(unit, LocalPlayerUnits);
     }
 
@@ -61,31 +87,24 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            var senderClientId = no.OwnerClientId;
             var unit = no.GetComponent<Unit>();
-            if (!Units[senderClientId].Contains(unit)) return;
+            if (!Units[no.OwnerClientId].Contains(unit)) return;
 
-            Units[senderClientId].Remove(unit);
-
-            // RemoveUnitClientRpc(no, GetClientRpcParams(no.OwnerClientId));
+            quadtree.Remove(unit);
+            unit.GetComponent<Damagable>().OnDead -= HandleUnitDeath;
+            Units[no.OwnerClientId].Remove(unit);
         }
     }
-
-    // [ClientRpc]
-    // private void RemoveUnitClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
-    // {
-    //     if (nor.TryGet(out NetworkObject no))
-    //     {
-    //         var unit = no.GetComponent<Unit>();
-    //         Debug.Log($"Client({unit.OwnerClientId}, {OwnerClientId}) have {LocalPlayerUnits.Count} units.");
-    //         RemoveLocalUnit(unit);
-    //     }
-    // }
 
     public void RemoveLocalUnit(Unit unit)
     {
         LocalPlayerUnits.Remove(unit);
         OnUnitChange?.Invoke(unit, LocalPlayerUnits);
+    }
+
+    private void HandleBuildingDeath(Damagable damagable)
+    {
+        RemoveBuildingServerRpc(damagable.GetComponent<NetworkObject>());
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -94,35 +113,16 @@ public class RTSObjectsManager : NetworkBehaviour
         if (nor.TryGet(out NetworkObject no))
         {
             var building = no.GetComponent<Building>();
-
-            if (!Buildings.ContainsKey(no.OwnerClientId))
-            {
-                Buildings[no.OwnerClientId] = new List<Building>();
-            }
             Buildings[no.OwnerClientId].Add(building);
 
-            var damagableScript = building.GetComponent<Damagable>();
-            damagableScript.OnDead += (Damagable damagable) =>
-            {
-                RemoveBuildingServerRpc(no);
-            };
-
-            AddBuildingClientRpc(no, GetClientRpcParams(no.OwnerClientId));
+            building.GetComponent<Damagable>().OnDead += HandleBuildingDeath;
         }
     }
 
-    [ClientRpc]
-    private void AddBuildingClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
+    public void AddLocalBuilding(Building building)
     {
-        if (nor.TryGet(out NetworkObject no))
-        {
-            if (no.OwnerClientId != OwnerClientId) return;
-            var building = no.GetComponent<Building>();
-            LocalPlayerBuildings.Add(building);
-            Debug.Log($"Client({building.OwnerClientId}, {OwnerClientId}) have {LocalPlayerBuildings.Count} buildings.");
-            // playerController.AddBuilding(building);
-            OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
-        }
+        LocalPlayerBuildings.Add(building);
+        OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -130,54 +130,27 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
-            var senderClientId = no.OwnerClientId;
             var building = no.GetComponent<Building>();
-            if (!Buildings[senderClientId].Contains(building)) return;
+            if (!Buildings[no.OwnerClientId].Contains(building)) return;
 
-            Buildings[senderClientId].Remove(building);
-
-            RemoveBuildingClientRpc(no, GetClientRpcParams(no.OwnerClientId));
+            building.GetComponent<Damagable>().OnDead -= HandleBuildingDeath;
+            Buildings[no.OwnerClientId].Remove(building);
         }
     }
 
-    [ClientRpc]
-    private void RemoveBuildingClientRpc(NetworkObjectReference nor, ClientRpcParams clientRpcParams = default)
+    public void RemoveLocalBuilding(Building building)
     {
-        if (nor.TryGet(out NetworkObject no))
-        {
-            var building = no.GetComponent<Building>();
-            LocalPlayerBuildings.Remove(building);
-            // playerController.RemoveBuilding(building);
-            OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
-        }
+        LocalPlayerBuildings.Remove(building);
+        OnBuildingChange?.Invoke(building, LocalPlayerBuildings);
     }
 
     public bool IsMaxBuildingOfType(BuildingSo buildingSo)
     {
-        int count = GetBuildingCountOfType(buildingSo);
-        return count >= buildingSo.maxBuildingCount;
+        return GetBuildingCountOfType(buildingSo) >= buildingSo.maxBuildingCount;
     }
 
     public int GetBuildingCountOfType(BuildingSo buildingSo)
     {
-        int count = 0;
-
-        foreach (var building in LocalPlayerBuildings)
-        {
-            if (building.buildingSo.buildingName == buildingSo.buildingName) count++;
-        }
-
-        return count;
-    }
-
-    private ClientRpcParams GetClientRpcParams(ulong clientId)
-    {
-        return new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { clientId }
-            }
-        };
+        return LocalPlayerBuildings.FindAll(b => b.buildingSo.buildingName == buildingSo.buildingName).Count;
     }
 }

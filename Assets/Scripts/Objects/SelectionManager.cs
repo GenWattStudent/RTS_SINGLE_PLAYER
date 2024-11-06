@@ -208,9 +208,11 @@ public class SelectionManager : NetworkBehaviour
             if (unit == null) continue; // Check if the unit is null
             var selectable = unit.GetComponent<Selectable>();
             if (IsEnemy(selectable) || IsBuilding(selectable)) continue;
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(selectable.transform.position);
 
-            if (screenPosition.x > min.x && screenPosition.x < max.x && screenPosition.y > min.y && screenPosition.y < max.y)
+            Collider collider = unit.GetComponent<Collider>();
+            if (collider == null) continue;
+
+            if (IsColliderInSelectionRectangle(collider, min, max))
             {
                 selectable.Select();
                 selectedObjects.Add(selectable);
@@ -219,6 +221,31 @@ public class SelectionManager : NetworkBehaviour
 
         OnSelect?.Invoke(selectedObjects);
         selectionBox.sizeDelta = Vector2.zero;
+    }
+
+    private bool IsColliderInSelectionRectangle(Collider collider, Vector2 min, Vector2 max)
+    {
+        Bounds bounds = collider.bounds;
+        Vector3[] corners = new Vector3[8];
+
+        corners[0] = Camera.main.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.min.y, bounds.min.z));
+        corners[1] = Camera.main.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.min.y, bounds.max.z));
+        corners[2] = Camera.main.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.min.z));
+        corners[3] = Camera.main.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.max.z));
+        corners[4] = Camera.main.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.min.z));
+        corners[5] = Camera.main.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.max.z));
+        corners[6] = Camera.main.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.min.z));
+        corners[7] = Camera.main.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.max.z));
+
+        foreach (var corner in corners)
+        {
+            if (corner.x > min.x && corner.x < max.x && corner.y > min.y && corner.y < max.y)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void UpdateSelectionBox(Vector2 currentMousePosition)

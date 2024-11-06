@@ -90,6 +90,18 @@ public class UnitDetailsUpdater
 
     private void UpdateExpirenceStat(Damagable damagable)
     {
+        var isMaxLevel = damagable.levelable.level.Value == damagable.levelable.maxLevel;
+        if (isMaxLevel)
+        {
+            expirenceBar.lowValue = 0;
+            expirenceBar.value = 1;
+            expirenceBar.highValue = 1;
+            expirenceBar.title = "MAX LEVEL";
+            levelText.text = $"{damagable.levelable.level.Value} MAX LVL";
+            levelUpButton.style.display = DisplayStyle.None;
+            return;
+        }
+
         expirenceBar.lowValue = 0;
         expirenceBar.value = damagable.levelable.expirence.Value;
         expirenceBar.highValue = damagable.levelable.expirenceToNextLevel.Value;

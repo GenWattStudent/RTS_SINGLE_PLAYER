@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -6271539331764796378}
   - component: {fileID: -3848033353401656120}
   - component: {fileID: 2775828512116916213}
+  - component: {fileID: 8060005900507694997}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -59,14 +60,15 @@ MonoBehaviour:
   hero: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   unitPrefabs:
   - {fileID: 2321514005527918770, guid: 4e56b41d90eaebc4596c0f84814b3391, type: 3}
+  - {fileID: 5994407462191697491, guid: c399d7988861f9547bb883b01a64f0fa, type: 3}
   playerLevelSo: {fileID: 11400000, guid: 5ebbb1ff371dbf8458c816a299c3ecee, type: 2}
+  LatencyManager: {fileID: 0}
   playerExpierence:
     m_InternalValue: 0
   playerLevel:
     m_InternalValue: 1
   teamType:
     m_InternalValue: 0
-  currentPing: 0
 --- !u!114 &3710898475097951197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +221,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fd661daae6a5033419336af84e7aa779, type: 2}
   - {fileID: 11400000, guid: fd661daae6a5033419336af84e7aa779, type: 2}
   SelectedUpgrade: {fileID: 0}
+--- !u!114 &8060005900507694997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502280097689162745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1626f5a226073d46ba2bc90c282cc1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Latency: 0
+  latencyUpdateInterval: 1
 --- !u!1001 &1441355943550433658
 PrefabInstance:
   m_ObjectHideFlags: 0

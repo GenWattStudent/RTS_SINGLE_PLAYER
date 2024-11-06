@@ -2,59 +2,6 @@ using UnityEngine;
 
 public class ParabolicMotion : Motion
 {
-    // private Vector3 startPosition;
-    // private float time = 0f;
-    // private Vector3 ControlPointInBetweenStartAndTarget;
-    // private float speedDependingOnDistance = 1f;
-
-    // public override void Setup()
-    // {
-    //     base.Setup();
-    //     startPosition = transform.position;
-    //     previousPosition = startPosition;
-    //     target = new Vector3(target.x, 0, target.z);
-    //     direction = (target - startPosition).normalized;
-    //     time = 0f;
-
-    //     // calulate ControlPointInBetweenStartAndTarget based on angle in between start and target
-    //     var distance = Vector3.Distance(startPosition, target);
-    //     var height = distance / 2f;
-    //     ControlPointInBetweenStartAndTarget = startPosition + (direction * distance / 2f) + (Vector3.up * height);
-    //     speedDependingOnDistance = 1f / distance;
-    // }
-
-    // private Vector3 EvaluateCurve(float t)
-    // {
-    //     var startToControl = Vector3.Lerp(startPosition, ControlPointInBetweenStartAndTarget, t);
-    //     var controlToEnd = Vector3.Lerp(ControlPointInBetweenStartAndTarget, target, t);
-
-    //     return Vector3.Lerp(startToControl, controlToEnd, t);
-    // }
-
-    // public override void Move()
-    // {
-    //     time += Time.deltaTime * speedDependingOnDistance * speed;
-    //     var position = EvaluateCurve(time);
-    //     var nextPos = EvaluateCurve(time + 0.01f) - position;
-
-    //     previousPosition = transform.position;
-    //     transform.rotation = Quaternion.LookRotation(nextPos);
-    //     transform.position = position;
-    // }
-
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-
-    //     for (float i = 0; i < 20; i++)
-    //     {
-    //         Gizmos.DrawSphere(EvaluateCurve(i / 20), 0.1f);
-    //     }
-
-    //     // draw previous position
-    //     Gizmos.color = Color.blue;
-    //     Gizmos.DrawSphere(previousPosition, 1f);
-    // }
     private Vector3 startPosition;
     private Vector3 targetPosition;
     private float totalDistance;
@@ -62,47 +9,71 @@ public class ParabolicMotion : Motion
     private float arcFactor = .1f;
     private float initialHeight; // Initial Y position
     private float targetHeight;  // Target's Y position
+    private float prevHeight;    // Previous height
 
     public override void Setup()
     {
         base.Setup();
         startPosition = transform.position;
         previousPosition = startPosition;
-        targetPosition = target; // Now using the full target including height (Y axis)
+        targetPosition = target;
 
-        // Capture initial and target heights
         initialHeight = startPosition.y;
         targetHeight = targetPosition.y;
 
         direction = (targetPosition - startPosition).normalized;
 
-        // Calculate the total distance to the target (horizontal distance)
         totalDistance = Vector3.Distance(new Vector3(startPosition.x, 0, startPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
-        distanceTravelled = 0f; // Reset the distance travelled
+        distanceTravelled = 0f;
 
-        arcFactor = 1f / totalDistance; // Adjust the arc factor based on the total distance
+        arcFactor = 1f / totalDistance;
     }
 
     public override void Move()
     {
-        if (totalDistance <= 0) return; // Prevent division by zero
+        if (totalDistance <= 0) return;
         previousPosition = transform.position;
 
-        // Move towards the target in a straight line (ignoring Y-axis for now)
         distanceTravelled += speed * Time.deltaTime;
-        float normalizedDistance = distanceTravelled / totalDistance; // 0 -> 1
+        float normalizedDistance = distanceTravelled / totalDistance;
 
-        // Interpolate between start and target position (horizontal movement)
+        // Horizontal movement
         Vector3 flatPosition = Vector3.Lerp(startPosition, targetPosition, normalizedDistance);
 
-        // Calculate the height at the current point based on a parabolic trajectory
-        float heightOffset = Mathf.Sin(Mathf.PI * normalizedDistance); // Sinusoidal path for arc
-
-        // Combine height difference between start and target heights
+        // Sinusoidal height calculation for a natural arc
+        float heightOffset = Mathf.Sin(Mathf.PI * normalizedDistance);
         float height = Mathf.Lerp(initialHeight, targetHeight, normalizedDistance) + arcFactor * totalDistance * heightOffset;
 
-        // Update the projectile's position with the new height
+        // Update projectile position
         Vector3 parabolicPosition = new Vector3(flatPosition.x, height, flatPosition.z);
-        transform.position = parabolicPosition;
+
+        // Extend movement beyond target position
+        if (normalizedDistance >= 1f)
+        {
+            Vector3 continuation = direction * speed * Time.deltaTime;
+            transform.position += continuation;
+
+            // Continue the height trajectory in the same parabolic fashion
+            float continuationHeight = targetHeight + arcFactor * totalDistance * Mathf.Sin(Mathf.PI * normalizedDistance);
+
+            if (continuationHeight < prevHeight)
+            {
+                continuationHeight -= arcFactor * totalDistance;
+            }
+
+            transform.position = new Vector3(transform.position.x, continuationHeight, transform.position.z);
+            prevHeight = continuationHeight;
+        }
+        else
+        {
+            transform.position = parabolicPosition;
+        }
+
+        // Rotate bullet to face the direction of movement
+        Vector3 moveDirection = (transform.position - previousPosition).normalized;
+        if (moveDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(moveDirection);
+        }
     }
 }

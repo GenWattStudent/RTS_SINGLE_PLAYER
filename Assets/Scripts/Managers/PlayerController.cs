@@ -10,44 +10,15 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private List<GameObject> unitPrefabs = new();
     public PlayerLevelSo playerLevelSo;
     public PlayerData playerData;
+    public LatencyManager LatencyManager;
 
     [HideInInspector] public NetworkVariable<int> playerExpierence = new(0);
     [HideInInspector] public NetworkVariable<int> playerLevel = new(1);
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
-    public float currentPing;
 
     private RTSObjectsManager RTSObjectsManager;
-    private double lastPingTime;
-    private float checkPingTime = 1f;
-    private float checkPingTimer;
 
     public event Action<int, int, int, int> OnPlayerLevelChange;
-
-    public void GetPing()
-    {
-        if (IsClient)
-        {
-            lastPingTime = NetworkManager.Singleton.LocalTime.Time;
-            RequestPingServerRpc();
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void RequestPingServerRpc(ServerRpcParams serverRpcParams = default)
-    {
-        RespondPingClientRpc(serverRpcParams.Receive.SenderClientId);
-    }
-
-    [ClientRpc]
-    private void RespondPingClientRpc(ulong clientId)
-    {
-        if (clientId == NetworkManager.Singleton.LocalClientId)
-        {
-            // Calculate the round-trip time (ping)
-            double currentTime = NetworkManager.Singleton.LocalTime.Time;
-            currentPing = (float)((currentTime - lastPingTime) * 1000); // Convert to milliseconds
-        }
-    }
 
     private void SpawnHero(ulong clientId, Vector3 spawnPosition)
     {
@@ -93,7 +64,7 @@ public class PlayerController : NetworkBehaviour
 
         foreach (var unitPrefab in unitPrefabs)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();
@@ -143,41 +114,24 @@ public class PlayerController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (!IsOwner) return;
-        playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
-        playerExpierence.OnValueChanged += OnPlayerExpierenceChangeHandler;
-
-        if (GameManager.Instance.IsDebug)
-        {
-            var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
-            SetTeamServerRpc(team);
-        }
-        else
-        {
-            var team = LobbyManager.Instance.playerLobbyData.Team;
-            Debug.Log("OnNetworkSpawn " + team);
-            SetTeamServerRpc(team);
-        }
-    }
-
-    private void Awake()
-    {
-        playerData = new PlayerData();
-        RTSObjectsManager = GetComponent<RTSObjectsManager>();
-    }
-
-    [ServerRpc()]
-    private void SetTeamServerRpc(TeamType teamType)
-    {
-        this.teamType.Value = teamType;
-    }
-
-    private void Start()
-    {
-        Debug.Log($"PlayerController Start {OwnerClientId} {MultiplayerController.Instance}");
 
         if (IsOwner)
         {
+            playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
+            playerExpierence.OnValueChanged += OnPlayerExpierenceChangeHandler;
+
+            if (GameManager.Instance.IsDebug)
+            {
+                var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
+                SetTeamServerRpc(team);
+            }
+            else
+            {
+                var team = LobbyManager.Instance.playerLobbyData.Team;
+                Debug.Log("OnNetworkSpawn " + team);
+                SetTeamServerRpc(team);
+            }
+
             var spawnPositions = GameObject.Find("PlayerSpawnPoints");
             playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
             playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
@@ -185,27 +139,32 @@ public class PlayerController : NetworkBehaviour
 
             var cameraSystem = FindAnyObjectByType<CameraSystem>();
             cameraSystem.SetCameraPosition(new Vector3(playerData.spawnPosition.x, cameraSystem.transform.position.y, playerData.spawnPosition.z));
+        }
+    }
+
+    private void Awake()
+    {
+        playerData = new PlayerData();
+        LatencyManager = GetComponent<LatencyManager>();
+        RTSObjectsManager = GetComponent<RTSObjectsManager>();
+    }
+
+    private void Start()
+    {
+        if (IsOwner)
+        {
             SpawnUnitServerRpc(playerData.spawnPosition, OwnerClientId);
         }
 
         if (IsServer)
         {
             AddExpiernceServerRpc(1);
-            playerData.teamId = NetworkManager.Singleton.ConnectedClients.Count;
         }
     }
 
-    private void Update()
+    [ServerRpc()]
+    private void SetTeamServerRpc(TeamType teamType)
     {
-        if (IsClient && IsOwner)
-        {
-            checkPingTimer += Time.deltaTime;
-
-            if (checkPingTimer >= checkPingTime)
-            {
-                GetPing();
-                checkPingTimer = 0;
-            }
-        }
+        this.teamType.Value = teamType;
     }
 }

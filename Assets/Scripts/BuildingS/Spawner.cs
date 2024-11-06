@@ -232,8 +232,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
     public bool IsInsideSpawner(Vector3 position)
     {
-        var BoxCollider = GetComponent<BoxCollider>();
-        return BoxCollider.bounds.Contains(position);
+        return GetComponent<BoxCollider>().bounds.Contains(position);
     }
 
     #endregion

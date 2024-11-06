@@ -7,12 +7,13 @@ public class UnitMovement : NetworkBehaviour
 {
     public NavMeshAgent agent;
     public Vector3 destinationAfterSpawn = Vector3.zero;
-    public bool isMoving = false;
     public bool isReachedDestinationAfterSpawn = false;
+    public bool isMoving = false;
 
     private Unit unit;
     private ResourceUsage resourceUsage;
     private Stats stats;
+    private Vector3 lastPosition;
 
     private void SetNavMeshValues()
     {
@@ -84,7 +85,6 @@ public class UnitMovement : NetworkBehaviour
             agent.isStopped = false;
             agent.acceleration = stats.GetStat(StatType.Acceleration);
             agent.SetDestination(hit.position);
-            isMoving = true;
         }
     }
 
@@ -94,42 +94,32 @@ public class UnitMovement : NetworkBehaviour
         isReachedDestinationAfterSpawn = false;
     }
 
-    public void MoveToWithoutNavMesh(Vector3 destination)
-    {
-        // move to destination without nav mesh
-        var direction = (destination - transform.position).normalized;
-        transform.position += direction * stats.GetStat(StatType.Speed) * Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, destination) < 0.5f)
-        {
-            isReachedDestinationAfterSpawn = true;
-            agent.enabled = true;
-            isMoving = false;
-        }
-    }
-
     public void Stop()
     {
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
-        isMoving = false;
     }
 
     private void Update()
     {
         if (!IsServer) return;
 
-        // if (!isReachedDestinationAfterSpawn)
-        // {
-        //     MoveToWithoutNavMesh(destinationAfterSpawn);
-        //     isMoving = true;
-        // }
-
-        if (isMoving && !agent.isStopped && agent.hasPath && agent.remainingDistance <= 0.08f)
+        if (!agent.isStopped && agent.hasPath && agent.remainingDistance <= 0.08f)
         {
             Debug.Log("Stop: " + agent.remainingDistance);
             Stop();
+        }
+        // is moving
+        if (agent.velocity.magnitude > 0.1f)
+        {
+            isMoving = true;
+            RTSObjectsManager.quadtree.UpdateUnitPosition(unit, lastPosition, transform.position);
+            lastPosition = transform.position;
+        }
+        else
+        {
+            isMoving = false;
         }
     }
 }
