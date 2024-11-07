@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,8 +14,11 @@ public class Selectable : NetworkBehaviour
     [SerializeField] private RectTransform selectionCircle;
     public SelectableType selectableType;
     [HideInInspector] public bool isSelected = false;
+
     private Camera unitCamera;
     private SelectionManager selectionManager;
+
+    public event Action<Selectable> OnSelected;
 
     public override void OnNetworkSpawn()
     {
@@ -44,6 +48,8 @@ public class Selectable : NetworkBehaviour
     {
         if (!IsOwner) return;
         isSelected = true;
+        OnSelected?.Invoke(this);
+
         if (selectionCircle == null) return;
         selectionCircle.gameObject.SetActive(true);
     }
@@ -52,6 +58,7 @@ public class Selectable : NetworkBehaviour
     {
         if (!IsOwner) return;
         isSelected = false;
+        OnSelected?.Invoke(this);
 
         if (unitCamera != null) unitCamera.gameObject.SetActive(false);
 

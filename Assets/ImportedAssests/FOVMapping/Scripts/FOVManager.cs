@@ -89,6 +89,7 @@ namespace FOVMapping
 
 		private Material FOVMaterial; // Field of view material
 		private Material FOWMaterial; // Fog of war material
+		private Camera mainCamera;
 
 		[SerializeField]
 		[Tooltip("(Do not modify) Pixel reader computer shader")]
@@ -146,7 +147,7 @@ namespace FOVMapping
 				print("FOV map has not been set");
 				return;
 			}
-
+			mainCamera = Camera.main;
 			FOWRenderTexture = new RenderTexture(FOWTextureSize, FOWTextureSize, 1, RenderTextureFormat.ARGB32);
 			FOWMaterial.SetTexture(_MainTex, FOWRenderTexture); // It will be projected using a Plane.
 
@@ -171,12 +172,44 @@ namespace FOVMapping
 		private void OnDisable()
 		{
 			if (Camera.main != null) Camera.main.depthTextureMode = DepthTextureMode.None;
-
 		}
 
 		private void OnDestroy()
 		{
-			if (outputAlphaBuffer != null) outputAlphaBuffer.Release();
+			ReleaseBuffers();
+		}
+
+		private void ReleaseBuffers()
+		{
+			if (outputAlphaBuffer != null)
+			{
+				outputAlphaBuffer.Release();
+				outputAlphaBuffer = null;
+			}
+
+			if (positionsBuffer != null)
+			{
+				positionsBuffer.Release();
+				positionsBuffer = null;
+			}
+
+			if (forwardsBuffer != null)
+			{
+				forwardsBuffer.Release();
+				forwardsBuffer = null;
+			}
+
+			if (rangesBuffer != null)
+			{
+				rangesBuffer.Release();
+				rangesBuffer = null;
+			}
+
+			if (angleCosinesBuffer != null)
+			{
+				angleCosinesBuffer.Release();
+				angleCosinesBuffer = null;
+			}
 		}
 
 		public void EnableFOV()
@@ -321,18 +354,13 @@ namespace FOVMapping
 				for (int i = 0; i < FOVAgents.Count; i++)
 				{
 					FOVAgent agent = FOVAgents[i];
-					if (agent == null)
-					{
-						FOVAgents.RemoveAt(i);
-						continue;
-					}
 
 					if (agent.disappearInFOW)
 					{
 						Vector3 agentPosition = agent.transform.position;
 
 						// Process agents inside the camera viewport only
-						Vector3 viewportPosition = Camera.main.WorldToViewportPoint(agentPosition);
+						Vector3 viewportPosition = mainCamera.WorldToViewportPoint(agentPosition);
 						if (viewportPosition.x < 0.0f || viewportPosition.x > 1.0f && viewportPosition.y < 0.0f || viewportPosition.y > 1.0f || viewportPosition.z <= 0.0f)
 						{
 							continue;
@@ -361,15 +389,6 @@ namespace FOVMapping
 
 				float[] outputAlphaArray = new float[maxEnemyAgentCount];
 				outputAlphaBuffer.GetData(outputAlphaArray);
-
-				// Set visibility
-				for (int i = 0; i < targetAgents.Count; ++i)
-				{
-					FOVAgent agent = targetAgents[i];
-
-					bool isInSight = outputAlphaArray[i] <= agent.disappearAlphaThreshold;
-					agent.SetUnderFOW(isInSight);
-				}
 			}
 		}
 

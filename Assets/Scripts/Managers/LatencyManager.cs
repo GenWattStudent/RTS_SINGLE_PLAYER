@@ -43,7 +43,6 @@ public class LatencyManager : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
             Latency = (Time.time - _startTime) * 1000f;
-            Debug.Log($"Latency: {Latency} ms");
         }
     }
 }

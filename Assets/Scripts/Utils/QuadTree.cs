@@ -1,195 +1,226 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Quadtree
+public class QuadTree
 {
-    private QuadtreeNode root;
-    private int maxUnitsPerNode;
-    private int maxDepth;
+    private int MAX_OBJECTS = 7;
+    private int MAX_LEVELS = 5;
 
-    public Quadtree(Rect bounds, int maxUnitsPerNode, int maxDepth)
+    private int level;
+    private Rect bounds;
+    private List<Unit> objects;
+    private QuadTree[] nodes;
+
+    public QuadTree(int level, Rect bounds)
     {
-        root = new QuadtreeNode(bounds);
-        this.maxUnitsPerNode = maxUnitsPerNode;
-        this.maxDepth = maxDepth;
+        this.level = level;
+        this.bounds = bounds;
+        objects = new List<Unit>();
+        nodes = new QuadTree[4];
     }
 
-    public void Insert(Unit unit)
+    public void Clear()
     {
-        Insert(unit, root, 0);
-    }
+        objects.Clear();
 
-    private void Insert(Unit unit, QuadtreeNode node, int depth)
-    {
-        if (!node.Bounds.Contains(unit.transform.position))
+        for (int i = 0; i < nodes.Length; i++)
         {
-            return;
-        }
-
-        if (node.IsLeaf && (node.Units.Count < maxUnitsPerNode || depth >= maxDepth))
-        {
-            node.Units.Add(unit);
-        }
-        else
-        {
-            if (node.IsLeaf)
+            if (nodes[i] != null)
             {
-                node.Subdivide();
-                List<Unit> unitsToReinsert = new List<Unit>(node.Units);
-                node.Units.Clear();
-                foreach (var u in unitsToReinsert)
+                nodes[i].Clear();
+                nodes[i] = null;
+            }
+        }
+    }
+
+    public void Split()
+    {
+        float subWidth = bounds.width / 2;
+        float subHeight = bounds.height / 2;
+        float x = bounds.x;
+        float y = bounds.y;
+
+        nodes[0] = new QuadTree(level + 1, new Rect(x + subWidth, y, subWidth, subHeight));
+        nodes[1] = new QuadTree(level + 1, new Rect(x, y, subWidth, subHeight));
+        nodes[2] = new QuadTree(level + 1, new Rect(x, y + subHeight, subWidth, subHeight));
+        nodes[3] = new QuadTree(level + 1, new Rect(x + subWidth, y + subHeight, subWidth, subHeight));
+    }
+
+    public void Insert(Unit obj)
+    {
+        if (nodes[0] != null)
+        {
+            int index = GetIndex(obj.transform.position);
+
+            if (index != -1)
+            {
+                nodes[index].Insert(obj);
+                return;
+            }
+        }
+
+        objects.Add(obj);
+
+        if (objects.Count > MAX_OBJECTS && level < MAX_LEVELS)
+        {
+            if (nodes[0] == null)
+            {
+                Split();
+            }
+
+            int i = 0;
+            while (i < objects.Count)
+            {
+                int index = GetIndex(objects[i].transform.position);
+                if (index != -1)
                 {
-                    Insert(u, node, depth + 1);
+                    nodes[index].Insert(objects[i]);
+                    objects.RemoveAt(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
-
-            foreach (var child in node.Children)
-            {
-                Insert(unit, child, depth + 1);
-            }
         }
-    }
-
-    public void Remove(Unit unit)
-    {
-        Remove(unit, root);
-    }
-
-    private void Remove(Unit unit, QuadtreeNode node)
-    {
-        // Exit early if the unit's position is not within the node's bounds or if unit is null
-        if (unit == null || !node.Bounds.Contains(unit.transform.position))
-        {
-            return;
-        }
-
-        // If this node is a leaf, remove the unit directly if it exists
-        if (node.IsLeaf)
-        {
-            node.Units.Remove(unit);
-        }
-        else
-        {
-            // Recursively check child nodes
-            foreach (var child in node.Children)
-            {
-                Remove(unit, child);
-            }
-
-            // Clean up empty children
-            if (node.ChildrenAreEmpty())
-            {
-                node.ClearChildren();
-            }
-        }
-    }
-
-    public Unit FindClosest(Vector3 position)
-    {
-        return FindClosest(position, root, float.MaxValue, null);
-    }
-
-    private Unit FindClosest(Vector3 position, QuadtreeNode node, float closestDistance, Unit closestUnit)
-    {
-        if (!node.Bounds.Overlaps(new Rect(position.x - closestDistance, position.y - closestDistance, closestDistance * 2, closestDistance * 2)))
-        {
-            return closestUnit;
-        }
-
-        foreach (var unit in node.Units)
-        {
-            float distance = Vector3.Distance(position, unit.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestUnit = unit;
-            }
-        }
-
-        if (!node.IsLeaf)
-        {
-            foreach (var child in node.Children)
-            {
-                closestUnit = FindClosest(position, child, closestDistance, closestUnit);
-            }
-        }
-
-        return closestUnit;
     }
 
     public List<Unit> FindUnitsInRange(Vector3 position, float range)
     {
-        List<Unit> unitsInRange = new List<Unit>();
-        FindUnitsInRange(position, range, root, unitsInRange);
-        return unitsInRange;
+        List<Unit> found = new List<Unit>();
+        FindUnitsInRange(position, range, found);
+        return found;
     }
 
-    private void FindUnitsInRange(Vector3 position, float range, QuadtreeNode node, List<Unit> unitsInRange)
+    private void FindUnitsInRange(Vector3 position, float range, List<Unit> found)
     {
-        float rangeSquared = range * range;
-
-        // Circular range check based on center distance to node's bounds
-        Vector2 circleCenter = new Vector2(position.x, position.z);
-        float nodeRadius = Mathf.Sqrt(node.Bounds.width * node.Bounds.width + node.Bounds.height * node.Bounds.height) / 2;
-
-        // Skip nodes entirely outside the circular range
-        Vector2 nodeCenter = new Vector2(node.Bounds.center.x, node.Bounds.center.y);
-        if (Vector2.SqrMagnitude(nodeCenter - circleCenter) > (range + nodeRadius) * (range + nodeRadius))
-        {
+        if (!bounds.Contains(position))
             return;
-        }
 
-        foreach (var unit in node.Units)
+        foreach (Unit obj in objects)
         {
-            // Get collider radius
-            Collider collider = unit.GetComponent<Collider>();
-            if (collider == null) continue;
-
-            // Find the nearest point on the collider’s bounds to the center of the search range
-            Vector3 closestPoint = collider.ClosestPoint(position);
-            float distanceSquared = (position - closestPoint).sqrMagnitude;
-
-            // If the closest point on the collider is within range, add the unit to the list
-            if (distanceSquared <= rangeSquared)
+            if (Vector3.Distance(obj.transform.position, position) <= range)
             {
-                unitsInRange.Add(unit);
+                found.Add(obj);
             }
         }
 
-        // Recursive search for child nodes
-        if (!node.IsLeaf)
+        if (nodes[0] != null)
         {
-            foreach (var child in node.Children)
+            for (int i = 0; i < 4; i++)
             {
-                FindUnitsInRange(position, range, child, unitsInRange);
+                nodes[i].FindUnitsInRange(position, range, found);
             }
         }
     }
 
-    public void UpdateUnitPosition(Unit unit, Vector3 oldPosition, Vector3 newPosition)
+    public Unit FindClosestUnitInRange(Vector3 position, float range, TeamType team)
     {
-        if (!root.Contains(oldPosition) || !root.Contains(newPosition))
+        Unit closest = null;
+        float minDistance = float.MaxValue;
+        FindClosestUnitInRange(position, range, ref closest, ref minDistance, team);
+        return closest;
+    }
+
+    private void FindClosestUnitInRange(Vector3 position, float range, ref Unit closest, ref float minDistance, TeamType team)
+    {
+        if (!bounds.Overlaps(new Rect(position.x - range, position.z - range, range * 2, range * 2)))
+            return;
+
+        foreach (Unit obj in objects)
         {
-            Remove(unit);  // Remove the unit from the old position
-            Insert(unit);  // Reinsert it at the new position
+            if (obj.Damagable.teamType.Value != team)
+            {
+                if (obj == null)
+                {
+                    continue;
+                }
+
+                float distance = Vector3.Distance(obj.transform.position, position);
+                if (distance <= range && distance < minDistance)
+                {
+                    closest = obj;
+                    minDistance = distance;
+                }
+            }
         }
+
+        if (nodes[0] != null)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                nodes[i].FindClosestUnitInRange(position, range, ref closest, ref minDistance, team);
+            }
+        }
+    }
+
+    public void RemoveUnit(Unit unit)
+    {
+        if (nodes[0] != null)
+        {
+            int index = GetIndex(unit.transform.position);
+
+            if (index != -1)
+            {
+                nodes[index].RemoveUnit(unit);
+                return;
+            }
+        }
+
+        objects.Remove(unit);
+    }
+
+    public void UpdateUnit(Unit unit)
+    {
+        RemoveUnit(unit);
+        Insert(unit);
+    }
+
+    private int GetIndex(Vector3 position)
+    {
+        float subWidth = bounds.width / 2;
+        float subHeight = bounds.height / 2;
+        float x = bounds.x;
+        float y = bounds.y;
+
+        int index = -1;
+
+        if (position.x <= x + subWidth)
+        {
+            if (position.z <= y + subHeight)
+            {
+                index = 1;
+            }
+            else
+            {
+                index = 2;
+            }
+        }
+        else
+        {
+            if (position.z <= y + subHeight)
+            {
+                index = 0;
+            }
+            else
+            {
+                index = 3;
+            }
+        }
+
+        return index;
     }
 
     public void DrawGizmos()
     {
-        DrawGizmos(root);
-    }
-
-    private void DrawGizmos(QuadtreeNode node)
-    {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(new Vector3(node.Bounds.x + node.Bounds.width / 2, 0, node.Bounds.y + node.Bounds.height / 2), new Vector3(node.Bounds.width, 0, node.Bounds.height));
+        Gizmos.DrawWireCube(new Vector3(bounds.x + bounds.width / 2, 0, bounds.y + bounds.height / 2), new Vector3(bounds.width, 0, bounds.height));
 
-        if (!node.IsLeaf)
+        if (nodes[0] != null)
         {
-            foreach (var child in node.Children)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                DrawGizmos(child);
+                nodes[i].DrawGizmos();
             }
         }
     }

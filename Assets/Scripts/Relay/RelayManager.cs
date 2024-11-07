@@ -16,7 +16,7 @@ public class RelayManager : Singleton<RelayManager>
     public Allocation Allocation { get; private set; }
     public JoinAllocation JoinAllocation { get; private set; }
 
-    public async Task<string?> CreateRelay(int maxPlayers)
+    public async Task<string> CreateRelay(int maxPlayers)
     {
         try
         {

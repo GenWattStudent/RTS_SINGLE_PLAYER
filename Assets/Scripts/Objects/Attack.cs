@@ -7,7 +7,7 @@ using UnityEngine;
 public class Attack : NetworkBehaviour
 {
     [SerializeField] private bool autoAttack = true;
-    [SerializeField] private float checkTargetTimer = 2f;
+    [SerializeField] private float checkTargetTimer = .2f;
     [SerializeField] private GameObject bulletSpawnPoint;
     public bool isRealoading = false;
     public Vector3 targetPosition;
@@ -77,18 +77,29 @@ public class Attack : NetworkBehaviour
 
     private void CheckForTargets()
     {
-        var units = RTSObjectsManager.quadtree.FindUnitsInRange(transform.position, currentUnit.attackableSo.attackRange);
+        var unit = RTSObjectsManager.quadtree.FindClosestUnitInRange(transform.position, currentUnit.attackableSo.attackRange, currentDamagable.teamType.Value);
+        if (unit == null) return;
+        var damagableScript = unit.GetComponent<Damagable>();
 
-        foreach (var unit in units)
+        if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
         {
-            var damagableScript = unit.GetComponent<Damagable>();
-
-            if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
-            {
-                SetTarget(damagableScript);
-                return;
-            }
+            SetTarget(damagableScript);
+            return;
         }
+
+        // var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
+
+        // foreach (var collider in colliders)
+        // {
+        //     var damagableScript = collider.gameObject.GetComponent<Damagable>();
+        //     var unitScript = collider.gameObject.GetComponent<Unit>();
+
+        //     if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
+        //     {
+        //         SetTarget(damagableScript);
+        //         return;
+        //     }
+        // }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -127,22 +138,6 @@ public class Attack : NetworkBehaviour
     private void OnTargetDead(Damagable target)
     {
         SetTarget(null);
-    }
-
-    private bool IsInRange()
-    {
-        // we need to use target collider
-        Collider[] colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
-
-        foreach (var collider in colliders)
-        {
-            if (collider.gameObject == target.gameObject)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private bool IsInRange(Vector3 targetPosition)
@@ -254,7 +249,7 @@ public class Attack : NetworkBehaviour
 
     private void PerformTargetAiming()
     {
-        if (IsInRange() && currentUnit.attackableSo.canAttack)
+        if (IsInRange(target.targetPoint.transform.position) && currentUnit.attackableSo.canAttack)
         {
             PerformAttackServerRpc();
         }

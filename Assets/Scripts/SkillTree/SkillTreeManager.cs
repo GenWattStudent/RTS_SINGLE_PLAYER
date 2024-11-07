@@ -143,7 +143,7 @@ public class SkillTreeManager : NetworkToolkitHelper
 
         skillPointsText = GetLabel("SkillPoints");
         skillTreeClose = GetButton("SkillTreeClose");
-        skillTree = GetVisualElement("SkillTree");
+        skillTree = GetVisualElement("SkillTreeContainer");
 
         skillTreeClose.RegisterCallback((ClickEvent ev) => Hide());
         skillPoints.OnValueChanged += OnSkillPointsChange;

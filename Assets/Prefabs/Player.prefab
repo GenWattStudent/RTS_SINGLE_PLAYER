@@ -320,6 +320,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6406924815915834201, guid: fd1b3b54da07ef74296c67c0cb422592,
         type: 3}
+      propertyPath: lineWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406924815915834201, guid: fd1b3b54da07ef74296c67c0cb422592,
+        type: 3}
       propertyPath: minimapRenderTexture
       value: 
       objectReference: {fileID: 8400000, guid: 9a82a27deeae96e478a349f3546e8b28, type: 2}

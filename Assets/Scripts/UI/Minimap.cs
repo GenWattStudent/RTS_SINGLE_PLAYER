@@ -1,30 +1,31 @@
-using System;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class MiniMapRectangle : NetworkBehaviour
+public class Minimap : NetworkToolkitHelper
 {
-    public VisualElement minimapImage;
-    public Camera minimap;
-    public CameraSystem cameraSystem;
-    public Collider terrainCollider;
-    public float lineWidth = 0.001f;
-    public UIDocument UIDocument;
+    public float lineWidth = 1f;
+
+    private VisualElement minimapImage;
+    private CameraSystem cameraSystem;
     private bool isPressed = false;
+    private LineRenderer lineRenderer;
+    private Camera mainCamera;
+    private VisualElement bigMap;
 
-    public RenderTexture minimapRenderTexture;
-
-    void OnEnable()
+    protected override void OnEnable()
     {
-        UIDocument = GetComponent<UIDocument>();
-
-        var root = UIDocument.rootVisualElement;
-        minimapImage = root.Q<VisualElement>("Minimap");
+        base.OnEnable();
+        minimapImage = GetVisualElement("Minimap");
+        bigMap = GetVisualElement("BigMap");
         // add click listener to the minimap
         minimapImage.RegisterCallback<PointerDownEvent>(HandleMinimapClick);
-        RenderPipelineManager.endCameraRendering += HandlePostRender;
+    }
+
+    private void OnDisable()
+    {
+        minimapImage.UnregisterCallback<PointerDownEvent>(HandleMinimapClick);
+        RenderPipelineManager.endCameraRendering -= HandlePostRender;
     }
 
     private void Start()
@@ -36,8 +37,21 @@ public class MiniMapRectangle : NetworkBehaviour
         }
 
         cameraSystem = FindAnyObjectByType<CameraSystem>();
-        terrainCollider = Terrain.activeTerrain.GetComponent<Collider>();
-        minimap = GameObject.Find("MinimapCamera").GetComponent<Camera>();
+        mainCamera = Camera.main;
+
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.positionCount = 5;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.red;
+        // add layer to line renderer
+        lineRenderer.gameObject.layer = LayerMask.NameToLayer("Trapezoid");
+        // set line renderer to be in front of minimap
+        lineRenderer.sortingOrder = 1;
+
+        RenderPipelineManager.endCameraRendering += HandlePostRender;
     }
 
     private void HandleMinimapClick(PointerDownEvent ev)
@@ -50,6 +64,18 @@ public class MiniMapRectangle : NetworkBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isPressed = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (bigMap.style.display == DisplayStyle.Flex)
+            {
+                bigMap.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                bigMap.style.display = DisplayStyle.Flex;
+            }
         }
 
         if (isPressed)
@@ -88,54 +114,29 @@ public class MiniMapRectangle : NetworkBehaviour
 
     private void DrawCameraViewTrapezoid()
     {
-        // Create a temporary texture to draw on
-        Texture2D tempTexture = new Texture2D(minimapRenderTexture.width, minimapRenderTexture.height, TextureFormat.RGBA32, false);
-        RenderTexture.active = minimapRenderTexture;
-        tempTexture.ReadPixels(new Rect(0, 0, minimapRenderTexture.width, minimapRenderTexture.height), 0, 0);
-        tempTexture.Apply();
+        Vector3[] corners = GetCameraViewCorners(mainCamera);
 
-        // Calculate the camera's view corners in world space
-        Vector3[] corners = GetCameraViewCorners(Camera.main);
-
-        // Convert world space corners to minimap texture space
-        Vector2[] textureCorners = new Vector2[4];
         for (int i = 0; i < 4; i++)
         {
-            textureCorners[i] = WorldToMinimapTextureSpace(corners[i]);
+            lineRenderer.SetPosition(i, corners[i]);
         }
 
-        // Draw the trapezoid
-        DrawLine(tempTexture, textureCorners[0], textureCorners[1], Color.red);
-        DrawLine(tempTexture, textureCorners[1], textureCorners[2], Color.red);
-        DrawLine(tempTexture, textureCorners[2], textureCorners[3], Color.red);
-        DrawLine(tempTexture, textureCorners[3], textureCorners[0], Color.red);
-
-        // Apply changes and copy back to the render texture
-        tempTexture.Apply();
-        Graphics.Blit(tempTexture, minimapRenderTexture);
-        RenderTexture.active = null;
-
-        // Clean up
-        DestroyImmediate(tempTexture);
+        lineRenderer.SetPosition(4, corners[0]);
     }
 
     private Vector3[] GetCameraViewCorners(Camera camera)
     {
-        // Get the camera frustum corners
         Vector3[] frustumCorners = new Vector3[4];
         camera.CalculateFrustumCorners(new Rect(0, 0, 1, 1), camera.farClipPlane, Camera.MonoOrStereoscopicEye.Mono, frustumCorners);
 
-        // Convert frustum corners to world space
         for (int i = 0; i < 4; i++)
         {
             frustumCorners[i] = camera.transform.TransformVector(frustumCorners[i]);
             frustumCorners[i] += camera.transform.position;
         }
 
-        // Log the results
         for (int i = 0; i < 4; i++)
         {
-            // shoot a ray from the camera to the corner to hit terrain
             RaycastHit hit;
             if (Physics.Raycast(camera.transform.position, frustumCorners[i] - camera.transform.position, out hit, 2000, LayerMask.GetMask("FlatMap")))
             {
@@ -145,39 +146,5 @@ public class MiniMapRectangle : NetworkBehaviour
         }
 
         return frustumCorners;
-    }
-
-    private Vector2 WorldToMinimapTextureSpace(Vector3 worldPosition)
-    {
-        var terrainWidth = Terrain.activeTerrain.terrainData.size.x;
-        var terrainHeight = Terrain.activeTerrain.terrainData.size.z;
-        var textureWidth = minimapRenderTexture.width;
-        var textureHeight = minimapRenderTexture.height;
-
-        var x = worldPosition.x / terrainWidth * textureWidth;
-        var y = worldPosition.z / terrainHeight * textureHeight;
-
-        return new Vector2(x, y);
-    }
-
-    private void DrawLine(Texture2D texture, Vector2 start, Vector2 end, Color color)
-    {
-        int x0 = Mathf.RoundToInt(Math.Clamp(start.x, 0, minimapRenderTexture.width));
-        int y0 = Mathf.RoundToInt(Math.Clamp(start.y, 0, minimapRenderTexture.height - 1));
-        int x1 = Mathf.RoundToInt(Math.Clamp(end.x, 0, minimapRenderTexture.width));
-        int y1 = Mathf.RoundToInt(Math.Clamp(end.y, 0, minimapRenderTexture.height - 1));
-
-        int dx = Mathf.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-        int dy = -Mathf.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-        int err = dx + dy, e2;
-
-        while (true)
-        {
-            texture.SetPixel(x0, y0, color);
-            if (x0 == x1 && y0 == y1) break;
-            e2 = 2 * err;
-            if (e2 >= dy) { err += dy; x0 += sx; }
-            if (e2 <= dx) { err += dx; y0 += sy; }
-        }
     }
 }

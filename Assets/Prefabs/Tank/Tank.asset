@@ -49,4 +49,4 @@ MonoBehaviour:
   usage: 2
   usageInterval: 3
   sightAngle: 360
-  sightRange: 8
+  sightRange: 10

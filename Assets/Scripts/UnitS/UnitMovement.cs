@@ -14,6 +14,7 @@ public class UnitMovement : NetworkBehaviour
     private ResourceUsage resourceUsage;
     private Stats stats;
     private Vector3 lastPosition;
+    private RTSObjectsManager rtaObjectsManager;
 
     private void SetNavMeshValues()
     {
@@ -67,6 +68,7 @@ public class UnitMovement : NetworkBehaviour
 
     private void Start()
     {
+        rtaObjectsManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         stats.stats.OnListChanged += StatsChanged;
     }
 
@@ -114,8 +116,7 @@ public class UnitMovement : NetworkBehaviour
         if (agent.velocity.magnitude > 0.1f)
         {
             isMoving = true;
-            RTSObjectsManager.quadtree.UpdateUnitPosition(unit, lastPosition, transform.position);
-            lastPosition = transform.position;
+            RTSObjectsManager.quadtree.UpdateUnit(unit);
         }
         else
         {
