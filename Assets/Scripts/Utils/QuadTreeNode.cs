@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class QuadtreeNode
 {
@@ -19,6 +19,7 @@ public class QuadtreeNode
     {
         float halfWidth = Bounds.width / 2f;
         float halfHeight = Bounds.height / 2f;
+
         Children = new QuadtreeNode[4];
         Children[0] = new QuadtreeNode(new Rect(Bounds.x, Bounds.y, halfWidth, halfHeight));
         Children[1] = new QuadtreeNode(new Rect(Bounds.x + halfWidth, Bounds.y, halfWidth, halfHeight));
@@ -28,7 +29,6 @@ public class QuadtreeNode
 
     public bool ChildrenAreEmpty()
     {
-        // Check if all children are either null or contain no units
         foreach (var child in Children)
         {
             if (child != null && child.Units.Count > 0)
@@ -41,7 +41,6 @@ public class QuadtreeNode
 
     public void ClearChildren()
     {
-        // Clear references to child nodes to free up memory
         for (int i = 0; i < Children.Length; i++)
         {
             Children[i] = null;
@@ -51,6 +50,6 @@ public class QuadtreeNode
 
     public bool Contains(Vector3 position)
     {
-        return Bounds.Contains(position);
+        return Bounds.Contains(new Vector2(position.x, position.z));
     }
 }

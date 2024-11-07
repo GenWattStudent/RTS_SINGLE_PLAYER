@@ -6,7 +6,7 @@ public class RTSObjectsManager : NetworkBehaviour
 {
     public static Dictionary<ulong, List<Unit>> Units { get; private set; } = new();
     public static Dictionary<ulong, List<Building>> Buildings { get; private set; } = new();
-    public static Quadtree quadtree = new Quadtree(new UnityEngine.Rect(0, 0, 250, 250), 6, 6);
+    public static QuadTree quadtree = new QuadTree(0, new UnityEngine.Rect(0, 0, 250, 250));
 
     public List<Unit> LocalPlayerUnits = new();
     public List<Building> LocalPlayerBuildings = new();
@@ -51,10 +51,7 @@ public class RTSObjectsManager : NetworkBehaviour
 
     private void OnClientDisconnect(ulong clientId)
     {
-        foreach (var unit in Units[clientId])
-        {
-            quadtree.Remove(unit);
-        }
+        // quadtree.Clear();
         Units.Remove(clientId);
         Buildings.Remove(clientId);
     }
@@ -90,7 +87,7 @@ public class RTSObjectsManager : NetworkBehaviour
             var unit = no.GetComponent<Unit>();
             if (!Units[no.OwnerClientId].Contains(unit)) return;
 
-            quadtree.Remove(unit);
+            quadtree.RemoveUnit(unit);
             unit.GetComponent<Damagable>().OnDead -= HandleUnitDeath;
             Units[no.OwnerClientId].Remove(unit);
         }

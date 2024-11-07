@@ -5,16 +5,20 @@ public class RangeIndicator : MonoBehaviour
     private Unit unit;
     private Selectable selectable;
 
-    void Start()
+    private void OnEnable()
     {
         selectable = GetComponentInParent<Selectable>();
+        selectable.OnSelected += ShowRange;
+    }
+
+    private void Start()
+    {
         unit = GetComponentInParent<Unit>();
 
         transform.localScale = new Vector3(0, 0, 0);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ShowRange(Selectable selectable)
     {
         if (selectable.isSelected)
         {

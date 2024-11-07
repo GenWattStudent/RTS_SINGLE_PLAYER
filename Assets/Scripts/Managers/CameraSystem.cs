@@ -76,8 +76,12 @@ public class CameraSystem : MonoBehaviour
     {
         Vector3 moveDirection = transform.forward * inputDirection.z + transform.right * inputDirection.x;
         Vector3 newPosition = transform.position + moveDirection * cameraMovementSpeed * Time.deltaTime;
-        newPosition.x = Mathf.Clamp(newPosition.x, marginLeft, terrain.terrainData.size.x + marginRight);
-        newPosition.z = Mathf.Clamp(newPosition.z, marginBottom, terrain.terrainData.size.z + marginTop);
+
+        if (terrain != null)
+        {
+            newPosition.x = Mathf.Clamp(newPosition.x, marginLeft, terrain.terrainData.size.x + marginRight);
+            newPosition.z = Mathf.Clamp(newPosition.z, marginBottom, terrain.terrainData.size.z + marginTop);
+        }
 
         transform.position = newPosition;
     }

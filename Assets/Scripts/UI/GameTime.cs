@@ -45,7 +45,7 @@ public class GameTime : NetworkToolkitHelper
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!IsServer) return;
 

@@ -18,8 +18,8 @@ public class Unit : NetworkBehaviour
     public bool shouldChangeMaterial = true;
     public NetworkVariable<bool> IsUpgrading = new(false);
     public bool isVisibile = true;
+    public Damagable Damagable;
 
-    private Damagable damagable;
     private PlayerController playerController;
 
     [ServerRpc(RequireOwnership = false)]
@@ -87,7 +87,7 @@ public class Unit : NetworkBehaviour
 
     private void HandleTeamChange(TeamType oldValue, TeamType newValue)
     {
-        AddAgentToFogOfWar(GetComponent<FOVAgent>(), newValue, damagable.teamType.Value);
+        AddAgentToFogOfWar(GetComponent<FOVAgent>(), newValue, Damagable.teamType.Value);
     }
 
     private void HandleUnitTeamChange(TeamType oldValue, TeamType newValue)
@@ -116,10 +116,10 @@ public class Unit : NetworkBehaviour
 
         ChangeMaterial(playerColorData.playerMaterial, true);
 
-        damagable = GetComponent<Damagable>();
+        Damagable = GetComponent<Damagable>();
 
         playerController.teamType.OnValueChanged += HandleTeamChange;
-        damagable.teamType.OnValueChanged += HandleUnitTeamChange;
+        Damagable.teamType.OnValueChanged += HandleUnitTeamChange;
 
         var fovAgent = GetComponent<FOVAgent>();
 
@@ -128,7 +128,7 @@ public class Unit : NetworkBehaviour
             fovAgent = gameObject.AddComponent<FOVAgent>();
         }
 
-        AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, damagable.teamType.Value);
+        AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, Damagable.teamType.Value);
     }
 
     public override void OnNetworkSpawn()
