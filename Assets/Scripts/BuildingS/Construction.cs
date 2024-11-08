@@ -93,10 +93,13 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
         var constructionNo = GetComponent<NetworkObject>();
         var damagable = building.GetComponent<Damagable>();
         var playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+        var rtsObjectManager = playerController.GetComponent<RTSObjectsManager>();
         var unit = transform.parent != null ? transform.parent.GetComponentInParent<Unit>() : null;
 
         damagable.teamType.Value = playerController.teamType.Value;
         no.SpawnWithOwnership(OwnerClientId);
+        rtsObjectManager.RemoveBuildingServerRpc(constructionNo);
+        rtsObjectManager.AddBuildingServerRpc(no);
 
         if (unit != null)
         {

@@ -6,15 +6,13 @@ using UnityEngine;
 public class Damagable : NetworkBehaviour
 {
     [SerializeField] private RectTransform healthBar;
+    [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public DamagableSo damagableSo;
     public Levelable levelable;
-    public GameObject targetPoint;
-    public float damageBoost = 0;
+    public Vector3 TargetPoint;
     public bool IsBot = false;
-    public float damage = 0f;
     public Stats stats;
-    public NetworkVariable<bool> isDead = new(false);
-    [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
+    [HideInInspector] public NetworkVariable<bool> isDead = new(false);
     public Unit unitScript;
 
     private ProgresBar progressBarScript;
@@ -24,7 +22,7 @@ public class Damagable : NetworkBehaviour
 
     public bool IsTeamMate(Damagable damagable) => teamType.Value != TeamType.None && teamType.Value == damagable.teamType.Value;
     public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
-        !damagable.isDead.Value && unit.isVisibile;
+        !damagable.isDead.Value && unit.isVisibile.Value;
 
     private void Awake()
     {
@@ -32,27 +30,41 @@ public class Damagable : NetworkBehaviour
         progressBarScript = GetComponentInChildren<ProgresBar>();
         levelable = GetComponent<Levelable>();
         unitScript = GetComponent<Unit>();
+        var pos = FindChildByName(transform, "TargetPoint");
+
+        if (pos != null) TargetPoint = pos.position;
+        else TargetPoint = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
+    }
+
+    private Transform FindChildByName(Transform parent, string name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+            {
+                return child;
+            }
+            Transform result = FindChildByName(child, name);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
     }
 
     private void Start()
     {
         if (IsServer)
         {
-            stats.AddStat(StatType.Health, stats.GetStat(StatType.MaxHealth));
             if (damagableSo.bulletSo != null) stats.AddStat(StatType.Damage, damagableSo.bulletSo.GetStat(StatType.Damage));
             var powerUp = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<PowerUp>();
 
             // add damage boost and helth boost
             if (powerUp != null)
             {
-                if (unitScript.GetComponent<Building>() == null)
-                {
-                    powerUp.ApplySkills(unitScript);
-                }
-                else
-                {
-                    powerUp.ApplySkills(unitScript.GetComponent<Building>());
-                }
+                ISkillApplicable skillApplicable = unitScript.unitSo ? unitScript : unitScript.GetComponent<Building>();
+                powerUp.ApplySkills(skillApplicable);
             }
 
             SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));

@@ -576,9 +576,10 @@ MonoBehaviour:
   Upgrades: []
   IsBot: 0
   shouldChangeMaterial: 1
+  isVisibile:
+    m_InternalValue: 1
   IsUpgrading:
     m_InternalValue: 0
-  isVisibile: 1
   Damagable: {fileID: 0}
 --- !u!114 &-8074666234003767969
 MonoBehaviour:
@@ -616,16 +617,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 904826143125762879}
+  targetPoint: {fileID: 8377270805354231842}
+  teamType:
+    m_InternalValue: 0
   damagableSo: {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
   levelable: {fileID: 0}
-  targetPoint: {fileID: 5020726765372733000}
-  damageBoost: 0
   IsBot: 0
   damage: 0
   stats: {fileID: 0}
   isDead:
-    m_InternalValue: 0
-  teamType:
     m_InternalValue: 0
   unitScript: {fileID: 0}
 --- !u!114 &170826199209899036
@@ -764,6 +764,7 @@ MonoBehaviour:
   _sightAngle: 240
   _disappearInFOW: 0
   _disappearAlphaThreshold: 0.1
+  Damagable: {fileID: 0}
 --- !u!1 &6841826559119909042
 GameObject:
   m_ObjectHideFlags: 0

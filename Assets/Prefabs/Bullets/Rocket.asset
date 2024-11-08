@@ -26,6 +26,8 @@ MonoBehaviour:
   speed: 15
   stats:
   - Type: 2
-    Value: 100
+    CurrentValue: 30
+    BaseValue: 30
   - Type: 5
-    Value: 15
+    CurrentValue: 18
+    BaseValue: 18

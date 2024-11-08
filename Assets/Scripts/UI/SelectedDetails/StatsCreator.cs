@@ -7,9 +7,11 @@ public static class StatCreator
         CreateStat(statsContainer, "Health", $"{health}/{maxHealth}");
     }
 
-    public static void CreateDamageStat(VisualElement statsContainer, float damage)
+    public static void CreateDamageStat(VisualElement statsContainer, float damage, float baseDamage)
     {
-        CreateStat(statsContainer, "Damage", $"{damage}");
+        var addedDamage = damage - baseDamage;
+        var sign = addedDamage > 0 ? "+" : addedDamage < 0 ? "-" : "";
+        CreateStat(statsContainer, "Damage", $"{baseDamage} ({sign}{addedDamage})");
     }
 
     public static void CreateBuildingSpeedStat(VisualElement statsContainer, float speed)

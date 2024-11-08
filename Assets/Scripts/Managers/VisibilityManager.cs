@@ -27,7 +27,7 @@ public class VisibilityManager : NetworkBehaviour
         var damagable = enemyUnit.GetComponent<Damagable>();
         var currentDamagable = unit.GetComponent<Damagable>();
 
-        var ray = new Ray(currentDamagable.targetPoint.transform.position, damagable.targetPoint.transform.position - currentDamagable.targetPoint.transform.position);
+        var ray = new Ray(currentDamagable.TargetPoint, damagable.TargetPoint - currentDamagable.TargetPoint);
         var isHit = Physics.Raycast(ray, unit.unitSo.sightRange, LayerMask.GetMask("Terrain"));
 
         if (isHit) return true;

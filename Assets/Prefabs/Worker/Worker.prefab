@@ -98,9 +98,10 @@ MonoBehaviour:
   Upgrades: []
   IsBot: 0
   shouldChangeMaterial: 1
+  isVisibile:
+    m_InternalValue: 1
   IsUpgrading:
     m_InternalValue: 0
-  isVisibile: 1
   Damagable: {fileID: 0}
 --- !u!195 &6739326068420461195
 NavMeshAgent:
@@ -109,7 +110,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2321514005527918770}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.4
   m_Speed: 0
@@ -168,6 +169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 3706828982024979038}
+  teamType:
+    m_InternalValue: 0
   damagableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
   levelable: {fileID: 0}
   targetPoint: {fileID: 5575477033357697071}
@@ -176,8 +179,6 @@ MonoBehaviour:
   damage: 0
   stats: {fileID: 0}
   isDead:
-    m_InternalValue: 0
-  teamType:
     m_InternalValue: 0
   unitScript: {fileID: 0}
 --- !u!114 &6084159726790955623
@@ -346,6 +347,7 @@ MonoBehaviour:
   _sightAngle: 240
   _disappearInFOW: 0
   _disappearAlphaThreshold: 0.1
+  Damagable: {fileID: 0}
 --- !u!1 &5575477033357697071
 GameObject:
   m_ObjectHideFlags: 0

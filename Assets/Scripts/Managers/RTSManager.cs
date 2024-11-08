@@ -225,7 +225,7 @@ public class RTSManager : NetworkBehaviour
                 if (damagableScript != null && !damagableScript.IsBot && selectableScript != null)
                 {
                     // Attack
-                    if (damagableScript.teamType.Value != playerController.teamType.Value && unitScript.isVisibile)
+                    if (damagableScript.teamType.Value != playerController.teamType.Value && unitScript.isVisibile.Value)
                     {
                         Debug.Log("AttackCommand " + damagableScript.teamType + " " + playerController.teamType);
                         AttackCommand(damagableScript);

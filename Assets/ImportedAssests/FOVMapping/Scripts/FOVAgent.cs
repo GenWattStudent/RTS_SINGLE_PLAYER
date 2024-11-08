@@ -35,6 +35,9 @@ namespace FOVMapping
 		[Range(0.0f, 1.0f)]
 		private float _disappearAlphaThreshold = 0.1f;
 		public float disappearAlphaThreshold { get => _disappearAlphaThreshold; set => _disappearAlphaThreshold = value; }
+		public Damagable Damagable;
+
+		private PlayerController playerController;
 
 		private void Awake()
 		{
@@ -50,6 +53,48 @@ namespace FOVMapping
 			{
 				sightAngle = unit.unitSo.sightAngle;
 				sightRange = unit.unitSo.sightRange;
+			}
+		}
+
+		private void Start()
+		{
+
+			playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
+			Damagable = GetComponent<Damagable>();
+
+			playerController.teamType.OnValueChanged += HandleTeamChange;
+			Damagable.teamType.OnValueChanged += HandleUnitTeamChange;
+
+			var fovAgent = GetComponent<FOVAgent>();
+
+			if (fovAgent == null)
+			{
+				fovAgent = gameObject.AddComponent<FOVAgent>();
+			}
+
+			AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, Damagable.teamType.Value);
+		}
+		private void HandleTeamChange(TeamType oldValue, TeamType newValue)
+		{
+			AddAgentToFogOfWar(GetComponent<FOVAgent>(), newValue, Damagable.teamType.Value);
+		}
+
+		private void HandleUnitTeamChange(TeamType oldValue, TeamType newValue)
+		{
+			AddAgentToFogOfWar(GetComponent<FOVAgent>(), playerController.teamType.Value, newValue);
+		}
+
+		private void AddAgentToFogOfWar(FOVAgent fovAgent, TeamType playerTeamType, TeamType unitTeamType)
+		{
+			var construction = GetComponent<Construction>();
+
+			fovAgent.disappearInFOW = unitTeamType != playerTeamType;
+			fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
+
+			var fogOfWar = FindFirstObjectByType<FOVManager>();
+			if (fogOfWar != null && !fogOfWar.ContainsFOVAgent(fovAgent))
+			{
+				fogOfWar.AddFOVAgent(fovAgent);
 			}
 		}
 	}

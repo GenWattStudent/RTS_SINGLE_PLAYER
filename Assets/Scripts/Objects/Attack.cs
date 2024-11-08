@@ -65,9 +65,9 @@ public class Attack : NetworkBehaviour
 
     private bool IsTargetHideInTerrain(Damagable target)
     {
-        var direction = target.targetPoint.transform.position - currentDamagable.targetPoint.transform.position;
+        var direction = target.TargetPoint - currentDamagable.TargetPoint;
 
-        if (Physics.Raycast(currentDamagable.targetPoint.transform.position, direction, currentUnit.attackableSo.attackRange, LayerMask.GetMask("Terrain")))
+        if (Physics.Raycast(currentDamagable.TargetPoint, direction, currentUnit.attackableSo.attackRange, LayerMask.GetMask("Terrain")))
         {
             return true;
         }
@@ -77,29 +77,29 @@ public class Attack : NetworkBehaviour
 
     private void CheckForTargets()
     {
-        var unit = RTSObjectsManager.quadtree.FindClosestUnitInRange(transform.position, currentUnit.attackableSo.attackRange, currentDamagable.teamType.Value);
-        if (unit == null) return;
-        var damagableScript = unit.GetComponent<Damagable>();
+        // var unit = RTSObjectsManager.quadtree.FindClosestUnitInRange(transform.position, currentUnit.attackableSo.attackRange, currentDamagable.teamType.Value);
+        // if (unit == null) return;
+        // var damagableScript = unit.GetComponent<Damagable>();
 
-        if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
-        {
-            SetTarget(damagableScript);
-            return;
-        }
-
-        // var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
-
-        // foreach (var collider in colliders)
+        // if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
         // {
-        //     var damagableScript = collider.gameObject.GetComponent<Damagable>();
-        //     var unitScript = collider.gameObject.GetComponent<Unit>();
-
-        //     if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
-        //     {
-        //         SetTarget(damagableScript);
-        //         return;
-        //     }
+        //     SetTarget(damagableScript);
+        //     return;
         // }
+
+        var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
+
+        foreach (var collider in colliders)
+        {
+            var damagableScript = collider.gameObject.GetComponent<Damagable>();
+            var unitScript = collider.gameObject.GetComponent<Unit>();
+
+            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
+            {
+                SetTarget(damagableScript);
+                return;
+            }
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -165,7 +165,7 @@ public class Attack : NetworkBehaviour
     {
         if (currentAmmo <= 0) return;
 
-        var targetPos = target != null ? (target.targetPoint != null ? target.targetPoint.transform.position : target.transform.position) : targetPosition;
+        var targetPos = target != null ? target.TargetPoint : targetPosition;
         var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType.Value);
 
         if (currentUnit.attackableSo.CanSalve)
@@ -249,7 +249,7 @@ public class Attack : NetworkBehaviour
 
     private void PerformTargetAiming()
     {
-        if (IsInRange(target.targetPoint.transform.position) && currentUnit.attackableSo.canAttack)
+        if (IsInRange(target.TargetPoint) && currentUnit.attackableSo.canAttack)
         {
             PerformAttackServerRpc();
         }

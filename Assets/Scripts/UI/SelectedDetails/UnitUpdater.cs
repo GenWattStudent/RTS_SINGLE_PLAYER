@@ -45,6 +45,7 @@ public class UnitDetailsUpdater
         var health = stats.GetStat(StatType.Health);
         var maxHealth = stats.GetStat(StatType.MaxHealth);
         var damage = stats.GetStat(StatType.Damage);
+        var baseDamage = stats.GetBaseStat(StatType.Damage);
         var attackSpeed = stats.GetStat(StatType.AttackSpeed);
         var buildingDistance = stats.GetStat(StatType.BuildingDistance);
         var damagable = stats.GetComponent<Damagable>();
@@ -56,7 +57,7 @@ public class UnitDetailsUpdater
         }
         else
         {
-            StatCreator.CreateDamageStat(statsContainer, damage);
+            StatCreator.CreateDamageStat(statsContainer, damage, baseDamage);
             StatCreator.CreateAttackSpeedStat(statsContainer, attackSpeed);
         }
 

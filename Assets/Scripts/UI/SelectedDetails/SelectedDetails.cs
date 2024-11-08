@@ -196,7 +196,7 @@ public class SelectedDetails : NetworkToolkitHelper
         ClearStats();
 
         var prevStats = selectedObject?.GetComponent<Stats>();
-        if (prevStats != null) prevStats.stats.OnListChanged -= HandleStatChanged;
+        if (prevStats != null) prevStats.BaseStats.OnListChanged -= HandleStatChanged;
         selectedObject = null;
 
         if (selectables.Count == 0)
@@ -221,7 +221,7 @@ public class SelectedDetails : NetworkToolkitHelper
             Show();
 
             var stats = selectedObject.GetComponent<Stats>();
-            stats.stats.OnListChanged += HandleStatChanged;
+            stats.BaseStats.OnListChanged += HandleStatChanged;
 
             if (selectedObject.selectableType == SelectableType.Unit)
             {

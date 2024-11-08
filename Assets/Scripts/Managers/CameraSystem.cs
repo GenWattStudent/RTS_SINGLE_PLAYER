@@ -22,6 +22,7 @@ public class CameraSystem : MonoBehaviour
 
     private void Start()
     {
+        QualitySettings.vSyncCount = 0;
         terrain = Terrain.activeTerrain;
     }
 

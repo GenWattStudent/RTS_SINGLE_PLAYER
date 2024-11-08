@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -67,7 +66,7 @@ public class EnemyController : MonoBehaviour
         if (unitMovement != null)
         {
             Destroy(unitMovement);
-            unitScript.AddComponent<EnemyUnitMovement>();
+            // unitScript.AddComponent<EnemyUnitMovement>();
         }
 
         // damagableScript.OwnerClientId = enemyId;
