@@ -13,8 +13,7 @@ public class UnitMovement : NetworkBehaviour
     private Unit unit;
     private ResourceUsage resourceUsage;
     private Stats stats;
-    private Vector3 lastPosition;
-    private RTSObjectsManager rtaObjectsManager;
+    private Vector3 oldPosition;
 
     private void SetNavMeshValues()
     {
@@ -47,7 +46,7 @@ public class UnitMovement : NetworkBehaviour
 
         if (stats != null)
         {
-            stats.stats.OnListChanged -= StatsChanged;
+            stats.BaseStats.OnListChanged -= StatsChanged;
         }
     }
 
@@ -68,12 +67,18 @@ public class UnitMovement : NetworkBehaviour
 
     private void Start()
     {
-        rtaObjectsManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
-        stats.stats.OnListChanged += StatsChanged;
+
+        SetNavMeshValues();
+        stats.BaseStats.OnListChanged += StatsChanged;
     }
 
     private void StatsChanged(NetworkListEvent<Stat> changeEvent)
     {
+        if (transform.name == "Worker(Clone)")
+        {
+            Debug.Log("Speed: " + stats.GetStat(StatType.Speed) + transform.name);
+        }
+
         SetNavMeshValues();
     }
 
@@ -90,12 +95,6 @@ public class UnitMovement : NetworkBehaviour
         }
     }
 
-    public void SetDestinationAfterSpawn(Vector3 destination)
-    {
-        destinationAfterSpawn = destination;
-        isReachedDestinationAfterSpawn = false;
-    }
-
     public void Stop()
     {
         agent.isStopped = true;
@@ -107,6 +106,8 @@ public class UnitMovement : NetworkBehaviour
     {
         if (!IsServer) return;
 
+        oldPosition = transform.position;
+
         if (!agent.isStopped && agent.hasPath && agent.remainingDistance <= 0.08f)
         {
             Debug.Log("Stop: " + agent.remainingDistance);
@@ -116,7 +117,7 @@ public class UnitMovement : NetworkBehaviour
         if (agent.velocity.magnitude > 0.1f)
         {
             isMoving = true;
-            RTSObjectsManager.quadtree.UpdateUnit(unit);
+            RTSObjectsManager.quadtree.UpdateUnit(RTSObjectsManager.Units);
         }
         else
         {

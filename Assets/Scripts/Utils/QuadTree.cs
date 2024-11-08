@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 public class QuadTree
 {
     private int MAX_OBJECTS = 7;
-    private int MAX_LEVELS = 5;
+    private int MAX_LEVELS = 6;
 
     private int level;
     private Rect bounds;
@@ -154,55 +158,54 @@ public class QuadTree
         }
     }
 
-    public void RemoveUnit(Unit unit)
+    public void Remove(Unit unit)
     {
+        if (!bounds.Contains(unit.transform.position))
+            return;
+
+        if (objects.Contains(unit))
+        {
+            objects.Remove(unit);
+            return;
+        }
+
         if (nodes[0] != null)
         {
             int index = GetIndex(unit.transform.position);
-
             if (index != -1)
             {
-                nodes[index].RemoveUnit(unit);
-                return;
+                nodes[index].Remove(unit);
             }
         }
-
-        objects.Remove(unit);
-    }
-
-    public void UpdateUnit(Unit unit)
-    {
-        RemoveUnit(unit);
-        Insert(unit);
     }
 
     private int GetIndex(Vector3 position)
     {
-        float subWidth = bounds.width / 2;
-        float subHeight = bounds.height / 2;
-        float x = bounds.x;
-        float y = bounds.y;
-
         int index = -1;
+        float verticalMidpoint = bounds.x + bounds.width / 2;
+        float horizontalMidpoint = bounds.y + bounds.height / 2;
 
-        if (position.x <= x + subWidth)
+        bool topQuadrant = position.z < horizontalMidpoint;
+        bool bottomQuadrant = position.z > horizontalMidpoint;
+
+        if (position.x < verticalMidpoint && position.x + 1 < verticalMidpoint)
         {
-            if (position.z <= y + subHeight)
+            if (topQuadrant)
             {
                 index = 1;
             }
-            else
+            else if (bottomQuadrant)
             {
                 index = 2;
             }
         }
-        else
+        else if (position.x > verticalMidpoint)
         {
-            if (position.z <= y + subHeight)
+            if (topQuadrant)
             {
                 index = 0;
             }
-            else
+            else if (bottomQuadrant)
             {
                 index = 3;
             }
@@ -211,11 +214,25 @@ public class QuadTree
         return index;
     }
 
+    public void UpdateUnit(Dictionary<ulong, List<Unit>> units)
+    {
+        Clear();
+        foreach (var unitList in units.Values)
+        {
+            foreach (var unit in unitList)
+            {
+                Insert(unit);
+            }
+        }
+    }
     public void DrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(new Vector3(bounds.x + bounds.width / 2, 0, bounds.y + bounds.height / 2), new Vector3(bounds.width, 0, bounds.height));
 
+#if UNITY_EDITOR
+        Handles.Label(new Vector3(bounds.x + bounds.width / 2, 0, bounds.y + bounds.height / 2), objects.Count.ToString(), new GUIStyle() { normal = new GUIStyleState() { textColor = Color.red } });
+#endif
         if (nodes[0] != null)
         {
             for (int i = 0; i < nodes.Length; i++)

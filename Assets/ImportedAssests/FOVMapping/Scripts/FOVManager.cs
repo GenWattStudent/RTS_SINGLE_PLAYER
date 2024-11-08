@@ -357,6 +357,12 @@ namespace FOVMapping
 
 					if (agent.disappearInFOW)
 					{
+						if (agent == null)
+						{
+							FOVAgents.RemoveAt(i);
+							continue;
+						}
+
 						Vector3 agentPosition = agent.transform.position;
 
 						// Process agents inside the camera viewport only

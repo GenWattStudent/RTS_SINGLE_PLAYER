@@ -26,7 +26,7 @@ public class BulletSo : ScriptableObject
         {
             if (stat.Type == type)
             {
-                return stat.Value;
+                return stat.CurrentValue;
             }
         }
 

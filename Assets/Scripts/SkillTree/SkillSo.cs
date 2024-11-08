@@ -14,4 +14,10 @@ public class SkillSo : ScriptableObject
     public int value;
     public string unitName;
     public bool isPercentage = true;
+
+    public float duration;
+    public bool isPermanent => duration <= 0;
+
+    public float cooldown;
+    public bool hasCooldown => cooldown > 0;
 }

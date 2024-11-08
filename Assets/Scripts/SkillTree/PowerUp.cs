@@ -67,24 +67,13 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
-    public void ApplySkills(Unit unit)
+    public void ApplySkills(ISkillApplicable applicable)
     {
         foreach (var skill in skillTreeManager.skills)
         {
-            if (skill.unitName == unit.unitSo.unitName && IsUnlocked(skill))
+            if (skill.unitName == applicable.Name && IsUnlocked(skill))
             {
-                ApplySkill(unit.GetComponent<Stats>(), unit.unitSo.unitName, skill);
-            }
-        }
-    }
-
-    public void ApplySkills(Building building)
-    {
-        foreach (var skill in skillTreeManager.skills)
-        {
-            if (skill.unitName == building.buildingSo.buildingName && IsUnlocked(skill))
-            {
-                ApplySkill(building.GetComponent<Stats>(), building.buildingSo.buildingName, skill);
+                ApplySkill(applicable.Stats, applicable.Name, skill);
             }
         }
     }

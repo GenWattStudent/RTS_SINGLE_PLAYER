@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using FOVMapping;
 using RTS.Domain.SO;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Unit : NetworkBehaviour
+public class Unit : NetworkBehaviour, ISkillApplicable
 {
     public UnitSo unitSo;
     public AttackableSo attackableSo;
@@ -16,11 +15,12 @@ public class Unit : NetworkBehaviour
     public List<UpgradeSO> Upgrades = new();
     public bool IsBot = false;
     public bool shouldChangeMaterial = true;
+    public NetworkVariable<bool> isVisibile = new(true);
     public NetworkVariable<bool> IsUpgrading = new(false);
-    public bool isVisibile = true;
-    public Damagable Damagable;
 
-    private PlayerController playerController;
+    public Damagable Damagable;
+    public Stats Stats => GetComponent<Stats>();
+    public string Name => unitSo.unitName;
 
     [ServerRpc(RequireOwnership = false)]
     public void CancelUpgradeServerRpc()
@@ -85,50 +85,13 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    private void HandleTeamChange(TeamType oldValue, TeamType newValue)
-    {
-        AddAgentToFogOfWar(GetComponent<FOVAgent>(), newValue, Damagable.teamType.Value);
-    }
-
-    private void HandleUnitTeamChange(TeamType oldValue, TeamType newValue)
-    {
-        AddAgentToFogOfWar(GetComponent<FOVAgent>(), playerController.teamType.Value, newValue);
-    }
-
-    private void AddAgentToFogOfWar(FOVAgent fovAgent, TeamType playerTeamType, TeamType unitTeamType)
-    {
-        var construction = GetComponent<Construction>();
-
-        fovAgent.disappearInFOW = unitTeamType != playerTeamType;
-        fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
-
-        var fogOfWar = FindFirstObjectByType<FOVManager>();
-        if (fogOfWar != null && !fogOfWar.ContainsFOVAgent(fovAgent))
-        {
-            fogOfWar.AddFOVAgent(fovAgent);
-        }
-    }
-
     private void Start()
     {
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
-        playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
 
         ChangeMaterial(playerColorData.playerMaterial, true);
 
         Damagable = GetComponent<Damagable>();
-
-        playerController.teamType.OnValueChanged += HandleTeamChange;
-        Damagable.teamType.OnValueChanged += HandleUnitTeamChange;
-
-        var fovAgent = GetComponent<FOVAgent>();
-
-        if (fovAgent == null)
-        {
-            fovAgent = gameObject.AddComponent<FOVAgent>();
-        }
-
-        AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, Damagable.teamType.Value);
     }
 
     public override void OnNetworkSpawn()

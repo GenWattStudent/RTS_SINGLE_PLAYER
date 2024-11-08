@@ -87,7 +87,7 @@ public class RTSObjectsManager : NetworkBehaviour
             var unit = no.GetComponent<Unit>();
             if (!Units[no.OwnerClientId].Contains(unit)) return;
 
-            quadtree.RemoveUnit(unit);
+            quadtree.Remove(unit);
             unit.GetComponent<Damagable>().OnDead -= HandleUnitDeath;
             Units[no.OwnerClientId].Remove(unit);
         }
@@ -111,6 +111,7 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             var building = no.GetComponent<Building>();
             Buildings[no.OwnerClientId].Add(building);
+            quadtree.Insert(building.GetComponent<Unit>());
 
             building.GetComponent<Damagable>().OnDead += HandleBuildingDeath;
         }
@@ -130,6 +131,7 @@ public class RTSObjectsManager : NetworkBehaviour
             var building = no.GetComponent<Building>();
             if (!Buildings[no.OwnerClientId].Contains(building)) return;
 
+            quadtree.Remove(building.GetComponent<Unit>());
             building.GetComponent<Damagable>().OnDead -= HandleBuildingDeath;
             Buildings[no.OwnerClientId].Remove(building);
         }
