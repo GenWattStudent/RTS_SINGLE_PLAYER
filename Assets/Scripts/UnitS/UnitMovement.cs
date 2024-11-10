@@ -19,7 +19,6 @@ public class UnitMovement : NetworkBehaviour
     {
         agent.speed = stats.GetStat(StatType.Speed);
         agent.acceleration = stats.GetStat(StatType.Acceleration);
-        agent.stoppingDistance = 1f;
     }
 
     public void RotateToTarget(Vector3 target)

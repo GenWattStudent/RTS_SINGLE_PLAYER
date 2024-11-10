@@ -34,7 +34,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
   type: 3
-  unitName: Argus
+  unitName: Hero
   sprite: {fileID: 21300000, guid: 5a09bd23f7473d94586daf5b381cb9db, type: 3}
   prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   speed: 5

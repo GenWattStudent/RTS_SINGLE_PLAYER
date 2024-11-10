@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FOVMapping;
 using RTS.Domain.SO;
 using Unity.Netcode;
 using UnityEngine;
@@ -99,6 +100,13 @@ public class Unit : NetworkBehaviour, ISkillApplicable
         base.OnNetworkSpawn();
 
         if (!IsOwner) return;
+
+        var fovAgent = GetComponent<FOVAgent>();
+
+        if (fovAgent == null)
+        {
+            gameObject.AddComponent<FOVAgent>();
+        }
 
         var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         rtsObjectManager.AddLocalUnit(this);

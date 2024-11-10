@@ -6,7 +6,7 @@ public class ParabolicMotion : Motion
     private Vector3 targetPosition;
     private float totalDistance;
     private float distanceTravelled = 0f;
-    private float arcFactor = .1f;
+    private float arcFactor = .2f;
     private float initialHeight; // Initial Y position
     private float targetHeight;  // Target's Y position
     private float prevHeight;    // Previous height

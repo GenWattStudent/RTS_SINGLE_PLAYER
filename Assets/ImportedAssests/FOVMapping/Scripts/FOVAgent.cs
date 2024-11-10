@@ -59,20 +59,13 @@ namespace FOVMapping
 		private void Start()
 		{
 
-			playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
-			Damagable = GetComponent<Damagable>();
+			// playerController = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerController>();
+			// Damagable = GetComponent<Damagable>();
 
-			playerController.teamType.OnValueChanged += HandleTeamChange;
-			Damagable.teamType.OnValueChanged += HandleUnitTeamChange;
+			// playerController.teamType.OnValueChanged += HandleTeamChange;
+			// Damagable.teamType.OnValueChanged += HandleUnitTeamChange;
 
-			var fovAgent = GetComponent<FOVAgent>();
-
-			if (fovAgent == null)
-			{
-				fovAgent = gameObject.AddComponent<FOVAgent>();
-			}
-
-			AddAgentToFogOfWar(fovAgent, playerController.teamType.Value, Damagable.teamType.Value);
+			// AddAgentToFogOfWar(this, playerController.teamType.Value, Damagable.teamType.Value);
 		}
 		private void HandleTeamChange(TeamType oldValue, TeamType newValue)
 		{

@@ -1,12 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
+
+public class PowerUpData
+{
+    public PowerUpSo PowerUpSo;
+    public float CollectedTime;
+    public List<Stat> StatsAdded;
+}
 
 [DefaultExecutionOrder(-1)]
 public class Stats : NetworkBehaviour
 {
     public NetworkList<Stat> BaseStats;
+    public List<PowerUpData> PowerUps = new List<PowerUpData>();
 
     private Unit unit;
     private Building building;
@@ -34,6 +43,50 @@ public class Stats : NetworkBehaviour
         }
     }
 
+    public void AddPowerUp(PowerUpSo powerUpSo)
+    {
+        if (!IsServer) return;
+
+        var powerUpData = new PowerUpData
+        {
+            PowerUpSo = powerUpSo,
+            CollectedTime = Time.time,
+            StatsAdded = new List<Stat>()
+        };
+
+        foreach (var stat in powerUpSo.Stats)
+        {
+            var statValue = stat.CurrentValue;
+            var baseStat = GetBaseStat(stat.Type);
+
+            if (baseStat == -1)
+            {
+                continue;
+            }
+
+            if (!powerUpSo.IsStackable)
+            {
+                for (int i = 0; i < PowerUps.Count; i++)
+                {
+                    if (PowerUps[i].PowerUpSo == powerUpSo)
+                    {
+                        PowerUps[i].CollectedTime = Time.time;
+                        return;
+                    }
+                }
+            }
+
+            if (powerUpSo.IsPercentage)
+            {
+                statValue = baseStat * stat.CurrentValue / 100;
+            }
+
+            AddToStat(stat.Type, statValue);
+            powerUpData.StatsAdded.Add(new Stat { Type = stat.Type, CurrentValue = statValue, BaseValue = statValue });
+            PowerUps.Add(powerUpData);
+        }
+    }
+
     private void AddStatsFromProperties(object source)
     {
         FieldInfo[] fields = source.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -47,10 +100,9 @@ public class Stats : NetworkBehaviour
                     var value = Convert.ToSingle(field.GetValue(source));
                     if (statType == StatType.Health)
                     {
-                        Debug.Log("Adding health");
                         AddStat(StatType.MaxHealth, value);
                     }
-                    Debug.Log("Adding " + statType + " " + value);
+
                     AddStat(statType, value);
                 }
             }
@@ -60,7 +112,7 @@ public class Stats : NetworkBehaviour
     public void AddStat(StatType type, float value)
     {
         if (!IsServer) return;
-        Debug.Log("Adding stat " + type + " " + value);
+
         for (int i = 0; i < BaseStats.Count; i++)
         {
             if (BaseStats[i].Type == type)
@@ -116,6 +168,7 @@ public class Stats : NetworkBehaviour
     public float AddToStat(StatType type, float value)
     {
         if (!IsServer) return -1;
+
         for (int i = 0; i < BaseStats.Count; i++)
         {
             if (BaseStats[i].Type == type)
@@ -145,5 +198,27 @@ public class Stats : NetworkBehaviour
             }
         }
         return -1;
+    }
+
+    private void FixedUpdate()
+    {
+        if (!IsServer) return;
+
+        for (int i = 0; i < PowerUps.Count; i++)
+        {
+            var powerUpData = PowerUps[i];
+
+            if (Time.fixedTime - powerUpData.CollectedTime > powerUpData.PowerUpSo.Duration)
+            {
+
+                foreach (var stat in powerUpData.StatsAdded)
+                {
+                    SubstractFromStat(stat.Type, stat.CurrentValue);
+                }
+
+                PowerUps.RemoveAt(i);
+                i--;
+            }
+        }
     }
 }

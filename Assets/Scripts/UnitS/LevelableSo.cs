@@ -5,11 +5,11 @@ using UnityEngine;
 public class LevelableSo : ScriptableObject
 {
     [System.Serializable]
-    public class Level {
+    public class Level
+    {
         public int level;
         public int expirence;
-        public float health;
-        public float attackDamage;
+        public List<Stat> stats;
     }
 
     public List<Level> levels;

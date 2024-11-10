@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
     public PlayerData playerData;
     public LatencyManager LatencyManager;
 
-    [HideInInspector] public NetworkVariable<int> playerExpierence = new(0);
+    [HideInInspector] public NetworkVariable<int> playerExperience = new(0);
     [HideInInspector] public NetworkVariable<int> playerLevel = new(1);
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
 
@@ -39,21 +39,26 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerLevel.Value == playerLevelSo.levelsData.Count) return;
 
-        var playerExp = playerExpierence.Value;
+        var playerExp = playerExperience.Value;
         playerExp += amount;
-        var nextLevelData = playerLevelSo.levelsData[playerLevel.Value];
-        var diffrence = playerExp - nextLevelData.expToNextLevel;
 
-        if (playerLevel.Value < playerLevelSo.levelsData.Count && playerExp >= nextLevelData.expToNextLevel)
+        while (playerLevel.Value < playerLevelSo.levelsData.Count)
         {
-            playerLevel.Value++;
-            playerExp = diffrence;
-            var playerSkillTree = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<SkillTreeManager>();
-
-            playerSkillTree.AddSkillPointsServerRpc(1);
+            var nextLevelData = playerLevelSo.levelsData[playerLevel.Value];
+            if (playerExp >= nextLevelData.expToNextLevel)
+            {
+                playerExp -= nextLevelData.expToNextLevel;
+                playerLevel.Value++;
+                var playerSkillTree = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponentInChildren<SkillTreeManager>();
+                playerSkillTree.AddSkillPointsServerRpc(1);
+            }
+            else
+            {
+                break;
+            }
         }
 
-        playerExpierence.Value = playerExp;
+        playerExperience.Value = playerExp;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -94,7 +99,7 @@ public class PlayerController : NetworkBehaviour
             expToNextLevel = playerLevelSo.levelsData[current].expToNextLevel;
         }
 
-        OnPlayerLevelChange?.Invoke(expToNextLevel, playerExpierence.Value, current, playerLevelSo.levelsData.Count);
+        OnPlayerLevelChange?.Invoke(expToNextLevel, playerExperience.Value, current, playerLevelSo.levelsData.Count);
     }
 
     private void OnPlayerExpierenceChangeHandler(int prev, int current)
@@ -118,7 +123,7 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
-            playerExpierence.OnValueChanged += OnPlayerExpierenceChangeHandler;
+            playerExperience.OnValueChanged += OnPlayerExpierenceChangeHandler;
 
             if (GameManager.Instance.IsDebug)
             {
