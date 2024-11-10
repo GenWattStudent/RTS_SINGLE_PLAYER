@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -40,6 +41,11 @@ public class PowerUp : NetworkBehaviour
         }
 
         return null;
+    }
+
+    public List<SkillSo> GetUnlockedAbilities()
+    {
+        return skillTreeManager.skills.Where((skill) => skill.isAbility && IsUnlocked(skill)).ToList();
     }
 
     public float GetPercentAmountOfByUnitName(string unitName, StatType valueName)

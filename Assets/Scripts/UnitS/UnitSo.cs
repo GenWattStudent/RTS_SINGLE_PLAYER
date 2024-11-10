@@ -15,11 +15,12 @@ public class UnitSo : DamagableSo
     public string unitName;
     public Sprite sprite;
     public GameObject prefab;
+    public GameObject levelUpPrefab;
 
     [Header("Movement")]
     public float speed;
     public float acceleration;
-    public float anguarRotation;
+    public float angularRotation;
 
     [Header("Building")]
     public float buildingDistance;

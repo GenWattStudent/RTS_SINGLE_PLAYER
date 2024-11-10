@@ -21,7 +21,7 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01");
     -unity-background-image-tint-color: rgb(0, 250, 72);
     padding-top: 0;
     padding-right: 0;
@@ -49,7 +49,7 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08");
 }
 
 .healthbar .unity-progress-bar__title {
@@ -67,7 +67,7 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill02.png?fileID=21300000&guid=bcb5b4fb84e360f4ab517305cc7ea5ab&type=3#gage_b_fill02');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill02.png?fileID=21300000&guid=bcb5b4fb84e360f4ab517305cc7ea5ab&type=3#gage_b_fill02");
     height: 25px;
     top: -3px;
     left: 0;
@@ -93,7 +93,7 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08");
 }
 
 .btn-danger {
@@ -250,7 +250,7 @@
     border-bottom-left-radius: 10px;
     width: auto;
     justify-content: flex-start;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill08.png?fileID=21300000&guid=d40499526caa6e243958c6071f4d5b0f&type=3#gage_b_fill08");
 }
 
 .mass .unity-progress-bar__progress {
@@ -265,7 +265,7 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill01.png?fileID=21300000&guid=9df81246e4df1154cb8d7410d2af7e84&type=3#gage_b_fill01");
     right: 0;
     width: auto;
 }
@@ -288,7 +288,7 @@
     height: 30px;
     background-color: rgba(255, 198, 0, 0);
     flex-direction: column;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_fill06.png?fileID=21300000&guid=9e2d10e868bfcc2459840cd98bcfde42&type=3#gage_b_fill06');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_fill06.png?fileID=21300000&guid=9e2d10e868bfcc2459840cd98bcfde42&type=3#gage_b_fill06");
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -376,7 +376,7 @@
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     color: rgb(0, 0, 0);
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/textinput_a.png?fileID=21300000&guid=e4430d406d9e002418f1d3cf864fb0ff&type=3#textinput_a');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/textinput_a.png?fileID=21300000&guid=e4430d406d9e002418f1d3cf864fb0ff&type=3#textinput_a");
 }
 
 .border-secondary {
@@ -408,7 +408,7 @@
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     background-color: rgba(255, 189, 0, 0);
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
     -unity-background-image-tint-color: rgb(255, 255, 255);
     -unity-background-scale-mode: stretch-to-fill;
     overflow: visible;
@@ -416,7 +416,7 @@
 
 .slider .unity-base-slider__tracker {
     background-color: rgb(96, 83, 49);
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/gage_b_empty.png?fileID=21300000&guid=f6c1dea84b7a31e4b81d0f719c477e2e&type=3#gage_b_empty');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/gage_b_empty.png?fileID=21300000&guid=f6c1dea84b7a31e4b81d0f719c477e2e&type=3#gage_b_empty");
 }
 
 .margin-left-md {
@@ -455,7 +455,7 @@
 }
 
 .btn-icon-red {
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_c_red.png?fileID=2800000&guid=dfe0f8b3b8f11c54d94569c6e1326583&type=3#btn_c_red');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_c_red.png?fileID=2800000&guid=dfe0f8b3b8f11c54d94569c6e1326583&type=3#btn_c_red");
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -467,12 +467,12 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_c_beige.png?fileID=2800000&guid=9c0068a62e7a92d40824e0b03460035a&type=3#btn_c_beige');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_c_beige.png?fileID=2800000&guid=9c0068a62e7a92d40824e0b03460035a&type=3#btn_c_beige");
 }
 
 .bg-primary {
     background-color: rgba(55, 55, 55, 0.95);
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a");
 }
 
 .btn-primary {
@@ -495,7 +495,7 @@
     font-size: 16px;
     transition-duration: 0.3s;
     margin-right: 0;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_emerald.png?fileID=21300000&guid=e87e973aa97e2cf41885259822725eb5&type=3#btn_a_emerald');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_emerald.png?fileID=21300000&guid=e87e973aa97e2cf41885259822725eb5&type=3#btn_a_emerald");
 }
 
 .btn-icon:hover:enabled {
@@ -503,12 +503,27 @@
 }
 
 .bg-secondary {
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_c.png?fileID=21300000&guid=7b03ca51eb13fef46ad379e25bc1bb4b&type=3#box_c');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_c.png?fileID=21300000&guid=7b03ca51eb13fef46ad379e25bc1bb4b&type=3#box_c");
 }
 
 .bg-primary {
     background-color: rgba(55, 55, 55, 0.95);
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a");
+}
+
+.btn-secondary {
+    background-color: rgba(221, 221, 221, 0);
+    border-left-color: rgb(55, 55, 55);
+    border-right-color: rgb(55, 55, 55);
+    border-top-color: rgb(55, 55, 55);
+    border-bottom-color: rgb(55, 55, 55);
+    transition-property: background-color;
+    transition-duration: 0.4s;
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .btn-secondary {
@@ -519,7 +534,7 @@
     border-bottom-color: rgb(55, 55, 55);
     transition-property: background-color;
     transition-duration: 0.4s;
-    background-image: url('project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige');
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;

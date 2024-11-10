@@ -1,8 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Skill", menuName = "ScriptableObjects/Skill")]
-public class SkillSo : ScriptableObject
+public class AbilitySo : ScriptableObject
+{
+    public virtual void Activate(Unit unit) { }
+}
+
+[CreateAssetMenu(fileName = "Skill", menuName = "RTS/Skill")]
+public class SkillSo : AbilitySo
 {
     public string skillName;
     public string description;
@@ -14,6 +20,9 @@ public class SkillSo : ScriptableObject
     public int value;
     public string unitName;
     public bool isPercentage = true;
+    public GameObject skillPrefab;
+
+    public bool isAbility = false;
 
     public float duration;
     public bool isPermanent => duration <= 0;

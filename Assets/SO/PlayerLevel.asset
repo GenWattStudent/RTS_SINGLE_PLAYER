@@ -16,6 +16,18 @@ MonoBehaviour:
   - Level: 1
     expToNextLevel: 0
   - Level: 2
-    expToNextLevel: 100
+    expToNextLevel: 50
   - Level: 3
+    expToNextLevel: 100
+  - Level: 4
+    expToNextLevel: 150
+  - Level: 5
     expToNextLevel: 200
+  - Level: 6
+    expToNextLevel: 250
+  - Level: 7
+    expToNextLevel: 300
+  - Level: 8
+    expToNextLevel: 320
+  - Level: 9
+    expToNextLevel: 350

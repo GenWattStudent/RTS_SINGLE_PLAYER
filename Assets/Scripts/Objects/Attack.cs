@@ -63,16 +63,20 @@ public class Attack : NetworkBehaviour
         }
     }
 
-    private bool IsTargetHideInTerrain(Damagable target)
+    private bool IsTargetHide(Damagable target)
     {
-        var direction = target.TargetPoint - currentDamagable.TargetPoint;
+        var direction = target.TargetPoint.position - currentDamagable.TargetPoint.position;
+        var hits = Physics.RaycastAll(currentDamagable.TargetPoint.position, direction, currentUnit.attackableSo.attackRange);
 
-        if (Physics.Raycast(currentDamagable.TargetPoint, direction, currentUnit.attackableSo.attackRange, LayerMask.GetMask("Terrain")))
+        foreach (var hit in hits)
         {
-            return true;
+            if (hit.collider.gameObject.GetComponent<Damagable>() == target)
+            {
+                return false; // Target is not hidden
+            }
         }
 
-        return false;
+        return true;
     }
 
     private void CheckForTargets()
@@ -94,7 +98,7 @@ public class Attack : NetworkBehaviour
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
             var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHideInTerrain(damagableScript))
+            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHide(damagableScript))
             {
                 SetTarget(damagableScript);
                 return;
@@ -165,7 +169,7 @@ public class Attack : NetworkBehaviour
     {
         if (currentAmmo <= 0) return;
 
-        var targetPos = target != null ? target.TargetPoint : targetPosition;
+        var targetPos = target != null ? target.TargetPoint.position : targetPosition;
         var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType.Value);
 
         if (currentUnit.attackableSo.CanSalve)
@@ -249,7 +253,7 @@ public class Attack : NetworkBehaviour
 
     private void PerformTargetAiming()
     {
-        if (IsInRange(target.TargetPoint) && currentUnit.attackableSo.canAttack)
+        if (IsInRange(target.TargetPoint.position) && currentUnit.attackableSo.canAttack)
         {
             PerformAttackServerRpc();
         }

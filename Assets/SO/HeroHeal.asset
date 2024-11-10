@@ -9,15 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de2103812b0add4fb6583eca2c27030, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1a463d779072c488b9580ccbd0c144, type: 3}
   m_Name: HeroHeal
   m_EditorClassIdentifier: 
-  skillName: Hero heal spell
-  description: Heals 20 HP per second
+  skillName: Hero heal
+  description: asdsad
   icon: {fileID: 0}
   requiredSkills: []
   requiredSkillPoints: 5
   skillTag: HeroHealSkill
-  valueName: damage
-  value: 10
+  statTypes: 
+  value: 0
   unitName: Hero
+  isPercentage: 0
+  skillPrefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef,
+    type: 3}
+  isAbility: 1
+  duration: 0
+  cooldown: 10
+  healAmount: 10
+  healInterval: 0.2
+  healDuration: 5
+  healRange: 5

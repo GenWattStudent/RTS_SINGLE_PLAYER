@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEngine;
 using static LevelableSo;
 
 public class Levelable : NetworkBehaviour
@@ -11,6 +12,24 @@ public class Levelable : NetworkBehaviour
     public int maxLevel => levelableSo.levels.Count;
     public Level curentLevel => levelableSo.levels[level.Value];
     private Damagable damagable;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        level.OnValueChanged += HandleLevelUp;
+    }
+
+    private void HandleLevelUp(int prev, int current)
+    {
+        if (damagable.unitScript.unitSo.levelUpPrefab != null)
+        {
+            var levelUp = Instantiate(damagable.unitScript.unitSo.levelUpPrefab, transform.position, Quaternion.identity);
+            levelUp.transform.SetParent(transform);
+
+            Destroy(levelUp, 2f);
+        }
+    }
 
     private void Start()
     {
@@ -42,9 +61,10 @@ public class Levelable : NetworkBehaviour
 
         var levelData = levelableSo.levels[level.Value - 1];
 
-        damagable.stats.AddToStat(StatType.MaxHealth, levelData.health);
-        damagable.stats.AddToStat(StatType.Health, levelData.health);
-        damagable.stats.AddToStat(StatType.Damage, levelData.attackDamage);
+        foreach (var stat in levelData.stats)
+        {
+            damagable.stats.AddToStat(stat.Type, stat.BaseValue);
+        }
 
         expirenceToNextLevel.Value = levelData.expirence;
     }

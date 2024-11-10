@@ -9,7 +9,7 @@ public class Damagable : NetworkBehaviour
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public DamagableSo damagableSo;
     public Levelable levelable;
-    public Vector3 TargetPoint;
+    public Transform TargetPoint;
     public bool IsBot = false;
     public Stats stats;
     [HideInInspector] public NetworkVariable<bool> isDead = new(false);
@@ -31,9 +31,9 @@ public class Damagable : NetworkBehaviour
         levelable = GetComponent<Levelable>();
         unitScript = GetComponent<Unit>();
         var pos = FindChildByName(transform, "TargetPoint");
-
-        if (pos != null) TargetPoint = pos.position;
-        else TargetPoint = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
+        Debug.Log(pos + " " + transform.name);
+        if (pos != null) TargetPoint = pos;
+        else TargetPoint = transform;
     }
 
     private Transform FindChildByName(Transform parent, string name)

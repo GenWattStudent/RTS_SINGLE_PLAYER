@@ -15,13 +15,28 @@ MonoBehaviour:
   levels:
   - level: 1
     expirence: 0
-    health: 0
-    attackDamage: 0
+    stats: []
   - level: 2
     expirence: 100
-    health: 50
-    attackDamage: 20
+    stats:
+    - Type: 0
+      CurrentValue: 0
+      BaseValue: 50
+    - Type: 1
+      CurrentValue: 0
+      BaseValue: 50
+    - Type: 2
+      CurrentValue: 0
+      BaseValue: 20
   - level: 3
     expirence: 150
-    health: 90
-    attackDamage: 30
+    stats:
+    - Type: 0
+      CurrentValue: 0
+      BaseValue: 50
+    - Type: 1
+      CurrentValue: 0
+      BaseValue: 50
+    - Type: 2
+      CurrentValue: 0
+      BaseValue: 30

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -7,7 +7,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] private bool isCameraZooming = true;
     [SerializeField] private bool isCameraRotating = true;
     [SerializeField] private float scrollSize = 25;
-    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] private CinemachineCamera cinemachineVirtualCamera;
     [SerializeField] private float targetFieldOfView = 50f;
     [SerializeField] private float maxZoom = 50f;
     [SerializeField] private float minZoom = 10f;
@@ -127,7 +127,7 @@ public class CameraSystem : MonoBehaviour
         }
 
         targetFieldOfView = Mathf.Clamp(targetFieldOfView, minZoom, maxZoom);
-        cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFieldOfView, Time.deltaTime * cameraZoomSpeed);
+        cinemachineVirtualCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.Lens.FieldOfView, targetFieldOfView, Time.deltaTime * cameraZoomSpeed);
     }
 
     private void HandleCameraRotation()

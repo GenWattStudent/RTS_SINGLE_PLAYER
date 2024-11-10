@@ -22,17 +22,23 @@ public class VisibilityManager : NetworkBehaviour
         UpdateVisibility();
     }
 
-    private bool IsTargetHideInTerrain(Unit unit, Unit enemyUnit)
+    private bool IsTargetHide(Unit unit, Unit enemyUnit)
     {
         var damagable = enemyUnit.GetComponent<Damagable>();
         var currentDamagable = unit.GetComponent<Damagable>();
 
-        var ray = new Ray(currentDamagable.TargetPoint, damagable.TargetPoint - currentDamagable.TargetPoint);
-        var isHit = Physics.Raycast(ray, unit.unitSo.sightRange, LayerMask.GetMask("Terrain"));
+        var ray = new Ray(currentDamagable.TargetPoint.position, damagable.TargetPoint.position - currentDamagable.TargetPoint.position);
+        var hits = Physics.RaycastAll(ray, unit.unitSo.sightRange);
 
-        if (isHit) return true;
+        foreach (var hit in hits)
+        {
+            if (hit.collider.gameObject.GetComponent<Unit>() == enemyUnit)
+            {
+                return false; // Target is not hidden
+            }
+        }
 
-        return false;
+        return true;
     }
 
     private bool IsUnitInSight(Unit unit, Unit enemyUnit)
@@ -47,7 +53,7 @@ public class VisibilityManager : NetworkBehaviour
         var angle = Vector3.Angle(unit.transform.forward, directionToUnit);
         if (angle > sightAngle / 2) return false;
 
-        return !IsTargetHideInTerrain(unit, enemyUnit);
+        return !IsTargetHide(unit, enemyUnit);
     }
 
     public void Show(Unit unit)
