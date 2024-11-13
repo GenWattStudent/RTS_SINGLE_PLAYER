@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de2103812b0add4fb6583eca2c27030, type: 3}
   m_Name: Tank1
   m_EditorClassIdentifier: 
-  skillName: Increase Tank Damage
+  skillName: Increase Tank damage
   description: By 10%
   icon: {fileID: 0}
   requiredSkills: []
@@ -22,3 +22,7 @@ MonoBehaviour:
   value: 10
   unitName: Tank
   isPercentage: 1
+  skillPrefab: {fileID: 0}
+  isAbility: 0
+  duration: 0
+  cooldown: 0

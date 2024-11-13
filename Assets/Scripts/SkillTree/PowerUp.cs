@@ -10,7 +10,7 @@ public class PowerUp : NetworkBehaviour
     public NetworkList<int> unlockedSkillsIndex;
 
     private SkillTreeManager skillTreeManager;
-    public event Action<SkillSo> OnSkillUnlocked;
+    public event Action<SkillTreeSo> OnSkillUnlocked;
 
     private void Awake()
     {
@@ -18,7 +18,7 @@ public class PowerUp : NetworkBehaviour
         skillTreeManager = GetComponent<SkillTreeManager>();
     }
 
-    private void ApplySkill(Stats stats, string objectName, SkillSo skillSo)
+    private void ApplySkill(Stats stats, string objectName, SkillTreeSo skillSo)
     {
         if (stats != null && objectName == skillSo.unitName)
         {
@@ -30,7 +30,7 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
-    public SkillSo GetBoughtSkillByUnitName(string unitName)
+    public SkillTreeSo GetBoughtSkillByUnitName(string unitName)
     {
         foreach (var skill in skillTreeManager.skills)
         {
@@ -43,7 +43,7 @@ public class PowerUp : NetworkBehaviour
         return null;
     }
 
-    public List<SkillSo> GetUnlockedAbilities()
+    public List<SkillTreeSo> GetUnlockedAbilities()
     {
         return skillTreeManager.skills.Where((skill) => skill.isAbility && IsUnlocked(skill)).ToList();
     }
@@ -62,7 +62,7 @@ public class PowerUp : NetworkBehaviour
         return value;
     }
 
-    public void ApplySkillForUnits(RTSObjectsManager player, SkillSo skill)
+    public void ApplySkillForUnits(RTSObjectsManager player, SkillTreeSo skill)
     {
         foreach (var unit in RTSObjectsManager.Units[player.OwnerClientId])
         {
@@ -84,7 +84,7 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
-    public bool Unlock(SkillSo skill, int skillIndex, int skillPoints, ServerRpcParams serverRpcParams = default)
+    public bool Unlock(SkillTreeSo skill, int skillIndex, int skillPoints, ServerRpcParams serverRpcParams = default)
     {
         if (CanBePurchased(skill, skillPoints))
         {
@@ -99,13 +99,13 @@ public class PowerUp : NetworkBehaviour
         return false;
     }
 
-    public bool IsUnlocked(SkillSo skillSo)
+    public bool IsUnlocked(SkillTreeSo skillSo)
     {
         var skillIndex = skillTreeManager.skills.IndexOf(skillSo);
         return unlockedSkillsIndex.Contains(skillIndex);
     }
 
-    public bool CanBePurchased(SkillSo skillSo, int skillPoints)
+    public bool CanBePurchased(SkillTreeSo skillSo, int skillPoints)
     {
         if (skillPoints >= skillSo.requiredSkillPoints)
         {

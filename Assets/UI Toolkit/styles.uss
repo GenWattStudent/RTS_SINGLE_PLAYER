@@ -475,6 +475,38 @@
     background-image: url("project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a");
 }
 
+.btn-icon:hover:enabled {
+    -unity-background-image-tint-color: rgb(185, 185, 185);
+}
+
+.bg-secondary {
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_c.png?fileID=21300000&guid=7b03ca51eb13fef46ad379e25bc1bb4b&type=3#box_c");
+}
+
+.bg-primary {
+    background-color: rgba(55, 55, 55, 0.95);
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a");
+}
+
+.btn-secondary {
+    background-color: rgb(221, 221, 221);
+    border-left-color: rgb(55, 55, 55);
+    border-right-color: rgb(55, 55, 55);
+    border-top-color: rgb(55, 55, 55);
+    border-bottom-color: rgb(55, 55, 55);
+    transition-property: background-color;
+    transition-duration: 0.4s;
+    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.btn-icon-red:hover:enabled {
+    -unity-background-image-tint-color: rgb(154, 152, 152);
+}
+
 .btn-primary {
     width: 200px;
     background-color: rgb(58, 58, 58);
@@ -496,51 +528,4 @@
     transition-duration: 0.3s;
     margin-right: 0;
     background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_emerald.png?fileID=21300000&guid=e87e973aa97e2cf41885259822725eb5&type=3#btn_a_emerald");
-}
-
-.btn-icon:hover:enabled {
-    -unity-background-image-tint-color: rgb(185, 185, 185);
-}
-
-.bg-secondary {
-    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_c.png?fileID=21300000&guid=7b03ca51eb13fef46ad379e25bc1bb4b&type=3#box_c");
-}
-
-.bg-primary {
-    background-color: rgba(55, 55, 55, 0.95);
-    background-image: url("project://database/Assets/ImportedAssests/resource_default/box_a.png?fileID=21300000&guid=ed3b4c75a68320349a9f4481bab4876c&type=3#box_a");
-}
-
-.btn-secondary {
-    background-color: rgba(221, 221, 221, 0);
-    border-left-color: rgb(55, 55, 55);
-    border-right-color: rgb(55, 55, 55);
-    border-top-color: rgb(55, 55, 55);
-    border-bottom-color: rgb(55, 55, 55);
-    transition-property: background-color;
-    transition-duration: 0.4s;
-    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.btn-secondary {
-    background-color: rgb(221, 221, 221);
-    border-left-color: rgb(55, 55, 55);
-    border-right-color: rgb(55, 55, 55);
-    border-top-color: rgb(55, 55, 55);
-    border-bottom-color: rgb(55, 55, 55);
-    transition-property: background-color;
-    transition-duration: 0.4s;
-    background-image: url("project://database/Assets/ImportedAssests/resource_default/btn_a_beige.png?fileID=21300000&guid=8e8051156b4decf4693f0648a48b3fc9&type=3#btn_a_beige");
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.btn-icon-red:hover:enabled {
-    -unity-background-image-tint-color: rgb(154, 152, 152);
 }

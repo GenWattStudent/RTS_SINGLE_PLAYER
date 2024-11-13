@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +7,12 @@ public class AbilitySo : ScriptableObject
 }
 
 [CreateAssetMenu(fileName = "Skill", menuName = "RTS/Skill")]
-public class SkillSo : AbilitySo
+public class SkillTreeSo : AbilitySo
 {
     public string skillName;
     public string description;
     public Sprite icon;
-    public List<SkillSo> requiredSkills = new();
+    public List<SkillTreeSo> requiredSkills = new();
     public int requiredSkillPoints;
     public string skillTag;
     public StatType[] statTypes;

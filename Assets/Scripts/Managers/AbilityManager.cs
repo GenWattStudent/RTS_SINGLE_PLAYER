@@ -6,9 +6,15 @@ using UnityEngine.UIElements;
 
 public class Ability
 {
-    public SkillSo skill;
+    public SkillTreeSo skill;
     public float cooldownTimer = 0;
     public bool isOnCooldown => cooldownTimer > 0;
+}
+
+public class AbilityUI
+{
+    public VisualElement abilityUI;
+    public Ability ability;
 }
 
 public class AbilityManager : NetworkToolkitHelper
@@ -19,6 +25,7 @@ public class AbilityManager : NetworkToolkitHelper
     private PowerUp _powerUp;
     private VisualElement _abilityContainer;
     private SelectionManager _selectionManager;
+    private List<AbilityUI> _abilityUIs = new();
 
     protected override void OnEnable()
     {
@@ -72,11 +79,14 @@ public class AbilityManager : NetworkToolkitHelper
     private void AddAbilityUI(Ability ability, Unit unit)
     {
         var abilityUI = abilityUIPrefab.CloneTree();
+        var abilityCooldown = abilityUI.Q<VisualElement>("AbilityCooldown");
+        var abilityImage = abilityUI.Q<VisualElement>("AbilityImage");
 
-        abilityUI.style.backgroundImage = new StyleBackground(ability.skill.icon);
+        abilityImage.style.backgroundImage = new StyleBackground(ability.skill.icon);
         abilityUI.RegisterCallback<ClickEvent>((ev) => HandleAbilityClicked(ability, unit));
 
         _abilityContainer.Add(abilityUI);
+        _abilityUIs.Add(new AbilityUI { abilityUI = abilityUI, ability = ability });
     }
 
     private void HandleAbilityClicked(Ability ability, Unit unit)
@@ -101,9 +111,18 @@ public class AbilityManager : NetworkToolkitHelper
                 {
                     ability.cooldownTimer = ability.skill.cooldown;
                     ability.skill.Activate(unit);
+                    var clientParams = new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new[] { OwnerClientId } } };
+                    ActivateAbilityClientRpc(abilityIndex, clientParams);
                 }
             }
         }
+    }
+
+    [ClientRpc]
+    private void ActivateAbilityClientRpc(int abilityIndex, ClientRpcParams clientParams)
+    {
+        var ability = Abilities[abilityIndex];
+        ability.cooldownTimer = ability.skill.cooldown;
     }
 
     private void Awake()
@@ -127,7 +146,7 @@ public class AbilityManager : NetworkToolkitHelper
         DrawAbilities(_selectionManager.selectedObjects);
     }
 
-    private void Update()
+    private void UpdateCooldowns()
     {
         foreach (var ability in Abilities)
         {
@@ -136,5 +155,31 @@ public class AbilityManager : NetworkToolkitHelper
                 ability.cooldownTimer -= Time.deltaTime;
             }
         }
+    }
+
+    private void UpdateCooldownUI()
+    {
+        foreach (var abilityUI in _abilityUIs)
+        {
+            var abilityCooldown = abilityUI.abilityUI.Q<VisualElement>("AbilityCooldown");
+            var ability = abilityUI.ability;
+
+            if (ability.isOnCooldown)
+            {
+                abilityCooldown.style.height = Length.Percent(100 * (ability.cooldownTimer / ability.skill.cooldown));
+            }
+            else
+            {
+                abilityCooldown.style.height = Length.Percent(0);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        UpdateCooldowns();
+
+        if (!IsOwner) return;
+        UpdateCooldownUI();
     }
 }

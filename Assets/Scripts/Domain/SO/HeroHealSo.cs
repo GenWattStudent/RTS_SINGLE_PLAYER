@@ -3,13 +3,12 @@ using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Hero heal", menuName = "RTS/HeroHeal")]
-public class HeroHealSo : SkillSo
+public class HeroHealSo : SkillTreeSo
 {
     public int healAmount;
     public float healInterval;
     public float healDuration;
     public bool isHealOverTime => healInterval > 0;
-    public bool isHealOverDuration => healDuration > 0;
     public float healRange;
 
     public override void Activate(Unit unit)

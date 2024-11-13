@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Hero heal
   description: asdsad
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 279ecc1efd68f594e9195c844a02a1f4, type: 3}
   requiredSkills: []
   requiredSkillPoints: 5
   skillTag: HeroHealSkill

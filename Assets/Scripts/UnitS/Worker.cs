@@ -62,7 +62,11 @@ public class Worker : NetworkBehaviour
         if (removeFromList) construction.RemoveWorker(this);
         isBuilding = false;
 
-        construction.GetComponent<Damagable>().OnDead -= (damagable) => StopConstructionServerRpc();
+        if (construction.GetComponent<Damagable>() != null)
+        {
+            construction.GetComponent<Damagable>().OnDead -= (damagable) => StopConstructionServerRpc();
+        }
+
         construction = null;
         DeactivateLaserServerRpc();
     }
@@ -94,7 +98,11 @@ public class Worker : NetworkBehaviour
             }
 
             this.construction = construction;
-            this.construction.GetComponent<Damagable>().OnDead += (damagable) => StopConstructionServerRpc();
+
+            if (this.construction.GetComponent<Damagable>() != null)
+            {
+                this.construction.GetComponent<Damagable>().OnDead += (damagable) => StopConstructionServerRpc();
+            }
 
             MoveToConstruction();
         }

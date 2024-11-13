@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Motion))]
-public class Bullet : NetworkBehaviour
+public class Bullet : MonoBehaviour
 {
     public float damage;
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
-    public NetworkObject networkObject;
+    // public NetworkObject networkObject;
     public Motion motion;
     public TeamType teamType;
 
@@ -19,34 +19,36 @@ public class Bullet : NetworkBehaviour
 
     private void Awake()
     {
-        if (!IsServer) return;
+        // if (!IsServer) return;
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
     }
 
     private void Start()
     {
-        if (!IsServer) return;
-        networkObject = GetComponent<NetworkObject>();
-        playerController = NetworkManager.Singleton.ConnectedClients[networkObject.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+        // if (!IsServer) return;
+        // networkObject = GetComponent<NetworkObject>();
+
     }
 
-    private void Explode()
+    private void Explode(Vector3 postion)
     {
-        Collider[] colliders = Physics.OverlapSphere(motion.previousPosition, bulletSo.radius);
-        foreach (var collider in colliders)
+        if (NetworkManager.Singleton.IsServer)
         {
-            if (IsOwnUnit(collider)) continue;
-            DealDamage(collider);
+            Collider[] colliders = Physics.OverlapSphere(postion, bulletSo.radius);
+            foreach (var collider in colliders)
+            {
+                if (IsOwnUnit(collider)) continue;
+                DealDamage(collider);
+            }
         }
 
-        ExplodeClientRpc(motion.previousPosition);
+        ExplodeClientRpc(postion);
     }
 
     [ClientRpc]
     private void ExplodeClientRpc(Vector3 postion)
     {
-
         if (bulletSo.explosionPrefab != null)
         {
             var explosion = Instantiate(bulletSo.explosionPrefab, postion, Quaternion.identity);
@@ -59,23 +61,16 @@ public class Bullet : NetworkBehaviour
     {
         var damageableScript = collider.gameObject.GetComponent<Damagable>();
 
-        if (damageableScript != null && damageableScript.OwnerClientId != OwnerClientId)
+        if (damageableScript != null && !damageableScript.IsTeamMate(unitsBullet))
         {
             if (damageableScript.TakeDamage(damage))
             {
                 unitsBullet.AddExpiernce(damageableScript.damagableSo.deathExpirence);
-                if (unitsBullet.OwnerClientId == OwnerClientId)
-                {
-                    playerController.AddExpiernceServerRpc(damageableScript.damagableSo.deathExpirence);
-                }
+
+                var playerController = NetworkManager.Singleton.ConnectedClients[unitsBullet.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+                playerController.AddExpiernceServerRpc(damageableScript.damagableSo.deathExpirence);
             }
         }
-    }
-
-    private bool IsOwnUnit(RaycastHit hit)
-    {
-        var damagable = hit.collider.gameObject.GetComponent<Damagable>();
-        return damagable != null && !damagable.isDead.Value && damagable.teamType.Value == teamType;
     }
 
     private bool IsOwnUnit(Collider collider)
@@ -96,11 +91,11 @@ public class Bullet : NetworkBehaviour
                 return;
             }
 
-            if (IsOwnUnit(hit)) return;
+            if (IsOwnUnit(hit.collider)) return;
 
             if (bulletSo.radius > 0)
             {
-                Explode();
+                Explode(hit.point);
             }
             else
             {
@@ -120,7 +115,9 @@ public class Bullet : NetworkBehaviour
             trailRenderer.Clear();
         }
 
-        networkObject.Despawn(true);
+        // networkObject.Despawn(true);
+        BulletPool.Instance.GetPool(bulletSo.bulletName).Release(this);
+        transform.position = new Vector3(0, -100, 0);
     }
 
     public void Setup()
@@ -129,14 +126,11 @@ public class Bullet : NetworkBehaviour
         motion.speed = bulletSo.GetStat(StatType.Speed);
     }
 
-    public void Reset()
+    public void Update()
     {
-        // motion.previousPosition = transform.position;
-    }
-
-    void Update()
-    {
-        if (!IsServer) return;
+        // if (!IsServer) return;
+        // check if is active
+        if (!isActiveAndEnabled) return;
 
         lifeTimeTimer += Time.deltaTime;
         CheckHit();
@@ -144,7 +138,7 @@ public class Bullet : NetworkBehaviour
 
         if (lifeTimeTimer > bulletSo.lifeTime)
         {
-            Explode();
+            Explode(transform.position);
             HideBullet();
         }
     }

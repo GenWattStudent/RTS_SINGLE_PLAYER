@@ -227,7 +227,7 @@
         <ui:VisualElement name="BigMap" style="flex-grow: 1; position: absolute; background-color: rgba(0, 0, 0, 0.78); top: 0; left: 0; right: 0; bottom: 0; display: none; justify-content: center; align-self: auto; align-items: center;">
             <ui:VisualElement style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Textures/MinimapTexture.renderTexture?fileID=8400000&amp;guid=9a82a27deeae96e478a349f3546e8b28&amp;type=2#MinimapTexture&quot;); width: 700px; height: 700px; -unity-background-scale-mode: stretch-to-fill; justify-content: flex-start; align-items: stretch; background-color: rgba(0, 0, 0, 0);" />
         </ui:VisualElement>
-        <ui:ScrollView name="AbilityContainer" horizontal-scroller-visibility="AlwaysVisible" class="bg-secondary" style="position: absolute; top: 308px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; flex-direction: row; flex-wrap: wrap; align-items: auto; justify-content: flex-start; align-self: auto; align-content: auto; right: 10px;">
+        <ui:ScrollView name="AbilityContainer" horizontal-scroller-visibility="AlwaysVisible" class="bg-secondary" style="position: absolute; top: 308px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; flex-direction: row; flex-wrap: wrap; align-items: auto; justify-content: flex-start; align-self: auto; align-content: auto; right: 10px;">
             <ui:Instance template="AbilityItem" name="AbilityItem" />
             <ui:Instance template="AbilityItem" name="AbilityItem" />
         </ui:ScrollView>

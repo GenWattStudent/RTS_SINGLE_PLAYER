@@ -16,10 +16,14 @@ MonoBehaviour:
   description: By 10%
   icon: {fileID: 0}
   requiredSkills:
-  - {fileID: 11400000, guid: 801d55a6c98246249b4bdee44c16fdb4, type: 2}
+  - {fileID: 11400000, guid: 97f396a4bc439e048a4f6670683b763a, type: 2}
   requiredSkillPoints: 2
   skillTag: TankSkill2
   statTypes: 02000000
   value: 10
   unitName: Tank
   isPercentage: 1
+  skillPrefab: {fileID: 0}
+  isAbility: 0
+  duration: 0
+  cooldown: 0

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class SkillTreeManager : NetworkToolkitHelper
 {
-    public List<SkillSo> skills = new();
+    public List<SkillTreeSo> skills = new();
     private NetworkVariable<int> skillPoints = new(0);
     private Label skillPointsText;
     private Button skillTreeClose;
@@ -33,7 +33,7 @@ public class SkillTreeManager : NetworkToolkitHelper
         UpdateUI();
     }
 
-    private void UpdateSkillUIData(SkillSo skillSo)
+    private void UpdateSkillUIData(SkillTreeSo skillSo)
     {
         var skill = GetVisualElement(skillSo.skillTag);
         var title = skill.Q<Label>("Title");
