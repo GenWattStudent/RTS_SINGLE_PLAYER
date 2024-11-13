@@ -1,35 +1,53 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletFactory
+public class BulletManager : MonoBehaviour
 {
-    public static Bullet CreateBullet(Unit unit, Transform bulletSpawnPoint, Vector3 targetPosition, VehicleGun vehicleGun, TeamType teamType)
+    private List<Bullet> bullets = new List<Bullet>();
+
+    public static BulletManager Instance;
+
+    private void Awake()
     {
-        var bulletObject = Object.Instantiate(unit.attackableSo.bulletSo.prefab);
-        var bullet = bulletObject.GetComponent<Bullet>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
+    public Bullet Spawn(Unit unit, Transform bulletSpawnPoint, Vector3 target, VehicleGun vehicleGun, TeamType teamType)
+    {
+        var bullet = BulletPool.Instance.GetPool(unit.unitSo.bulletSo.bulletName).Get();
         var motionScript = bullet.GetComponent<Motion>();
-        // var networkObject = bulletObject.GetComponent<NetworkObject>();
 
         bullet.teamType = teamType;
         bullet.motion = motionScript;
-        // bullet.networkObject = networkObject;
 
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.transform.rotation = Quaternion.identity;
-        // bullet.Reset();
 
         // Take into account unit accuracy to target position
         var accuracy = unit.attackableSo.accuracy;
         var randomX = Random.Range(-accuracy, accuracy);
         var randomZ = Random.Range(-accuracy, accuracy);
-        targetPosition += new Vector3(randomX, 0, randomZ);
+        target += new Vector3(randomX, 0, randomZ);
 
         bullet.bulletSo = unit.attackableSo.bulletSo;
-        bullet.motion.target = targetPosition;
+        bullet.motion.target = target;
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = unit.GetComponent<Damagable>();
         bullet.motion.Setup();
         bullet.Setup();
 
+        bullets.Add(bullet);
         return bullet;
+    }
+
+    private void Update()
+    {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            bullets[i].Update();
+        }
     }
 }

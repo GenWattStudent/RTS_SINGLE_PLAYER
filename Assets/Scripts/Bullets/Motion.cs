@@ -1,7 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class Motion : NetworkBehaviour
+public class Motion : MonoBehaviour
 {
     public float speed;
     public Vector3 target;
@@ -24,5 +23,8 @@ public class Motion : NetworkBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    virtual public void Hide() { }
+    virtual public void Hide()
+    {
+        transform.position = Vector3.zero;
+    }
 }

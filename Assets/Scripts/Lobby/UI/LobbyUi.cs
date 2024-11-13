@@ -16,6 +16,7 @@ public class LobbyUi : ToolkitHelper
     private LobbyManager lobbyManager;
     private Button closeLobbyButton;
     private RoomUi roomUi;
+    private Label currentPlayerName;
 
     private void Start()
     {
@@ -27,10 +28,13 @@ public class LobbyUi : ToolkitHelper
         lobbyName = root.Q<TextField>("LobbyName");
         errorLabel = root.Q<Label>("ErrorLabel");
         closeLobbyButton = GetButton("CloseLobby");
+        currentPlayerName = root.Q<Label>("CurrentPlayerName");
 
         HideError();
         createLobbyButton.clicked += CreateLobby;
         closeLobbyButton.clicked += CloseLobby;
+
+        currentPlayerName.text = LobbyManager.Instance.playerName;
         // CreateLobbiesUI();
         StartCoroutine(RefreshLobbies());
     }

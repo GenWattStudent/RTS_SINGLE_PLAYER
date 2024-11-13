@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - level: 1
-    expirence: 0
+    expirence: 50
     stats: []
   - level: 2
     expirence: 50

@@ -119,6 +119,7 @@ public class VisibilityManager : NetworkBehaviour
                         }
                         visibilityCounts[networkObject] = 0;
                         visibilityCounts[networkObject]++;
+                        networkObject.GetComponent<Unit>().isVisibile.Value = true;
                     }
                     else
                     {
@@ -127,7 +128,10 @@ public class VisibilityManager : NetworkBehaviour
                         if (!visibilityCounts.ContainsKey(networkObject))
                         {
                             visibilityCounts[networkObject] = 0;
+
                         }
+
+                        networkObject.GetComponent<Unit>().isVisibile.Value = false;
                     }
                 }
             }

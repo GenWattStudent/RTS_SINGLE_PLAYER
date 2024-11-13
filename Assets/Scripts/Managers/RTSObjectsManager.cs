@@ -43,6 +43,17 @@ public class RTSObjectsManager : NetworkBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (IsServer)
+        {
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                OnClientConnected(client.ClientId);
+            }
+        }
+    }
+
     private void OnClientConnected(ulong clientId)
     {
         Units[clientId] = new List<Unit>();

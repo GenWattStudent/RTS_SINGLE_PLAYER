@@ -45,9 +45,12 @@ public class Levelable : NetworkBehaviour
     public void AddExpirenceServerRpc(int amount)
     {
         if (level.Value >= maxLevel) return;
+
         expirence.Value += amount;
-        if (expirence.Value >= levelableSo.levels[level.Value].expirence)
+
+        while (level.Value < maxLevel && expirence.Value >= levelableSo.levels[level.Value].expirence)
         {
+            expirence.Value -= levelableSo.levels[level.Value].expirence;
             LevelUp();
         }
     }
@@ -55,9 +58,6 @@ public class Levelable : NetworkBehaviour
     public void LevelUp()
     {
         level.Value++;
-        expirence.Value = 0;
-
-        if (level.Value > maxLevel) return;
 
         var levelData = levelableSo.levels[level.Value - 1];
 

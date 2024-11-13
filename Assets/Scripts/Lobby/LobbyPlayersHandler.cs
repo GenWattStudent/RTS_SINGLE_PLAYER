@@ -18,14 +18,34 @@ public class LobbyPlayersHandler : NetworkBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
     }
 
+    private int GetFreeColorIndex()
+    {
+        int index = 0;
+
+        for (int i = 0; i < playerNetcodeLobbyData.Count; i++)
+        {
+            for (int j = 0; j < MultiplayerController.Instance.playerMaterials.Count; j++)
+            {
+                if (playerNetcodeLobbyData[i].playerColor == MultiplayerController.Instance.playerMaterials[j].playerColor)
+                {
+                    index++;
+                    break;
+                }
+            }
+        }
+
+        return index;
+    }
+
     private void OnClientConnectedCallback(ulong clientId)
     {
         if (NetworkManager.Singleton.IsServer)
         {
             var savedPlayerData = playerNetcodeLobbyDataDict[clientId];
-            Color? notSelectedColor = MultiplayerController.Instance.playerMaterials[(int)clientId].playerColor;
+            var playerIndex = GetFreeColorIndex();
+            Color? notSelectedColor = MultiplayerController.Instance.playerMaterials[playerIndex].playerColor;
 
-            savedPlayerData.Team = clientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
+            savedPlayerData.Team = playerIndex % 2 == 0 ? TeamType.Blue : TeamType.Red;
             savedPlayerData.playerColor = (Color)notSelectedColor;
             savedPlayerData.IsReady = false;
 

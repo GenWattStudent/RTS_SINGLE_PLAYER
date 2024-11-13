@@ -21,8 +21,8 @@ public class Damagable : NetworkBehaviour
     public event Action OnTakeDamage;
 
     public bool IsTeamMate(Damagable damagable) => teamType.Value != TeamType.None && teamType.Value == damagable.teamType.Value;
-    public bool CanAttack(Damagable damagable, Unit unit) => damagable != null && !IsTeamMate(damagable) &&
-        !damagable.isDead.Value && unit.isVisibile.Value;
+    public bool CanAttack(Damagable damagable) => damagable != null && !IsTeamMate(damagable) &&
+        !damagable.isDead.Value && damagable.unitScript.isVisibile.Value;
 
     private void Awake()
     {

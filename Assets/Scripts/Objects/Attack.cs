@@ -26,6 +26,7 @@ public class Attack : NetworkBehaviour
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
     private RTSObjectsManager RTSObjectsManager;
+    private BulletPool bulletPool;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -96,9 +97,8 @@ public class Attack : NetworkBehaviour
         foreach (var collider in colliders)
         {
             var damagableScript = collider.gameObject.GetComponent<Damagable>();
-            var unitScript = collider.gameObject.GetComponent<Unit>();
 
-            if (currentDamagable.CanAttack(damagableScript, unitScript) && !IsTargetHide(damagableScript))
+            if (currentDamagable.CanAttack(damagableScript))
             {
                 SetTarget(damagableScript);
                 return;
@@ -150,16 +150,19 @@ public class Attack : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void ShootBulletClientRpc(Vector3 direction, int ammo, int salveIndex)
+    private void ShootBulletClientRpc(int ammo, int salveIndex, Vector3 targetPosition)
     {
+        var spawnPoint = currentUnit.attackableSo.CanSalve ? salvePoints[salveIndex].transform : bulletSpawnPoint.transform;
+        var bullet = BulletManager.Instance.Spawn(currentUnit, spawnPoint, targetPosition, vehicleGun, currentDamagable.teamType.Value);
+
         currentAmmo = ammo;
         OnAmmoChange?.Invoke(currentAmmo);
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
         {
-            var rotation = Quaternion.LookRotation(direction);
+            // var rotation = Quaternion.LookRotation(direction);
             var salvePoint = currentUnit.attackableSo.CanSalve ? salvePoints[salveIndex] : bulletSpawnPoint;
-            rotation *= Quaternion.Euler(0, -90, 0);
-            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, rotation);
+            // rotation *= Quaternion.Euler(0, -90, 0);
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, Quaternion.identity);
             // MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
         }
     }
@@ -170,7 +173,6 @@ public class Attack : NetworkBehaviour
         if (currentAmmo <= 0) return;
 
         var targetPos = target != null ? target.TargetPoint.position : targetPosition;
-        var bullet = BulletFactory.CreateBullet(currentUnit, bulletSpawnPoint.transform, targetPos, salveIndex, salvePoints, vehicleGun, currentDamagable.teamType.Value);
 
         if (currentUnit.attackableSo.CanSalve)
         {
@@ -184,8 +186,8 @@ public class Attack : NetworkBehaviour
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        bullet.networkObject.SpawnWithOwnership(OwnerClientId);
-        ShootBulletClientRpc(bullet.motion.direction, currentAmmo, salveIndex);
+        // bullet.networkObject.SpawnWithOwnership(OwnerClientId);
+        ShootBulletClientRpc(currentAmmo, salveIndex, targetPos);
     }
 
     private bool IsInAngle()
