@@ -9,26 +9,16 @@ public class Bullet : MonoBehaviour
     public BulletSo bulletSo;
     public Damagable unitsBullet;
     public ObjectPool<Bullet> pool;
-    // public NetworkObject networkObject;
     public Motion motion;
     public TeamType teamType;
 
     private float lifeTimeTimer = 0f;
     private TrailRenderer trailRenderer;
-    private PlayerController playerController;
 
     private void Awake()
     {
-        // if (!IsServer) return;
         trailRenderer = GetComponentInChildren<TrailRenderer>();
         motion = GetComponent<Motion>();
-    }
-
-    private void Start()
-    {
-        // if (!IsServer) return;
-        // networkObject = GetComponent<NetworkObject>();
-
     }
 
     private void Explode(Vector3 postion)
@@ -109,15 +99,13 @@ public class Bullet : MonoBehaviour
     private void HideBullet()
     {
         lifeTimeTimer = 0f;
-        motion.Hide();
         if (trailRenderer != null)
         {
             trailRenderer.Clear();
         }
 
-        // networkObject.Despawn(true);
         BulletPool.Instance.GetPool(bulletSo.bulletName).Release(this);
-        transform.position = new Vector3(0, -100, 0);
+        BulletManager.Instance.Remove(this);
     }
 
     public void Setup()
@@ -126,13 +114,8 @@ public class Bullet : MonoBehaviour
         motion.speed = bulletSo.GetStat(StatType.Speed);
     }
 
-    public void Update()
+    public void UpdateBullet()
     {
-        // if (!IsServer) return;
-        // check if is active
-        if (!isActiveAndEnabled) return;
-
-        lifeTimeTimer += Time.deltaTime;
         CheckHit();
         motion.Move();
 

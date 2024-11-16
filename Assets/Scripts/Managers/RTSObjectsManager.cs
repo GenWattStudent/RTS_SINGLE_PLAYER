@@ -45,7 +45,7 @@ public class RTSObjectsManager : NetworkBehaviour
 
     private void Start()
     {
-        if (IsServer)
+        if (IsServer && !GameManager.Instance.IsDebug)
         {
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {

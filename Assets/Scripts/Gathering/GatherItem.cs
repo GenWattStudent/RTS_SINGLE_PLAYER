@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
 
     private List<Worker> workers = new();
     private ProgresBar progressBarScript;
+
+    public event Action OnFinshed;
 
     private void Awake()
     {
@@ -26,9 +29,10 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
 
         if (IsServer)
         {
-            var randomValue = Random.Range(gatherItemSo.minValue, gatherItemSo.maxValue);
+            var randomValue = UnityEngine.Random.Range(gatherItemSo.minValue, gatherItemSo.maxValue);
             currentValue.Value = randomValue;
             maxValue.Value = randomValue;
+            NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateGather;
         }
 
         progressBarScript.UpdateProgresBar(currentValue.Value, maxValue.Value);
@@ -40,6 +44,12 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
 
         currentValue.OnValueChanged -= HandleCurrentValueChange;
         maxValue.OnValueChanged -= HandleMaxValueChange;
+        RemoveWorkers();
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.NetworkTickSystem.Tick -= UpdateGather;
+        }
     }
 
     private void HandleCurrentValueChange(float oldValue, float newValue)
@@ -73,8 +83,21 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
         worker.StopConstructionServerRpc(false);
     }
 
+    public void RemoveWorkers()
+    {
+        foreach (var worker in workers)
+        {
+            var damagable = worker.GetComponent<Damagable>();
+            damagable.OnDead -= HandleWorkerDeath;
+            worker.StopConstructionServerRpc(false);
+        }
+
+        workers.Clear();
+    }
+
     private void DestroyItem()
     {
+        OnFinshed?.Invoke();
         GetComponent<NetworkObject>().Despawn(true);
     }
 
@@ -123,10 +146,8 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
         }
     }
 
-    private void Update()
+    private void UpdateGather()
     {
-        if (!IsServer) return;
-
         Gather();
     }
 }

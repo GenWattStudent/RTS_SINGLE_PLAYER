@@ -9,9 +9,10 @@ namespace RTS.UI
 {
     public class UpgradeUI : NetworkToolkitHelper
     {
+        public bool isVisibile => _upgradeItemContainer.style.display == DisplayStyle.Flex;
         [SerializeField] private VisualTreeAsset _upgradeItemTemplate;
-        private ScrollView _upgradeItemContainer;
 
+        private ScrollView _upgradeItemContainer;
         private List<VisualElement> _upgradeItems = new();
         private UpgradeManager _upgradeManager;
         private UIStorage _uiStorage;

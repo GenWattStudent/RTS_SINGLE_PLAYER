@@ -17,13 +17,18 @@ public class BulletManager : MonoBehaviour
 
     public Bullet Spawn(Unit unit, Transform bulletSpawnPoint, Vector3 target, VehicleGun vehicleGun, TeamType teamType)
     {
-        var bullet = BulletPool.Instance.GetPool(unit.unitSo.bulletSo.bulletName).Get();
+        var bullet = BulletPool.Instance.GetPool(unit.attackableSo.bulletSo.bulletName).Get();
         var motionScript = bullet.GetComponent<Motion>();
+
+        var _latencyManager = FindAnyObjectByType<LatencyManager>();
+        // calulate start postion take in account latency 
+        var latency = _latencyManager.Latency;
+        var startPosition = bulletSpawnPoint.position + bulletSpawnPoint.forward * unit.attackableSo.bulletSo.speed * latency;
 
         bullet.teamType = teamType;
         bullet.motion = motionScript;
 
-        bullet.transform.position = bulletSpawnPoint.position;
+        bullet.transform.position = startPosition;
         bullet.transform.rotation = Quaternion.identity;
 
         // Take into account unit accuracy to target position
@@ -37,17 +42,23 @@ public class BulletManager : MonoBehaviour
         bullet.motion.launchAngle = vehicleGun != null ? vehicleGun.transform.eulerAngles.x : 0;
         bullet.unitsBullet = unit.GetComponent<Damagable>();
         bullet.motion.Setup();
+        bullet.motion.previousPosition = bulletSpawnPoint.position;
         bullet.Setup();
 
         bullets.Add(bullet);
         return bullet;
     }
 
+    public void Remove(Bullet bullet)
+    {
+        bullets.Remove(bullet);
+    }
+
     private void Update()
     {
         for (int i = 0; i < bullets.Count; i++)
         {
-            bullets[i].Update();
+            bullets[i].UpdateBullet();
         }
     }
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8418543292980964833}
+  - component: {fileID: 4791337573148038701}
   - component: {fileID: 606075020862887833}
   - component: {fileID: 5807540428542867514}
   - component: {fileID: 2943060365431914200}
@@ -17,7 +18,6 @@ GameObject:
   - component: {fileID: 4633497842560847797}
   - component: {fileID: -8262177101767174825}
   - component: {fileID: -8125373983021582785}
-  - component: {fileID: 4791337573148038701}
   - component: {fileID: -2183276253921039989}
   m_Layer: 0
   m_Name: ConstractionManagerRocketTurret
@@ -45,6 +45,31 @@ Transform:
   - {fileID: 4229454190087384747}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4791337573148038701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3286866004926964515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2821976394
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &606075020862887833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,11 +82,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d69f1024707d4c81488d5f06e96f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
-  buildingUnits: []
+  ShowTopMostFoldoutHeaderGroup: 1
   healthBar: {fileID: 5749275408073883805}
   buildingInProgressPrefab: {fileID: 3688444315432235300}
   constructionPrefab: {fileID: 474397167381355303}
+  buildingUnits: []
 --- !u!114 &5807540428542867514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,15 +99,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a2346c456f7be4fa2b99527995f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   unitSo: {fileID: 0}
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
-  shouldChangeMaterial: 0
   unitPrefabs: []
   unitUiPrefabs: []
   bushes: []
-  isVisibile: 1
+  Upgrades: []
+  IsBot: 0
+  shouldChangeMaterial: 0
+  isVisibile:
+    m_InternalValue: 1
+  IsUpgrading:
+    m_InternalValue: 0
+  Damagable: {fileID: 0}
 --- !u!114 &2943060365431914200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,14 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e15fa62911dfe94384336f6b5b24feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   healthBar: {fileID: 5749275408073883805}
+  teamType:
+    m_InternalValue: 0
   damagableSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
   levelable: {fileID: 0}
-  targetPoint: {fileID: 0}
-  isDead: 0
-  damageBoost: 0
-  damage: 0
+  TargetPoint: {fileID: 0}
+  IsBot: 0
   stats: {fileID: 0}
+  isDead:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bb031758b5d74418f8d51a87157a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   selectionCircle: {fileID: 0}
   selectableType: 0
   isSelected: 0
@@ -167,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d90683d0e8ce284e96a83caf108abb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   buildingSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
   attackableSo: {fileID: 11400000, guid: 0375402e73ef72d44a0d0a6efdcaa90b, type: 2}
   buildingLevelable: {fileID: 0}
@@ -182,32 +220,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc43562d0d0107742a0ae19144d0a7bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   buildingLevelableSo: {fileID: 11400000, guid: 179735a6902ba1c44a1912e2db66c604,
     type: 2}
-  level: 1
+  level:
+    m_InternalValue: 1
+  reduceSpawnTime:
+    m_InternalValue: 0
   building: {fileID: 0}
   damagable: {fileID: 0}
-  reduceSpawnTime: 0
---- !u!114 &4791337573148038701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3286866004926964515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &-2183276253921039989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281d9a038ebb40d45872f33dd908714c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5398051915011653896
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,12 +373,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1001 &815442246044689766
 PrefabInstance:
   m_ObjectHideFlags: 0

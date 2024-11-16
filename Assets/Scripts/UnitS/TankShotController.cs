@@ -52,7 +52,7 @@ public class TankShotController : NetworkBehaviour
 
         if (Time.time - lastAttackTime > 0.25f)
         {
-            animator.Animator.SetBool("isShot", false);
+            animator.Animator.SetBool(isShotHash, false);
         }
     }
 }

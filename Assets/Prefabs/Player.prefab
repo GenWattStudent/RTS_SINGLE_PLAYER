@@ -232,7 +232,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   Upgrades:
   - {fileID: 11400000, guid: fd661daae6a5033419336af84e7aa779, type: 2}
-  - {fileID: 11400000, guid: fd661daae6a5033419336af84e7aa779, type: 2}
   SelectedUpgrade: {fileID: 0}
 --- !u!114 &8060005900507694997
 MonoBehaviour:

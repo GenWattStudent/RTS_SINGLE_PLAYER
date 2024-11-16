@@ -32,7 +32,11 @@ public class UnitMovement : NetworkBehaviour
     {
         if (isInDebt)
         {
-            Stop();
+            agent.speed = stats.GetStat(StatType.Speed) / 2;
+        }
+        else
+        {
+            agent.speed = stats.GetStat(StatType.Speed);
         }
     }
 
@@ -66,7 +70,6 @@ public class UnitMovement : NetworkBehaviour
 
     private void Start()
     {
-
         SetNavMeshValues();
         stats.BaseStats.OnListChanged += StatsChanged;
     }

@@ -5,7 +5,6 @@ using UnityEngine;
 [DefaultExecutionOrder(2)]
 public class Damagable : NetworkBehaviour
 {
-    [SerializeField] private RectTransform healthBar;
     [HideInInspector] public NetworkVariable<TeamType> teamType = new(TeamType.None);
     public DamagableSo damagableSo;
     public Levelable levelable;
@@ -67,12 +66,22 @@ public class Damagable : NetworkBehaviour
                 powerUp.ApplySkills(skillApplicable);
             }
 
-            SetHealthClientRpc(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
-
             // TakeDamage(2000);
         }
 
         isDead.OnValueChanged += HandleDeadState;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        stats.BaseStats.OnListChanged += HandleBaseStatsChange;
+    }
+
+    private void HandleBaseStatsChange(NetworkListEvent<Stat> changeEvent)
+    {
+        SetHealth(stats.GetStat(StatType.Health), stats.GetStat(StatType.MaxHealth));
     }
 
     private void HandleDeadState(bool oldValue, bool newValue)
@@ -123,8 +132,7 @@ public class Damagable : NetworkBehaviour
         InstantiateDestroyedObject();
     }
 
-    [ClientRpc]
-    public void SetHealthClientRpc(float health, float maxHealth)
+    public void SetHealth(float health, float maxHealth)
     {
         progressBarScript.UpdateProgresBar(health, maxHealth);
     }
@@ -148,8 +156,6 @@ public class Damagable : NetworkBehaviour
             DeathServerRpc();
             return true;
         }
-
-        SetHealthClientRpc(newHealth, maxHealth);
 
         return false;
     }

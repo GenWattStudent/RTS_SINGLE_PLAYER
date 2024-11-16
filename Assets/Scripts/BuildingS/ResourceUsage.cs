@@ -33,7 +33,19 @@ public class ResourceUsage : NetworkBehaviour
         usageInterval = stats.GetStat(StatType.UsageInterval);
         ResourceSO = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
 
-        if (IsServer) uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+        if (IsServer)
+        {
+            uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+            uIStorage.OnStoragesChanged += HandleStoragesChanged;
+        }
+    }
+
+    private void HandleStoragesChanged()
+    {
+        if (isInDebt && uIStorage.HasEnoughResource(ResourceSO, stats.GetStat(StatType.Usage)))
+        {
+            UseResources();
+        }
     }
 
     private UsageData GetUsageDataFromStats()

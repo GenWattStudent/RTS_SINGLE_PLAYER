@@ -28,5 +28,5 @@ MonoBehaviour:
     CurrentValue: 40
     BaseValue: 40
   - Type: 5
-    CurrentValue: 18
-    BaseValue: 18
+    CurrentValue: 9
+    BaseValue: 9

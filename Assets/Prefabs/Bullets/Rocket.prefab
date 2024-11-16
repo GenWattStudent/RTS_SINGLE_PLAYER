@@ -58,6 +58,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -92,9 +95,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3694495670714098034}
-  - component: {fileID: 4493460404982636758}
   - component: {fileID: -4882059750134424208}
-  - component: {fileID: 7726855082304701699}
+  - component: {fileID: 7423068247777359188}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -118,24 +120,6 @@ Transform:
   - {fileID: 6361498997289880877}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4493460404982636758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5697498854208013853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab8400b9bf6b5c04ebc57637a52d3035, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  target: {x: 0, y: 0, z: 0}
-  direction: {x: 0, y: 0, z: 0}
-  previousPosition: {x: 0, y: 0, z: 0}
-  arcHeight: 5
-  launchAngle: 0
 --- !u!114 &-4882059750134424208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,9 +135,9 @@ MonoBehaviour:
   damage: 0
   bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
   unitsBullet: {fileID: 0}
-  networkObject: {fileID: 0}
   motion: {fileID: 0}
---- !u!114 &7726855082304701699
+  teamType: 0
+--- !u!114 &7423068247777359188
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,14 +146,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5697498854208013853}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 39f62a25dd528f54ca49bfe6c0ea385b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  speed: 0
+  target: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  previousPosition: {x: 0, y: 0, z: 0}
+  arcHeight: 0
+  launchAngle: 0

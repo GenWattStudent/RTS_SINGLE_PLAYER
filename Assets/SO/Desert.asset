@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1ecb791e242094d9008697c5ce4f9b, type: 3}
   m_Name: Desert
   m_EditorClassIdentifier: 
-  MapName: Desert
+  MapName: Forest
   MapImage: {fileID: 2800000, guid: bc4a83ea0e448ab4fbe674b05056855e, type: 3}
