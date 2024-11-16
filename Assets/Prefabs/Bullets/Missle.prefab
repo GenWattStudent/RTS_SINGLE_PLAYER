@@ -186,7 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1654249786358649304}
   - component: {fileID: 2753135743361072677}
-  - component: {fileID: -7307114883415932514}
+  - component: {fileID: -7829571346997543679}
   m_Layer: 0
   m_Name: Missle
   m_TagString: Untagged
@@ -228,7 +228,7 @@ MonoBehaviour:
   unitsBullet: {fileID: 0}
   motion: {fileID: 0}
   teamType: 0
---- !u!114 &-7307114883415932514
+--- !u!114 &-7829571346997543679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,10 +237,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3824120718455233952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab8400b9bf6b5c04ebc57637a52d3035, type: 3}
+  m_Script: {fileID: 11500000, guid: e1fde5d7f27f7de44ac4e4d7040a038b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   speed: 0
   target: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}

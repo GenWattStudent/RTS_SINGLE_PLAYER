@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: 47e514a97e2d6984d9ad789522e10368
   - enabled: 1
-    path: Assets/Scenes/Desert.unity
+    path: Assets/Scenes/Maps/Forest.unity
     guid: ca8631b630e00a248ac6a7d4b46026c4
   - enabled: 0
     path: Assets/Scenes/Maps/Moon.unity
@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Loader.unity
     guid: a31ab42a3a179984f9ca5cf555b1f243
+  - enabled: 1
+    path: Assets/Scenes/Managers.unity
+    guid: 13ffce805df931d46bfec31f7512196c
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

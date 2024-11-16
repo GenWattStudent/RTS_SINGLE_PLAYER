@@ -54,8 +54,8 @@ public class VisibilityManager : NetworkBehaviour
         if (angle > sightAngle / 2) return false;
 
         return !IsTargetHide(unit, enemyUnit);
-    }
 
+    }
     public void Show(Unit unit)
     {
         var networkObject = unit.GetComponent<NetworkObject>();
@@ -115,11 +115,11 @@ public class VisibilityManager : NetworkBehaviour
 
                         if (!visibilityCounts.ContainsKey(networkObject))
                         {
-                            visibilityCounts[networkObject] = 0;
+                            visibilityCounts[networkObject] = 1;
                         }
-                        visibilityCounts[networkObject] = 0;
                         visibilityCounts[networkObject]++;
-                        networkObject.GetComponent<Unit>().isVisibile.Value = true;
+
+                        // enemyUnit.isVisibile.Value = true;
                     }
                     else
                     {
@@ -128,10 +128,9 @@ public class VisibilityManager : NetworkBehaviour
                         if (!visibilityCounts.ContainsKey(networkObject))
                         {
                             visibilityCounts[networkObject] = 0;
-
                         }
 
-                        networkObject.GetComponent<Unit>().isVisibile.Value = false;
+                        // enemyUnit.isVisibile.Value = false;
                     }
                 }
             }

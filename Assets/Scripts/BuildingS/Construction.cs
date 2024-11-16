@@ -19,7 +19,7 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     private Stats stats;
     private SelectionManager selectionManager;
 
-    public event Action OnConstructionFinished;
+    public event Action OnFinshed;
 
     [ServerRpc(RequireOwnership = false)]
     public void DestroyConstructionServerRpc()
@@ -44,6 +44,16 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
         }
     }
 
+    public void RemoveWorkers()
+    {
+        foreach (var worker in buildingUnits)
+        {
+            worker.StopConstructionServerRpc(false);
+        }
+
+        buildingUnits.Clear();
+    }
+
     public void StartConstruction()
     {
         isCurrentlyConstructing = true;
@@ -54,16 +64,7 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     {
         isCurrentlyConstructing = false;
         ActivateConstructionBuildingServerRpc();
-        StopWorkersConstruction();
-    }
-
-    private void StopWorkersConstruction()
-    {
-        foreach (var unit in buildingUnits)
-        {
-            var worker = unit.GetComponent<Worker>();
-            worker.StopConstructionServerRpc(false);
-        }
+        RemoveWorkers();
     }
 
     private bool RemoveConstructionIfSelected()
@@ -103,7 +104,6 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
 
         if (unit != null)
         {
-            Debug.Log("Unit is not null " + unit.transform.name);
             unit.IsUpgrading.Value = false;
             no.transform.SetParent(unit.transform);
         }
@@ -116,7 +116,7 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     {
         // Finished building
         InstantiateBuildingServerRpc();
-        OnConstructionFinished?.Invoke();
+        OnFinshed?.Invoke();
     }
 
     [ClientRpc]
@@ -162,10 +162,13 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        if (IsServer)
-        {
-            StopWorkersConstruction();
-        }
+        RemoveWorkers();
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        RemoveWorkers();
     }
 
     [ClientRpc]

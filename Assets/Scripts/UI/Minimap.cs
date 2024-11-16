@@ -49,7 +49,7 @@ public class Minimap : NetworkToolkitHelper
         // add layer to line renderer
         lineRenderer.gameObject.layer = LayerMask.NameToLayer("Trapezoid");
         // set line renderer to be in front of minimap
-        lineRenderer.sortingOrder = 1;
+        lineRenderer.sortingOrder = 10;
 
         RenderPipelineManager.endCameraRendering += HandlePostRender;
     }
@@ -118,6 +118,7 @@ public class Minimap : NetworkToolkitHelper
 
         for (int i = 0; i < 4; i++)
         {
+            corners[i].y = 6;
             lineRenderer.SetPosition(i, corners[i]);
         }
 

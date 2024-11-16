@@ -32,6 +32,7 @@ public class ParabolicMotion : Motion
     public override void Move()
     {
         if (totalDistance <= 0) return;
+
         previousPosition = transform.position;
 
         distanceTravelled += speed * Time.deltaTime;

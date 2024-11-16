@@ -77,7 +77,7 @@ namespace RTS.Managers
                 damagable.teamType.Value = _playerController.teamType.Value;
 
                 _uiStorage.DecreaseResource(upgrade.costResource, upgrade.Cost);
-                stats.AddStat(StatType.Health, 1);
+                stats.SetStat(StatType.Health, 1);
             }
         }
 
@@ -91,7 +91,14 @@ namespace RTS.Managers
 
             if (Input.GetKeyDown(KeyCode.U))
             {
-                _upgradeUI.Show();
+                if (_upgradeUI.isVisibile)
+                {
+                    _upgradeUI.Hide();
+                }
+                else
+                {
+                    _upgradeUI.Show();
+                }
             }
         }
     }

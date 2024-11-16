@@ -15,7 +15,6 @@ public class Worker : NetworkBehaviour
     private void ActivateLaserServerRpc()
     {
         var targetNo = (construction as NetworkBehaviour).GetComponent<NetworkObject>();
-        Debug.Log("ActivateLaserServerRpc " + targetNo);
         ActivateLaserClientRpc(targetNo);
     }
 
@@ -44,7 +43,6 @@ public class Worker : NetworkBehaviour
 
     private float DistanceToConstruction()
     {
-        if (construction == null) return 0;
         return Vector3.Distance(transform.position, (construction as NetworkBehaviour).transform.position);
     }
 
@@ -55,6 +53,11 @@ public class Worker : NetworkBehaviour
         ActivateLaserServerRpc();
     }
 
+    private void HandleFinish()
+    {
+        StopConstructionServerRpc();
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void StopConstructionServerRpc(bool removeFromList = true)
     {
@@ -62,11 +65,7 @@ public class Worker : NetworkBehaviour
         if (removeFromList) construction.RemoveWorker(this);
         isBuilding = false;
 
-        if (construction.GetComponent<Damagable>() != null)
-        {
-            construction.GetComponent<Damagable>().OnDead -= (damagable) => StopConstructionServerRpc();
-        }
-
+        construction.OnFinshed -= HandleFinish;
         construction = null;
         DeactivateLaserServerRpc();
     }
@@ -98,11 +97,7 @@ public class Worker : NetworkBehaviour
             }
 
             this.construction = construction;
-
-            if (this.construction.GetComponent<Damagable>() != null)
-            {
-                this.construction.GetComponent<Damagable>().OnDead += (damagable) => StopConstructionServerRpc();
-            }
+            this.construction.OnFinshed += HandleFinish;
 
             MoveToConstruction();
         }
@@ -124,17 +119,22 @@ public class Worker : NetworkBehaviour
 
         stats.AddStat(StatType.Damage, laser.laserSo.Damage);
         stats.AddStat(StatType.AttackSpeed, laser.laserSo.AttackSpeed);
+
+        NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateWorker;
     }
 
     public override void OnNetworkDespawn()
     {
         if (!IsServer) return;
         StopConstructionServerRpc();
+
+        NetworkManager.Singleton.NetworkTickSystem.Tick -= UpdateWorker;
     }
 
-    private void Update()
+    private void UpdateWorker()
     {
-        if (!IsServer || construction == null) return;
+        if (!IsServer) return;
+        if (construction == null) return;
 
         var distance = DistanceToConstruction();
         unitMovement.RotateToTarget(construction.transform.position);
@@ -143,10 +143,7 @@ public class Worker : NetworkBehaviour
 
         if (distance <= buildingDistance && !isBuilding)
         {
-            if (unitMovement != null)
-            {
-                unitMovement.Stop();
-            }
+            unitMovement.Stop();
 
             StartConstruction();
         }
