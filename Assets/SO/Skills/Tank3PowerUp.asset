@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8ab2ccdf7327b54bb283cda1239909d, type: 3}
+  m_Name: Tank3PowerUp
+  m_EditorClassIdentifier: 
+  Name: Increase Tank Health
+  Duration: 0
+  Cooldown: 0
+  Stats:
+  - Type: 0
+    CurrentValue: 10
+    BaseValue: 10
+  - Type: 1
+    CurrentValue: 10
+    BaseValue: 10
+  Icon: {fileID: 0}
+  Prefab: {fileID: 0}
+  IsPermanent: 1
+  IsStackable: 0
+  IsPercentage: 1
+  IsAbility: 0

@@ -49,6 +49,7 @@ public class UnitDetailsUpdater
         var attackSpeed = stats.GetStat(StatType.AttackSpeed);
         var buildingDistance = stats.GetStat(StatType.BuildingDistance);
         var damagable = stats.GetComponent<Damagable>();
+        var speed = stats.GetStat(StatType.Speed);
 
         if (damagable.unitScript.unitSo.type == UnitSo.UnitType.Worker)
         {
@@ -60,6 +61,8 @@ public class UnitDetailsUpdater
             StatCreator.CreateDamageStat(statsContainer, damage, baseDamage);
             StatCreator.CreateAttackSpeedStat(statsContainer, attackSpeed);
         }
+
+        StatCreator.CreateSpeedStat(statsContainer, speed);
 
         if (damagable.unitScript.IsUpgrading.Value)
         {
