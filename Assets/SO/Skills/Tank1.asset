@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de2103812b0add4fb6583eca2c27030, type: 3}
+  m_Name: Tank1
+  m_EditorClassIdentifier: 
+  Description: by 10%
+  RequiredSkills: []
+  RequiredSkillPoints: 1
+  SkillTag: TankSkill1
+  UnitNames:
+  - Tank
+  - Heavy Tank
+  PowerUp: {fileID: 11400000, guid: 3a3771371b1c257479a9adb74838cef0, type: 2}

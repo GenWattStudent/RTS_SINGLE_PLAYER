@@ -47,13 +47,23 @@ public class BuildingDetailsUpdater
             float health = damagable.stats.GetStat(StatType.Health);
             float maxHealth = damagable.stats.GetStat(StatType.MaxHealth);
 
-            StatCreator.CreateHealthStat(statsContainer, health, maxHealth);
+
+            if (building.buildingSo.incomeResource != null)
+            {
+                var income = damagable.stats.GetStat(StatType.Income);
+                var incomeResource = building.buildingSo.incomeResource.resourceName;
+
+                StatCreator.CreateIncomeStat(statsContainer, income);
+                StatCreator.CreateIncomeResourceStat(statsContainer, incomeResource);
+            }
+
             UpdateHealthBar(health, maxHealth);
             HandleLeveling(building, damagable);
             ActivateBuildingCamera(damagable);
 
             if (damagable.damagableSo.canAttack)
             {
+                StatCreator.CreateDamageStat(statsContainer, damagable.stats.GetStat(StatType.Damage), damagable.stats.GetBaseStat(StatType.Damage));
                 ShowHideAttackActions(true);
             }
             else

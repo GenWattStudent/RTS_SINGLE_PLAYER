@@ -24,7 +24,7 @@ public class HeroHealSo : SkillTreeSo
                 Heal(unit);
             }
 
-            var skillInstance = Instantiate(skillPrefab, unit.transform);
+            var skillInstance = Instantiate(PowerUp.Prefab, unit.transform);
             skillInstance.GetComponent<NetworkObject>().SpawnWithOwnership(unit.OwnerClientId);
             skillInstance.transform.SetParent(unit.transform);
             unit.StartCoroutine(DestroyAfterDuration(skillInstance, healDuration));

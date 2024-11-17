@@ -48,7 +48,10 @@ MonoBehaviour:
   spawnTime: 2
   spawnerLevelToUnlock: 1
   resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
-  usage: 2
+  usage: 20
   usageInterval: 3
   sightAngle: 360
   sightRange: 10
+  debuff: {fileID: 11400000, guid: 7f646445bf9289f4788b168e1399016c, type: 2}
+  debuffEffect: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c,
+    type: 3}

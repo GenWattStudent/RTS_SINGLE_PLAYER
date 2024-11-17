@@ -29,6 +29,21 @@ public static class StatCreator
         CreateStat(statsContainer, "Building Distance", $"{distance}");
     }
 
+    public static void CreateSpeedStat(VisualElement statsContainer, float speed)
+    {
+        CreateStat(statsContainer, "Speed", $"{speed}");
+    }
+
+    public static void CreateIncomeStat(VisualElement statsContainer, float income)
+    {
+        CreateStat(statsContainer, "Income", $"{income}");
+    }
+
+    public static void CreateIncomeResourceStat(VisualElement statsContainer, string incomeResource)
+    {
+        CreateStat(statsContainer, "income Resource", $"{incomeResource}");
+    }
+
     public static void CreateStat(VisualElement statsContainer, string name, string value)
     {
         var statBox = new VisualElement
