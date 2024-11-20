@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Damage Power Up
   Duration: 5
+  Cooldown: 0
   Stats:
   - Type: 2
     CurrentValue: 10
     BaseValue: 10
   Icon: {fileID: 0}
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 100004, guid: f10a79f37ff522b4280e2844332bef77, type: 3}
   IsPermanent: 0
   IsStackable: 1
   IsPercentage: 1
+  IsAbility: 0

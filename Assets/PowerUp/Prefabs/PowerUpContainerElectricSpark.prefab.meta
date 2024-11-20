@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 034e51e6d8986d04795f48b487231687
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16458
+  packageName: PowerUp particles
+  packageVersion: 1.1.3
+  assetPath: Assets/PowerUp/Prefabs/PowerUpContainerElectricSpark.prefab
+  uploadId: 387662
