@@ -21,7 +21,7 @@ MonoBehaviour:
     BaseValue: -50
   Icon: {fileID: 0}
   Prefab: {fileID: 0}
-  IsPermanent: 0
+  IsPermanent: 1
   IsStackable: 0
   IsPercentage: 1
   IsAbility: 0

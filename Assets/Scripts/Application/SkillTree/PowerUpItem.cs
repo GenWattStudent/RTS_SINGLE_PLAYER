@@ -6,9 +6,21 @@ public class PowerUpItem : NetworkBehaviour
     [SerializeField] private PowerUpSo powerUpSo;
     private NetworkObject networkObject;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        networkObject = GetComponent<NetworkObject>();
+        base.OnNetworkSpawn();
+
+        if (IsServer)
+        {
+            // var go = Instantiate(powerUpSo.Prefab, transform.position, Quaternion.identity);
+            // networkObject = go.GetComponent<NetworkObject>();
+
+            // if (networkObject != null)
+            // {
+            //     networkObject.Spawn();
+            // }
+            networkObject = GetComponent<NetworkObject>();
+        }
     }
 
     private void Update()
@@ -20,7 +32,7 @@ public class PowerUpItem : NetworkBehaviour
     {
         // Rotate to be curved pluse rotate up and down
         transform.Rotate(Vector3.up * Time.deltaTime * 50);
-        transform.position = new Vector3(transform.position.x, Mathf.PingPong(Time.time, 0.5f) + 1, transform.position.z);
+        transform.position = new Vector3(transform.position.x, Mathf.PingPong(Time.time, 0.2f) + 0.5f, transform.position.z);
     }
 
     private void OnTriggerEnter(Collider other)
