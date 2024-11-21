@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8ab2ccdf7327b54bb283cda1239909d, type: 3}
-  m_Name: DamagePowerUp
+  m_Name: SpeedPowerUp
   m_EditorClassIdentifier: 
-  Name: Damage Power Up
-  Duration: 5
-  Cooldown: 10
+  Name: Speed Power Up
+  Duration: 20
+  Cooldown: 25
   Stats:
-  - Type: 2
+  - Type: 5
     CurrentValue: 10
     BaseValue: 10
   Icon: {fileID: 0}
-  Prefab: {fileID: 100004, guid: f10a79f37ff522b4280e2844332bef77, type: 3}
+  Prefab: {fileID: 100006, guid: 339ec13e94b70ca469275f6f7e29bac3, type: 3}
   IsPermanent: 0
   IsStackable: 1
   IsPercentage: 1

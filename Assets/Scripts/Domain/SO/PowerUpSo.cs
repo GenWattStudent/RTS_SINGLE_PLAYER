@@ -15,6 +15,7 @@ public class PowerUpSo : ScriptableObject
     public bool IsStackable = true;
     public bool IsPercentage = true;
     public bool IsAbility = false;
+    public bool IsRespawnable = false;
 
     public bool HasCooldown => Cooldown > 0;
 }
