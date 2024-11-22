@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6147144558642713454}
   - component: {fileID: 3710898475097951197}
+  - component: {fileID: -6271539331764796378}
   - component: {fileID: 6658737344311043898}
   - component: {fileID: -6640201509390759280}
   - component: {fileID: 7260419064711618807}
   - component: {fileID: -3413407138139128331}
   - component: {fileID: 3935365758164698151}
   - component: {fileID: -5616619733085501964}
-  - component: {fileID: -6271539331764796378}
   - component: {fileID: -3848033353401656120}
   - component: {fileID: 2775828512116916213}
   - component: {fileID: 8060005900507694997}
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1264024512
+  GlobalObjectIdHash: 3328251871
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -70,6 +70,21 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-6271539331764796378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502280097689162745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02a99d567138fd4786a3f36ee560ea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  LocalPlayerUnits: []
+  LocalPlayerBuildings: []
 --- !u!114 &6658737344311043898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,21 +204,6 @@ MonoBehaviour:
   UILayer:
     serializedVersion: 2
     m_Bits: 32
---- !u!114 &-6271539331764796378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3502280097689162745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e02a99d567138fd4786a3f36ee560ea7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  LocalPlayerUnits: []
-  LocalPlayerBuildings: []
 --- !u!114 &-3848033353401656120
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,10 +7,14 @@ public class LobbyPlayersHandler : NetworkBehaviour
     public Dictionary<ulong, PlayerNetcodeLobbyData> playerNetcodeLobbyDataDict;
     public NetworkList<PlayerNetcodeLobbyData> playerNetcodeLobbyData;
 
+    public static LobbyPlayersHandler Instance;
+
     private void Awake()
     {
+        Instance = this;
         playerNetcodeLobbyDataDict = new();
         playerNetcodeLobbyData = new();
+        DontDestroyOnLoad(gameObject);
     }
 
     public override void OnNetworkSpawn()
@@ -43,6 +47,7 @@ public class LobbyPlayersHandler : NetworkBehaviour
         {
             var savedPlayerData = playerNetcodeLobbyDataDict[clientId];
             var playerIndex = GetFreeColorIndex();
+            Debug.Log($"Player {clientId} connected with index {playerIndex}");
             Color? notSelectedColor = MultiplayerController.Instance.playerMaterials[playerIndex].playerColor;
 
             savedPlayerData.Team = playerIndex % 2 == 0 ? TeamType.Blue : TeamType.Red;

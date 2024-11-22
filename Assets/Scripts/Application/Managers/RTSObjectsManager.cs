@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine;
 
 public class RTSObjectsManager : NetworkBehaviour
 {
     public static Dictionary<ulong, List<Unit>> Objects { get; private set; } = new();
     public static Dictionary<ulong, List<Unit>> Units { get; private set; } = new();
     public static Dictionary<ulong, List<Building>> Buildings { get; private set; } = new();
-    public static QuadTree quadtree = new QuadTree(0, new UnityEngine.Rect(0, 0, 250, 250));
+    public static QuadTree quadtree = new QuadTree(0, new Rect(0, 0, 250, 250));
 
     public List<Unit> LocalPlayerUnits = new();
     public List<Building> LocalPlayerBuildings = new();
@@ -30,6 +31,15 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+
+            if (!GameManager.Instance.IsDebug)
+            {
+                Debug.Log("RTSObjectsManager Start");
+                foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+                {
+                    OnClientConnected(client.ClientId);
+                }
+            }
         }
     }
 
@@ -44,19 +54,9 @@ public class RTSObjectsManager : NetworkBehaviour
         }
     }
 
-    private void Start()
-    {
-        if (IsServer && !GameManager.Instance.IsDebug)
-        {
-            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                OnClientConnected(client.ClientId);
-            }
-        }
-    }
-
     private void OnClientConnected(ulong clientId)
     {
+        Debug.Log($"Client connected: {clientId}");
         Units[clientId] = new List<Unit>();
         Buildings[clientId] = new List<Building>();
         Objects[clientId] = new List<Unit>();
@@ -79,6 +79,7 @@ public class RTSObjectsManager : NetworkBehaviour
     {
         if (nor.TryGet(out NetworkObject no))
         {
+            Debug.Log("AddUnitServerRpc");
             var unit = no.GetComponent<Unit>();
             Units[no.OwnerClientId].Add(unit);
             Objects[no.OwnerClientId].Add(unit);
