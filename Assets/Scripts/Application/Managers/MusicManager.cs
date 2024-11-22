@@ -37,7 +37,7 @@ public class MusicManager : Singleton<MusicManager>
 
     public void SetGlobalMusicVolume(float volume)
     {
-        // globalMusic.volume = volume;
+        globalMusic.volume = volume;
     }
 
     public void SetEffectVolume(float volume)

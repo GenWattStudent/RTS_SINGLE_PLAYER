@@ -1,28 +1,9 @@
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
-using Unity.Networking.Transport.Relay;
 using UnityEngine;
 
 [DefaultExecutionOrder(-100)]
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public bool IsDebug = false;
-    public static GameManager Instance;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-
-        if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
+    public bool IsDebug = true;
 
     private void Start()
     {

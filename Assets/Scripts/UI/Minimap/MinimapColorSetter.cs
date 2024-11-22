@@ -3,13 +3,21 @@ using UnityEngine.UI;
 
 public class MinimapColorSetter : NetworkBehaviour
 {
-    private PlayerController playerController;
-    private Image image;
-
-    void Start()
+    private void Start()
     {
-        playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        image = GetComponent<Image>();
-        image.color = playerController.playerData.playerColor;
+        var color = UnityEngine.Color.white;
+        if (!GameManager.Instance.IsDebug)
+        {
+            var lobbyPlayerData = LobbyPlayersHandler.Instance.GetPlayerData(OwnerClientId);
+            color = lobbyPlayerData.Value.playerColor;
+        }
+        else
+        {
+            color = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
+        }
+
+        var image = GetComponent<Image>();
+
+        image.color = color;
     }
 }

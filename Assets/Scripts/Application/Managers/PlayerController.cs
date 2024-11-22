@@ -6,6 +6,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-100)]
 public class PlayerController : NetworkBehaviour
 {
+    private Dictionary<ulong, Vector3> spawnPostionsDict { get; set; } = new();
     [SerializeField] private GameObject hero;
     [SerializeField] private List<GameObject> unitPrefabs = new();
     public PlayerLevelSo playerLevelSo;
@@ -81,6 +82,7 @@ public class PlayerController : NetworkBehaviour
                 if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 spawnPosition += new Vector3(2, 0, 0);
+                Debug.Log($"Spawning unit {unit.name} for player {clientId} {teamType.Value}");
                 damagable.teamType.Value = teamType.Value;
                 no.SpawnWithOwnership(clientId);
                 RTSObjectsManager.AddUnitServerRpc(no);
@@ -124,27 +126,70 @@ public class PlayerController : NetworkBehaviour
         {
             playerLevel.OnValueChanged += OnPlayerLevelChangeHandler;
             playerExperience.OnValueChanged += OnPlayerExpierenceChangeHandler;
+        }
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+
+            var spawnPositions = GameObject.Find("PlayerSpawnPoints");
+            var clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new[] { OwnerClientId }
+                }
+            };
 
             if (GameManager.Instance.IsDebug)
             {
                 var team = OwnerClientId % 2 == 0 ? TeamType.Blue : TeamType.Red;
-                SetTeamServerRpc(team);
+                var spawnPoint = spawnPositions.transform.GetChild((int)OwnerClientId).transform.position;
+
+                spawnPostionsDict.Add(OwnerClientId, spawnPoint);
+                SetTeam(team);
+                SetPlayerDataClientRpc((int)OwnerClientId, spawnPoint, clientRpcParams);
             }
             else
             {
-                var team = LobbyManager.Instance.playerLobbyData.Team;
-                Debug.Log("OnNetworkSpawn " + team);
-                SetTeamServerRpc(team);
+                var lobbyPlayerData = LobbyPlayersHandler.Instance.GetPlayerData(OwnerClientId);
+
+                if (lobbyPlayerData.HasValue)
+                {
+                    Debug.Log($"Player {OwnerClientId} connected with index {lobbyPlayerData.Value.PlayerIndex}");
+                    var spawnPoint = spawnPositions.transform.GetChild(lobbyPlayerData.Value.PlayerIndex).transform.position;
+                    spawnPostionsDict.Add(OwnerClientId, spawnPoint);
+                    SetPlayerDataClientRpc(lobbyPlayerData.Value.PlayerIndex, spawnPoint, clientRpcParams);
+                    SetTeam(lobbyPlayerData.Value.Team);
+                }
             }
-
-            var spawnPositions = GameObject.Find("PlayerSpawnPoints");
-            playerData.playerColor = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerColor;
-            playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId].playerMaterial;
-            playerData.spawnPosition = spawnPositions.transform.GetChild((int)OwnerClientId).position;
-
-            var cameraSystem = FindAnyObjectByType<CameraSystem>();
-            cameraSystem.SetCameraPosition(new Vector3(playerData.spawnPosition.x, cameraSystem.transform.position.y, playerData.spawnPosition.z));
         }
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (!IsServer) return;
+
+        SpawnUnitServerRpc(spawnPostionsDict[OwnerClientId], OwnerClientId);
+        AddExpiernceServerRpc(1);
+    }
+
+    private void OnClientDisconnect(ulong clientId)
+    {
+        if (!IsServer) return;
+
+        spawnPostionsDict.Remove(clientId);
+    }
+
+    [ClientRpc]
+    private void SetPlayerDataClientRpc(int playerIndex, Vector3 spawnPoint, ClientRpcParams clientRpcParams = default)
+    {
+        playerData.playerColor = MultiplayerController.Instance.playerMaterials[playerIndex].playerColor;
+        playerData.playerMaterial = MultiplayerController.Instance.playerMaterials[playerIndex].playerMaterial;
+
+        var cameraSystem = FindAnyObjectByType<CameraSystem>();
+        cameraSystem.SetCameraPosition(new Vector3(spawnPoint.x, cameraSystem.transform.position.y, spawnPoint.z));
     }
 
     private void Awake()
@@ -154,21 +199,7 @@ public class PlayerController : NetworkBehaviour
         RTSObjectsManager = GetComponent<RTSObjectsManager>();
     }
 
-    private void Start()
-    {
-        if (IsOwner)
-        {
-            SpawnUnitServerRpc(playerData.spawnPosition, OwnerClientId);
-        }
-
-        if (IsServer)
-        {
-            AddExpiernceServerRpc(1);
-        }
-    }
-
-    [ServerRpc()]
-    private void SetTeamServerRpc(TeamType teamType)
+    private void SetTeam(TeamType teamType)
     {
         this.teamType.Value = teamType;
     }
