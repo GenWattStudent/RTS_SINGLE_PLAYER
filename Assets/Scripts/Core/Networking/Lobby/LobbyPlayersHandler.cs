@@ -53,6 +53,7 @@ public class LobbyPlayersHandler : NetworkBehaviour
             savedPlayerData.Team = playerIndex % 2 == 0 ? TeamType.Blue : TeamType.Red;
             savedPlayerData.playerColor = (Color)notSelectedColor;
             savedPlayerData.IsReady = false;
+            savedPlayerData.PlayerIndex = playerIndex;
 
             playerNetcodeLobbyData.Add(savedPlayerData);
         }
