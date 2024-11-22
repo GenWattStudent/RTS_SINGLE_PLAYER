@@ -130,7 +130,6 @@ public class PlayerController : NetworkBehaviour
 
         if (IsServer)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
 
             var spawnPositions = GameObject.Find("PlayerSpawnPoints");
@@ -167,14 +166,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    private void OnClientConnected(ulong clientId)
-    {
-        if (!IsServer) return;
-
-        SpawnUnitServerRpc(spawnPostionsDict[OwnerClientId], OwnerClientId);
-        AddExpiernceServerRpc(1);
-    }
-
     private void OnClientDisconnect(ulong clientId)
     {
         if (!IsServer) return;
@@ -197,6 +188,15 @@ public class PlayerController : NetworkBehaviour
         playerData = new PlayerData();
         LatencyManager = GetComponent<LatencyManager>();
         RTSObjectsManager = GetComponent<RTSObjectsManager>();
+    }
+
+    private void Start()
+    {
+        if (IsServer)
+        {
+            SpawnUnitServerRpc(spawnPostionsDict[OwnerClientId], OwnerClientId);
+            AddExpiernceServerRpc(1);
+        }
     }
 
     private void SetTeam(TeamType teamType)

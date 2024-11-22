@@ -29,17 +29,10 @@ public class RTSObjectsManager : NetworkBehaviour
 
         if (IsServer)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            // NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
 
-            if (!GameManager.Instance.IsDebug)
-            {
-                Debug.Log("RTSObjectsManager Start");
-                foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-                {
-                    OnClientConnected(client.ClientId);
-                }
-            }
+            OnClientConnected(OwnerClientId);
         }
     }
 
@@ -49,7 +42,7 @@ public class RTSObjectsManager : NetworkBehaviour
 
         if (IsServer)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            // NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
         }
     }
