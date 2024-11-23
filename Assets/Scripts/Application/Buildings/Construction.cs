@@ -36,22 +36,25 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
 
     public void RemoveWorker(Worker worker)
     {
-        buildingUnits.Remove(worker);
-        if (buildingSpeed > 0) buildingSpeed -= worker.stats.GetStat(StatType.Damage);
-        if (buildingUnits.Count == 0)
+        if (buildingUnits.Contains(worker))
         {
-            StopConstruction();
+            buildingUnits.Remove(worker);
+            if (buildingSpeed > 0) buildingSpeed -= worker.stats.GetStat(StatType.Damage);
+            if (buildingUnits.Count == 0)
+            {
+                StopConstruction();
+            }
         }
     }
 
     public void RemoveWorkers()
     {
-        foreach (var worker in buildingUnits)
+        for (int i = buildingUnits.Count - 1; i >= 0; i--)
         {
-            worker.StopConstructionServerRpc(false);
+            var worker = buildingUnits[i];
+            RemoveWorker(worker);
+            worker.StopWorkerConstruction();
         }
-
-        buildingUnits.Clear();
     }
 
     public void StartConstruction()
@@ -146,7 +149,6 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     [ClientRpc]
     private void ActivateBuildInProgressClientRpc()
     {
-        // Building with shader effect while someone is building it
         buildingInProgressPrefab.SetActive(true);
         constructionPrefab.SetActive(false);
     }
@@ -154,7 +156,6 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     [ClientRpc]
     private void ActivateConstructionBuildingClientRpc()
     {
-        // Building with shader effect while someone is building it
         buildingInProgressPrefab.SetActive(false);
         constructionPrefab.SetActive(true);
     }

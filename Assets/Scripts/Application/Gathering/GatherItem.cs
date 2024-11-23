@@ -77,10 +77,11 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
 
     public void RemoveWorker(Worker worker)
     {
+        Debug.Log("Remove worker");
         var damagable = worker.GetComponent<Damagable>();
         damagable.OnDead -= HandleWorkerDeath;
         workers.Remove(worker);
-        worker.StopConstructionServerRpc(false);
+        worker.StopWorkerConstruction();
     }
 
     public void RemoveWorkers()
@@ -89,7 +90,7 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
         {
             var damagable = worker.GetComponent<Damagable>();
             damagable.OnDead -= HandleWorkerDeath;
-            worker.StopConstructionServerRpc(false);
+            worker.StopWorkerConstruction();
         }
 
         workers.Clear();
