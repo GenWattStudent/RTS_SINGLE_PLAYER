@@ -651,7 +651,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  healthBar: {fileID: 3174816341935065255}
   teamType:
     m_InternalValue: 0
   damagableSo: {fileID: 11400000, guid: e9f8266ad6710924d8828e433b2c62ed, type: 2}
@@ -938,13 +937,13 @@ MonoBehaviour:
   NetworkTransformExpanded: 0
   AuthorityMode: 0
   TickSyncChildren: 0
-  UseUnreliableDeltas: 0
+  UseUnreliableDeltas: 1
   SyncPositionX: 0
   SyncPositionY: 0
-  SyncPositionZ: 1
+  SyncPositionZ: 0
   SyncRotAngleX: 1
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -953,7 +952,7 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
+  UseHalfFloatPrecision: 1
   InLocalSpace: 0
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
@@ -1283,12 +1282,6 @@ PrefabInstance:
 --- !u!224 &2494944716351385924 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6101178895358519602, guid: 51ffc9f1b4ea46143867e911db8a91b0,
-    type: 3}
-  m_PrefabInstance: {fileID: 8517554709801261174}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &3174816341935065255 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6501887540693160145, guid: 51ffc9f1b4ea46143867e911db8a91b0,
     type: 3}
   m_PrefabInstance: {fileID: 8517554709801261174}
   m_PrefabAsset: {fileID: 0}

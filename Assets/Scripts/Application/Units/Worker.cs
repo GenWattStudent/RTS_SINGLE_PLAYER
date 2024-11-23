@@ -59,12 +59,19 @@ public class Worker : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void StopConstructionServerRpc(bool removeFromList = true)
+    public void StopConstructionServerRpc()
     {
-        if (construction == null) return;
-        if (removeFromList) construction.RemoveWorker(this);
-        isBuilding = false;
+        if (construction == null || !isBuilding) return;
 
+        construction.RemoveWorker(this);
+        StopWorkerConstruction();
+    }
+
+    public void StopWorkerConstruction()
+    {
+        if (construction == null || !isBuilding) return;
+
+        isBuilding = false;
         construction.OnFinshed -= HandleFinish;
         construction = null;
         DeactivateLaserServerRpc();
