@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-
 public class QuadTree
 {
     private int MAX_OBJECTS = 7;
@@ -140,7 +139,9 @@ public class QuadTree
                     continue;
                 }
 
-                float distance = Vector3.Distance(obj.transform.position, position);
+                Vector3 closestPoint = GetClosestPointOnCollider(obj, position);
+                float distance = Vector3.Distance(closestPoint, position);
+
                 if (distance <= range && distance < minDistance)
                 {
                     closest = obj;
@@ -156,6 +157,16 @@ public class QuadTree
                 nodes[i].FindClosestUnitInRange(position, range, ref closest, ref minDistance, team);
             }
         }
+    }
+
+    private Vector3 GetClosestPointOnCollider(Unit unit, Vector3 position)
+    {
+        Collider collider = unit.GetComponent<Collider>();
+        if (collider != null)
+        {
+            return collider.ClosestPoint(position);
+        }
+        return unit.transform.position;
     }
 
     public void Remove(Unit unit)
@@ -185,10 +196,10 @@ public class QuadTree
         float verticalMidpoint = bounds.x + bounds.width / 2;
         float horizontalMidpoint = bounds.y + bounds.height / 2;
 
-        bool topQuadrant = position.z < horizontalMidpoint;
-        bool bottomQuadrant = position.z > horizontalMidpoint;
+        bool topQuadrant = position.z < horizontalMidpoint && position.z >= bounds.y;
+        bool bottomQuadrant = position.z >= horizontalMidpoint && position.z < bounds.y + bounds.height;
 
-        if (position.x < verticalMidpoint && position.x + 1 < verticalMidpoint)
+        if (position.x < verticalMidpoint && position.x >= bounds.x)
         {
             if (topQuadrant)
             {
@@ -199,7 +210,7 @@ public class QuadTree
                 index = 2;
             }
         }
-        else if (position.x > verticalMidpoint)
+        else if (position.x >= verticalMidpoint && position.x < bounds.x + bounds.width)
         {
             if (topQuadrant)
             {
@@ -225,6 +236,7 @@ public class QuadTree
             }
         }
     }
+
     public void DrawGizmos()
     {
         Gizmos.color = Color.red;

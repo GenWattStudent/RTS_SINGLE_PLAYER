@@ -57,15 +57,17 @@ public class Levelable : NetworkBehaviour
 
     public void LevelUp()
     {
-        level.Value++;
-
         var levelData = levelableSo.levels[level.Value];
+        level.Value++;
 
         foreach (var stat in levelData.stats)
         {
             damagable.stats.AddToStat(stat.Type, stat.BaseValue);
         }
 
-        expirenceToNextLevel.Value = levelData.expirence;
+        if (level.Value < maxLevel)
+        {
+            expirenceToNextLevel.Value = levelableSo.levels[level.Value].expirence;
+        }
     }
 }

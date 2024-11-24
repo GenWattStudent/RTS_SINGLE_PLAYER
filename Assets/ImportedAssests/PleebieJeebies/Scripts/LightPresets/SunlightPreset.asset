@@ -44,9 +44,9 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   DirectionalColour:
     serializedVersion: 2
-    key0: {r: 0, g: 0.3214053, b: 0.49056602, a: 1}
+    key0: {r: 0, g: 0.42330572, b: 0.645283, a: 1}
     key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0.32156864, b: 0.49411765, a: 0}
+    key2: {r: 0, g: 0.42352942, b: 0.64705884, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
