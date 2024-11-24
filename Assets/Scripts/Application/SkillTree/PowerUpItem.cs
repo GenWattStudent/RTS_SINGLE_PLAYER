@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PowerUpItem : NetworkBehaviour
 {
-    public NetworkVariable<bool> IsRespawning = new(false);
+    public NetworkVariable<bool> IsRespawning = new(true);
     public NetworkVariable<float> RespawnTimer = new(0);
 
     [SerializeField] private PowerUpSo powerUpSo;
@@ -18,20 +18,25 @@ public class PowerUpItem : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        if (IsServer)
+        {
+            MultiplayerController.Instance.OnAllPlayersLoad += OnAllPlayersLoad;
+        }
+
         if (IsClient)
         {
             _timerText = GetComponentInChildren<TextMeshProUGUI>();
-            ChangeTextVisibility(IsRespawning.Value);
             RespawnTimer.OnValueChanged += OnRespawnTimerChanged;
             IsRespawning.OnValueChanged += OnRespawningChanged;
-        }
 
-        if (IsServer)
-        {
-            _spawnInterval = powerUpSo.Cooldown;
-
-            Spawn();
+            ChangeTextVisibility(IsRespawning.Value);
         }
+    }
+
+    private void OnAllPlayersLoad()
+    {
+        _spawnInterval = powerUpSo.Cooldown;
+        Spawn();
     }
 
     public override void OnNetworkDespawn()
@@ -42,6 +47,11 @@ public class PowerUpItem : NetworkBehaviour
         {
             RespawnTimer.OnValueChanged -= OnRespawnTimerChanged;
             IsRespawning.OnValueChanged -= OnRespawningChanged;
+        }
+
+        if (IsServer)
+        {
+            MultiplayerController.Instance.OnAllPlayersLoad -= OnAllPlayersLoad;
         }
     }
 
@@ -65,7 +75,7 @@ public class PowerUpItem : NetworkBehaviour
         var go = Instantiate(powerUpSo.Prefab, transform.position, Quaternion.identity);
 
         _powerUpNetworkObject = go.GetComponent<NetworkObject>();
-        _powerUpNetworkObject.Spawn();
+        _powerUpNetworkObject.SpawnWithOwnership(NetworkManager.ServerClientId);
         _powerUpNetworkObject.transform.SetParent(transform);
 
         IsRespawning.Value = false;

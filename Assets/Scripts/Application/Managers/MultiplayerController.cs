@@ -28,6 +28,8 @@ public class MultiplayerController : NetworkBehaviour
     public static MultiplayerController Instance;
     public GameObject playerPrefab;
 
+    public event Action OnAllPlayersLoad;
+
     private void Awake()
     {
         if (Instance == null)
@@ -41,6 +43,16 @@ public class MultiplayerController : NetworkBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (GameManager.Instance.IsDebug)
+        {
+            OnAllPlayersLoad?.Invoke();
+        }
     }
 
     private void Start()
@@ -70,5 +82,7 @@ public class MultiplayerController : NetworkBehaviour
 
             no.SpawnAsPlayerObject(player.ClientId);
         }
+
+        OnAllPlayersLoad?.Invoke();
     }
 }

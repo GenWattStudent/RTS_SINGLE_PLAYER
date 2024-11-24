@@ -15,6 +15,7 @@ public class LightManager : MonoBehaviour
     [SerializeField, Tooltip("How fast time will go")] private float TimeMultiplier = 1;
     [SerializeField] private bool ControlLights = true;
     public float UpdateInterval = 0.5f;
+    private float updateTimer = 0;
 
     private const float inverseDayLength = 1f / 1440f;
     public float SunDirection = 170f;
@@ -28,6 +29,7 @@ public class LightManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        updateTimer = UpdateInterval;
         if (ControlLights)
         {
             Light[] lights = FindObjectsByType<Light>(FindObjectsSortMode.None);
@@ -63,11 +65,11 @@ public class LightManager : MonoBehaviour
     {
         TimeOfDay = TimeOfDay + (Time.deltaTime * TimeMultiplier);
         TimeOfDay = TimeOfDay % 1440;
-        UpdateInterval -= Time.deltaTime;
+        updateTimer -= Time.deltaTime;
 
-        if (UpdateInterval <= 0)
+        if (updateTimer <= 0)
         {
-            UpdateInterval = 0.5f;
+            updateTimer = UpdateInterval;
             UpdateLighting(TimeOfDay * inverseDayLength);
         }
     }
@@ -86,10 +88,12 @@ public class LightManager : MonoBehaviour
         if (DirectionalLight.enabled == true)
         {
             DirectionalLight.color = DayNightPreset.DirectionalColour.Evaluate(timePercent);
-            float rotationAngle = timePercent * 175f;
+            // float rotationAngle = timePercent * 175f;
+
+
 
             // Set the rotation of the DirectionalLight
-            DirectionalLight.transform.rotation = Quaternion.Euler(rotationAngle, SunDirection, 0);
+            // DirectionalLight.transform.rotation = Quaternion.Euler(rotationAngle, SunDirection, 0);
             // DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, SunDirection, 0));
         }
     }

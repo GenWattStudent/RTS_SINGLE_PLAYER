@@ -174,7 +174,7 @@ public class RTSObjectsManager : NetworkBehaviour
         ShouldUpdateTree = true;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (ShouldUpdateTree)
         {
