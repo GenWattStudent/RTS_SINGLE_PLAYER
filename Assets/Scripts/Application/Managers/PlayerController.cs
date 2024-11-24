@@ -28,7 +28,6 @@ public class PlayerController : NetworkBehaviour
         var no = heroInstance.GetComponent<NetworkObject>();
         var damagable = heroInstance.GetComponent<Damagable>();
 
-        if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
         damagable.teamType.Value = teamType.Value;
         no.SpawnWithOwnership(clientId);
 
@@ -78,8 +77,6 @@ public class PlayerController : NetworkBehaviour
                 var damagable = unit.GetComponent<Damagable>();
 
                 unitMovement.agent.enabled = true;
-
-                if (unitMovement != null) unitMovement.isReachedDestinationAfterSpawn = true;
 
                 spawnPosition += new Vector3(2, 0, 0);
                 Debug.Log($"Spawning unit {unit.name} for player {clientId} {teamType.Value}");

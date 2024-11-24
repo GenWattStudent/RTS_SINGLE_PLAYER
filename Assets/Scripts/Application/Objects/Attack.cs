@@ -25,8 +25,6 @@ public class Attack : NetworkBehaviour
     private UnitMovement unitMovement;
     private List<GameObject> salvePoints = new();
     private int salveIndex = 0;
-    private RTSObjectsManager RTSObjectsManager;
-    private BulletPool bulletPool;
 
     public event Action OnAttack;
     public event Action<Damagable, Unit> OnTarget;
@@ -44,7 +42,6 @@ public class Attack : NetworkBehaviour
 
     private void Start()
     {
-        RTSObjectsManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         lastAttackTime = Time.time;
 
         if (currentUnit.attackableSo.hasTurret)
@@ -82,28 +79,28 @@ public class Attack : NetworkBehaviour
 
     private void CheckForTargets()
     {
-        // var unit = RTSObjectsManager.quadtree.FindClosestUnitInRange(transform.position, currentUnit.attackableSo.attackRange, currentDamagable.teamType.Value);
-        // if (unit == null) return;
-        // var damagableScript = unit.GetComponent<Damagable>();
+        var unit = RTSObjectsManager.quadtree.FindClosestUnitInRange(transform.position, currentUnit.attackableSo.attackRange, currentDamagable.teamType.Value);
+        if (unit == null) return;
+        var damagableScript = unit.GetComponent<Damagable>();
 
-        // if (currentDamagable.CanAttack(damagableScript, unit) && !IsTargetHideInTerrain(damagableScript))
-        // {
-        //     SetTarget(damagableScript);
-        //     return;
-        // }
-
-        var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
-
-        foreach (var collider in colliders)
+        if (currentDamagable.CanAttack(damagableScript) && !IsTargetHide(damagableScript))
         {
-            var damagableScript = collider.gameObject.GetComponent<Damagable>();
-
-            if (currentDamagable.CanAttack(damagableScript))
-            {
-                SetTarget(damagableScript);
-                return;
-            }
+            SetTarget(damagableScript);
+            return;
         }
+
+        //var colliders = Physics.OverlapSphere(transform.position, currentUnit.attackableSo.attackRange);
+
+        //foreach (var collider in colliders)
+        //{
+        //    var damagableScript = collider.gameObject.GetComponent<Damagable>();
+
+        //    if (currentDamagable.CanAttack(damagableScript))
+        //    {
+        //        SetTarget(damagableScript);
+        //        return;
+        //    }
+        //}
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -144,9 +141,27 @@ public class Attack : NetworkBehaviour
         SetTarget(null);
     }
 
+    private bool IsInRange()
+    {
+        Vector3 closestPointOnTargetUnit = GetClosestPointOnCollider(target, transform.position);
+        float distance = Vector3.Distance(transform.position, closestPointOnTargetUnit);
+
+        return distance <= currentUnit.attackableSo.attackRange;
+    }
+
     private bool IsInRange(Vector3 targetPosition)
     {
         return Vector3.Distance(transform.position, targetPosition) <= currentUnit.attackableSo.attackRange;
+    }
+
+    private Vector3 GetClosestPointOnCollider(Damagable damagable, Vector3 position)
+    {
+        Collider collider = damagable.GetComponent<Collider>();
+        if (collider != null)
+        {
+            return collider.ClosestPoint(position);
+        }
+        return damagable.transform.position;
     }
 
     [ClientRpc]
@@ -159,11 +174,13 @@ public class Attack : NetworkBehaviour
         OnAmmoChange?.Invoke(currentAmmo);
         if (currentUnit.attackableSo.bulletSo.initialExplosionPrefab != null)
         {
-            // var rotation = Quaternion.LookRotation(direction);
+            var direction = targetPosition - spawnPoint.position;
+            var rotation = Quaternion.LookRotation(direction);
             var salvePoint = currentUnit.attackableSo.CanSalve ? salvePoints[salveIndex] : bulletSpawnPoint;
-            // rotation *= Quaternion.Euler(0, -90, 0);
-            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, Quaternion.identity);
-            // MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
+
+            rotation *= Quaternion.Euler(0, -90, 0);
+            Instantiate(currentUnit.attackableSo.bulletSo.initialExplosionPrefab, salvePoint.transform.position, rotation);
+            MusicManager.Instance.PlayMusic(currentUnit.attackableSo.attackSound, salvePoint.transform.position);
         }
     }
 
@@ -186,7 +203,6 @@ public class Attack : NetworkBehaviour
         attackSpeedTimer = currentUnit.attackableSo.attackSpeed;
         currentAmmo--;
 
-        // bullet.networkObject.SpawnWithOwnership(OwnerClientId);
         ShootBulletClientRpc(currentAmmo, salveIndex, targetPos);
     }
 
@@ -255,7 +271,7 @@ public class Attack : NetworkBehaviour
 
     private void PerformTargetAiming()
     {
-        if (IsInRange(target.TargetPoint.position) && currentUnit.attackableSo.canAttack)
+        if (IsInRange() && currentUnit.attackableSo.canAttack)
         {
             PerformAttackServerRpc();
         }

@@ -29,7 +29,6 @@ public class EnemyController : MonoBehaviour
 
                 if (unitMovement != null)
                 {
-                    unitMovement.isReachedDestinationAfterSpawn = true;
                     unitMovement.agent.enabled = true;
                 }
 

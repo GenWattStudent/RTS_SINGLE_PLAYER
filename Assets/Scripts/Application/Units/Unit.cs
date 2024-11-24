@@ -85,14 +85,16 @@ public class Unit : NetworkBehaviour, ISkillApplicable
             canvas.enabled = true;
         }
     }
+    private void Awake()
+    {
+        Damagable = GetComponent<Damagable>();
+    }
 
     private void Start()
     {
         var playerColorData = MultiplayerController.Instance.playerMaterials[(int)OwnerClientId];
 
         ChangeMaterial(playerColorData.playerMaterial, true);
-
-        Damagable = GetComponent<Damagable>();
     }
 
     public override void OnNetworkSpawn()

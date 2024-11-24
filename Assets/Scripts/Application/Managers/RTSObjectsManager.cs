@@ -13,6 +13,8 @@ public class RTSObjectsManager : NetworkBehaviour
     public List<Unit> LocalPlayerUnits = new();
     public List<Building> LocalPlayerBuildings = new();
 
+    public bool ShouldUpdateTree = false;
+
     public event Action<Unit, List<Unit>> OnUnitChange;
     public event Action<Building, List<Building>> OnBuildingChange;
 
@@ -57,14 +59,15 @@ public class RTSObjectsManager : NetworkBehaviour
 
     private void OnClientDisconnect(ulong clientId)
     {
-        // quadtree.Clear();
         Units.Remove(clientId);
         Buildings.Remove(clientId);
         Objects.Remove(clientId);
+        quadtree.UpdateUnit(Objects);
     }
     private void HandleUnitDeath(Damagable damagable)
     {
         RemoveUnitServerRpc(damagable.GetComponent<NetworkObject>());
+        quadtree.UpdateUnit(Objects);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -96,10 +99,10 @@ public class RTSObjectsManager : NetworkBehaviour
             var unit = no.GetComponent<Unit>();
             if (!Units[no.OwnerClientId].Contains(unit)) return;
 
-            quadtree.Remove(unit);
             unit.GetComponent<Damagable>().OnDead -= HandleUnitDeath;
             Units[no.OwnerClientId].Remove(unit);
             Objects[no.OwnerClientId].Remove(unit);
+            quadtree.Remove(unit);
         }
     }
 
@@ -112,6 +115,7 @@ public class RTSObjectsManager : NetworkBehaviour
     private void HandleBuildingDeath(Damagable damagable)
     {
         RemoveBuildingServerRpc(damagable.GetComponent<NetworkObject>());
+        quadtree.UpdateUnit(Objects);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -141,11 +145,11 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             var building = no.GetComponent<Building>();
             if (!Buildings[no.OwnerClientId].Contains(building)) return;
-
-            quadtree.Remove(building.GetComponent<Unit>());
+            ;
             building.GetComponent<Damagable>().OnDead -= HandleBuildingDeath;
             Buildings[no.OwnerClientId].Remove(building);
             Objects[no.OwnerClientId].Remove(building.GetComponent<Unit>());
+            quadtree.Remove(building.GetComponent<Unit>());
         }
     }
 
@@ -163,5 +167,19 @@ public class RTSObjectsManager : NetworkBehaviour
     public int GetBuildingCountOfType(BuildingSo buildingSo)
     {
         return LocalPlayerBuildings.FindAll(b => b.buildingSo.buildingName == buildingSo.buildingName).Count;
+    }
+
+    public void UpdateTree()
+    {
+        ShouldUpdateTree = true;
+    }
+
+    private void Update()
+    {
+        if (ShouldUpdateTree)
+        {
+            quadtree.UpdateUnit(Objects);
+            ShouldUpdateTree = false;
+        }
     }
 }

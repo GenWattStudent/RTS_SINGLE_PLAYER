@@ -25,18 +25,22 @@ public class MusicManager : Singleton<MusicManager>
 
     [SerializeField] private AudioSource globalMusic;
     [SerializeField] private List<MusicData> effects = new();
+    [SerializeField] private int maxOneKindAudioSources = 7;
     private float effectsVolume = 1;
+    private Dictionary<MusicType, AudioSource> audioSources = new();
 
-    void Start()
+    private void Start()
     {
+        effectsVolume = PlayerPrefs.GetFloat("EffectsVolume", 1);
         if (globalMusic == null) return;
         globalMusic.loop = true;
-        globalMusic.volume = 0.5f;
+        globalMusic.volume = PlayerPrefs.GetFloat("GlobalMusicVolume", 0.5f);
         globalMusic.Play();
     }
 
     public void SetGlobalMusicVolume(float volume)
     {
+        if (globalMusic == null) return;
         globalMusic.volume = volume;
     }
 

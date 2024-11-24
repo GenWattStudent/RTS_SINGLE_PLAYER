@@ -7,13 +7,12 @@ public class UnitMovement : NetworkBehaviour
 {
     public NavMeshAgent agent;
     public Vector3 destinationAfterSpawn = Vector3.zero;
-    public bool isReachedDestinationAfterSpawn = false;
     public bool isMoving = false;
+    public Vector3 Destination;
 
     private Unit unit;
-    private ResourceUsage resourceUsage;
     private Stats stats;
-    private Vector3 oldPosition;
+    private RTSObjectsManager rtsObjectManager;
 
     private void SetNavMeshValues()
     {
@@ -40,14 +39,15 @@ public class UnitMovement : NetworkBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         unit = GetComponent<Unit>();
-        resourceUsage = GetComponent<ResourceUsage>();
         stats = GetComponent<Stats>();
+        agent.stoppingDistance = 0.1f;
     }
 
     private void Start()
     {
         SetNavMeshValues();
         stats.BaseStats.OnListChanged += StatsChanged;
+        rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
     }
 
     private void StatsChanged(NetworkListEvent<Stat> changeEvent)
@@ -63,6 +63,7 @@ public class UnitMovement : NetworkBehaviour
         {
             agent.isStopped = false;
             agent.acceleration = stats.GetStat(StatType.Acceleration);
+            Destination = hit.position;
             agent.SetDestination(hit.position);
         }
     }
@@ -78,18 +79,15 @@ public class UnitMovement : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        oldPosition = transform.position;
-
-        if (!agent.isStopped && agent.hasPath && agent.remainingDistance <= 0.08f)
+        if (!agent.isStopped && agent.hasPath && Vector3.Distance(transform.position, Destination) <= agent.stoppingDistance)
         {
-            Debug.Log("Stop: " + agent.remainingDistance);
             Stop();
         }
         // is moving
         if (agent.velocity.magnitude > 0.1f)
         {
             isMoving = true;
-            RTSObjectsManager.quadtree.UpdateUnit(RTSObjectsManager.Units);
+            rtsObjectManager.UpdateTree();
         }
         else
         {
