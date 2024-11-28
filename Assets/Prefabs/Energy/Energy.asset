@@ -35,32 +35,26 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
-  type: 0
   buildingName: Energy
   description: lalala
+  type: 0
   sprite: {fileID: 21300000, guid: d56b5386733fd314891209268b641430, type: 3}
-  prefab: {fileID: 8989622198761688359, guid: ab070f6ef0626334d8856e5d4c530f2e, type: 3}
-  previewPrefab: {fileID: 1000012258327032, guid: 3011a6b85952555428f465b78c4c9adc,
-    type: 3}
-  constructionManagerPrefab: {fileID: 3286866004926964515, guid: fcb368d001f9ded49af221a21ffb0846,
-    type: 3}
+  income: 30
+  incomeInterval: 2
+  incomeResource: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
   unitsToSpawn: []
   maxBuildingCount: 2
-  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
-  resourceUsage: {fileID: 0}
   levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
     type: 3}
+  resourceUsage: {fileID: 0}
   usage: 0
   usageInterval: 0
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   cost: 100
-  income: 20
-  incomeInterval: 2
-  stats:
-  - Type: 8
-    Value: 100
-  - Type: 11
-    Value: 20
-  - Type: 12
-    Value: 2
-  - Type: 1
-    Value: 100
+  sightAngle: 360
+  sightRange: 4
+  Prefab: {fileID: 8989622198761688359, guid: ab070f6ef0626334d8856e5d4c530f2e, type: 3}
+  PreviewPrefab: {fileID: 1000012258327032, guid: 3011a6b85952555428f465b78c4c9adc,
+    type: 3}
+  ConstructionManagerPrefab: {fileID: 3286866004926964515, guid: fcb368d001f9ded49af221a21ffb0846,
+    type: 3}

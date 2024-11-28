@@ -60,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -93,9 +96,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3245765324526795628}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 2
-  m_Shape: 0
   m_Color: {r: 0.09391101, g: 0.8773585, b: 0.053800307, a: 1}
   m_Intensity: 5
   m_Range: 2.5
@@ -145,8 +147,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!114 &9057115638920410157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1654249786358649304}
   - component: {fileID: 2753135743361072677}
-  - component: {fileID: -3058146708177544648}
+  - component: {fileID: 4543945934264690904}
   m_Layer: 0
   m_Name: HeroBullet
   m_TagString: Untagged
@@ -221,7 +227,8 @@ MonoBehaviour:
   bulletSo: {fileID: 11400000, guid: ccaad882467b8cc49bb312a93e64231d, type: 2}
   unitsBullet: {fileID: 0}
   motion: {fileID: 0}
---- !u!114 &-3058146708177544648
+  teamType: 0
+--- !u!114 &4543945934264690904
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,7 +237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3824120718455233952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f93f504438bdd8408c6349a70ff2a0a, type: 3}
+  m_Script: {fileID: 11500000, guid: 39f62a25dd528f54ca49bfe6c0ea385b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
@@ -289,6 +296,9 @@ TrailRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

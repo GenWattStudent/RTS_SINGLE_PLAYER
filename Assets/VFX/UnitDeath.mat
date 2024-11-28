@@ -71,12 +71,13 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.7688679, g: 0.90439117, b: 1, a: 1}
     - _DissolveDirection: {r: 0, g: 0, b: 0, a: 0}
-    - _DissolveOffest: {r: 0, g: -1.11, b: 0, a: 0}
+    - _DissolveOffest: {r: 0, g: -1.24, b: 0, a: 0}
     - _EdgeColor: {r: 7.958115, g: 0.12499657, b: 0, a: 1}
     - _NoiseUVSpeed: {r: 1.53, g: 1.41, b: 0, a: 0}
     - _Offest: {r: 0.11, g: 0, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &2003466321002656821
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -89,4 +90,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9

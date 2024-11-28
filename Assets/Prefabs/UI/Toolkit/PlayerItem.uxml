@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
+    <ui:VisualElement name="PlayerItem" class="border-secondary border-medium" style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-top: 10px;">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: stretch; justify-content: center;">
+                <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-items: center;">
+                    <ui:VisualElement style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-user-50.png?fileID=2800000&amp;guid=0d372afbcd67aa441bb936cab510723f&amp;type=3#icons8-user-50&apos;); width: 24px; height: 24px; flex-direction: column;" />
+                    <ui:Label tabindex="-1" text="Nazwa gracza hah" display-tooltip-when-elided="true" name="PlayerName" class="text-primary" />
+                </ui:VisualElement>
+                <ui:VisualElement name="PlayerColor" style="flex-grow: 1; color: rgb(190, 0, 0); background-color: rgb(255, 23, 23); width: 50px; height: 50px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-top-width: 5px; border-bottom-width: 0; margin-top: 5px; margin-bottom: 5px;" />
+                <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: flex-start; align-items: center;">
+                    <ui:Label tabindex="-1" text="Host" display-tooltip-when-elided="true" name="PlayerType" class="text-primary text-bold" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; font-size: 12px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                    <ui:Label tabindex="-1" text="Team: Red" display-tooltip-when-elided="true" name="PlayerTeam" class="text-primary text-bold" style="margin-left: 5px; margin-bottom: 0; margin-right: 0; margin-top: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="StatusContainer" style="flex-grow: 0; background-color: rgba(21, 89, 21, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; justify-content: center; align-items: center; align-self: center; flex-direction: row;">
+                <ui:Label tabindex="-1" text="Not Ready" display-tooltip-when-elided="true" name="Status" class="text-primary text-bold bg-danger" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;" />
+                <ui:Button display-tooltip-when-elided="true" name="Kick" class="btn-secondary" style="padding-right: 5px; align-self: auto; justify-content: flex-start; width: 50px; height: 50px; background-color: rgba(58, 58, 58, 0); padding-top: 5px; padding-bottom: 5px; padding-left: 5px;">
+                    <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-boot-48.png?fileID=2800000&amp;guid=581423ef31092b6489f820b79666e851&amp;type=3#icons8-boot-48&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

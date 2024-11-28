@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
+    <ui:VisualElement name="SettingsModal" class="border-secondary border-medium bg-secondary" style="flex-grow: 1; position: relative; left: auto; width: 400px; top: auto; translate: 0 0; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; background-color: rgba(55, 55, 55, 0); height: 500px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+        <ui:VisualElement style="flex-grow: 1; justify-content: space-between;">
+            <ui:VisualElement style="flex-grow: 1; flex-direction: column;">
+                <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="SettingsHeading" class="text-primary text-xxl text-bold" style="justify-content: flex-start; -unity-text-align: upper-center;" />
+                <ui:Button display-tooltip-when-elided="true" name="BackButton" class="btn-icon-red" style="position: absolute; right: 0; width: 30px; height: 30px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                    <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-close-48.png?fileID=2800000&amp;guid=269354cbee3017f4f8e5a5bf6f9e954a&amp;type=3#icons8-close-48&apos;); width: 100%; height: 100%;" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 0; align-self: center;">
+                <ui:Button text="GO TO MAIN MENU" display-tooltip-when-elided="true" name="MainMenuButton" class="btn-primary" />
+                <ui:Button text="Sound Settings" display-tooltip-when-elided="true" name="SoundsSettings" class="btn-primary" style="margin-bottom: 10px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52df891cd467cc43b186c47ae773d1d, type: 3}
   m_Name: Hero
   m_EditorClassIdentifier: 
+  canAttack: 1
   attackDamage: 145
   attackRange: 12
   attackSpeed: 0.4
   attackCooldown: 2
-  acceleration: 4
-  canAttack: 1
-  bulletPrefab: {fileID: 3824120718455233952, guid: 376647ccba0758a49a3a69e68ca7e599,
-    type: 3}
   ammo: 30
   attackAngle: 15
   hasTurret: 0
@@ -27,7 +24,7 @@ MonoBehaviour:
   rotateSpeed: 10
   bulletSo: {fileID: 11400000, guid: ccaad882467b8cc49bb312a93e64231d, type: 2}
   CanSalve: 0
-  accuracy: 0.3
+  accuracy: 0.1
   attackSound: 6
   health: 500
   deathExpirence: 10
@@ -36,25 +33,20 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5866041844659945875, guid: f9e61d2b5dc1156469a77b3191e6b915,
     type: 3}
-  stats:
-  - Type: 1
-    Value: 500
-  - Type: 4
-    Value: 12
-  - Type: 3
-    Value: 0.4
-  - Type: 5
-    Value: 5
   type: 3
-  unitName: Argus
+  unitName: Hero
+  sprite: {fileID: 21300000, guid: 5a09bd23f7473d94586daf5b381cb9db, type: 3}
+  prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   speed: 5
+  acceleration: 4
+  anguarRotation: 0
   buildingDistance: 0
   cost: 0
   costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
   spawnTime: 0
-  sprite: {fileID: 21300000, guid: 5a09bd23f7473d94586daf5b381cb9db, type: 3}
-  prefab: {fileID: 3912865232768828701, guid: 43a428bf7122360479512b8e870880a0, type: 3}
   spawnerLevelToUnlock: 0
   resourceUsage: {fileID: 0}
   usage: 0
   usageInterval: 0
+  sightAngle: 360
+  sightRange: 12

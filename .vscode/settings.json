@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Fantasy_Single_Player.sln"
+    "dotnet.defaultSolution": "RTS_SINGLE_PLAYER.sln",
+    "dotnet.preferCSharpExtension": true
 }

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2943060365431914200}
   - component: {fileID: 433998347203920011}
   - component: {fileID: 7780410018301658671}
-  - component: {fileID: 6051365526223578087}
   - component: {fileID: 4633497842560847797}
   - component: {fileID: -8262177101767174825}
   - component: {fileID: 7313554900080219477}
@@ -57,11 +56,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d69f1024707d4c81488d5f06e96f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSo: {fileID: 11400000, guid: 55b9b9f6987dfef43829e71da7047fe6, type: 2}
-  buildingUnits: []
   healthBar: {fileID: 8521102515514173841}
   buildingInProgressPrefab: {fileID: 3261315199320783877}
   constructionPrefab: {fileID: 4331978935220324178}
+  buildingUnits: []
 --- !u!114 &5807540428542867514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,10 +76,14 @@ MonoBehaviour:
   attackableSo: {fileID: 0}
   unitMaterial: {fileID: 0}
   originalMaterial: {fileID: 0}
-  shouldChangeMaterial: 0
   unitPrefabs: []
   unitUiPrefabs: []
   bushes: []
+  Upgrades: []
+  IsBot: 0
+  shouldChangeMaterial: 0
+  IsUpgrading:
+    m_InternalValue: 0
   isVisibile: 1
 --- !u!114 &2943060365431914200
 MonoBehaviour:
@@ -101,8 +103,12 @@ MonoBehaviour:
   targetPoint: {fileID: 0}
   isDead: 0
   damageBoost: 0
+  IsBot: 0
   damage: 0
   stats: {fileID: 0}
+  teamType:
+    m_InternalValue: 0
+  unitScript: {fileID: 0}
 --- !u!114 &433998347203920011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,33 +145,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0343945, y: 0.44942325, z: 1.048759}
   m_Center: {x: -0.008897066, y: 0.22090015, z: -0.008595616}
---- !u!54 &6051365526223578087
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3286866004926964515}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!208 &4633497842560847797
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -210,10 +189,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingLevelableSo: {fileID: 0}
-  level: 1
+  level:
+    m_InternalValue: 1
+  reduceSpawnTime:
+    m_InternalValue: 0
   building: {fileID: 0}
   damagable: {fileID: 0}
-  reduceSpawnTime: 0
 --- !u!114 &1907013346050808813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +310,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 326025491214339538, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 1825685268220437108, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 3017917382580695044, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
+    - {fileID: 1812492046459913763, guid: 7c8d37b542446844c934fce385a09fda, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

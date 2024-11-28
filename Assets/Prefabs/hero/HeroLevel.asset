@@ -14,14 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - level: 1
-    expirence: 0
-    health: 0
-    attackDamage: 0
+    expirence: 100
+    stats: []
   - level: 2
     expirence: 100
-    health: 100
-    attackDamage: 5
+    stats:
+    - Type: 0
+      CurrentValue: 0
+      BaseValue: 200
+    - Type: 1
+      CurrentValue: 0
+      BaseValue: 200
+    - Type: 2
+      CurrentValue: 0
+      BaseValue: 20
   - level: 3
     expirence: 150
-    health: 200
-    attackDamage: 10
+    stats:
+    - Type: 0
+      CurrentValue: 0
+      BaseValue: 200
+    - Type: 1
+      CurrentValue: 0
+      BaseValue: 200
+    - Type: 2
+      CurrentValue: 0
+      BaseValue: 20

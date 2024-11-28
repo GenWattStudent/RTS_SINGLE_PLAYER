@@ -2,6 +2,9 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+/Assets/ImportedAssests/FOVMapping/FOVMaps
+/Assets/ImportedAssests/FOVMapping/FOVMaps/FOVMapTerrain1024.asset
+/Assets/ImportedAssests/FOVMapping/FOVMaps/FOVMap1024.asset
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/

@@ -23,7 +23,7 @@ MonoBehaviour:
   ammo: 12
   attackAngle: 15
   hasTurret: 1
-  turretRotateSpeed: 50
+  turretRotateSpeed: 8
   rotateSpeed: 0
   bulletSo: {fileID: 11400000, guid: c853c789c1b7db640a7ba1277fde10a1, type: 2}
   CanSalve: 1
@@ -36,36 +36,24 @@ MonoBehaviour:
   deathEffectTime: 2
   explosionPrefab: {fileID: 5822891184628015753, guid: f9a274cadb36d7b47b6ff23048fb4321,
     type: 3}
-  type: 2
   buildingName: Rocket Turret
   description: Turret lol
+  type: 2
   sprite: {fileID: 0}
-  prefab: {fileID: 8989622198761688359, guid: 133b0c64da67ff644a0747bde0b41b63, type: 3}
-  previewPrefab: {fileID: 6647195554574366884, guid: d71a8540f077deb4b8fd664d76698739,
-    type: 3}
-  constructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
-    type: 3}
-  unitsToSpawn: []
-  maxBuildingCount: 2
-  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
-  resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
-  levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
-    type: 3}
-  usage: 10
-  usageInterval: 5
-  cost: 100
   income: 0
   incomeInterval: 0
-  stats:
-  - Type: 1
-    Value: 100
-  - Type: 8
-    Value: 100
-  - Type: 9
-    Value: 10
-  - Type: 10
-    Value: 5
-  - Type: 4
-    Value: 25
-  - Type: 3
-    Value: 0.4
+  unitsToSpawn: []
+  maxBuildingCount: 2
+  levelUpEffect: {fileID: 1459862227383078, guid: cc461484bcafc664fb68be84c1fc6860,
+    type: 3}
+  resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+  usage: 0
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  cost: 100
+  sightAngle: 360
+  sightRange: 4
+  Prefab: {fileID: 8989622198761688359, guid: 133b0c64da67ff644a0747bde0b41b63, type: 3}
+  PreviewPrefab: {fileID: 6647195554574366884, guid: d71a8540f077deb4b8fd664d76698739,
+    type: 3}
+  ConstructionManagerPrefab: {fileID: 3286866004926964515, guid: 8cc200df7e2652741bddf09ef35934ba,
+    type: 3}

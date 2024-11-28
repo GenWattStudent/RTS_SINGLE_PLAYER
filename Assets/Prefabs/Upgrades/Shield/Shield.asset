@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45533730f3c586145a1c8a9d1b404142, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  Name: Shield
+  Description: Nice shield
+  Cost: 100
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  UnlockLevel: 1
+  Icon: {fileID: 21300000, guid: 2687085aa75f4344b905abfbe1d32495, type: 3}
+  Stats: []
+  ForUnits:
+  - {fileID: 11400000, guid: 0919e7b0ac6fea244b126c98c239b26d, type: 2}
+  _prefab: {fileID: 3466841267310500670, guid: 8e994c1b45a7f2b4aac2217ff984f969, type: 3}
+  _previewPrefab: {fileID: 0}
+  _constructionManagerPrefab: {fileID: 4100258203609856823, guid: e9c7b3fe79b425048a6f2636a2198dc2,
+    type: 3}

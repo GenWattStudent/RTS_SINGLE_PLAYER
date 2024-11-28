@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e0becea3715fd43ab80c4c09c73e44, type: 3}
+  m_Name: ShieldBuilding
+  m_EditorClassIdentifier: 
+  attackDamage: 0
+  attackRange: 0
+  attackSpeed: 0
+  attackCooldown: 0
+  acceleration: 0
+  canAttack: 0
+  bulletPrefab: {fileID: 0}
+  ammo: 0
+  attackAngle: 0
+  hasTurret: 0
+  turretRotateSpeed: 0
+  rotateSpeed: 0
+  bulletSo: {fileID: 0}
+  CanSalve: 0
+  accuracy: 0.5
+  attackSound: 0
+  health: 100
+  deathExpirence: 10
+  deathEffect: {fileID: 0}
+  deathEffectTime: 2
+  explosionPrefab: {fileID: 0}
+  type: 2
+  buildingName: 
+  description: 
+  sprite: {fileID: 0}
+  unitsToSpawn: []
+  maxBuildingCount: 0
+  resourceUsage: {fileID: 11400000, guid: 9ced2c40634304046a7d27b23c24d654, type: 2}
+  levelUpEffect: {fileID: 0}
+  costResource: {fileID: 11400000, guid: 0d8375dcbaa7fd343b614e4d4c07a631, type: 2}
+  cost: 0
+  stats:
+  - Type: 1
+    Value: 100
+  sightAngle: 360
+  sightRange: 4
+  _prefab: {fileID: 3466841267310500670, guid: 8e994c1b45a7f2b4aac2217ff984f969, type: 3}
+  _previewPrefab: {fileID: 0}
+  _constructionManagerPrefab: {fileID: 4100258203609856823, guid: e9c7b3fe79b425048a6f2636a2198dc2,
+    type: 3}

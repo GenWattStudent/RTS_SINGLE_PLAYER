@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="SettingsBox" src="project://database/Assets/Prefabs/UI/SettingsBox.uxml?fileID=9197481963319205126&amp;guid=cf3949801f299bb48aa6d181cbe4601c&amp;type=3#SettingsBox" />
+    <Style src="project://database/Assets/UI%20Toolkit/styles.uss?fileID=7433441132597879392&amp;guid=e50dcf7ca764659419f0d9f4cd11f32c&amp;type=3#styles" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(39, 39, 39, 0.43);">
+        <ui:VisualElement name="Menu" class="bg-primary" style="flex-grow: 1; background-color: rgba(39, 39, 39, 0); position: absolute; width: 400px; height: 500px; bottom: 100px; left: 100px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgb(212, 212, 212); border-right-color: rgb(212, 212, 212); border-top-color: rgb(212, 212, 212); border-bottom-color: rgb(212, 212, 212); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+            <ui:Label tabindex="-1" text="Main Menu" display-tooltip-when-elided="true" class="text-large text-primary text-bold" style="-unity-text-align: upper-center;" />
+            <ui:VisualElement style="flex-grow: 1; margin-top: 20px; justify-content: flex-start;">
+                <ui:Button text="Single Player" display-tooltip-when-elided="true" name="SinglePlayer" class="btn-primary" style="align-self: auto; width: auto;" />
+                <ui:Button text="Multiplayer" display-tooltip-when-elided="true" name="Multiplayer" class="btn-primary" style="align-self: auto; width: auto;" />
+                <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="btn-primary" style="margin-top: 2px; width: auto;" />
+                <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" class="btn-primary" style="margin-top: 2px; width: auto;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="GameName" class="bg-secondary" style="flex-grow: 1; position: absolute; left: 50%; top: 150px; translate: -50% 0; background-color: rgba(39, 39, 39, 0); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+            <ui:Label tabindex="-1" text="Fantasy RTS Game :)" display-tooltip-when-elided="true" class="text-xxl text-bold text-primary" />
+        </ui:VisualElement>
+        <ui:VisualElement name="User" class="bg-secondary" style="flex-grow: 1; position: absolute; right: 0; background-color: rgba(39, 39, 39, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; flex-direction: row; justify-content: flex-start; align-items: center; border-right-width: 0; border-top-width: 0; border-left-width: 5px;">
+            <ui:Label tabindex="-1" text="200FPS" display-tooltip-when-elided="true" name="FPS" class="text-primary text-medium text-bold border-secondary border-medium" style="margin-left: 0; border-bottom-width: 0; border-right-width: 4px; border-top-width: 0; padding-left: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; padding-top: 10px; padding-right: 0; padding-bottom: 10px; border-left-width: 0; -unity-text-align: upper-left; flex-grow: 0; width: 119px;" />
+            <ui:VisualElement name="UserIcon" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Prefabs/UI/icons/icons8-user-50.png?fileID=2800000&amp;guid=0d372afbcd67aa441bb936cab510723f&amp;type=3#icons8-user-50&apos;); width: 50px; height: 50px; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; margin-right: 8px; margin-left: 8px;" />
+            <ui:Label tabindex="-1" text="Adrianek" display-tooltip-when-elided="true" name="Username" class="text-primary text-medium text-bold border-secondary border-medium" style="margin-left: 0; border-bottom-width: 0; border-right-width: 0; border-top-width: 0; padding-left: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; padding-top: 10px; padding-right: 0; padding-bottom: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="UserModalBox" style="flex-grow: 1; background-color: rgba(39, 39, 39, 0.61); display: none;">
+            <ui:VisualElement name="UserModal" class="border-medium border-secondary" style="flex-grow: 1; position: absolute; top: 50%; left: 50%; translate: -50% 0; width: 450px; height: 300px; flex-direction: column; background-color: rgb(39, 39, 39); padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; display: flex;">
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:Label tabindex="-1" text="Entry your username" display-tooltip-when-elided="true" class="text-large text-primary text-bold" style="-unity-text-align: upper-center; margin-bottom: 20px;" />
+                    <ui:TextField picking-mode="Ignore" label="Username" placeholder-text="Your username" name="UserInput" class="text-input" style="margin-left: 2px; margin-bottom: 20px;" />
+                    <ui:Label tabindex="-1" text="Uppsss&#10;" display-tooltip-when-elided="true" name="ErrorLabel" class="text-danger text-bold" style="display: none;" />
+                </ui:VisualElement>
+                <ui:Button text="Confirm" display-tooltip-when-elided="true" name="AcceptUsername" class="btn-primary" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Instance template="SettingsBox" name="SettingsBox" style="width: 100%; height: 100%; justify-content: flex-start; align-items: stretch; display: none;" />
+    </ui:VisualElement>
+</ui:UXML>

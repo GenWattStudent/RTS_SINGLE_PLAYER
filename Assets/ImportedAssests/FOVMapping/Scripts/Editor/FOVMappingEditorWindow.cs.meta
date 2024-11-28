@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 339e1c227b7d63b40abf56784f651c15
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 269976
+  packageName: Fog of War & Field of View
+  packageVersion: 1.1.2
+  assetPath: Assets/ImportedAssests/FOVMapping/Scripts/Editor/FOVMappingEditorWindow.cs
+  uploadId: 642786

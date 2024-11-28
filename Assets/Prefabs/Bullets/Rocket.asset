@@ -22,10 +22,12 @@ MonoBehaviour:
     type: 3}
   explosionSound: 4
   radius: 4
-  damage: 100
+  damage: 25
   speed: 15
   stats:
   - Type: 2
-    Value: 100
+    CurrentValue: 30
+    BaseValue: 30
   - Type: 5
-    Value: 15
+    CurrentValue: 18
+    BaseValue: 18
