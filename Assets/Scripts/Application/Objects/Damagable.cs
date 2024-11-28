@@ -30,7 +30,7 @@ public class Damagable : NetworkBehaviour
         levelable = GetComponent<Levelable>();
         unitScript = GetComponent<Unit>();
         var pos = FindChildByName(transform, "TargetPoint");
-        Debug.Log(pos + " " + transform.name);
+
         if (pos != null) TargetPoint = pos;
         else TargetPoint = transform;
     }

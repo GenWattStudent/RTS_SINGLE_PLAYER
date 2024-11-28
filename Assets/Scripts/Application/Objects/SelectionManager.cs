@@ -155,8 +155,6 @@ public class SelectionManager : NetworkBehaviour
             // Check if the object is selectable
             Selectable selectable = hit.collider.GetComponent<Selectable>();
 
-            Debug.Log(selectable);
-
             if (IsBuilding(selectable) && !IsEnemy(selectable))
             {
                 SelectBuilding(selectable);

@@ -18,7 +18,7 @@ public class PowerUpItem : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (IsServer)
+        if (IsServer && !GameManager.Instance.IsDebug)
         {
             MultiplayerController.Instance.OnAllPlayersLoad += OnAllPlayersLoad;
         }
@@ -31,10 +31,16 @@ public class PowerUpItem : NetworkBehaviour
 
             ChangeTextVisibility(IsRespawning.Value);
         }
+
+        if (GameManager.Instance.IsDebug && IsServer)
+        {
+            OnAllPlayersLoad();
+        }
     }
 
     private void OnAllPlayersLoad()
     {
+        Debug.Log("All players loaded");
         _spawnInterval = powerUpSo.Cooldown;
         Spawn();
     }

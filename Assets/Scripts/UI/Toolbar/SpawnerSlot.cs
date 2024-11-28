@@ -17,8 +17,9 @@ public class SpawnerSlot
     private Label _slotValue;
     private Label _quantity;
     private ProgressBar _progressBarTimer;
+    private UIStorage _uiStorage;
 
-    public SpawnerSlot(VisualTreeAsset slot, UnitSo unitSo, Building building, int quantity)
+    public SpawnerSlot(VisualTreeAsset slot, UnitSo unitSo, Building building, int quantity, UIStorage uiStorage)
     {
         Slot = slot.Instantiate();
         Slot.style.height = Length.Percent(100);
@@ -29,6 +30,7 @@ public class SpawnerSlot
         Spawner = building.GetComponent<ISpawnerBuilding>();
         Quantity = quantity;
 
+        _uiStorage = uiStorage;
         _imageBox = Slot.Q<VisualElement>("ImageBox");
         _valueIcon = Slot.Q<VisualElement>("ValueIcon");
         _slotName = Slot.Q<Label>("SlotName");
@@ -86,11 +88,17 @@ public class SpawnerSlot
     private string GetQuantityText()
     {
         var buildingLevelable = Building.GetComponent<BuildingLevelable>();
-        Debug.Log($"Level {buildingLevelable} {SoUnit.spawnerLevelToUnlock}");
+
         if (buildingLevelable != null && buildingLevelable.level.Value < SoUnit.spawnerLevelToUnlock)
         {
             Slot.SetEnabled(false);
             return $"Level {SoUnit.spawnerLevelToUnlock} required";
+        }
+
+        if (!_uiStorage.HasEnoughResource(SoUnit.costResource, SoUnit.cost))
+        {
+            Slot.SetEnabled(false);
+            return "Not enough resources";
         }
 
         Slot.SetEnabled(true);

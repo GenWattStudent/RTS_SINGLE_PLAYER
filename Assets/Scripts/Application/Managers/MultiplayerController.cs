@@ -45,16 +45,6 @@ public class MultiplayerController : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-
-        if (GameManager.Instance.IsDebug)
-        {
-            OnAllPlayersLoad?.Invoke();
-        }
-    }
-
     private void Start()
     {
         if (!GameManager.Instance.IsDebug)

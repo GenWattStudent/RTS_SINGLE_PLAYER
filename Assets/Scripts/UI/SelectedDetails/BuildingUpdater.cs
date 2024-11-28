@@ -12,6 +12,7 @@ public class BuildingDetailsUpdater
     private Button levelUpButton;
     private Button sellButton;
     private VisualElement attackActions;
+    private Button cancelUpgradeButton;
 
     public BuildingDetailsUpdater(
         VisualElement statsContainer,
@@ -22,7 +23,8 @@ public class BuildingDetailsUpdater
         UIStorage uIStorage,
         Button levelUpButton,
         Button sellButton,
-        VisualElement attackActions)
+        VisualElement attackActions,
+        Button cancelUpgradeButton)
     {
         this.statsContainer = statsContainer;
         this.healthBar = healthBar;
@@ -33,11 +35,13 @@ public class BuildingDetailsUpdater
         this.levelUpButton = levelUpButton;
         this.sellButton = sellButton;
         this.attackActions = attackActions;
+        this.cancelUpgradeButton = cancelUpgradeButton;
     }
 
     public void UpdateBuildingDetails(Selectable selectable)
     {
         actions.style.display = DisplayStyle.Flex;
+        cancelUpgradeButton.style.display = DisplayStyle.None;
         var damagable = selectable.GetComponent<Damagable>();
         var building = selectable.GetComponent<Building>();
         var construction = selectable.GetComponent<Construction>();

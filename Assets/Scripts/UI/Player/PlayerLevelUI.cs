@@ -11,10 +11,8 @@ public class PlayerLevelUI : NetworkToolkitHelper
 
     private void UpdateUI(int expToNextLevel, int playerExpierence, int level, int maxLevel)
     {
-        Debug.Log("UpdateUI " + playerExpierence + " " + expToNextLevel + " " + level + " " + maxLevel);
         if (!IsOwner) return;
 
-        Debug.Log("UpdateUI " + playerExpierence + " " + expToNextLevel + " " + level + " " + maxLevel);
         if (level == maxLevel)
         {
             playerLevelText.text = $"{level} Max LVL";
@@ -37,7 +35,6 @@ public class PlayerLevelUI : NetworkToolkitHelper
         UIDocument = gameResult.GetComponent<UIDocument>();
         root = UIDocument.rootVisualElement;
 
-        Debug.Log("PlayerLevelUI enabled");
         playerLevelText = GetLabel("PlayerLevel");
         playerLevelFill = GetVisualElement("LevelFill");
         levelBox = GetVisualElement("Level");

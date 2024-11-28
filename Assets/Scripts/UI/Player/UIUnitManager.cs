@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class UIUnitManager : NetworkToolkitHelper
     private List<SpawnerSlot> _spawnerSlots = new();
     private SelectionManager _selectionManager;
     private BuildingLevelable _buildingLevelable;
+    private UIStorage _uiStorage;
 
     public override void OnNetworkSpawn()
     {
@@ -27,6 +29,7 @@ public class UIUnitManager : NetworkToolkitHelper
     private void Start()
     {
         _selectionManager = GetComponentInParent<SelectionManager>();
+        _uiStorage = GetComponentInParent<UIStorage>();
         _unitSlotContainer = root.Q<VisualElement>("TabContent");
 
         SelectionManager.OnSelect += HandleSelection;
@@ -42,6 +45,7 @@ public class UIUnitManager : NetworkToolkitHelper
         if (_spawnerBuilding is not null)
         {
             _spawnerBuilding.OnCurrentUnitChange -= HandleAddUnitToQueue;
+            _spawnerBuilding.OnAddUnitToQueue -= HandleAddUnitToQueue;
             if (_buildingLevelable != null) _buildingLevelable.level.OnValueChanged -= HandleLevelChange;
             _spawnerBuilding = null;
         }
@@ -90,6 +94,8 @@ public class UIUnitManager : NetworkToolkitHelper
     {
         Clear();
         spawnerBuilding.OnCurrentUnitChange += HandleAddUnitToQueue;
+        spawnerBuilding.OnAddUnitToQueue += HandleAddUnitToQueue;
+
         if (_buildingLevelable != null) _buildingLevelable.level.OnValueChanged += HandleLevelChange;
 
         var currentSpawningUnit = spawnerBuilding.GetCurrentSpawningUnit();
@@ -97,7 +103,7 @@ public class UIUnitManager : NetworkToolkitHelper
         foreach (var soUnit in BuildingSo.unitsToSpawn)
         {
             var unitQueueCount = spawnerBuilding.GetUnitQueueCountByName(soUnit.unitName);
-            var spawnerSlot = new SpawnerSlot(slot, soUnit, spawnerBuilding.GetComponent<Building>(), unitQueueCount);
+            var spawnerSlot = new SpawnerSlot(slot, soUnit, spawnerBuilding.GetComponent<Building>(), unitQueueCount, _uiStorage);
 
             if (currentSpawningUnit is not null && currentSpawningUnit.unitName == soUnit.unitName)
             {

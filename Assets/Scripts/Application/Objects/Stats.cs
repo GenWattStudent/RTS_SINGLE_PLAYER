@@ -79,9 +79,8 @@ public class Stats : NetworkBehaviour
                 statValue = baseStat * stat.CurrentValue / 100;
             }
 
-            Debug.Log($"Adding {stat.Type} {statValue} to {unit.unitSo.unitName}");
-            var current = AddToStat(stat.Type, statValue);
-            Debug.Log($"Current {stat.Type} {current} to {unit.unitSo.unitName}");
+
+            AddToStat(stat.Type, statValue);
             powerUpData.StatsAdded.Add(new Stat { Type = stat.Type, CurrentValue = statValue, BaseValue = statValue });
             PowerUps.Add(powerUpData);
         }
@@ -179,7 +178,8 @@ public class Stats : NetworkBehaviour
     public void SetStat(StatType type, float value)
     {
         if (!IsServer) return;
-        for (int i = 0; i < BaseStats.Count; i++)
+
+        for (int i = BaseStats.Count - 1; i >= 0; i--)
         {
             if (BaseStats[i].Type == type)
             {
@@ -195,7 +195,7 @@ public class Stats : NetworkBehaviour
     {
         if (!IsServer) return -1;
 
-        for (int i = 0; i < BaseStats.Count; i++)
+        for (int i = BaseStats.Count - 1; i >= 0; i--)
         {
             if (BaseStats[i].Type == type)
             {
@@ -213,7 +213,7 @@ public class Stats : NetworkBehaviour
     {
         if (!IsServer) return -1;
 
-        for (int i = 0; i < BaseStats.Count; i++)
+        for (int i = BaseStats.Count - 1; i >= 0; i--)
         {
             if (BaseStats[i].Type == type)
             {

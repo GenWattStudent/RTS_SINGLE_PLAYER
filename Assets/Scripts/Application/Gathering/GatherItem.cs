@@ -32,7 +32,6 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
             var randomValue = UnityEngine.Random.Range(gatherItemSo.minValue, gatherItemSo.maxValue);
             currentValue.Value = randomValue;
             maxValue.Value = randomValue;
-            NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateGather;
         }
 
         progressBarScript.UpdateProgresBar(currentValue.Value, maxValue.Value);
@@ -45,11 +44,6 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
         currentValue.OnValueChanged -= HandleCurrentValueChange;
         maxValue.OnValueChanged -= HandleMaxValueChange;
         RemoveWorkers();
-
-        if (IsServer)
-        {
-            NetworkManager.Singleton.NetworkTickSystem.Tick -= UpdateGather;
-        }
     }
 
     private void HandleCurrentValueChange(float oldValue, float newValue)
@@ -147,7 +141,7 @@ public class GatherItem : NetworkBehaviour, IWorkerConstruction
         }
     }
 
-    private void UpdateGather()
+    private void Update()
     {
         Gather();
     }
