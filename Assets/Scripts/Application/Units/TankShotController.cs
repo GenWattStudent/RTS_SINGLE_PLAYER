@@ -33,7 +33,6 @@ public class TankShotController : NetworkBehaviour
         enabled = IsServer;
         if (!IsServer) return;
 
-        Debug.Log("Tank shoot");
         attack = GetComponent<Attack>();
         attack.OnAttack += HandleAttack;
     }

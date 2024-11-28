@@ -51,7 +51,6 @@ public class RTSObjectsManager : NetworkBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        Debug.Log($"Client connected: {clientId}");
         Units[clientId] = new List<Unit>();
         Buildings[clientId] = new List<Building>();
         Objects[clientId] = new List<Unit>();
