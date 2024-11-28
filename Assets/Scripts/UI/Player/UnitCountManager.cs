@@ -10,15 +10,6 @@ public class UnitCountManager : NetworkToolkitHelper
     private Label unitCountText;
     private RTSObjectsManager RTSObjectsManager;
 
-    private void Start()
-    {
-        if (!IsOwner)
-        {
-            enabled = false;
-            return;
-        }
-    }
-
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -26,7 +17,6 @@ public class UnitCountManager : NetworkToolkitHelper
         RTSObjectsManager = GetComponentInParent<RTSObjectsManager>();
         root = UIDocument.rootVisualElement;
         unitCountText = root.Q<Label>("UnitCountLabel");
-        Debug.Log("UnitCountManager Start");
         RTSObjectsManager.OnUnitChange += OnUnitChange;
     }
 
@@ -35,14 +25,16 @@ public class UnitCountManager : NetworkToolkitHelper
         RTSObjectsManager.OnUnitChange -= OnUnitChange;
     }
 
-    public bool CanSpawnUnit()
+    public bool CanSpawnUnit(int unitsToSpawn)
     {
-        return currentUnitCount < maxUnitCount;
+        return currentUnitCount + unitsToSpawn <= maxUnitCount;
     }
 
     private void OnUnitChange(Unit unit, List<Unit> units)
     {
         currentUnitCount = units.Count;
+
+        if (!IsOwner) return;
         UpdateText();
     }
 

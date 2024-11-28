@@ -24,6 +24,27 @@ public class ResourceUsage : NetworkBehaviour
 
     public event Action<bool> OnDebtChanged;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsServer)
+        {
+            uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
+            uIStorage.OnStoragesChanged += HandleStoragesChanged;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (IsServer)
+        {
+            uIStorage.OnStoragesChanged -= HandleStoragesChanged;
+        }
+    }
+
     private void Start()
     {
         building = GetComponent<Building>();
@@ -32,12 +53,6 @@ public class ResourceUsage : NetworkBehaviour
         infoBox = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<InfoBox>();
         usageInterval = stats.GetStat(StatType.UsageInterval);
         ResourceSO = building != null ? building.buildingSo.resourceUsage : unit.unitSo.resourceUsage;
-
-        if (IsServer)
-        {
-            uIStorage = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>().GetComponentInChildren<UIStorage>();
-            uIStorage.OnStoragesChanged += HandleStoragesChanged;
-        }
     }
 
     private void HandleStoragesChanged()
@@ -98,7 +113,6 @@ public class ResourceUsage : NetworkBehaviour
 
         if (unit.unitSo.debuff != null)
         {
-            Debug.Log("Remove debuff");
             stats.RemovePowerUp(unit.unitSo.debuff);
         }
     }
@@ -112,7 +126,6 @@ public class ResourceUsage : NetworkBehaviour
 
         if (unit.unitSo.debuff != null)
         {
-            Debug.Log("Add debuff");
             stats.AddPowerUp(unit.unitSo.debuff);
         }
 

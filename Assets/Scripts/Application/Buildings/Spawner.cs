@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,7 +19,9 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     private ResourceUsage resourceUsage;
     private PlayerController playerController;
     private UnitCountManager unitCountManager;
+    private UnitCountManager localUnitCountManager;
     private UIStorage uIStorage;
+    private UIStorage localUIStorage;
     private BuildingLevelable buildingLevelable;
     private InfoBox infoBox;
 
@@ -30,12 +33,19 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     {
         buildingScript = GetComponent<Building>();
         resourceUsage = GetComponent<ResourceUsage>();
-
-        playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        infoBox = playerController.GetComponentInChildren<InfoBox>();
-        unitCountManager = playerController.GetComponentInChildren<UnitCountManager>();
-        uIStorage = playerController.GetComponentInChildren<UIStorage>();
         buildingLevelable = GetComponent<BuildingLevelable>();
+
+        var localPlayerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        infoBox = localPlayerController.GetComponentInChildren<InfoBox>();
+        localUnitCountManager = localPlayerController.GetComponentInChildren<UnitCountManager>();
+        localUIStorage = localPlayerController.GetComponentInChildren<UIStorage>();
+
+        if (IsServer)
+        {
+            playerController = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+            unitCountManager = playerController.GetComponentInChildren<UnitCountManager>();
+            uIStorage = playerController.GetComponentInChildren<UIStorage>();
+        }
     }
 
     public bool IsValidIndex(int index) => index >= 0 && index < buildingScript.buildingSo.unitsToSpawn.Count;
@@ -45,8 +55,6 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
     private Unit InstantiateUnit()
     {
-        if (!unitCountManager.CanSpawnUnit()) return null;
-
         uIStorage.DecreaseResource(currentSpawningUnit.costResource, currentSpawningUnit.cost);
 
         GameObject unitInstance = Instantiate(currentSpawningUnit.prefab, unitSpawnPoint.position, unitSpawnPoint.rotation);
@@ -64,9 +72,11 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
 
         var unitSo = buildingScript.buildingSo.unitsToSpawn[index];
 
+        if (!uIStorage.HasEnoughResource(unitSo.costResource, unitSo.cost) || !unitCountManager.CanSpawnUnit(unitsQueue.Count + 1)) return;
+
         unitsQueue.Add(unitSo);
-        StartQueue();
         NotifyClientUnitAddedToQueue(index, rpcParams);
+        StartQueueServer();
     }
 
     private void NotifyClientUnitAddedToQueue(int index, ServerRpcParams rpcParams)
@@ -116,7 +126,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
             OnSpawnUnit?.Invoke(unit.unitSo, unit);
             CurrentUnitChange(null);
 
-            StartQueue();
+            StartQueueServer();
         }
     }
 
@@ -133,14 +143,26 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
         SpawnUnitClientRpc(no);
     }
 
-    private void StartQueue()
+    private void StartQueueServer()
     {
         if (unitsQueue.Count > 0 && !isUnitSpawning)
         {
             InitializeSpawnTimer();
-            CurrentUnitChange(unitsQueue[0]);
-            isUnitSpawning = true;
+            StartQueue();
+            StartQueueClientRpc(new ClientRpcParams { Send = { TargetClientIds = new ulong[] { OwnerClientId } } });
         }
+    }
+
+    private void StartQueue()
+    {
+        CurrentUnitChange(unitsQueue[0]);
+        isUnitSpawning = true;
+    }
+
+    [ClientRpc]
+    private void StartQueueClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        StartQueue();
     }
 
     private void InitializeSpawnTimer()
@@ -152,9 +174,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     private void Update()
     {
         if (!IsServer) return;
-        if (currentSpawningUnit == null
-            || !uIStorage.HasEnoughResource(currentSpawningUnit.costResource, currentSpawningUnit.cost)
-            || resourceUsage.isInDebt) return;
+        if (currentSpawningUnit == null || resourceUsage.isInDebt) return;
 
         spawnTimer.Value -= Time.deltaTime;
         SpawnUnitServerRpc();
@@ -168,7 +188,7 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     {
         if (!IsValidIndex(index)) return;
 
-        if (!unitCountManager.CanSpawnUnit())
+        if (!localUnitCountManager.CanSpawnUnit(unitsQueue.Count + 1))
         {
             infoBox.AddError("You have reached unit limit");
             return;
@@ -180,6 +200,12 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
             return;
         }
 
+        if (!localUIStorage.HasEnoughResource(buildingScript.buildingSo.unitsToSpawn[index].costResource, buildingScript.buildingSo.unitsToSpawn[index].cost))
+        {
+            infoBox.AddError("Not enough resources");
+            return;
+        }
+
         AddUnitToQueueServerRpc(index);
     }
 
@@ -187,9 +213,8 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     public void AddUnitToQueueClientRpc(int index, ClientRpcParams clientRpcParams = default)
     {
         var unitSo = buildingScript.buildingSo.unitsToSpawn[index];
-
+        Debug.Log($"Unit {unitSo.unitName} added to queue");
         if (!IsServer) unitsQueue.Add(unitSo);
-        CurrentUnitChange(unitsQueue[0]);
         OnAddUnitToQueue?.Invoke(unitSo);
     }
 
@@ -208,17 +233,21 @@ public class Spawner : NetworkBehaviour, ISpawnerBuilding
     private void HandleClientUnitSpawn(NetworkObject no)
     {
         OnSpawnUnit?.Invoke(no.GetComponent<Unit>().unitSo, no.GetComponent<Unit>());
+
         if (unitsQueue.Count > 0)
         {
             unitsQueue.RemoveAt(0);
             isUnitSpawning = false;
-            if (unitsQueue.Count > 0) CurrentUnitChange(unitsQueue[0]);
+            if (unitsQueue.Any()) CurrentUnitChange(unitsQueue[0]);
+            else CurrentUnitChange(null);
         }
         else
         {
             isUnitSpawning = false;
             CurrentUnitChange(null);
         }
+
+        Debug.Log($"Unit {no.GetComponent<Unit>().unitSo.unitName} spawned Queue count: {unitsQueue.Count}");
     }
 
     private void CurrentUnitChange(UnitSo unitSo)

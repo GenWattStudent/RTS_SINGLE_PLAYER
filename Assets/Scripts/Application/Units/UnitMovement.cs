@@ -52,7 +52,6 @@ public class UnitMovement : NetworkBehaviour
 
     private void StatsChanged(NetworkListEvent<Stat> changeEvent)
     {
-        Debug.Log("Stats changed: " + transform + " " + stats.GetStat(StatType.Speed));
         SetNavMeshValues();
     }
 

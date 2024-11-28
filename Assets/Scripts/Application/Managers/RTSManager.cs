@@ -215,7 +215,7 @@ public class RTSManager : NetworkBehaviour
             foreach (var raycastHit in raycastHits)
             {
                 if (raycastHit.transform.gameObject.CompareTag("ForceField")) continue;
-                Debug.Log(raycastHit.transform.gameObject.name);
+
                 var damagableScript = raycastHit.transform.gameObject.GetComponent<Damagable>();
                 var selectableScript = raycastHit.transform.gameObject.GetComponent<Selectable>();
                 var constructionScript = raycastHit.transform.gameObject.GetComponent<Construction>();

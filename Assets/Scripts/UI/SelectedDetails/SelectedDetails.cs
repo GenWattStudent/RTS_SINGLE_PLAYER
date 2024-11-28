@@ -57,7 +57,8 @@ public class SelectedDetails : NetworkToolkitHelper
             uIStorage,
             levelUpButton,
             sellButton,
-            attackActions);
+            attackActions,
+            cancelUpgradeButton);
 
         levelUpButton.RegisterCallback<ClickEvent>(OnUpgradeButtonClick);
         sellButton.RegisterCallback<ClickEvent>(OnSellButtonClick);

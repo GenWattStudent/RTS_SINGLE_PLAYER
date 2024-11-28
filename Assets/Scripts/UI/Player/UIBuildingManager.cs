@@ -99,7 +99,6 @@ public class UIBuildingManager : NetworkBehaviour
 
     private void OnSlotClick(BuildingSo buildingSo)
     {
-        Debug.Log("Clicked on " + buildingSo.buildingName);
         if (!uIStorage.HasEnoughResource(buildingSo.costResource, buildingSo.cost)) return;
         selectedBuilding = buildingSo;
     }

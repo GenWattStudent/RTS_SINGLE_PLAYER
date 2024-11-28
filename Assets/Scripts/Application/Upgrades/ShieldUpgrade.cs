@@ -6,12 +6,11 @@ public class ShieldUpgrade : NetworkBehaviour
 {
     public float shieldPadding = 1f;
     public UpgradeSO upgradeSo;
-    private Collider _collider;
     private Unit _unit;
 
     private void Start()
     {
-        _collider = transform.parent.GetComponentInParent<Collider>();
+        if (!IsServer) return;
         _unit = transform.parent.GetComponentInParent<Unit>();
 
         ScaleShield();
@@ -20,7 +19,7 @@ public class ShieldUpgrade : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-
+        if (!IsServer) return;
         _unit.RemoveUpgrade(upgradeSo);
     }
 
@@ -39,11 +38,5 @@ public class ShieldUpgrade : NetworkBehaviour
         // make sheld in the middle of y position
         var height = bounds.size.y;
         transform.position = new Vector3(transform.position.x, height / 2, transform.position.z);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
     }
 }

@@ -57,6 +57,11 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
         }
     }
 
+    public void Build()
+    {
+        // StartConstruction();
+    }
+
     public void StartConstruction()
     {
         isCurrentlyConstructing = true;
@@ -92,7 +97,7 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     [ServerRpc(RequireOwnership = false)]
     private void InstantiateBuildingServerRpc()
     {
-        var building = Instantiate(construction.Prefab, transform.position, transform.rotation);
+        var building = Instantiate(construction.Prefab, transform.position, transform.rotation * construction.Prefab.transform.rotation);
         var no = building.GetComponent<NetworkObject>();
         var constructionNo = GetComponent<NetworkObject>();
         var damagable = building.GetComponent<Damagable>();
@@ -118,8 +123,8 @@ public class Construction : NetworkBehaviour, IWorkerConstruction
     private void InstantiateBuilding()
     {
         // Finished building
-        InstantiateBuildingServerRpc();
         OnFinshed?.Invoke();
+        InstantiateBuildingServerRpc();
     }
 
     [ClientRpc]

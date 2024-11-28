@@ -7,6 +7,8 @@ public interface IWorkerConstruction
     void RemoveWorker(Worker worker);
     void RemoveWorkers();
 
+    // void Build();
+
     Transform transform { get; }
 
     T GetComponent<T>();

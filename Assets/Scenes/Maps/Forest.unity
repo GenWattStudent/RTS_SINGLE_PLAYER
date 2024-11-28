@@ -3496,7 +3496,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.33333334
+  m_VoxelSize: 0.26666668
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: ed40a411660c4254897d31f2bcd35466, type: 2}
   m_BuildHeightMesh: 0
@@ -3581,6 +3581,11 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3222343451
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211592758492534023, guid: 465c505844950da499dcf096a6da4409,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 4279595026
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7743,6 +7748,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2678406842
       objectReference: {fileID: 0}
+    - target: {fileID: 8211592758492534023, guid: 465c505844950da499dcf096a6da4409,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 4279595026
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7865,6 +7875,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2339927612
       objectReference: {fileID: 0}
+    - target: {fileID: 8447213026126201364, guid: 614e4196c6b744c43976fb5174c3df58,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 508226859
+      objectReference: {fileID: 0}
     - target: {fileID: 8629107951899837375, guid: 614e4196c6b744c43976fb5174c3df58,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7930,8 +7945,8 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1803086568}
   - {fileID: 1859679414}
   - {fileID: 936990203}
   - {fileID: 160425547}
   - {fileID: 1238956426}
-  - {fileID: 1803086568}

@@ -61,7 +61,7 @@ public class Worker : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void StopConstructionServerRpc()
     {
-        if (construction == null || !isBuilding) return;
+        if (construction == null) return;
 
         construction.RemoveWorker(this);
         StopWorkerConstruction();
@@ -69,7 +69,7 @@ public class Worker : NetworkBehaviour
 
     public void StopWorkerConstruction()
     {
-        if (construction == null || !isBuilding) return;
+        if (construction == null) return;
 
         isBuilding = false;
         construction.OnFinshed -= HandleFinish;
