@@ -69,7 +69,7 @@ public class PlayerController : NetworkBehaviour
 
         foreach (var unitPrefab in unitPrefabs)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 15; i++)
             {
                 var unit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
                 var unitMovement = unit.GetComponent<UnitMovement>();

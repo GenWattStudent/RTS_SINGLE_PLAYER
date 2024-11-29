@@ -144,7 +144,7 @@ public class RTSObjectsManager : NetworkBehaviour
         {
             var building = no.GetComponent<Building>();
             if (!Buildings[no.OwnerClientId].Contains(building)) return;
-            ;
+
             building.GetComponent<Damagable>().OnDead -= HandleBuildingDeath;
             Buildings[no.OwnerClientId].Remove(building);
             Objects[no.OwnerClientId].Remove(building.GetComponent<Unit>());
