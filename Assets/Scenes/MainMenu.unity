@@ -5486,6 +5486,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1956854440
       objectReference: {fileID: 0}
+    - target: {fileID: 5274868833598084267, guid: d358bb72863aadd49b558e0234676dc8,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 2316860804
+      objectReference: {fileID: 0}
     - target: {fileID: 6239037674919067970, guid: d358bb72863aadd49b558e0234676dc8,
         type: 3}
       propertyPath: m_Name
@@ -5588,6 +5593,11 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 4061147873
+      objectReference: {fileID: 0}
+    - target: {fileID: -6627365435683122295, guid: ee52a160e67e4e145b51611619c1e701,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 2594049384
       objectReference: {fileID: 0}
     - target: {fileID: -5733962355213376312, guid: ee52a160e67e4e145b51611619c1e701,
         type: 3}
@@ -6313,10 +6323,25 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8960156484496545033, guid: 43a428bf7122360479512b8e870880a0,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8960156484496545033, guid: 43a428bf7122360479512b8e870880a0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9136693582231763078, guid: 43a428bf7122360479512b8e870880a0,
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 4200174636
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136693582231763078, guid: 43a428bf7122360479512b8e870880a0,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 2803235690
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1361897205793647017, guid: 43a428bf7122360479512b8e870880a0, type: 3}

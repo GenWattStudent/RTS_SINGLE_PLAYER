@@ -12,7 +12,6 @@ public class MainMenuManager : MonoBehaviour
     private VisualElement root;
     private VisualElement userModal;
     private Button submitUsernameButton;
-    private Button singlePlayerButton;
     private Button multiplayerButton;
     private Button settingsButton;
     private TextField usernameInput;
@@ -30,7 +29,6 @@ public class MainMenuManager : MonoBehaviour
         root = uIDocument.rootVisualElement;
         userModal = root.Q<VisualElement>("UserModalBox");
         submitUsernameButton = root.Q<Button>("AcceptUsername");
-        singlePlayerButton = root.Q<Button>("SinglePlayer");
         multiplayerButton = root.Q<Button>("Multiplayer");
         settingsButton = root.Q<Button>("SettingsButton");
         usernameInput = root.Q<TextField>("UserInput");
@@ -43,7 +41,6 @@ public class MainMenuManager : MonoBehaviour
 
         userModal.style.display = DisplayStyle.None;
 
-        singlePlayerButton.clicked += StartSinglePlayerGame;
         settingsButton.clicked += ShowSettings;
         usernameLabel.RegisterCallback<ClickEvent>(HandleShowUserModal);
         multiplayerButton.clicked += StartMultiplayerGame;
@@ -55,11 +52,6 @@ public class MainMenuManager : MonoBehaviour
     private void HandleShowUserModal(ClickEvent evt)
     {
         userModal.style.display = DisplayStyle.Flex;
-    }
-
-    private void StartSinglePlayerGame()
-    {
-        SceneManager.LoadScene("Game");
     }
 
     private void StartMultiplayerGame()
@@ -80,7 +72,6 @@ public class MainMenuManager : MonoBehaviour
     private void OnDisable()
     {
         submitUsernameButton.clicked -= SubmitUsername;
-        singlePlayerButton.clicked -= StartSinglePlayerGame;
         settingsButton.clicked -= ShowSettings;
         closeSettingsButton.clicked -= CloseSettings;
         usernameLabel.UnregisterCallback<ClickEvent>(HandleShowUserModal);
