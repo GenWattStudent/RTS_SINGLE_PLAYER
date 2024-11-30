@@ -146,6 +146,7 @@ public class BuildingManager : NetworkBehaviour
         var damagable = newBuilding.GetComponent<Damagable>();
         var construction = newBuilding.GetComponent<Construction>();
 
+        Debug.Log($"Placing building {buildingSo.name} at {position}");
         construction.construction = buildingSo;
         no.SpawnWithOwnership(clientId);
         stats.SetStat(StatType.Health, 1);

@@ -20,9 +20,15 @@ public class Healer : NetworkBehaviour
         }
 
         var healPoints = stats.GetStat(StatType.Damage);
+        var totalHealPoints = Mathf.RoundToInt(healPoints * Time.deltaTime);
 
-        target.TakeDamage(healPoints * Time.deltaTime * -1);
+        target.TakeDamage(Mathf.RoundToInt(totalHealPoints * -1));
         currentHealTimer = stats.GetStat(StatType.AttackSpeed);
+
+        if (!laser.IsLaserOn)
+        {
+            SetLaserTargetClientRpc(target.GetComponent<NetworkObject>());
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -35,9 +41,19 @@ public class Healer : NetworkBehaviour
         }
     }
 
+    private void HandleDeath(Damagable damagable)
+    {
+        SetTarget(null);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SetTargetToNullServerRpc()
     {
+        if (target != null)
+        {
+            target.OnDead -= HandleDeath;
+        }
+
         SetTarget(null);
     }
 
@@ -51,9 +67,7 @@ public class Healer : NetworkBehaviour
             return;
         }
 
-        target.OnDead += (Damagable damagable) => SetTarget(null);
-
-        SetLaserTargetClientRpc(target.GetComponent<NetworkObject>());
+        target.OnDead += HandleDeath;
     }
 
     [ClientRpc]
@@ -73,17 +87,20 @@ public class Healer : NetworkBehaviour
 
     private bool IsInRange()
     {
-        if (target == null) return false;
-        var colliders = Physics.OverlapSphere(transform.position, damagableSo.attackRange);
-        foreach (var collider in colliders)
-        {
-            if (collider.gameObject == target.gameObject)
-            {
-                return true;
-            }
-        }
+        Vector3 closestPointOnTargetUnit = GetClosestPointOnCollider(target, transform.position);
+        float distance = Vector3.Distance(transform.position, closestPointOnTargetUnit);
 
-        return false;
+        return distance <= stats.GetStat(StatType.BuildingDistance);
+    }
+
+    private Vector3 GetClosestPointOnCollider(Damagable damagable, Vector3 position)
+    {
+        Collider collider = damagable.GetComponent<Collider>();
+        if (collider != null)
+        {
+            return collider.ClosestPoint(position);
+        }
+        return damagable.transform.position;
     }
 
     private void MoveToTarget()
@@ -116,6 +133,8 @@ public class Healer : NetworkBehaviour
 
         if (target == null) return;
 
+        if (unitMovement != null) unitMovement.RotateToTarget(target.transform.position);
+
         if (!IsInRange())
         {
             MoveToTarget();
@@ -124,7 +143,5 @@ public class Healer : NetworkBehaviour
         {
             Heal(target);
         }
-
-        if (unitMovement != null) unitMovement.RotateToTarget(target.transform.position);
     }
 }

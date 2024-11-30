@@ -99,14 +99,6 @@ public class CursorManager : NetworkBehaviour
     {
         if (selectionManager.GetHealers().Count == 0) return false;
 
-        if (selectionManager.selectedObjects.Count == 1)
-        {
-            var healer = selectionManager.selectedObjects[0].GetComponent<Healer>();
-            if (healer != null)
-            {
-                return false;
-            }
-        }
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 100f);
 
@@ -115,6 +107,11 @@ public class CursorManager : NetworkBehaviour
             if (hit.transform.gameObject.CompareTag("ForceField")) continue;
 
             var damagable = hit.collider.gameObject.GetComponent<Damagable>();
+
+            if (selectionManager.selectedObjects.Count == 1 && damagable == null && damagable == selectionManager.selectedObjects[0].GetComponent<Damagable>())
+            {
+                return false;
+            }
 
             if (damagable != null && !damagable.isDead.Value && damagable.teamType.Value == playerController.teamType.Value && damagable.stats.GetStat(StatType.Health) < damagable.stats.GetStat(StatType.MaxHealth))
             {

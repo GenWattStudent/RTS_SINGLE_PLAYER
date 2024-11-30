@@ -66,7 +66,7 @@ public class Damagable : NetworkBehaviour
                 powerUp.ApplySkills(skillApplicable);
             }
 
-            // TakeDamage(2000);
+            // TakeDamage(100);
         }
 
         isDead.OnValueChanged += HandleDeadState;

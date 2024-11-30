@@ -88,23 +88,29 @@ public class QuadTree
         }
     }
 
-    public List<Unit> FindUnitsInRange(Vector3 position, float range)
+    public List<Unit> FindEnemyUnitsInRange(Vector3 position, float range, TeamType team)
     {
         List<Unit> found = new List<Unit>();
-        FindUnitsInRange(position, range, found);
+        FindEnemyUnitsInRange(position, range, found, team);
         return found;
     }
 
-    private void FindUnitsInRange(Vector3 position, float range, List<Unit> found)
+    private void FindEnemyUnitsInRange(Vector3 position, float range, List<Unit> found, TeamType team)
     {
-        if (!bounds.Contains(position))
+        if (!bounds.Overlaps(new Rect(position.x - range, position.z - range, range * 2, range * 2)))
             return;
 
         foreach (Unit obj in objects)
         {
-            if (Vector3.Distance(obj.transform.position, position) <= range)
+            if (obj.Damagable.teamType.Value != team)
             {
-                found.Add(obj);
+                Vector3 closestPoint = GetClosestPointOnCollider(obj, position);
+                float distance = Vector3.Distance(closestPoint, position);
+
+                if (distance <= range)
+                {
+                    found.Add(obj);
+                }
             }
         }
 
@@ -112,7 +118,7 @@ public class QuadTree
         {
             for (int i = 0; i < 4; i++)
             {
-                nodes[i].FindUnitsInRange(position, range, found);
+                nodes[i].FindEnemyUnitsInRange(position, range, found, team);
             }
         }
     }

@@ -14,6 +14,8 @@ public class Worker : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ActivateLaserServerRpc()
     {
+        if (laser.IsLaserOn) return;
+
         var targetNo = (construction as NetworkBehaviour).GetComponent<NetworkObject>();
         ActivateLaserClientRpc(targetNo);
     }
@@ -24,7 +26,7 @@ public class Worker : NetworkBehaviour
         if (nor.TryGet(out NetworkObject no))
         {
             var construction = no.GetComponent<IWorkerConstruction>();
-            laser.isAttacking = false;
+            laser.IsAttacking = false;
             laser.SetTarget(construction.transform);
         }
     }
@@ -124,8 +126,8 @@ public class Worker : NetworkBehaviour
 
         if (!IsServer) return;
 
-        stats.AddStat(StatType.Damage, laser.laserSo.Damage);
-        stats.AddStat(StatType.AttackSpeed, laser.laserSo.AttackSpeed);
+        stats.AddStat(StatType.Damage, laser.LaserSo.Damage);
+        stats.AddStat(StatType.AttackSpeed, laser.LaserSo.AttackSpeed);
 
         NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateWorker;
     }

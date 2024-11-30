@@ -65,16 +65,28 @@ public class Attack : NetworkBehaviour
     {
         var direction = target.TargetPoint.position - currentDamagable.TargetPoint.position;
         var hits = Physics.RaycastAll(currentDamagable.TargetPoint.position, direction, currentUnit.attackableSo.attackRange);
+        var isHidden = true;
+
+        // Sort hits by distance
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         foreach (var hit in hits)
         {
+            var terrainLayer = LayerMask.NameToLayer("Terrain");
+
+            if (hit.collider.gameObject.layer == terrainLayer)
+            {
+                isHidden = true;
+                break;
+            }
+
             if (hit.collider.gameObject.GetComponent<Damagable>() == target)
             {
-                return false; // Target is not hidden
+                isHidden = false;
             }
         }
 
-        return true;
+        return isHidden;
     }
 
     private void CheckForTargets()
