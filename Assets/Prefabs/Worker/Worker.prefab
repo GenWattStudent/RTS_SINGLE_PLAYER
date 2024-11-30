@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2863274975
+  GlobalObjectIdHash: 891128793
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -166,8 +166,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   agent: {fileID: 0}
   destinationAfterSpawn: {x: 0, y: 0, z: 0}
-  isReachedDestinationAfterSpawn: 0
   isMoving: 0
+  Destination: {x: 0, y: 0, z: 0}
 --- !u!114 &1419450092642985885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,7 +197,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  healthBar: {fileID: 3706828982024979038}
   teamType:
     m_InternalValue: 0
   damagableSo: {fileID: 11400000, guid: d3e99ce101daeed43b3b29270880fd40, type: 2}
@@ -279,11 +278,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  spawnPoint: {fileID: 6003862070716649827}
-  goLaserBeam: {fileID: 2459324060585857454}
-  laserSo: {fileID: 11400000, guid: c2e2afdbb44a6b941adab0a98d54f9db, type: 2}
-  currentDamageInterval: 0
-  isAttacking: 0
+  SpawnPoint: {fileID: 6003862070716649827}
+  GoLaserBeam: {fileID: 2459324060585857454}
+  LaserSo: {fileID: 11400000, guid: c2e2afdbb44a6b941adab0a98d54f9db, type: 2}
+  CurrentDamageInterval: 0
+  IsAttacking: 0
+  IsLaserOn: 0
 --- !u!114 &-8534491582296696178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -786,12 +786,6 @@ GameObject:
 --- !u!4 &1259631158737908712 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7634876721254635297, guid: 2706fbf2a5a42a24e9e59b610b8e1268,
-    type: 3}
-  m_PrefabInstance: {fileID: 8687333937516520649}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &3706828982024979038 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5476044413658916503, guid: 2706fbf2a5a42a24e9e59b610b8e1268,
     type: 3}
   m_PrefabInstance: {fileID: 8687333937516520649}
   m_PrefabAsset: {fileID: 0}

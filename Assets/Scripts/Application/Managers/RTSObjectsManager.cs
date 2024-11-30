@@ -63,10 +63,10 @@ public class RTSObjectsManager : NetworkBehaviour
         Objects.Remove(clientId);
         quadtree.UpdateUnit(Objects);
     }
+
     private void HandleUnitDeath(Damagable damagable)
     {
         RemoveUnitServerRpc(damagable.GetComponent<NetworkObject>());
-        quadtree.UpdateUnit(Objects);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -101,7 +101,7 @@ public class RTSObjectsManager : NetworkBehaviour
             unit.GetComponent<Damagable>().OnDead -= HandleUnitDeath;
             Units[no.OwnerClientId].Remove(unit);
             Objects[no.OwnerClientId].Remove(unit);
-            quadtree.Remove(unit);
+            quadtree.UpdateUnit(Objects);
         }
     }
 
@@ -114,7 +114,6 @@ public class RTSObjectsManager : NetworkBehaviour
     private void HandleBuildingDeath(Damagable damagable)
     {
         RemoveBuildingServerRpc(damagable.GetComponent<NetworkObject>());
-        quadtree.UpdateUnit(Objects);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -148,7 +147,7 @@ public class RTSObjectsManager : NetworkBehaviour
             building.GetComponent<Damagable>().OnDead -= HandleBuildingDeath;
             Buildings[no.OwnerClientId].Remove(building);
             Objects[no.OwnerClientId].Remove(building.GetComponent<Unit>());
-            quadtree.Remove(building.GetComponent<Unit>());
+            quadtree.UpdateUnit(Objects);
         }
     }
 

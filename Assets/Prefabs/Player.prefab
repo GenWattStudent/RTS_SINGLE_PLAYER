@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3328251871
+  GlobalObjectIdHash: 1264024512
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -85,6 +85,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   LocalPlayerUnits: []
   LocalPlayerBuildings: []
+  ShouldUpdateTree: 0
 --- !u!114 &6658737344311043898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +296,18 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 951099334
       objectReference: {fileID: 0}
+    - target: {fileID: 2615484739504457805, guid: fd1b3b54da07ef74296c67c0cb422592,
+        type: 3}
+      propertyPath: localUIObject
+      value: 
+      objectReference: {fileID: 1683459123212548856, guid: 728f8e5b615e0344d84b8c0e5a2c14cc,
+        type: 3}
+    - target: {fileID: 2615484739504457805, guid: fd1b3b54da07ef74296c67c0cb422592,
+        type: 3}
+      propertyPath: localUIDocument
+      value: 
+      objectReference: {fileID: 6914289029607977601, guid: 728f8e5b615e0344d84b8c0e5a2c14cc,
+        type: 3}
     - target: {fileID: 3566358833013920736, guid: fd1b3b54da07ef74296c67c0cb422592,
         type: 3}
       propertyPath: m_Name

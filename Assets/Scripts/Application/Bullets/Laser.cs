@@ -4,11 +4,12 @@ using UnityEngine;
 public class Laser : NetworkBehaviour
 {
     // laser beam have light, paricle system and line renderer
-    [SerializeField] private GameObject spawnPoint;
-    [SerializeField] private GameObject goLaserBeam;
-    public LaserSo laserSo;
-    public float currentDamageInterval = 0;
-    public bool isAttacking = false;
+    [SerializeField] private GameObject SpawnPoint;
+    [SerializeField] private GameObject GoLaserBeam;
+    public LaserSo LaserSo;
+    public float CurrentDamageInterval = 0;
+    public bool IsAttacking = false;
+    public bool IsLaserOn = false;
 
     private Transform target;
     private bool areEffectsInstantiated = false;
@@ -19,20 +20,21 @@ public class Laser : NetworkBehaviour
 
     public void SetTarget(Transform target)
     {
+        Debug.Log("Set target " + target);
         this.target = target;
     }
 
     private void Awake()
     {
         stats = GetComponentInParent<Stats>();
-        currentDamageInterval = stats.GetStat(StatType.AttackSpeed);
+        CurrentDamageInterval = stats.GetStat(StatType.AttackSpeed);
     }
 
     private void Attack()
     {
-        if (currentDamageInterval <= 0 && isAttacking)
+        if (CurrentDamageInterval <= 0 && IsAttacking)
         {
-            currentDamageInterval = stats.GetStat(StatType.AttackSpeed);
+            CurrentDamageInterval = stats.GetStat(StatType.AttackSpeed);
             var damagable = target.GetComponent<Damagable>();
 
             if (damagable != null) damagable.TakeDamage(stats.GetStat(StatType.Damage));
@@ -41,7 +43,7 @@ public class Laser : NetworkBehaviour
 
     private void DrawLineToTarget()
     {
-        lineRenderer.SetPosition(0, spawnPoint.transform.position);
+        lineRenderer.SetPosition(0, SpawnPoint.transform.position);
         lineRenderer.SetPosition(1, target.transform.position);
     }
 
@@ -60,17 +62,18 @@ public class Laser : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void InstantiateAllEffectsServerRpc()
     {
+        IsLaserOn = true;
         InstantiateAllEffectsClientRpc();
     }
 
     [ClientRpc]
     private void InstantiateAllEffectsClientRpc()
     {
-        goLaserBeam.gameObject.SetActive(true);
+        GoLaserBeam.gameObject.SetActive(true);
 
-        lineRenderer = goLaserBeam.GetComponentInChildren<LineRenderer>();
-        laserHitEffect = goLaserBeam.GetComponentInChildren<ParticleSystem>();
-        laserLight = goLaserBeam.GetComponentInChildren<Light>();
+        lineRenderer = GoLaserBeam.GetComponentInChildren<LineRenderer>();
+        laserHitEffect = GoLaserBeam.GetComponentInChildren<ParticleSystem>();
+        laserLight = GoLaserBeam.GetComponentInChildren<Light>();
 
         areEffectsInstantiated = true;
     }
@@ -78,13 +81,14 @@ public class Laser : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void DestroyAllEffectsServerRpc()
     {
+        IsLaserOn = false;
         DestroyAllEffectsClientRpc();
     }
 
     [ClientRpc]
     private void DestroyAllEffectsClientRpc()
     {
-        goLaserBeam.gameObject.SetActive(false);
+        GoLaserBeam.gameObject.SetActive(false);
 
         lineRenderer = null;
         laserHitEffect = null;
@@ -111,7 +115,7 @@ public class Laser : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        currentDamageInterval -= Time.deltaTime;
+        CurrentDamageInterval -= Time.deltaTime;
 
         if (target == null)
         {
@@ -125,7 +129,7 @@ public class Laser : NetworkBehaviour
             PlayAllEffectsServerRpc();
         }
 
-        if (isAttacking)
+        if (IsAttacking)
         {
             Attack();
         }

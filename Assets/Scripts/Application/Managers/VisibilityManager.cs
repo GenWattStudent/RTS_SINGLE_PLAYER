@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-150)]
 public class VisibilityManager : NetworkBehaviour
 {
-    private Dictionary<NetworkObject, int> visibilityCounts = new Dictionary<NetworkObject, int>();
+    private HashSet<NetworkObject> visibleUnits = new HashSet<NetworkObject>();
 
     private void Start()
     {
@@ -28,35 +29,33 @@ public class VisibilityManager : NetworkBehaviour
         var currentDamagable = unit.GetComponent<Damagable>();
 
         var ray = new Ray(currentDamagable.TargetPoint.position, damagable.TargetPoint.position - currentDamagable.TargetPoint.position);
-        var hits = Physics.RaycastAll(ray, unit.unitSo.sightRange);
+        var sightRange = unit.unitSo != null ? unit.unitSo.sightRange : unit.GetComponent<Building>().buildingSo.sightRange;
+        var hits = Physics.RaycastAll(ray, sightRange);
+
+        Debug.DrawRay(ray.origin, ray.direction * sightRange, Color.red);
+        bool isHidden = true;
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         foreach (var hit in hits)
         {
+            // if hits terrain dont see it
+            var terrainLayer = LayerMask.NameToLayer("Terrain");
+
+            if (hit.collider.gameObject.layer == terrainLayer)
+            {
+                isHidden = true;
+                break;
+            }
+
             if (hit.collider.gameObject.GetComponent<Unit>() == enemyUnit)
             {
-                return false; // Target is not hidden
+                isHidden = false;
             }
         }
 
-        return true;
+        return isHidden;
     }
 
-    private bool IsUnitInSight(Unit unit, Unit enemyUnit)
-    {
-        var building = unit.GetComponent<Building>();
-        var sightRange = building != null ? building.buildingSo.sightRange : unit.unitSo.sightRange;
-        var sightAngle = building != null ? building.buildingSo.sightAngle : unit.unitSo.sightAngle;
-
-        var distance = Vector3.Distance(unit.transform.position, enemyUnit.transform.position);
-        if (distance > sightRange) return false;
-
-        var directionToUnit = (enemyUnit.transform.position - unit.transform.position).normalized;
-        var angle = Vector3.Angle(unit.transform.forward, directionToUnit);
-        if (angle > sightAngle / 2) return false;
-
-        return !IsTargetHide(unit, enemyUnit);
-
-    }
     public void Show(Unit unit)
     {
         var networkObject = unit.GetComponent<NetworkObject>();
@@ -92,61 +91,51 @@ public class VisibilityManager : NetworkBehaviour
         if (!RTSObjectsManager.Units.ContainsKey(OwnerClientId)) return;
 
         var playerUnits = RTSObjectsManager.Objects[OwnerClientId];
-
-        visibilityCounts.Clear();
+        // Clear visibility states
+        visibleUnits.Clear();
 
         foreach (var unit in playerUnits)
         {
             if (unit == null) continue;
 
-            foreach (var player in RTSObjectsManager.Objects)
+            // Retrieve units in sight range using QuadTree
+            var unitDamagable = unit.GetComponent<Damagable>();
+            var sightRange = unit.unitSo != null ? unit.unitSo.sightRange : unit.GetComponent<Building>().buildingSo.sightRange;
+            var unitsInRange = RTSObjectsManager.quadtree.FindEnemyUnitsInRange(
+                unit.transform.position,
+                sightRange,
+                unitDamagable.teamType.Value);
+
+            foreach (var enemyUnit in unitsInRange)
             {
-                var playerController = NetworkManager.Singleton.ConnectedClients[player.Key].PlayerObject.GetComponent<PlayerController>();
-                var unitPlayerController = NetworkManager.Singleton.ConnectedClients[unit.OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+                if (enemyUnit == null || visibleUnits.Contains(enemyUnit.GetComponent<NetworkObject>()) || IsTargetHide(unit, enemyUnit)) continue;
 
-                if (playerController.teamType.Value == unitPlayerController.teamType.Value) continue;
+                var networkObject = enemyUnit.GetComponent<NetworkObject>();
 
-                foreach (var enemyUnit in player.Value)
-                {
-                    if (enemyUnit == null) continue;
-
-                    if (IsUnitInSight(unit, enemyUnit))
-                    {
-                        var networkObject = enemyUnit.GetComponent<NetworkObject>();
-
-                        if (!visibilityCounts.ContainsKey(networkObject))
-                        {
-                            visibilityCounts[networkObject] = 1;
-                        }
-                        visibilityCounts[networkObject]++;
-
-                        // enemyUnit.isVisibile.Value = true;
-                    }
-                    else
-                    {
-                        var networkObject = enemyUnit.GetComponent<NetworkObject>();
-
-                        if (!visibilityCounts.ContainsKey(networkObject))
-                        {
-                            visibilityCounts[networkObject] = 0;
-                        }
-
-                        // enemyUnit.isVisibile.Value = false;
-                    }
-                }
+                visibleUnits.Add(networkObject); // Mark as visible globally
             }
         }
 
-        // Show or hide units based on visibility counts
-        foreach (var kvp in visibilityCounts)
+        var currentPlayerController = NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerController>();
+        // Loop through all enemy units units and update visibility
+        foreach (var kvp in RTSObjectsManager.Objects)
         {
-            if (kvp.Value > 0)
+            if (currentPlayerController.teamType.Value == NetworkManager.Singleton.ConnectedClients[kvp.Key].PlayerObject.GetComponent<PlayerController>().teamType.Value) continue;
+
+            foreach (var unit in kvp.Value)
             {
-                Show(kvp.Key.GetComponent<Unit>());
-            }
-            else
-            {
-                Hide(kvp.Key.GetComponent<Unit>());
+                if (unit == null) continue;
+
+                var networkObject = unit.GetComponent<NetworkObject>();
+
+                if (visibleUnits.Contains(networkObject))
+                {
+                    Show(unit);
+                }
+                else
+                {
+                    Hide(unit);
+                }
             }
         }
     }

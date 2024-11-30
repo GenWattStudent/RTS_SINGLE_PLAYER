@@ -1,8 +1,12 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class GameResult : NetworkToolkitHelper
 {
+    [SerializeField] private GameObject localUIObject;
+
+    private UIDocument localUIDocument;
     private Label resultText;
     private Button goToMainMenuButton;
     private VisualElement resultModal;
@@ -13,11 +17,22 @@ public class GameResult : NetworkToolkitHelper
         SceneManager.LoadScene(0);
     }
 
-    void Start()
+    private void Awake()
     {
-        resultText = GetLabel("GameResult");
-        goToMainMenuButton = GetButton("MainMenuButtonResult");
-        resultModal = GetVisualElement("ResultModal");
+        if (localUIDocument == null)
+        {
+            // instantiate the prefab
+            localUIDocument = Instantiate(localUIObject).GetComponent<UIDocument>();
+        }
+    }
+
+    private void Start()
+    {
+        var localRoot = localUIDocument.rootVisualElement;
+
+        resultText = localRoot.Q<Label>("GameResult");
+        goToMainMenuButton = localRoot.Q<Button>("MainMenuButtonResult");
+        resultModal = localRoot.Q<VisualElement>("ResultModal");
     }
 
     public void Victory()
