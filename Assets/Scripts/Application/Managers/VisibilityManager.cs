@@ -8,13 +8,23 @@ public class VisibilityManager : NetworkBehaviour
 {
     private HashSet<NetworkObject> visibleUnits = new HashSet<NetworkObject>();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
         if (IsServer)
         {
             NetworkManager.Singleton.NetworkTickSystem.Tick += OnNetworkTick;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.NetworkTickSystem.Tick -= OnNetworkTick;
         }
     }
 

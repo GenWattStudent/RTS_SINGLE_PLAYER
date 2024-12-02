@@ -39,6 +39,15 @@ public class MainMenuManager : MonoBehaviour
         closeSettingsButton = root.Q<Button>("CloseSettings");
         quitButton = root.Q<Button>("QuitButton");
 
+        PlayerPrefs.DeleteKey("username");
+
+        if (!PlayerPrefs.HasKey("username"))
+        {
+            PlayerPrefs.SetString("username", $"Player{Mathf.Round(Random.Range(0, 1000))}");
+        }
+
+        usernameInput.value = PlayerPrefs.GetString("username");
+        Debug.Log(PlayerPrefs.GetString("username"));
         userModal.style.display = DisplayStyle.None;
 
         settingsButton.clicked += ShowSettings;

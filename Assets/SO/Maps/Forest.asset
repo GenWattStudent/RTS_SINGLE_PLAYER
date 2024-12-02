@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Forest
   m_EditorClassIdentifier: 
   MapName: Forest
-  MapImage: {fileID: 2800000, guid: bc4a83ea0e448ab4fbe674b05056855e, type: 3}
+  MapImage: {fileID: 2800000, guid: 16f2a00757d5b154a85c9132db23f1c4, type: 3}
