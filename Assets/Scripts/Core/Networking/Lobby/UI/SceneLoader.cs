@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class SceneLoader : ToolkitHelper
     [SerializeField] private VisualTreeAsset loaderPlayerTemplate;
     private VisualElement sceneLoading;
     private VisualElement playerList;
+    private ProgressBar loadingProgressbar;
     private Dictionary<ulong, VisualElement> playerItems = new();
 
     protected override void OnEnable()
@@ -16,11 +18,26 @@ public class SceneLoader : ToolkitHelper
 
         sceneLoading = GetVisualElement("SceneLoading");
         playerList = GetVisualElement("LoaderPlayerBox");
+        loadingProgressbar = GetProgressBar("LoadingProgressbar");
+    }
+
+    private void Start()
+    {
+        LobbyRoomService.Instance.loadingProgress.OnValueChanged += SetLoder;
+    }
+
+    private void SetLoder(int previousValue, int newValue)
+    {
+        Debug.Log($"Loading progress: {newValue}%");
+        loadingProgressbar.value = newValue;
+        loadingProgressbar.title = $"{newValue}%";
     }
 
     private void OnDisable()
     {
         sceneLoading.style.display = DisplayStyle.None;
+
+        LobbyRoomService.Instance.loadingProgress.OnValueChanged -= SetLoder;
     }
 
     public void ShowSceneLoading(NetworkList<PlayerNetcodeLobbyData> players)
@@ -50,8 +67,6 @@ public class SceneLoader : ToolkitHelper
         var playerItem = loaderPlayerTemplate.CloneTree();
 
         playerItem.Q<Label>("PlayerName").text = player.PlayerName.ToString();
-        playerItem.Q<ProgressBar>("LoadingProgressbar").title = $"Loading({player.Progress}%)";
-        playerItem.Q<ProgressBar>("LoadingProgressbar").value = player.Progress;
 
         playerList.Add(playerItem);
         playerItems.Add(player.NetcodePlayerId, playerItem);

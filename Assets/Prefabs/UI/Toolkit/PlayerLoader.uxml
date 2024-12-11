@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="PlayerLoader" class="border-secondary" style="flex-grow: 0; justify-content: space-between; flex-direction: row; flex-wrap: nowrap; align-self: center; align-items: center; width: 400px; border-top-width: 5px; border-left-width: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; height: 64px; margin-bottom: 10px;">
         <ui:Label tabindex="-1" text="Adrianek" display-tooltip-when-elided="true" name="PlayerName" class="text-primary text-bold" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-        <ui:ProgressBar value="22" title="Loading(20%)" name="LoadingProgressbar" class="mass" style="position: relative; right: auto; left: auto; bottom: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 31px;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -17,7 +17,7 @@ public class LobbyData
         {
             { "MapName", new DataObject(DataObject.VisibilityOptions.Member, MapName) },
             { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, RelayCode) },
-            { "Started", new DataObject(DataObject.VisibilityOptions.Member, Started.ToString()) }
+            { "Started", new DataObject(DataObject.VisibilityOptions.Member, Started.ToString(), DataObject.IndexOptions.S1) }
         };
 
         return data;

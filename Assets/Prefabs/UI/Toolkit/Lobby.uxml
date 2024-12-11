@@ -281,6 +281,7 @@
                 <ui:Instance template="PlayerLoader" name="PlayerLoader" />
                 <ui:Instance template="PlayerLoader" name="PlayerLoader" />
             </ui:VisualElement>
+            <ui:ProgressBar value="0" title="0%" name="LoadingProgressbar" class="healthbar" style="position: absolute; bottom: 0; right: 0; left: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

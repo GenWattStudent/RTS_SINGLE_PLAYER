@@ -14,6 +14,7 @@ public class LobbyRoomService : NetworkBehaviour
     public LobbyPlayersHandler lobbyPlayersHandler;
     public LobbyNetcodeDataHandler lobbyNetcodeDataHandler;
     public NetworkList<PlayerNetcodeLobbyData> PlayerNetcodeLobbyData => lobbyPlayersHandler.playerNetcodeLobbyData;
+    public NetworkVariable<int> loadingProgress = new(0);
 
     private int completedPlayers = 0;
     private SceneLoader sceneLoader;
@@ -183,7 +184,7 @@ public class LobbyRoomService : NetworkBehaviour
     {
         while (!asyncOperation.isDone)
         {
-            lobbyPlayersHandler.SetPlayerProgressServerRpc((int)(asyncOperation.progress * 100));
+            loadingProgress.Value = (int)(asyncOperation.progress * 100);
 
             yield return new WaitForSeconds(0.01f);
         }

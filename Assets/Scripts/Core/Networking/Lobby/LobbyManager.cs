@@ -133,12 +133,26 @@ public class LobbyManager : ToolkitHelper
         };
 
         lobbyData.CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
-        await StartGame();
+        await StartRelay();
         await RoomUi.JoinRoom(this);
     }
 
     public async Task<List<Lobby>> GetAll()
     {
+        // Get all lobbies but not full ones and not started ones
+        QueryLobbiesOptions options = new QueryLobbiesOptions();
+        options.Filters = new List<QueryFilter>()
+        {
+            new QueryFilter(
+                field: QueryFilter.FieldOptions.AvailableSlots,
+                op: QueryFilter.OpOptions.GT,
+                value: "0"),
+            new QueryFilter(
+                field: QueryFilter.FieldOptions.S1,
+                op: QueryFilter.OpOptions.EQ,
+                value: "false"),
+        };
+
         var lobbies = await Lobbies.Instance.QueryLobbiesAsync();
         return lobbies.Results;
     }
@@ -156,13 +170,16 @@ public class LobbyManager : ToolkitHelper
         await LobbyService.Instance.SendHeartbeatPingAsync(CurrentLobby.Id);
     }
 
-    public async Task StartGame()
+    public async Task StartRelay()
     {
         if (CurrentLobby == null) return;
         string code = await RelayManager.Instance.CreateRelay(CurrentLobby.MaxPlayers);
 
         await lobbyData.SetRelayCode(code, CurrentLobby.Id);
-        await playerLobbyData.SetConnectionData(RelayManager.Instance.AllocationId.ToString(), Convert.ToBase64String(RelayManager.Instance.ConnectionData), CurrentLobby.Id);
+        await playerLobbyData.SetConnectionData(
+            RelayManager.Instance.AllocationId.ToString(),
+            Convert.ToBase64String(RelayManager.Instance.ConnectionData),
+            CurrentLobby.Id);
     }
 
     public async Task JoinRelayServer(string code)
