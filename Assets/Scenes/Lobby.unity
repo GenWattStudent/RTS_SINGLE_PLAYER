@@ -128,13 +128,24 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 375122627}
+<<<<<<< HEAD
   - component: {fileID: 375122630}
+=======
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   - component: {fileID: 375122626}
   - component: {fileID: 375122625}
   - component: {fileID: 375122628}
   - component: {fileID: 375122629}
+<<<<<<< HEAD
   - component: {fileID: 375122632}
   - component: {fileID: 375122633}
+=======
+  - component: {fileID: 375122630}
+  - component: {fileID: 375122631}
+  - component: {fileID: 375122632}
+  - component: {fileID: 375122633}
+  - component: {fileID: 375122634}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   m_Layer: 0
   m_Name: LobbyUI
   m_TagString: Untagged
@@ -154,7 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121fbc51ec2d4e84caf296357f879c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   UIDocument: {fileID: 375122633}
+=======
+  UIDocument: {fileID: 1940510936}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   lobbyItemTemplate: {fileID: 9197481963319205126, guid: 7dcf140dea6cf4f4e9e2b4ed635a3eff,
     type: 3}
 --- !u!114 &375122626
@@ -170,7 +185,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+<<<<<<< HEAD
   UIDocument: {fileID: 375122633}
+=======
+  UIDocument: {fileID: 1940510936}
+  playerPrefab: {fileID: 3502280097689162745, guid: ae1fef50ca6120c47a40ad8e5b9ce45b,
+    type: 3}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   updateInterval: 3
   isInRoom: 0
 --- !u!4 &375122627
@@ -201,7 +222,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+<<<<<<< HEAD
   UIDocument: {fileID: 375122633}
+=======
+  UIDocument: {fileID: 1940510936}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   maps:
   - {fileID: 11400000, guid: dc8b7bc813fef3b4cbec31801299f258, type: 2}
   - {fileID: 11400000, guid: fd6ea7aaf1c9fae42a6f910ac99bac3a, type: 2}
@@ -220,7 +245,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3367d869193a1c64881d9af6c87ecfaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   UIDocument: {fileID: 375122633}
+=======
+  UIDocument: {fileID: 1940510936}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   loaderPlayerTemplate: {fileID: 9197481963319205126, guid: 1e8be526cb41fa84a8599311298c8376,
     type: 3}
 --- !u!114 &375122630
@@ -248,6 +277,26 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+<<<<<<< HEAD
+=======
+--- !u!114 &375122631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e659d0434e2b48947af984774be9ca64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  isLoading:
+    m_InternalValue: 0
+  lobbyPlayersHandler: {fileID: 0}
+  lobbyNetcodeDataHandler: {fileID: 0}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 --- !u!114 &375122632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +310,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+<<<<<<< HEAD
   UIDocument: {fileID: 375122633}
+=======
+  UIDocument: {fileID: 1940510936}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   roomItemTemplate: {fileID: 9197481963319205126, guid: 0da8f2e6ad731014eb5d6fcf7648717b,
     type: 3}
 --- !u!114 &375122633
@@ -273,6 +326,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 375122624}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -284,6 +338,25 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+=======
+  m_Script: {fileID: 11500000, guid: 51c77da14bb12cf44ba74cd1d0c34e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &375122634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375122624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdaa5057a315844082624cbfcd033d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 --- !u!1001 &460004262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -955,11 +1028,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1940510937}
+<<<<<<< HEAD
   - component: {fileID: 1940510939}
   - component: {fileID: 1940510940}
   - component: {fileID: 1940510941}
   - component: {fileID: 1940510943}
   - component: {fileID: 1940510942}
+=======
+  - component: {fileID: 1940510936}
+  - component: {fileID: 1940510939}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   m_Layer: 0
   m_Name: Lobby
   m_TagString: Untagged
@@ -967,6 +1045,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
+=======
+--- !u!114 &1940510936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940510935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: ea5d6ce65b1fa0c46b2c7a45fe4dd5e4, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 463334e4baf41fa49b13b5eaf7542230,
+    type: 3}
+  m_SortingOrder: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 --- !u!4 &1940510937
 Transform:
   m_ObjectHideFlags: 0
@@ -994,12 +1095,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d526db3146d0d504699741d53f76296c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+=======
+  UIDocument: {fileID: 0}
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   hearbeatInterval: 25
   isSingInCompleted: 0
   playerId: 
   playerName: 
   isHost: 0
   maxPlayers: 4
+<<<<<<< HEAD
 --- !u!114 &1940510940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1070,6 +1176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+=======
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 --- !u!1 &2045889705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,7 +1208,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   m_ProtocolType: 1
+=======
+  m_ProtocolType: 0
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
   m_UseWebSockets: 0
   m_UseEncryption: 0
   m_MaxPacketQueueSize: 128
@@ -1160,7 +1272,11 @@ MonoBehaviour:
     NetworkProfilingMetrics: 1
     OldPrefabList: []
   RunInBackground: 1
+<<<<<<< HEAD
   LogLevel: 0
+=======
+  LogLevel: 1
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 --- !u!4 &2045889708
 Transform:
   m_ObjectHideFlags: 0

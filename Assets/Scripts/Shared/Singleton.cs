@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 using Unity.Netcode;
+=======
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Component
@@ -38,6 +41,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
         }
     }
 }
+<<<<<<< HEAD
 
 
 public class NetworkSingleton<T> : NetworkBehaviour where T : Component
@@ -77,3 +81,5 @@ public class NetworkSingleton<T> : NetworkBehaviour where T : Component
         }
     }
 }
+=======
+>>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
