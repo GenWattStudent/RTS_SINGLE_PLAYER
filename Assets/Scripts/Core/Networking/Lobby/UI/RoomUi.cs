@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 public class RoomUi : NetworkToolkitHelper
 {
-    [SerializeField] private GameObject playerPrefab;
     public float updateInterval = 3.0f;
     public bool isInRoom = false;
     [HideInInspector] NetworkVariable<bool> IsGameStarted = new(false);
@@ -31,7 +30,7 @@ public class RoomUi : NetworkToolkitHelper
 
         startGameButton = GetButton("StartGame");
         exitButton = GetButton("Exit");
-        lobby = GetVisualElement("Lobby");
+        lobby = GetVisualElement("LobbyBox");
         room = GetVisualElement("Room");
         readyButton = GetButton("ReadyButton");
 
@@ -45,13 +44,22 @@ public class RoomUi : NetworkToolkitHelper
     private void Start()
     {
         LobbyRoomService.Instance.PlayerNetcodeLobbyData.OnListChanged += PlayerListChanged;
+        Debug.Log("RoomUi started");
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
+        // Debug.Log("RoomUi spawned");
+        LobbyRoomService.Instance.PlayerNetcodeLobbyData.OnListChanged += PlayerListChanged;
         IsGameStarted.OnValueChanged += HandleGameStarted;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        IsGameStarted.OnValueChanged -= HandleGameStarted;
     }
 
     private void HandleGameStarted(bool oldValue, bool newValue)
@@ -97,7 +105,7 @@ public class RoomUi : NetworkToolkitHelper
         room.style.display = DisplayStyle.Flex;
     }
 
-    private void ShowLobbyAndHideRoom()
+    public void ShowLobbyAndHideRoom()
     {
         lobby.style.display = DisplayStyle.Flex;
         room.style.display = DisplayStyle.None;
@@ -193,9 +201,10 @@ public class RoomUi : NetworkToolkitHelper
     public async Task JoinRoom(LobbyManager lobby)
     {
         await UpdateRoomData();
+        Debug.Log("Joining room");
         HideLobbyAndShowRoom();
         isInRoom = true;
-
+        Debug.Log("HEJKA");
         LobbyRoomService.Instance.StartNetcode(lobby.playerLobbyData.PlayerName);
 
         lobbyGameSetup.OnMapSelected += OnMapSelected;

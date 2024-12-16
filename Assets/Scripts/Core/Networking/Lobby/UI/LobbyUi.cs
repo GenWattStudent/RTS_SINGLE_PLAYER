@@ -16,42 +16,61 @@ public class LobbyUi : ToolkitHelper
     private LobbyManager lobbyManager;
     private Button closeLobbyButton;
     private RoomUi roomUi;
-    private Label currentPlayerName;
+    private VisualElement _lobbyContainer;
 
-    private void Start()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         lobbyManager = FindAnyObjectByType<LobbyManager>();
         roomUi = FindAnyObjectByType<RoomUi>();
 
+        _lobbyContainer = GetVisualElement("LobbyBox");
         createLobbyButton = GetButton("CreateLobby");
         lobbiesContainer = GetVisualElement("LobbiesContainer");
         lobbyName = root.Q<TextField>("LobbyName");
         errorLabel = root.Q<Label>("ErrorLabel");
         closeLobbyButton = GetButton("CloseLobby");
-        currentPlayerName = root.Q<Label>("CurrentPlayerName");
 
         HideError();
         createLobbyButton.clicked += CreateLobby;
-        closeLobbyButton.clicked += CloseLobby;
+        closeLobbyButton.clicked += async () => await CloseLobby();
 
-        currentPlayerName.text = LobbyManager.Instance.playerName;
+        // currentPlayerName.text = LobbyManager.Instance.playerName;
+
+        Debug.Log("LobbyUi started");
+        _lobbyContainer.style.display = DisplayStyle.Flex;
+        lobbiesContainer.Clear();
+        Debug.Log("LobbyUi started 2" + _lobbyContainer.style.display);
         // CreateLobbiesUI();
         StartCoroutine(RefreshLobbies());
     }
 
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+
+        createLobbyButton.clicked -= CreateLobby;
+        // closeLobbyButton.clicked -= CloseLobby;
+    }
+
     private IEnumerator RefreshLobbies()
     {
-        while (true)
+        while (!roomUi.isInRoom)
         {
+            Debug.Log("Refesh" + _lobbyContainer.style.display);
+            _lobbyContainer.style.display = DisplayStyle.Flex;
             if (!lobbyManager.isSingInCompleted) yield return new WaitForSeconds(1);
             CreateLobbiesUI();
             yield return new WaitForSeconds(3);
         }
     }
 
-    private async void CloseLobby()
+    private async Task CloseLobby()
     {
         await roomUi.HideLobbyAndRoom();
+
+        // Destroy(gameObject);
+
         SceneManager.LoadScene("MainMenu");
     }
 

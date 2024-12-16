@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : Singleton<GameManager>
@@ -7,6 +8,11 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-
+        if (FindAnyObjectByType<EventSystem>() == null)
+        {
+            GameObject obj = new GameObject("EventSystem");
+            obj.AddComponent<EventSystem>();
+            obj.AddComponent<StandaloneInputModule>();
+        }
     }
 }

@@ -7,10 +7,9 @@ using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LobbyRoomService : NetworkBehaviour
+public class LobbyRoomService : NetworkSingleton<LobbyRoomService>
 {
     [HideInInspector] public NetworkVariable<bool> isLoading = new(false);
-    public static LobbyRoomService Instance;
     public LobbyPlayersHandler lobbyPlayersHandler;
     public LobbyNetcodeDataHandler lobbyNetcodeDataHandler;
     public NetworkList<PlayerNetcodeLobbyData> PlayerNetcodeLobbyData => lobbyPlayersHandler.playerNetcodeLobbyData;
@@ -49,24 +48,18 @@ public class LobbyRoomService : NetworkBehaviour
         }
     }
 
-    private void Awake()
+    public override void Awake()
     {
-        sceneLoader = GetComponent<SceneLoader>();
+        base.Awake();
+
+        sceneLoader = FindAnyObjectByType<SceneLoader>();
         lobbyPlayersHandler = GetComponent<LobbyPlayersHandler>();
         lobbyNetcodeDataHandler = GetComponent<LobbyNetcodeDataHandler>();
-
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        Instance = this;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void HandlePlayerDisconnect(ulong clientId)
     {
+        Debug.Log($"Player {clientId} disconnected");
         lobbyPlayersHandler.RemovePlayer(clientId);
 
         if (NetworkManager.LocalClientId == clientId)

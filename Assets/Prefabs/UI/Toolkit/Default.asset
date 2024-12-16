@@ -36,7 +36,7 @@ MonoBehaviour:
   m_VertexBudget: 0
   m_DynamicAtlasSettings:
     m_MinAtlasSize: 64
-    m_MaxAtlasSize: 4066
+    m_MaxAtlasSize: 5904
     m_MaxSubTextureSize: 64
     m_ActiveFilters: -1
   m_AtlasBlitShader: {fileID: 9101, guid: 0000000000000000f000000000000000, type: 0}

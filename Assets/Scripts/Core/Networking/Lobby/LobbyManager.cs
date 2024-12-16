@@ -8,7 +8,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class LobbyManager : ToolkitHelper
+public class LobbyManager : Singleton<LobbyManager>
 {
     [SerializeField] private float hearbeatInterval = 25.0f;
     public bool isSingInCompleted = false;
@@ -20,19 +20,13 @@ public class LobbyManager : ToolkitHelper
     public Lobby CurrentLobby => lobbyData?.CurrentLobby;
     public PlayerLobbyData playerLobbyData;
     public List<PlayerLobbyData> lobbyPlayers = new();
-    public static LobbyManager Instance;
 
     private float heartbeatTimer = 0.0f;
     private RoomUi RoomUi;
 
-    private void Awake()
+    public override void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        Instance = this;
+        base.Awake();
         lobbyData = new LobbyData();
     }
 
@@ -41,19 +35,22 @@ public class LobbyManager : ToolkitHelper
         RoomUi = FindAnyObjectByType<RoomUi>();
 
         var initOptions = new InitializationOptions();
-        playerName = $"{PlayerPrefs.GetString("username")}{Mathf.FloorToInt(UnityEngine.Random.Range(0, 1000))}";
+        playerName = $"{PlayerPrefs.GetString("username")}";
         initOptions.SetProfile(playerName);
         await UnityServices.InitializeAsync(initOptions);
 
         AuthenticationService.Instance.SignedIn += OnSignInCompleted;
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        else
+        {
+            OnSignInCompleted();
+        }
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
     }
 
     private async void Update()
@@ -124,6 +121,7 @@ public class LobbyManager : ToolkitHelper
 
     public async Task CreateLobby(string lobbyName, int maxPlayers)
     {
+        Debug.Log("Creating lobby");
         playerLobbyData = new PlayerLobbyData(playerId, playerName, TeamType.Blue);
 
         var lobbyOptions = new CreateLobbyOptions
@@ -133,8 +131,11 @@ public class LobbyManager : ToolkitHelper
         };
 
         lobbyData.CurrentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOptions);
+        Debug.Log("Lobby created");
         await StartRelay();
+        Debug.Log("Relay started");
         await RoomUi.JoinRoom(this);
+        Debug.Log("Room joined");
     }
 
     public async Task<List<Lobby>> GetAll()

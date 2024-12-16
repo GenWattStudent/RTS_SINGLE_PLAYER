@@ -2,19 +2,21 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class LobbyPlayersHandler : NetworkBehaviour
+public class LobbyPlayersHandler : NetworkSingleton<LobbyPlayersHandler>
 {
     public Dictionary<ulong, PlayerNetcodeLobbyData> playerNetcodeLobbyDataDict;
     public NetworkList<PlayerNetcodeLobbyData> playerNetcodeLobbyData;
 
-    public static LobbyPlayersHandler Instance;
+    // public static LobbyPlayersHandler Instance;
 
-    private void Awake()
+    public override void Awake()
     {
-        Instance = this;
+        base.Awake();
+        // Instance = this;
         playerNetcodeLobbyDataDict = new();
         playerNetcodeLobbyData = new();
-        DontDestroyOnLoad(gameObject);
+        // Debug.Log("LobbyPlayersHandler Awake");
+        // DontDestroyOnLoad(gameObject);
     }
 
     public override void OnNetworkSpawn()
@@ -83,6 +85,7 @@ public class LobbyPlayersHandler : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetReadyServerRpc(ServerRpcParams rpcParams = default)
     {
+        Debug.Log($"Player {rpcParams.Receive.SenderClientId} {playerNetcodeLobbyData} is ready");
         for (int i = 0; i < playerNetcodeLobbyData.Count; i++)
         {
             if (playerNetcodeLobbyData[i].NetcodePlayerId == rpcParams.Receive.SenderClientId)

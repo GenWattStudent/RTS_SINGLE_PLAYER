@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using UnityEngine;
 
 public enum TeamType
 {
@@ -95,7 +96,7 @@ public class PlayerLobbyData
             AllocationId = AllocationId,
             ConnectionInfo = ConnectionData
         };
-
+        Debug.Log($"Updating player data {PlayerId} - {lobbyId}");
         await LobbyService.Instance.UpdatePlayerAsync(lobbyId, PlayerId, options);
     }
 }
