@@ -20,11 +20,7 @@ public class RelayManager : Singleton<RelayManager>
     {
         try
         {
-<<<<<<< HEAD
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers, "europe-central2");
-=======
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
->>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
             JoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Allocation = allocation;
 
@@ -47,7 +43,6 @@ public class RelayManager : Singleton<RelayManager>
 
     public async Task<bool> JoinRelay(string code)
     {
-<<<<<<< HEAD
         // try
         // {
         JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(code);
@@ -67,26 +62,5 @@ public class RelayManager : Singleton<RelayManager>
         //     Debug.LogError("Failed to join relay");
         //     return false;
         // }
-=======
-        try
-        {
-            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(code);
-            JoinAllocation = allocation;
-
-            RelayServerEndpoint dtlsEndpoint = allocation.ServerEndpoints.FirstOrDefault(endpoint => endpoint.ConnectionType == "dtls");
-
-            Ip = dtlsEndpoint.Host;
-            Port = dtlsEndpoint.Port;
-            ConnectionData = allocation.ConnectionData;
-            AllocationId = allocation.AllocationId;
-
-            return true;
-        }
-        catch (Exception)
-        {
-            Debug.LogError("Failed to join relay");
-            return false;
-        }
->>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
     }
 }

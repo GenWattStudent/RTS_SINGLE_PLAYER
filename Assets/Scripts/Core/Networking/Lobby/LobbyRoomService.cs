@@ -71,7 +71,13 @@ public class LobbyRoomService : NetworkSingleton<LobbyRoomService>
 
     private void HandleLoadingChange(bool previousValue, bool newValue)
     {
-        if (newValue)
+        Debug.Log($"Loading changed: {newValue}");
+        HandleScreenLoading(newValue);
+
+    }
+    private void HandleScreenLoading(bool isVisible)
+    {
+        if (isVisible)
         {
             sceneLoader.ShowSceneLoading(PlayerNetcodeLobbyData);
         }
@@ -114,6 +120,17 @@ public class LobbyRoomService : NetworkSingleton<LobbyRoomService>
 
     public void ChangeScene(string sceneName)
     {
+        StartCoroutine(ChangeSceneWithDelay(sceneName));
+    }
+
+    private IEnumerator ChangeSceneWithDelay(string sceneName)
+    {
+        // Display the loading screen
+        HandleScreenLoading(true);
+
+        // Wait for a short period (e.g., 1 second)
+        yield return new WaitForSeconds(1f);
+
         NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplate;
         NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
 

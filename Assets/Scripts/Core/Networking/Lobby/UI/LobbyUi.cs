@@ -28,8 +28,10 @@ public class LobbyUi : ToolkitHelper
         createLobbyButton = GetButton("CreateLobby");
         lobbiesContainer = GetVisualElement("LobbiesContainer");
         lobbyName = root.Q<TextField>("LobbyName");
-        errorLabel = root.Q<Label>("ErrorLabel");
+        errorLabel = GetLabel("ErrorLabel");
         closeLobbyButton = GetButton("CloseLobby");
+
+        Debug.Log($"LobbyUi enabled {errorLabel}");
 
         HideError();
         createLobbyButton.clicked += CreateLobby;
@@ -68,8 +70,6 @@ public class LobbyUi : ToolkitHelper
     private async Task CloseLobby()
     {
         await roomUi.HideLobbyAndRoom();
-
-        // Destroy(gameObject);
 
         SceneManager.LoadScene("MainMenu");
     }

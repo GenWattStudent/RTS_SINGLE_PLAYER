@@ -118,11 +118,7 @@ public class Unit : NetworkBehaviour, ISkillApplicable
     {
         base.OnNetworkDespawn();
 
-<<<<<<< HEAD
         if (!IsOwner || NetworkManager.Singleton == null) return;
-=======
-        if (!IsOwner) return;
->>>>>>> 9516a399e13b00dcf94037ac0cdcc7dd9d269e1e
 
         var rtsObjectManager = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<RTSObjectsManager>();
         rtsObjectManager.RemoveLocalUnit(this);

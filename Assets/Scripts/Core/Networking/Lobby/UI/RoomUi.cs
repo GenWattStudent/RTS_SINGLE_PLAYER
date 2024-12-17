@@ -33,7 +33,7 @@ public class RoomUi : NetworkToolkitHelper
         lobby = GetVisualElement("LobbyBox");
         room = GetVisualElement("Room");
         readyButton = GetButton("ReadyButton");
-
+        Debug.Log($"RoomUi enabled ");
         readyButton.clicked += Ready;
         exitButton.clicked += async () => await Exit();
         startGameButton.clicked += StartGame;

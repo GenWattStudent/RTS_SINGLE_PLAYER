@@ -19,16 +19,17 @@ public class SceneLoader : ToolkitHelper
         sceneLoading = GetVisualElement("SceneLoading");
         playerList = GetVisualElement("LoaderPlayerBox");
         loadingProgressbar = GetProgressBar("LoadingProgressbar");
+        Debug.Log("SceneLoader enabled");
     }
 
     private void Start()
     {
+        Debug.Log("SceneLoader started");
         LobbyRoomService.Instance.loadingProgress.OnValueChanged += SetLoder;
     }
 
     private void SetLoder(int previousValue, int newValue)
     {
-        Debug.Log($"Loading progress: {newValue}%");
         loadingProgressbar.value = newValue;
         loadingProgressbar.title = $"{newValue}%";
     }
@@ -36,7 +37,7 @@ public class SceneLoader : ToolkitHelper
     private void OnDisable()
     {
         sceneLoading.style.display = DisplayStyle.None;
-
+        // Debug.Log("SceneLoader disabled");
         LobbyRoomService.Instance.loadingProgress.OnValueChanged -= SetLoder;
     }
 
@@ -48,6 +49,7 @@ public class SceneLoader : ToolkitHelper
 
     public void HideSceneLoading()
     {
+        Debug.Log("Hide scene loading");
         sceneLoading.style.display = DisplayStyle.None;
     }
 

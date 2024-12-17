@@ -36,6 +36,7 @@ public class LobbyManager : Singleton<LobbyManager>
 
         var initOptions = new InitializationOptions();
         playerName = $"{PlayerPrefs.GetString("username")}";
+        Debug.Log("Player name: " + playerName);
         initOptions.SetProfile(playerName);
         await UnityServices.InitializeAsync(initOptions);
 
