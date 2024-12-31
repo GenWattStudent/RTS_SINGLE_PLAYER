@@ -132,13 +132,24 @@ public class RoomUi : NetworkToolkitHelper
         LobbyRoomService.Instance.lobbyNetcodeDataHandler.SetMapName(map.MapName);
     }
 
+    private void QuitRoom()
+    {
+        isInRoom = false;
+        ShowLobbyAndHideRoom();
+        lobbyManager.lobbyData.CurrentLobby = null;
+    }
+
     private void CheckPlayerInLobby()
     {
-        if (lobbyManager.CurrentLobby == null) return;
+        if (lobbyManager.CurrentLobby == null)
+        {
+            QuitRoom();
+            return;
+        }
+
         if (lobbyManager.CurrentLobby.Players.Find(player => player.Id == AuthenticationService.Instance.PlayerId) == null)
         {
-            isInRoom = false;
-            ShowLobbyAndHideRoom();
+            QuitRoom();
         }
     }
 

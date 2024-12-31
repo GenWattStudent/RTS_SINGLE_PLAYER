@@ -35,15 +35,13 @@ public class LobbyUi : ToolkitHelper
 
         HideError();
         createLobbyButton.clicked += CreateLobby;
-        closeLobbyButton.clicked += async () => await CloseLobby();
+        closeLobbyButton.clicked += CloseLobby;
 
         // currentPlayerName.text = LobbyManager.Instance.playerName;
 
-        Debug.Log("LobbyUi started");
         _lobbyContainer.style.display = DisplayStyle.Flex;
         lobbiesContainer.Clear();
-        Debug.Log("LobbyUi started 2" + _lobbyContainer.style.display);
-        // CreateLobbiesUI();
+
         StartCoroutine(RefreshLobbies());
     }
 
@@ -52,7 +50,7 @@ public class LobbyUi : ToolkitHelper
         StopAllCoroutines();
 
         createLobbyButton.clicked -= CreateLobby;
-        // closeLobbyButton.clicked -= CloseLobby;
+        closeLobbyButton.clicked -= CloseLobby;
     }
 
     private IEnumerator RefreshLobbies()
@@ -67,7 +65,7 @@ public class LobbyUi : ToolkitHelper
         }
     }
 
-    private async Task CloseLobby()
+    private async void CloseLobby()
     {
         await roomUi.HideLobbyAndRoom();
 
@@ -128,6 +126,7 @@ public class LobbyUi : ToolkitHelper
     {
         try
         {
+            Debug.Log("Creating lobbies UI lol");
             var lobbies = await lobbyManager.GetAll();
             var avaliableLobbies = lobbies.FindAll(lobby => lobby.Players.Count < lobby.MaxPlayers);
 

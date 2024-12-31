@@ -94,7 +94,7 @@
       }
     },
     "com.unity.multiplayer.playmode": {
-      "version": "1.3.2",
+      "version": "1.3.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

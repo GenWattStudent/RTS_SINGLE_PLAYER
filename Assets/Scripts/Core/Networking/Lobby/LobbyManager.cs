@@ -35,7 +35,7 @@ public class LobbyManager : Singleton<LobbyManager>
         RoomUi = FindAnyObjectByType<RoomUi>();
 
         var initOptions = new InitializationOptions();
-        playerName = $"{PlayerPrefs.GetString("username")}";
+        playerName = $"{PlayerPrefs.GetString("username")}{Mathf.FloorToInt(UnityEngine.Random.Range(0, 1000))}";
         Debug.Log("Player name: " + playerName);
         initOptions.SetProfile(playerName);
         await UnityServices.InitializeAsync(initOptions);
@@ -89,6 +89,7 @@ public class LobbyManager : Singleton<LobbyManager>
     public async Task JoinLobby(string lobbyId)
     {
         lobbyData.CurrentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+        Debug.Log("Joined lobby");
         playerLobbyData = new PlayerLobbyData(playerId, playerName);
 
         var teamPlayersCount = GetTeamPlayersCount(CurrentLobby);
@@ -105,7 +106,6 @@ public class LobbyManager : Singleton<LobbyManager>
     {
         if (CurrentLobby == null) return;
         await LobbyService.Instance.RemovePlayerAsync(CurrentLobby.Id, playerId);
-        lobbyData.CurrentLobby = null;
     }
 
     public async Task KickPlayer(string playerId)

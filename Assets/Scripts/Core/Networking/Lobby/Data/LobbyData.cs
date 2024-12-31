@@ -10,6 +10,7 @@ public class LobbyData
     public string RelayCode = default;
     public Lobby CurrentLobby;
     public bool Started = false;
+    private float _getLobbyDataTimer = 0;
 
     public Dictionary<string, DataObject> Get()
     {
@@ -56,7 +57,10 @@ public class LobbyData
 
     public async Task GetLobbyData(string lobbyId)
     {
+        if (Time.time - _getLobbyDataTimer < 1.5f) return;
+
         CurrentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
+        _getLobbyDataTimer = Time.time;
 
         if (CurrentLobby == null || CurrentLobby.Data == null) return;
 
