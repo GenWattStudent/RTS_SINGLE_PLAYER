@@ -89,9 +89,15 @@ public class RoomUi : NetworkToolkitHelper
         // try
         // {
         LobbyRoomService.Instance.Exit();
-        await lobbyManager.LeaveLobby(AuthenticationService.Instance.PlayerId);
-        isInRoom = false;
+
+        if (isInRoom)
+        {
+            await lobbyManager.LeaveLobby(AuthenticationService.Instance.PlayerId);
+            isInRoom = false;
+        }
+
         ShowLobbyAndHideRoom();
+        QuitRoom();
         // }
         // catch (Exception)
         // {
@@ -103,6 +109,7 @@ public class RoomUi : NetworkToolkitHelper
     {
         lobby.style.display = DisplayStyle.None;
         room.style.display = DisplayStyle.Flex;
+        Debug.Log("HideLobbyAndShowRoom " + room.style.display);
     }
 
     public void ShowLobbyAndHideRoom()
@@ -137,6 +144,8 @@ public class RoomUi : NetworkToolkitHelper
         isInRoom = false;
         ShowLobbyAndHideRoom();
         lobbyManager.lobbyData.CurrentLobby = null;
+
+        NetworkManager.Singleton.Shutdown();
     }
 
     private void CheckPlayerInLobby()
