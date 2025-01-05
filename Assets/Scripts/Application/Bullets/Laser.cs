@@ -10,9 +10,9 @@ public class Laser : NetworkBehaviour
     public float CurrentDamageInterval = 0;
     public bool IsAttacking = false;
     public bool IsLaserOn = false;
+    public NetworkVariable<bool> IsTarget = new(false);
 
     private Transform target;
-    private bool areEffectsInstantiated = false;
     private LineRenderer lineRenderer;
     private ParticleSystem laserHitEffect;
     private Light laserLight;
@@ -20,14 +20,51 @@ public class Laser : NetworkBehaviour
 
     public void SetTarget(Transform target)
     {
-        Debug.Log("Set target " + target);
         this.target = target;
+        HandleTarget(false, this.target != null);
     }
 
     private void Awake()
     {
         stats = GetComponentInParent<Stats>();
         CurrentDamageInterval = stats.GetStat(StatType.AttackSpeed);
+    }
+
+    [ClientRpc]
+    public void SetTargetClientRpc(NetworkObjectReference nor)
+    {
+        if (nor.TryGet(out NetworkObject no))
+        {
+            SetTarget(no.transform);
+        }
+        else
+        {
+            SetTarget(null);
+        }
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsServer)
+        {
+            var targetOrNull = target == null ? null : target.GetComponent<NetworkObject>();
+            SetTargetClientRpc(targetOrNull);
+        }
+    }
+
+    private void HandleTarget(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            InstantiateAllEffectsClientRpc();
+            PlayAllEffectsClientRpc();
+        }
+        else
+        {
+            DestroyAllEffectsClientRpc();
+        }
     }
 
     private void Attack()
@@ -59,13 +96,6 @@ public class Laser : NetworkBehaviour
         laserLight.transform.position = newPosition;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void InstantiateAllEffectsServerRpc()
-    {
-        IsLaserOn = true;
-        InstantiateAllEffectsClientRpc();
-    }
-
     [ClientRpc]
     private void InstantiateAllEffectsClientRpc()
     {
@@ -74,15 +104,6 @@ public class Laser : NetworkBehaviour
         lineRenderer = GoLaserBeam.GetComponentInChildren<LineRenderer>();
         laserHitEffect = GoLaserBeam.GetComponentInChildren<ParticleSystem>();
         laserLight = GoLaserBeam.GetComponentInChildren<Light>();
-
-        areEffectsInstantiated = true;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void DestroyAllEffectsServerRpc()
-    {
-        IsLaserOn = false;
-        DestroyAllEffectsClientRpc();
     }
 
     [ClientRpc]
@@ -93,14 +114,6 @@ public class Laser : NetworkBehaviour
         lineRenderer = null;
         laserHitEffect = null;
         laserLight = null;
-
-        areEffectsInstantiated = false;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void PlayAllEffectsServerRpc()
-    {
-        PlayAllEffectsClientRpc();
     }
 
     [ClientRpc]
@@ -116,18 +129,6 @@ public class Laser : NetworkBehaviour
         if (!IsServer) return;
 
         CurrentDamageInterval -= Time.deltaTime;
-
-        if (target == null)
-        {
-            if (lineRenderer != null && laserHitEffect != null && laserLight != null) DestroyAllEffectsServerRpc();
-            return;
-        }
-
-        if (!areEffectsInstantiated) InstantiateAllEffectsServerRpc();
-        if (areEffectsInstantiated)
-        {
-            PlayAllEffectsServerRpc();
-        }
 
         if (IsAttacking)
         {

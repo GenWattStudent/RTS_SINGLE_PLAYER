@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Maps/Forest.unity
     guid: ca8631b630e00a248ac6a7d4b46026c4
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Maps/Moon.unity
     guid: 3aa865b4cc8c3834c8b06c46344bd631
   - enabled: 0

@@ -84,11 +84,11 @@ namespace FOVMapping
 			fovAgent.disappearInFOW = unitTeamType != playerTeamType;
 			fovAgent.contributeToFOV = unitTeamType == playerTeamType && construction == null;
 
-			var fogOfWar = FindFirstObjectByType<FOVManager>();
-			if (fogOfWar != null && !fogOfWar.ContainsFOVAgent(fovAgent))
-			{
-				fogOfWar.AddFOVAgent(fovAgent);
-			}
+			// var fogOfWar = FindFirstObjectByType<FOVManager>();
+			// if (fogOfWar != null && !fogOfWar.ContainsFOVAgent(fovAgent))
+			// {
+			// 	fogOfWar.AddFOVAgent(fovAgent);
+			// }
 		}
 	}
 }
